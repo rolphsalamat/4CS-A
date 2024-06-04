@@ -140,8 +140,11 @@ public class a_user_1_login extends AppCompatActivity {
         // Get reference to the user's document
         DocumentReference userRef = db.collection("users").document(userId);
 
+
+        // Call the new method to fetch user info
+        fetchUserInfo(userId);
         // Call retrieveLessonData for Progressive Mode
-        retrieveLessonData("Progressive Mode", userId);
+        retrieveLessonData("ProgressiveMode", userId); // Change this later to Progressive <space> Mode
         // Call retrieveLessonData for Free Use Mode
         retrieveLessonData("Free Use Mode", userId);
 
@@ -175,6 +178,42 @@ public class a_user_1_login extends AppCompatActivity {
 //            }
 //        });
     }
+
+    private void fetchUserInfo(String userId) {
+        DocumentReference userRef = db.collection("users").document(userId);
+
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            String firstName = document.getString("First name");
+                            String lastName = document.getString("Last name");
+                            String email = document.getString("Email Address");
+                            String gender = document.getString("Gender");
+                            String password = document.getString("Password");
+                            int age = document.getLong("Age").intValue(); // Assuming Age is stored as a Long
+
+                            Log.d("Firestore", "First Name: " + firstName);
+                            Log.d("Firestore", "Last Name: " + lastName);
+                            Log.d("Firestore", "Email Address: " + email);
+                            Log.d("Firestore", "Gender: " + gender);
+                            Log.d("Firestore", "Password: " + password);
+                            Log.d("Firestore", "Age: " + age);
+                        } else {
+                            Log.d("Firestore", "User document does not exist");
+                        }
+                    } else {
+                        String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
+                        Log.d("Firestore", "Failed to retrieve user information: " + errorMessage);
+                    }
+                }
+            }
+        });
+    }
+
 
     private void retrieveLessonData(String modeName, String userId) {
         // Get reference to the user's lesson collection within the specified mode

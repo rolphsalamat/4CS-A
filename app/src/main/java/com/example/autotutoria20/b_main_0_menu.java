@@ -329,8 +329,6 @@
             }
         }
 
-
-
         // Helper method to check if an app is installed
         private boolean isAppInstalled(String packageName) {
             PackageManager pm = getPackageManager();
