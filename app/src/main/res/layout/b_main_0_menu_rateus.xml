@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+    <!-- Rate Us -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rate Us"
+        android:textAppearance="?attr/textAppearanceHeadline5"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:textColor="@color/black"/>
+    <!-- Please rate your experience with our app -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please rate your experience with our app"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:textColor="@color/black"/>
+    <!-- * * * * * -->
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="1.0"
+        android:layout_marginBottom="16dp"
+        android:theme="@style/Widget.AppCompat.RatingBar"/>
+    <!-- (Submit) -->
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:backgroundTint="@color/black"
+        android:textColor="@color/white"/>
+
+</LinearLayout>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/autotutoria_background_color"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- EXIT BUTTON -->
+        <Button
+            android:id="@+id/exitButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_columnSpan="5"
+            android:backgroundTint="@color/white"
+            android:background="@drawable/exit" />
+
+        <TextView
+            android:id="@+id/topic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:text="Ambiguity and Ambiguity Resolution"
+            android:textSize="32sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+
+            />
+
+        <!-- Module #1 -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card1"
+            android:onClick="onCard1Clicked"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="20dp"
+            app:cardCornerRadius="15dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:rowCount="2"
+                android:columnCount="2"
+                android:orientation="vertical"
+                android:background="@drawable/card_background"
+                android:paddingStart="20dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_row="0"
+                    android:layout_column="0"
+                    android:text="Module 1"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_row="1"
+                    android:layout_column="0"
+                    android:layout_gravity="center_vertical"
+                    android:text="Recognizing Ambiguous Grammars"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="30dp"
+                    android:text="0/4"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    />
+            </FrameLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Module #2 -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card2"
+            android:onClick="onCard2Clicked"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="20dp"
+            app:cardCornerRadius="15dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:rowCount="2"
+                android:columnCount="2"
+                android:orientation="vertical"
+                android:background="@drawable/card_background"
+                android:paddingStart="20dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_row="0"
+                    android:layout_column="0"
+                    android:text="Module 2"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_row="1"
+                    android:layout_column="0"
+                    android:layout_gravity="center_vertical"
+                    android:text="Ambiguity Resolution Techniques"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="30dp"
+                    android:text="0/6"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    />
+            </FrameLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Module #3 -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card3"
+            android:onClick="onCard3Clicked"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="20dp"
+            app:cardCornerRadius="15dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:rowCount="2"
+                android:columnCount="2"
+                android:orientation="vertical"
+                android:background="@drawable/card_background"
+                android:paddingStart="20dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_row="0"
+                    android:layout_column="0"
+                    android:text="Module 3"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_row="1"
+                    android:layout_column="0"
+                    android:layout_gravity="center_vertical"
+                    android:text="Left Recursion and Common Pitfalls"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="30dp"
+                    android:text="0/6"
+                    android:textSize="20sp"
+                    android:textColor="@color/white"
+                    />
+            </FrameLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <!-- Automatic Bottom Margin -->
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="20dp"
+            />
+
+
+    </LinearLayout>
+
+</ScrollView>

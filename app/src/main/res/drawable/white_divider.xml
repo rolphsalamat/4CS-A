@@ -1,0 +1,5 @@
+<!-- white_divider.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@android:color/white" /> <!-- Set divider color to white -->
+</shape>

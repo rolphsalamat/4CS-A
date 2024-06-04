@@ -1,0 +1,131 @@
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/autotutoria_background_color"
+    tools:context=".b_main_0_menu">
+
+    <!-- Main content -->
+    <LinearLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- This should be at the topmost part of the screen -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@drawable/top_header_background"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Fixed button on top -->
+            <Button
+                android:id="@+id/toggle_drawer_button"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginHorizontal="20dp"
+                android:background="@drawable/menu"
+                android:backgroundTint="@android:color/transparent"
+                android:gravity="center_horizontal|center_vertical" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="AutoTutoria"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:gravity="center_horizontal|center_vertical" />
+
+        </LinearLayout>
+
+        <!-- This should be next to the topmost part of the screen -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@drawable/top_header_background">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp">
+
+                <Button
+                    android:id="@+id/module_button"
+                    android:layout_width="125dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:text="Lessons"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    android:textStyle="normal"
+                    android:gravity="center_horizontal|center_vertical"/>
+
+                <View
+                    android:id="@+id/modulesSelected"
+                    android:layout_width="125dp"
+                    android:layout_height="2dp"
+                    android:layout_gravity="bottom"
+                    android:background="@color/white"
+                    />
+
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp">
+
+                <Button
+                    android:id="@+id/description_button"
+                    android:layout_width="165dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:text="Description"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    android:textStyle="normal"
+                    android:gravity="center_horizontal|center_vertical" />
+
+                <View
+                    android:id="@+id/descriptionSelected"
+                    android:layout_width="165dp"
+                    android:layout_height="2dp"
+                    android:layout_gravity="bottom"
+                    />
+
+
+        </FrameLayout>
+
+        </LinearLayout>
+
+
+
+        <!-- This should be at the center in both the top panels and bottom panels, but  each panel can have an excess objects overlaying on top of the viewpager -->
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <!-- Navigation drawer -->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="#DEDEDE"
+        app:headerLayout="@layout/b_main_0_menu_header"
+        app:menu="@menu/main_menu" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "916777198203",
+    "project_id": "autotutoria-8ac84",
+    "storage_bucket": "autotutoria-8ac84.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916777198203:android:4106db1ec3caeffc6c78de",
+        "android_client_info": {
+          "package_name": "com.example.autotutoria20"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "916777198203-mm879qogus9vnds5tcibesv3j4ior6q7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.autotutoria20",
+            "certificate_hash": "ca6c5203f292932b96821845e3637b9b89e8168f"
+          }
+        },
+        {
+          "client_id": "916777198203-v7t3kk2k4k969h9m4igokdtc3s8645q4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJytmXeKQwX2Nx4UtjlCGSsF7K5Y8Deog"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "916777198203-v7t3kk2k4k969h9m4igokdtc3s8645q4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

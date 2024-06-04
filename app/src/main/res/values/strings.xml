@@ -1,0 +1,38 @@
+<resources>
+
+    <string name="app_name">AutoTutoria(2.0)</string>
+    <string name="open">Open Navigation Bar</string>
+    <string name="close">Close Navigation Bar</string>
+    <string name="signup_policy">By clicking Sign Up, you agree to our Terms, Privacy Policy and Cookies Policy. You may receive SMS Notifications from us and can opt out any time.</string>
+
+    <!-- WHAT WILL I LEARN? -->
+    <string name="learn_0">What will I learn?</string>
+    <string name="learn_1">Understand the concept of Finite Automaton</string>
+    <string name="learn_2">Learn about deterministic and non-deterministic Finite Automata</string>
+    <string name="learn_3">Explore the applications of Finite Automaton in computer science</string>
+    <string name="learn_4">Master the conversion of regular expressions to Finite Automata</string>
+
+    <!-- WHO IS THE TARGET AUDIENCE? -->
+    <string name="audience_0">Who is the target audience?</string>
+    <string name="audience_1">Computer Science students, specially Game Developers</string>
+    <string name="audience_2">Programmers interested in automata theory</string>
+    <string name="audience_3">Professionals seeking to enhance their understanding of theoretical computer science concepts</string>
+
+    <!-- BENEFITS -->
+    <string name="benefits_0">Benefits of learning Finite Automaton</string>
+    <string name="benefits_1">Gain a fundamental understanding of Finite Automaton, a crucial concept in theoretical computer science</string>
+    <string name="benefits_2">Enhance problem-solving skills through exercises and practical examples</string>
+    <string name="benefits_3">Prepare for advanced topics in automata theory and formal languages</string>
+    <string name="benefits_4">Improve algorithmic thinking and abstraction abilities</string>
+
+    <!-- SALARY -->
+    <string name="salary_0">Salary</string>
+    <string name="salary_1">Average salaries for professionals with expertise in Finite Automaton concepts vary widely based on factors such as experience, location, and industry. For example, game developers specializing in AI and logic design may earn competitive salaries, ranging from $70,000 to $150,000 annually, depending on their skill level and the company they work for.</string>
+
+    <!-- REQUIREMENTS -->
+    <string name="requirements_0">Requirements / Prerequisites</string>
+    <string name="requirements_1">Basic understanding of discrete mathematics</string>
+    <string name="requirements_2">Familiarity with programming fundamentals (recommended but not mandatory)</string>
+    <string name="requirements_3">Access to a computer with internet connection for accessing course materials and completing exercises</string>
+
+</resources>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="20dp"
+    android:orientation="vertical"
+    android:background="@drawable/profile_background"
+    android:gravity="top">
+
+    <FrameLayout
+        android:id="@+id/profile_frame_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/user_profile_picture"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:padding="3dp"
+            android:src="@drawable/photo_2023_09_27_08_04_46"
+            android:scaleType="fitXY"
+            app:shapeAppearanceOverlay="@style/ImageViewCircle" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:padding="4dp">
+
+            <!-- Gray circle background -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/autotutoria_background_color"
+                app:shapeAppearanceOverlay="@style/ImageViewCircle" />
+
+            <!-- Camera icon -->
+            <ImageView
+                android:id="@+id/change_profile_icon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/camera"
+                app:tint="@color/white" />
+
+        </FrameLayout>
+
+    <!-- Hello, User -->
+    </FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:letterSpacing="0.085"
+        android:text="Hello, Rolph"
+        android:textColor="#FFF"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+</LinearLayout>

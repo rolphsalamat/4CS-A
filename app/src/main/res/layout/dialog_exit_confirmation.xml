@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/exit_module_image"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:background="@drawable/exit_module"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="-20dp"
+        android:orientation="horizontal"
+        android:background="#284979"
+        app:layout_constraintTop_toBottomOf="@id/exit_module_image">
+
+        <Button
+            android:id="@+id/cancel_exit_module_"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:backgroundTint="#FFF"
+            android:elevation="30dp"
+            android:text="Cancel"
+            android:textColor="#000" />
+
+        <Button
+            android:id="@+id/exit_module"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:backgroundTint="#1b5694"
+            android:elevation="30dp"
+            android:text="Exit"
+            android:textColor="#FFF" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

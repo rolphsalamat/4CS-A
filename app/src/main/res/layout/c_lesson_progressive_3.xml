@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/autotutoria_background_color"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- EXIT BUTTON -->
+        <Button
+            android:id="@+id/exitButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_columnSpan="5"
+            android:backgroundTint="@color/white"
+            android:background="@drawable/exit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/topic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:text="Parsing Techniques"
+            android:textSize="32sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/exitButton"
+            />
+
+        <!-- Card #1 -->
+        <FrameLayout
+            android:id="@+id/card1"
+            android:onClick="onCard1Clicked"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/topic"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            >
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="20dp"
+                app:cardCornerRadius="15dp">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/card_background"
+                    android:paddingStart="20dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="Module 1"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="Top-Down Parsing"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="30dp"
+                        android:text="0/4"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        />
+                </FrameLayout>
+            </androidx.cardview.widget.CardView>
+        </FrameLayout>
+
+        <!-- Module #1 LOCKED STATE OVERLAY -->
+        <FrameLayout
+            android:id="@+id/card1_locked_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            app:layout_constraintStart_toStartOf="@id/card1"
+            app:layout_constraintTop_toTopOf="@id/card1"
+            app:layout_constraintEnd_toEndOf="@id/card1"
+            app:layout_constraintBottom_toBottomOf="@id/card1"
+            android:layout_marginHorizontal="20dp"
+            >
+                        <!-- Background for the locked lesson cover -->
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/locked_lesson_cover" />
+                        <!-- Lock icon -->
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/lock"/>
+        </FrameLayout>
+
+        <!-- Card #2 -->
+        <FrameLayout
+            android:id="@+id/card2"
+            android:onClick="onCard2Clicked"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card1"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            >
+            <!-- Module #2 -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="20dp"
+                app:cardCornerRadius="15dp">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/card_background"
+                    android:paddingStart="20dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="Module 2"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="Bottom-Up Parsing"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="30dp"
+                        android:text="0/4"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        />
+                </FrameLayout>
+            </androidx.cardview.widget.CardView>
+        </FrameLayout>
+
+        <!-- Module #2 LOCKED STATE OVERLAY -->
+        <FrameLayout
+            android:id="@+id/card2_locked_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            app:layout_constraintStart_toStartOf="@id/card2"
+            app:layout_constraintTop_toTopOf="@id/card2"
+            app:layout_constraintEnd_toEndOf="@id/card2"
+            app:layout_constraintBottom_toBottomOf="@id/card2"
+            android:layout_marginHorizontal="20dp"
+            >
+            <!-- Background for the locked lesson cover -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/locked_lesson_cover" />
+            <!-- Lock icon -->
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:src="@drawable/lock"
+                />
+        </FrameLayout>
+
+        <!-- Card #3 -->
+        <FrameLayout
+            android:id="@+id/card3"
+            android:onClick="onCard3Clicked"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card2"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            >
+            <!-- Module #3 -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="20dp"
+                app:cardCornerRadius="15dp">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/card_background"
+                    android:paddingStart="20dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="Module 3"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="Recursive Descent Parsing"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="30dp"
+                        android:text="0/4"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        />
+                </FrameLayout>
+            </androidx.cardview.widget.CardView>
+        </FrameLayout>
+
+        <!-- Module #3 LOCKED STATE OVERLAY -->
+        <FrameLayout
+            android:id="@+id/card3_locked_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            app:layout_constraintStart_toStartOf="@id/card3"
+            app:layout_constraintTop_toTopOf="@id/card3"
+            app:layout_constraintEnd_toEndOf="@id/card3"
+            app:layout_constraintBottom_toBottomOf="@id/card3"
+            android:layout_marginHorizontal="20dp"
+            >
+            <!-- Background for the locked lesson cover -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/locked_lesson_cover" />
+            <!-- Lock icon -->
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:src="@drawable/lock"
+                />
+        </FrameLayout>
+
+        <!-- Card #4 -->
+        <FrameLayout
+            android:id="@+id/card4"
+            android:onClick="onCard4Clicked"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card3"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            >
+            <!-- Module #3 -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="20dp"
+                app:cardCornerRadius="15dp">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/card_background"
+                    android:paddingStart="20dp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="Module 4"
+                        android:textColor="@color/white"
+                        android:textSize="22sp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="LL(1) Parsing"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="30dp"
+                        android:text="0/4"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        />
+                </FrameLayout>
+            </androidx.cardview.widget.CardView>
+        </FrameLayout>
+
+        <!-- Module #3 LOCKED STATE OVERLAY -->
+        <FrameLayout
+            android:id="@+id/card4_locked_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            app:layout_constraintStart_toStartOf="@id/card4"
+            app:layout_constraintTop_toTopOf="@id/card4"
+            app:layout_constraintEnd_toEndOf="@id/card4"
+            app:layout_constraintBottom_toBottomOf="@id/card4"
+            android:layout_marginHorizontal="20dp"
+            >
+            <!-- Background for the locked lesson cover -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/locked_lesson_cover" />
+            <!-- Lock icon -->
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:src="@drawable/lock"
+                />
+        </FrameLayout>
+
+        <!-- Automatic Bottom Margin -->
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="20dp"
+            app:layout_constraintTop_toBottomOf="@id/card2"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

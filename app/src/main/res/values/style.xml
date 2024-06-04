@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Circle Image Container -->
+    <style name="ImageViewCircle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <!-- My Date Picker -->
+    <style name="MyDatePickerStyle" parent="@android:style/Widget.Material.DatePicker">
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
+
+</resources>

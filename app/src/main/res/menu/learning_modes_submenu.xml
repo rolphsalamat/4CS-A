@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/progressive_mode"
+        android:icon="@drawable/module"
+        android:title="Progressive Mode" />
+    <item
+        android:id="@+id/free_use_mode"
+        android:icon="@drawable/free_use_mode"
+        android:title="Free Use Mode" />
+</menu>

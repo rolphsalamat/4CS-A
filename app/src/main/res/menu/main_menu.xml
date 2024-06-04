@@ -1,0 +1,71 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:title="Settings">
+
+        <menu>
+            <!-- Settings -->
+            <item
+                android:id="@+id/settings"
+                android:icon="@drawable/settings"
+                android:title="Settings" />
+        </menu>
+
+    </item>
+
+    <!-- Learning Mode -->
+    <item
+        android:id="@+id/learning_modes"
+        android:icon="@drawable/learning_mode"
+        android:title="Learning Modes">
+
+        <menu>
+            <!-- First subitem -->
+            <item
+                android:id="@+id/progressive_mode"
+                android:icon="@drawable/progressive_mode"
+                android:title="Progressive Mode" />
+
+            <!-- Second subitem -->
+            <item
+                android:id="@+id/free_use_mode"
+                android:icon="@drawable/free_use_mode"
+                android:title="Free Use Mode" />
+        </menu>
+
+    </item>
+
+    <item
+        android:title="University of Cabuyao Community">
+
+        <menu>
+            <!-- Rate Us -->
+            <item
+                android:id="@+id/rate"
+                android:icon="@drawable/rate"
+                android:title="Rate Us" />
+
+            <!-- Follow Us -->
+            <item
+                android:id="@+id/follow"
+                android:icon="@drawable/follow"
+                android:title="Follow Us" />
+        </menu>
+
+    </item>
+
+    <item
+        android:title="Account Session">
+
+        <menu>
+            <!-- Log Out -->
+            <item
+                android:id="@+id/log_out"
+                android:icon="@drawable/logout"
+                android:title="Log out" />
+        </menu>
+
+    </item>
+
+</menu>
