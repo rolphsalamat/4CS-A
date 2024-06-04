@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -46,7 +47,7 @@ public class a_user_1_login extends AppCompatActivity {
         // Initialize views and buttons
         TextView loginButton = findViewById(R.id.btnLogin);
         TextView signupButton = findViewById(R.id.btnSignup);
-        EditText usernameTextView = findViewById(R.id.textUsername);
+        EditText emailAddressTextView = findViewById(R.id.textUsername);
         EditText passwordTextView = findViewById(R.id.textPassword);
 
         // FORGOT PASSWORD
@@ -83,9 +84,9 @@ public class a_user_1_login extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = usernameTextView.getText().toString().trim();
+                String email = emailAddressTextView.getText().toString().trim();
                 String password = passwordTextView.getText().toString().trim();
-                loginUser(username, password);
+                loginUser(email, password);
             }
         });
 
@@ -106,21 +107,26 @@ public class a_user_1_login extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+                    public void onComplete(@NonNull Task <AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Authentication successful
                             Toast.makeText(a_user_1_login.this, "Authentication Successful", Toast.LENGTH_SHORT).show();
 
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user != null) {
-                                // Fetch user details from Firestore
-                                Toast.makeText(a_user_1_login.this, "user.getUid(): " + user.getUid(), Toast.LENGTH_SHORT).show();
+                                String userId = user.getUid();
+//                                Toast.makeText(a_user_1_login.this, "Welcome, " + user.getUid(), Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(a_user_1_login.this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
+                                Log.d("Firestore", "user id: " + userId);
                                 startActivity(new Intent(a_user_1_login.this, b_main_0_menu.class));
-                                fetchUserDetails(user.getUid());
+
+                                // Fetch user details in the background
+                                fetchUserDetails(userId);
                             } else {
-                                // User is null
+                                // User is null (handle login or prompt here)
                                 Toast.makeText(a_user_1_login.this, "User is null", Toast.LENGTH_SHORT).show();
                             }
+
                         } else {
                             // Authentication failed
                             Toast.makeText(a_user_1_login.this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -131,49 +137,50 @@ public class a_user_1_login extends AppCompatActivity {
     }
 
     private void fetchUserDetails(String userId) {
-        // Initial Toast to confirm the method is called
-        Toast.makeText(a_user_1_login.this, "fetchUserDetails called", Toast.LENGTH_SHORT).show();
-
         // Get reference to the user's document
         DocumentReference userRef = db.collection("users").document(userId);
 
-        // Logging the user reference for debugging
-        Log.d("Firestore", "UserRef: " + userRef.getPath());
-        Toast.makeText(a_user_1_login.this, "UserRef: " + userRef.getPath(), Toast.LENGTH_SHORT).show();
+        // Call retrieveLessonData for Progressive Mode
+        retrieveLessonData("Progressive Mode", userId);
+        // Call retrieveLessonData for Free Use Mode
+        retrieveLessonData("Free Use Mode", userId);
 
-        // Retrieve user data
-        userRef.get().addOnCompleteListener(task -> {
-            Log.d("Firestore", "onComplete called");
-            Toast.makeText(a_user_1_login.this, "onComplete na", Toast.LENGTH_SHORT).show();
-            if (task.isSuccessful()) {
-                Toast.makeText(a_user_1_login.this, "task.isSuccessful()", Toast.LENGTH_SHORT).show();
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    // Document exists, retrieve modes data
-                    Toast.makeText(a_user_1_login.this, "User document exists", Toast.LENGTH_SHORT).show();
-                    Log.d("Firestore", "User document exists");
 
-                    // Retrieve Free Use Mode lessons
-                    retrieveModeData(userRef, "Free Use Mode");
-
-                    // Retrieve Progressive Mode lessons
-                    retrieveModeData(userRef, "Progressive Mode");
-                } else {
-                    // User document does not exist
-                    Toast.makeText(a_user_1_login.this, "No such document", Toast.LENGTH_SHORT).show();
-                    Log.d("Firestore", "No such document");
-                }
-            } else {
-                // Error getting user document
-                String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
-                Toast.makeText(a_user_1_login.this, "Failed to retrieve user data: " + errorMessage, Toast.LENGTH_SHORT).show();
-                Log.d("Firestore", "Failed to retrieve user data: " + errorMessage);
-            }
-        });
+        // Retrieve data from Free Use Mode collection
+//        userRef.collection("Free Use Mode").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    QuerySnapshot querySnapshot = task.getResult();
+//                    if (!querySnapshot.isEmpty()) {
+//                        for (DocumentSnapshot lessonDoc : querySnapshot.getDocuments()) {
+//                            // Process each lesson document
+//                            String lessonName = lessonDoc.getId(); // Get the lesson name (document ID)
+//                            Map<String, Object> lessonData = lessonDoc.getData();
+//                            processLessonData(lessonName, lessonData);
+//                        }
+//                        Toast.makeText(a_user_1_login.this, "Free Use Mode data retrieved", Toast.LENGTH_SHORT).show();
+//                        Log.d("Firestore", "Free Use Mode data retrieved");
+//                    } else {
+//                        // No lessons found in Free Use Mode collection
+//                        Toast.makeText(a_user_1_login.this, "Free Use Mode data not found", Toast.LENGTH_SHORT).show();
+//                        Log.d("Firestore", "Free Use Mode data not found");
+//                    }
+//                } else {
+//                    // Error retrieving Free Use Mode data
+//                    String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
+//                    Toast.makeText(a_user_1_login.this, "Failed to retrieve Free Use Mode data: " + errorMessage, Toast.LENGTH_SHORT).show();
+//                    Log.d("Firestore", "Failed to retrieve Free Use Mode data: " + errorMessage);
+//                }
+//            }
+//        });
     }
 
-    private void retrieveModeData(DocumentReference userRef, String mode) {
-        userRef.collection(mode).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    private void retrieveLessonData(String modeName, String userId) {
+        // Get reference to the user's lesson collection within the specified mode
+        CollectionReference lessonRef = db.collection("users").document(userId).collection(modeName);
+
+        lessonRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -181,36 +188,40 @@ public class a_user_1_login extends AppCompatActivity {
                     if (!querySnapshot.isEmpty()) {
                         for (DocumentSnapshot lessonDoc : querySnapshot.getDocuments()) {
                             // Process each lesson document
+                            String lessonName = lessonDoc.getId(); // Get the lesson name (document ID)
                             Map<String, Object> lessonData = lessonDoc.getData();
-                            processModules(mode + " - " + lessonDoc.getId(), lessonData);
+                            processLessonData(modeName, lessonName, lessonData);
                         }
-                        Toast.makeText(a_user_1_login.this, mode + " data retrieved", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(a_user_1_login.this, modeName + " data retrieved", Toast.LENGTH_SHORT).show();
+                        Log.d("Firestore", modeName + " data retrieved");
                     } else {
-                        // No lessons found in the mode
-                        Toast.makeText(a_user_1_login.this, mode + " data not found", Toast.LENGTH_SHORT).show();
-                        Log.d("Firestore", mode + " data not found");
+                        // No lessons found in the specified mode
+                        Toast.makeText(a_user_1_login.this, modeName + " data not found", Toast.LENGTH_SHORT).show();
+                        Log.d("Firestore", modeName + " data not found");
                     }
                 } else {
-                    // Error retrieving mode data
+                    // Error retrieving lesson data
                     String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
-                    Toast.makeText(a_user_1_login.this, "Failed to retrieve " + mode + " data: " + errorMessage, Toast.LENGTH_SHORT).show();
-                    Log.d("Firestore", "Failed to retrieve " + mode + " data: " + errorMessage);
+                    Toast.makeText(a_user_1_login.this, "Failed to retrieve " + modeName + " data: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    Log.d("Firestore", "Failed to retrieve " + modeName + " data: " + errorMessage);
                 }
             }
         });
     }
 
-    // Method to process modules data
-    private void processModules(String mode, Map<String, Object> modeData) {
-        for (Map.Entry<String, Object> entry : modeData.entrySet()) {
-            String module = entry.getKey();
-            Map<String, Object> moduleData = (Map<String, Object>) entry.getValue();
-            // Process moduleData for each module
-            Toast.makeText(a_user_1_login.this, mode + " - Module: " + module, Toast.LENGTH_SHORT).show();
-            // Here you can further process the moduleData as needed
+
+    private void processLessonData(String modeName, String lessonName, Map<String, Object> lessonData) {
+        // Access individual fields within lessonData (M1, M2, etc.)
+        // You can use a loop or conditional statements to access specific fields
+        for (Map.Entry<String, Object> entry : lessonData.entrySet()) {
+            String fieldName = entry.getKey();
+            Object fieldValue = entry.getValue();
+
+            // Process the field name and value as needed
+            Log.d("LessonData", modeName + ": " + lessonName + ", Field: " + fieldName + ", Value: " + fieldValue);
+            // You can perform actions based on the field name and value here
         }
     }
-
 
     // Method to show custom dialog for resetting password
     private void showForgotPasswordDialog() {

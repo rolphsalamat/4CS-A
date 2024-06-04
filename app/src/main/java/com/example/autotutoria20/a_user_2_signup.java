@@ -197,7 +197,7 @@ public class a_user_2_signup extends AppCompatActivity {
                                             Toast.makeText(getApplicationContext(), "User details saved to Firestore", Toast.LENGTH_SHORT).show();
 
                                             // Add Progressive Mode - Lesson 1 module progress data to Firestore
-                                            db.collection("users").document(userId).collection("ProgressiveMode")
+                                            db.collection("users").document(userId).collection("Progressive Mode")
                                                     .document("Lesson 1")
                                                     .set(progressiveModuleProgress_Lesson1)
                                                     .addOnSuccessListener(aVoid1 -> {
@@ -208,7 +208,7 @@ public class a_user_2_signup extends AppCompatActivity {
                                                     });
 
                                             // Add Progressive Mode - Lesson 2 module progress data to Firestore
-                                            db.collection("users").document(userId).collection("ProgressiveMode")
+                                            db.collection("users").document(userId).collection("Progressive Mode")
                                                     .document("Lesson 2")
                                                     .set(progressiveModuleProgress_Lesson2)
                                                     .addOnSuccessListener(aVoid2 -> {
@@ -219,7 +219,7 @@ public class a_user_2_signup extends AppCompatActivity {
                                                     });
 
                                             // Add Progressive Mode - Lesson 3 module progress data to Firestore
-                                            db.collection("users").document(userId).collection("ProgressiveMode")
+                                            db.collection("users").document(userId).collection("Progressive Mode")
                                                     .document("Lesson 3")
                                                     .set(progressiveModuleProgress_Lesson3)
                                                     .addOnSuccessListener(aVoid3 -> {
@@ -230,9 +230,9 @@ public class a_user_2_signup extends AppCompatActivity {
                                                     });
 
                                             // Add Progressive Mode - Lesson 4 module progress data to Firestore
-                                            db.collection("users").document(userId).collection("ProgressiveMode")
+                                            db.collection("users").document(userId).collection("Progressive Mode")
                                                     .document("Lesson 4")
-                                                    .set(progressiveModuleProgress_Lesson1)
+                                                    .set(progressiveModuleProgress_Lesson4)
                                                     .addOnSuccessListener(aVoid4 -> {
                                                         // Module 4 progress saved successfully
                                                     })
