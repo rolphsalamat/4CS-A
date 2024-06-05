@@ -72,8 +72,6 @@
             String firstName = getIntent().getStringExtra("firstName");
             greetUserName.setText("Hello, " + firstName); // change Greeting text
 
-
-
             // Initialize ViewPager
             viewPager = findViewById(R.id.view_pager);
 

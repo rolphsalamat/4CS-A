@@ -24,6 +24,7 @@
     <FrameLayout
         android:layout_width="300dp"
         android:layout_height="45dp"
+        android:layout_marginTop="-20dp"
         android:background="@drawable/rounded_edit_text_with_border">
 
         <EditText
@@ -106,7 +107,7 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_marginHorizontal="50dp"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="50dp"
         android:text="Sign in"
         android:textColor="#FFFFFF"
         android:backgroundTint="#5983FC"
@@ -117,7 +118,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -140,106 +141,106 @@
 
     </LinearLayout>
 
-<!--    &lt;!&ndash; OR LOGIN WITH &ndash;&gt;-->
-<!--    <LinearLayout-->
-<!--        android:id="@+id/orLoginWithLayout"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="20dp"-->
-<!--        android:layout_marginTop="70dp">-->
+    <!-- OR LOGIN WITH -->
+    <LinearLayout
+        android:id="@+id/orLoginWithLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="70dp">
 
-<!--        <View-->
-<!--            android:id="@+id/orLoginLeft"-->
-<!--            android:layout_width="145dp"-->
-<!--            android:layout_height="3dp"-->
-<!--            android:layout_gravity="center_vertical"-->
-<!--            android:background="@drawable/white_divider" />-->
+        <View
+            android:id="@+id/orLoginLeft"
+            android:layout_width="145dp"
+            android:layout_height="3dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/white_divider" />
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="or login with"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:layout_margin="8dp" />-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="or login with"
+            android:textColor="@color/white"
+            android:layout_margin="8dp" />
 
-<!--        <View-->
-<!--            android:id="@+id/orLoginRight"-->
-<!--            android:layout_width="145dp"-->
-<!--            android:layout_height="3dp"-->
-<!--            android:layout_gravity="center_vertical"-->
-<!--            android:background="@drawable/white_divider" />-->
+        <View
+            android:id="@+id/orLoginRight"
+            android:layout_width="145dp"
+            android:layout_height="3dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/white_divider" />
 
-<!--    </LinearLayout>-->
+    </LinearLayout>
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:layout_marginTop="30dp"-->
-<!--        android:layout_marginHorizontal="30dp">-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="30dp">
 
-<!--        &lt;!&ndash; LOGIN WITH FACEBOOK &ndash;&gt;-->
-<!--        <FrameLayout-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_marginEnd="5dp">-->
+        <!-- LOGIN WITH FACEBOOK -->
+        <FrameLayout
+            android:id="@+id/facebookButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="5dp">
 
-<!--            &lt;!&ndash; FACEBOOK BUTTON &ndash;&gt;-->
-<!--            <Button-->
-<!--                android:id="@+id/facebookButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:text="Facebook"-->
-<!--                android:paddingStart="50dp"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:backgroundTint="@color/facebook"-->
-<!--                android:clickable="true"-->
-<!--                android:focusable="true"-->
-<!--                android:onClick="onFacebookClicked"-->
-<!--                tools:ignore="OnClick" />-->
+            <!-- FACEBOOK BUTTON -->
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Facebook"
+                android:paddingStart="50dp"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/facebook"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="onFacebookClicked"
+                tools:ignore="OnClick" />
 
-<!--            &lt;!&ndash; Facebook Icon &ndash;&gt;-->
-<!--            <ImageView-->
-<!--                android:layout_width="30dp"-->
-<!--                android:layout_height="30dp"-->
-<!--                android:src="@drawable/facebook"-->
-<!--                android:layout_marginStart="15dp"-->
-<!--                android:layout_gravity="start|center_vertical" />-->
+            <!-- Facebook Icon -->
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/facebook"
+                android:layout_marginStart="15dp"
+                android:layout_gravity="start|center_vertical" />
 
-<!--        </FrameLayout>-->
+        </FrameLayout>
 
-<!--        &lt;!&ndash; LOGIN WITH GOOGLE &ndash;&gt;-->
-<!--        <FrameLayout-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_marginStart="5dp">-->
+        <!-- LOGIN WITH GOOGLE -->
+        <FrameLayout
+            android:id="@+id/googleButton"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_marginStart="5dp">
 
-<!--            &lt;!&ndash; GOOGLE BUTTON &ndash;&gt;-->
-<!--            <Button-->
-<!--                android:id="@+id/googleButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:text="Google"-->
-<!--                android:paddingStart="35dp"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:backgroundTint="#EEEEEE"-->
-<!--                android:clickable="true"-->
-<!--                android:focusable="true"-->
-<!--                android:onClick="onGoogleClicked"-->
-<!--                tools:ignore="OnClick" />-->
+            <!-- GOOGLE BUTTON -->
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Google"
+                android:paddingStart="35dp"
+                android:textColor="@color/black"
+                android:backgroundTint="#EEEEEE"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="onGoogleClicked"
+                tools:ignore="OnClick" />
 
-<!--            &lt;!&ndash; Google Icon &ndash;&gt;-->
-<!--            <ImageView-->
-<!--                android:layout_width="30dp"-->
-<!--                android:layout_height="30dp"-->
-<!--                android:src="@drawable/google"-->
-<!--                android:layout_marginStart="15dp"-->
-<!--                android:layout_gravity="start|center_vertical" />-->
+            <!-- Google Icon -->
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/google"
+                android:layout_marginStart="15dp"
+                android:layout_gravity="start|center_vertical" />
 
-<!--        </FrameLayout>-->
-<!--    </LinearLayout>-->
+        </FrameLayout>
+    </LinearLayout>
 
 
 </LinearLayout>
