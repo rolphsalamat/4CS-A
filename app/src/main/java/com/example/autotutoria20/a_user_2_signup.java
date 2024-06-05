@@ -4,29 +4,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class a_user_2_signup extends AppCompatActivity {
@@ -89,15 +84,63 @@ public class a_user_2_signup extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 String gender = "";
 
+                // Must validate 4
+                int validCounter = 0;
+
+                /* FIRST NAME SECTION */
+                if (firstName.isEmpty())
+                    Toast.makeText(a_user_2_signup.this, "Please enter your first name", Toast.LENGTH_SHORT).show();
+                else if (!firstName.matches("[a-zA-Z]+"))
+                    Toast.makeText(a_user_2_signup.this, "First name can only contain letters", Toast.LENGTH_SHORT).show();
+                else
+                    validCounter++;
+
+                Toast.makeText(a_user_2_signup.this, "validCounter: " + validCounter, Toast.LENGTH_SHORT).show();
+
+                /* LAST NAME SECTION */
+                if (lastName.isEmpty())
+                    Toast.makeText(a_user_2_signup.this, "Please enter your last name", Toast.LENGTH_SHORT).show();
+                else if (!lastName.matches("[a-zA-Z]+"))
+                    Toast.makeText(a_user_2_signup.this, "First name can only contain letters", Toast.LENGTH_SHORT).show();
+                else
+                    validCounter++;
+
+                Toast.makeText(a_user_2_signup.this, "validCounter: " + validCounter, Toast.LENGTH_SHORT).show();
+
+                /* EMAIL ADDRESS SECTION */
+                if (email.isEmpty())
+                    Toast.makeText(a_user_2_signup.this, "Please enter your email", Toast.LENGTH_SHORT).show();
+                // Email is VALID
+                else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches())
+                    Toast.makeText(a_user_2_signup.this, "Please enter a valid email address    ", Toast.LENGTH_SHORT).show();
+                else
+                    validCounter++;
+
+                Toast.makeText(a_user_2_signup.this, "validCounter: " + validCounter, Toast.LENGTH_SHORT).show();
+
+                /* PASSWORD SECTION */
+                if (password.isEmpty())
+                    Toast.makeText(a_user_2_signup.this, "Please enter your password", Toast.LENGTH_SHORT).show();
+                else if (password.length() < 8)
+                    Toast.makeText(a_user_2_signup.this, "Password must be at least 8 characters long", Toast.LENGTH_SHORT).show();
+                else if (!password.matches(".*[a-z].*"))
+                    Toast.makeText(a_user_2_signup.this, "Password must contain at least one lowercase letter", Toast.LENGTH_SHORT).show();
+                else if (!password.matches(".*[A-Z].*"))
+                    Toast.makeText(a_user_2_signup.this, "Password must contain at least one uppercase letter", Toast.LENGTH_SHORT).show();
+                else
+                    validCounter++;
+                    // Proceed with your logic here
+
+                Toast.makeText(a_user_2_signup.this, "validCounter: " + validCounter, Toast.LENGTH_SHORT).show();
+
                 // Retrieve the selected gender from the RadioGroup
                 int selectedId = genderRadioGroup.getCheckedRadioButtonId();
-                if (selectedId == R.id.rdoFemale) {
+                if (selectedId == R.id.rdoFemale)
                     gender = "Female";
-                } else if (selectedId == R.id.rdoMale) {
+                else if (selectedId == R.id.rdoMale)
                     gender = "Male";
-                } else if (selectedId == R.id.rdoRatherNoySay) {
+                else if (selectedId == R.id.rdoRatherNoySay)
                     gender = "Rather not say";
-                }
 
                 // Calculate the actual age
                 Calendar currentDate = Calendar.getInstance();
@@ -180,126 +223,129 @@ public class a_user_2_signup extends AppCompatActivity {
                 // Initialize Firebase Authentication
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-                // Sign up the user with email and password
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                // Sign up success, proceed to save user details to Firestore
-                                Log.d(TAG, "createUserWithEmail:success");
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                String userId = user.getUid(); // Retrieve the user ID
+                if (validCounter == 4) {
+                    // Sign up the user with email and password
+                    mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            // Sign up success, proceed to save user details to Firestore
+                            Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            String userId = user.getUid(); // Retrieve the user ID
 
-                                // Add the user data to Firestore
-                                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                db.collection("users").document(userId).set(userData)
-                                        .addOnSuccessListener(aVoid -> {
-                                            // Display success message
-                                            Toast.makeText(getApplicationContext(), "User details saved to Firestore", Toast.LENGTH_SHORT).show();
+                            // Add the user data to Firestore
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            db.collection("users").document(userId).set(userData)
+                            .addOnSuccessListener(aVoid -> {
+                                // Display success message
+                                Toast.makeText(getApplicationContext(), "User details saved to Firestore", Toast.LENGTH_SHORT).show();
 
-                                            // Add Progressive Mode - Lesson 1 module progress data to Firestore
-                                            db.collection("users").document(userId).collection("Progressive Mode")
-                                                    .document("Lesson 1")
-                                                    .set(progressiveModuleProgress_Lesson1)
-                                                    .addOnSuccessListener(aVoid1 -> {
-                                                        // Module 1 progress saved successfully
-                                                    })
-                                                    .addOnFailureListener(e -> {
-                                                        Log.e(TAG, "Error adding Progressive Mode - Lesson 1 document", e);
-                                                    });
-
-                                            // Add Progressive Mode - Lesson 2 module progress data to Firestore
-                                            db.collection("users").document(userId).collection("Progressive Mode")
-                                                    .document("Lesson 2")
-                                                    .set(progressiveModuleProgress_Lesson2)
-                                                    .addOnSuccessListener(aVoid2 -> {
-                                                        // Module 2 progress saved successfully
-                                                    })
-                                                    .addOnFailureListener(e -> {
-                                                        Log.e(TAG, "Error adding Progressive Mode - Lesson 2 document", e);
-                                                    });
-
-                                            // Add Progressive Mode - Lesson 3 module progress data to Firestore
-                                            db.collection("users").document(userId).collection("Progressive Mode")
-                                                    .document("Lesson 3")
-                                                    .set(progressiveModuleProgress_Lesson3)
-                                                    .addOnSuccessListener(aVoid3 -> {
-                                                        // Module 3 progress saved successfully
-                                                    })
-                                                    .addOnFailureListener(e -> {
-                                                        Log.e(TAG, "Error adding Progressive Mode - Lesson 3 document", e);
-                                                    });
-
-                                            // Add Progressive Mode - Lesson 4 module progress data to Firestore
-                                            db.collection("users").document(userId).collection("Progressive Mode")
-                                                    .document("Lesson 4")
-                                                    .set(progressiveModuleProgress_Lesson4)
-                                                    .addOnSuccessListener(aVoid4 -> {
-                                                        // Module 4 progress saved successfully
-                                                    })
-                                                    .addOnFailureListener(e -> {
-                                                        Log.e(TAG, "Error adding Progressive Mode - Lesson 4 document", e);
-                                                    });
-
-                                            // Add Free Use Mode - Lesson 1 module progress data to Firestore
-                                            db.collection("users").document(userId).collection("Free Use Mode")
-                                                    .document("Lesson 1")
-                                                    .set(freeUseModuleProgress_Lesson1)
-                                                    .addOnSuccessListener(aVoid1 -> {
-                                                        // Module 1 progress saved successfully
-                                                    })
-                                                    .addOnFailureListener(e -> {
-                                                        Log.e(TAG, "Error adding Free Use Mode - Lesson 1 document", e);
-                                                    });
-
-                                            // Add Free Use Mode - Lesson 2 module progress data to Firestore
-                                            db.collection("users").document(userId).collection("Free Use Mode")
-                                                    .document("Lesson 2")
-                                                    .set(freeUseModuleProgress_Lesson2)
-                                                    .addOnSuccessListener(aVoid2 -> {
-                                                        // Module 2 progress saved successfully
-                                                    })
-                                                    .addOnFailureListener(e -> {
-                                                        Log.e(TAG, "Error adding Free Use Mode - Lesson 2 document", e);
-                                                    });
-
-                                            // Add Free Use Mode - Lesson 3 module progress data to Firestore
-                                            db.collection("users").document(userId).collection("Free Use Mode")
-                                                    .document("Lesson 3")
-                                                    .set(freeUseModuleProgress_Lesson3)
-                                                    .addOnSuccessListener(aVoid3 -> {
-                                                        // Module 3 progress saved successfully
-                                                    })
-                                                    .addOnFailureListener(e -> {
-                                                        Log.e(TAG, "Error adding Free Use Mode - Lesson 3 document", e);
-                                                    });
-
-                                            // Add Free Use Mode - Lesson 4 module progress data to Firestore
-                                            db.collection("users").document(userId).collection("Free Use Mode")
-                                                    .document("Lesson 4")
-                                                    .set(freeUseModuleProgress_Lesson4)
-                                                    .addOnSuccessListener(aVoid4 -> {
-                                                        // Module 1 progress saved successfully
-                                                    })
-                                                    .addOnFailureListener(e -> {
-                                                        Log.e(TAG, "Error adding Free Use Mode - Lesson 4 document", e);
-                                                    });
-
-                                            finish();
-
+                                // Add Progressive Mode - Lesson 1 module progress data to Firestore
+                                db.collection("users").document(userId).collection("Progressive Mode")
+                                        .document("Lesson 1")
+                                        .set(progressiveModuleProgress_Lesson1)
+                                        .addOnSuccessListener(aVoid1 -> {
+                                            // Module 1 progress saved successfully
                                         })
                                         .addOnFailureListener(e -> {
-                                            // Display error message
-                                            Toast.makeText(getApplicationContext(), "Error saving user details to Firestore", Toast.LENGTH_SHORT).show();
-                                            Log.e(TAG, "Error saving user details", e);
-                                            clearAllFields();
+                                            Log.e(TAG, "Error adding Progressive Mode - Lesson 1 document", e);
                                         });
-                            } else {
-                                // If sign up fails, display a message to the user.
-                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
+
+                                // Add Progressive Mode - Lesson 2 module progress data to Firestore
+                                db.collection("users").document(userId).collection("Progressive Mode")
+                                        .document("Lesson 2")
+                                        .set(progressiveModuleProgress_Lesson2)
+                                        .addOnSuccessListener(aVoid2 -> {
+                                            // Module 2 progress saved successfully
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.e(TAG, "Error adding Progressive Mode - Lesson 2 document", e);
+                                        });
+
+                                // Add Progressive Mode - Lesson 3 module progress data to Firestore
+                                db.collection("users").document(userId).collection("Progressive Mode")
+                                        .document("Lesson 3")
+                                        .set(progressiveModuleProgress_Lesson3)
+                                        .addOnSuccessListener(aVoid3 -> {
+                                            // Module 3 progress saved successfully
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.e(TAG, "Error adding Progressive Mode - Lesson 3 document", e);
+                                        });
+
+                                // Add Progressive Mode - Lesson 4 module progress data to Firestore
+                                db.collection("users").document(userId).collection("Progressive Mode")
+                                        .document("Lesson 4")
+                                        .set(progressiveModuleProgress_Lesson4)
+                                        .addOnSuccessListener(aVoid4 -> {
+                                            // Module 4 progress saved successfully
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.e(TAG, "Error adding Progressive Mode - Lesson 4 document", e);
+                                        });
+
+                                // Add Free Use Mode - Lesson 1 module progress data to Firestore
+                                db.collection("users").document(userId).collection("Free Use Mode")
+                                        .document("Lesson 1")
+                                        .set(freeUseModuleProgress_Lesson1)
+                                        .addOnSuccessListener(aVoid1 -> {
+                                            // Module 1 progress saved successfully
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.e(TAG, "Error adding Free Use Mode - Lesson 1 document", e);
+                                        });
+
+                                // Add Free Use Mode - Lesson 2 module progress data to Firestore
+                                db.collection("users").document(userId).collection("Free Use Mode")
+                                        .document("Lesson 2")
+                                        .set(freeUseModuleProgress_Lesson2)
+                                        .addOnSuccessListener(aVoid2 -> {
+                                            // Module 2 progress saved successfully
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.e(TAG, "Error adding Free Use Mode - Lesson 2 document", e);
+                                        });
+
+                                // Add Free Use Mode - Lesson 3 module progress data to Firestore
+                                db.collection("users").document(userId).collection("Free Use Mode")
+                                        .document("Lesson 3")
+                                        .set(freeUseModuleProgress_Lesson3)
+                                        .addOnSuccessListener(aVoid3 -> {
+                                            // Module 3 progress saved successfully
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.e(TAG, "Error adding Free Use Mode - Lesson 3 document", e);
+                                        });
+
+                                // Add Free Use Mode - Lesson 4 module progress data to Firestore
+                                db.collection("users").document(userId).collection("Free Use Mode")
+                                        .document("Lesson 4")
+                                        .set(freeUseModuleProgress_Lesson4)
+                                        .addOnSuccessListener(aVoid4 -> {
+                                            // Module 1 progress saved successfully
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.e(TAG, "Error adding Free Use Mode - Lesson 4 document", e);
+                                        });
+
+                                finish();
+
+                            })
+                            .addOnFailureListener(e -> {
+                                // Display error message
+                                Toast.makeText(getApplicationContext(), "Error saving user details to Firestore", Toast.LENGTH_SHORT).show();
+                                Log.e(TAG, "Error saving user details", e);
+                                clearAllFields();
+                            });
+                        } else {
+                            // If sign up fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(getApplicationContext(), "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
             }
         });
 
