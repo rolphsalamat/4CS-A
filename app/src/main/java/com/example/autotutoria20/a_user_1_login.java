@@ -108,7 +108,7 @@ public class a_user_1_login extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete(@NonNull Task <AuthResult> task) {
+                    public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) { // Email and Password found on Firestore Authentication
                             FirebaseUser user = mAuth.getCurrentUser(); // Get user ID
                             if (user != null) { // if user is found
@@ -162,7 +162,7 @@ public class a_user_1_login extends AppCompatActivity {
                             Log.d("Firestore", "Password: " + password);
                             Log.d("Firestore", "Age: " + age);
 
-                            Intent intent = new Intent (a_user_1_login.this, b_main_0_menu.class);
+                            Intent intent = new Intent(a_user_1_login.this, b_main_0_menu.class);
 
                             // Put User Data Here
                             intent.putExtra("firstName", firstName); // for Greeting "Hello, " + firstName
@@ -277,15 +277,55 @@ public class a_user_1_login extends AppCompatActivity {
     // Method to reset password
     private void resetPassword(String email) {
         mAuth.sendPasswordResetEmail(email)
-        .addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task){
-                if (task.isSuccessful()) {
-                    Toast.makeText(a_user_1_login.this, "Password reset email sent", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(a_user_1_login.this, "Failed to send reset email", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(a_user_1_login.this, "Password reset email sent", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(a_user_1_login.this, "Failed to send reset email", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }
+//    }
+
+//    private void handleFacebookAccessToken(AccessToken token) {
+//        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+//        FirebaseAuth.getInstance().signInWithCredential(credential)
+//                .addOnCompleteListener(this, task -> {
+//                    if (task.isSuccessful()) {
+//                        // Sign in success
+//                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//                        Log.d(TAG, "signInWithCredential:success: " + user.getDisplayName());
+//                    } else {
+//                        // If sign in fails
+//                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+//                    }
+//                });
+//    }
+//
+//    // Facebook login callback
+//    private FacebookCallback<LoginResult> mCallback = new FacebookCallback<LoginResult>() {
+//        @Override
+//        public void onSuccess(LoginResult loginResult) {
+//            handleFacebookAccessToken(loginResult.getAccessToken());
+//        }
+//
+//        @Override
+//        public void onCancel() {
+//            // Handle cancel
+//        }
+//
+//        @Override
+//        public void onError(FacebookException error) {
+//            // Handle error
+//        }
+//    };
+//
+//// In your onCreate or onActivityResult
+//LoginManager.getInstance().registerCallback(callbackManager, mCallback);
+//
+//
+//}

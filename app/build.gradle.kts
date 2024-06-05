@@ -45,6 +45,12 @@ dependencies {
     testImplementation("junit:junit:4.13.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+//    implementation ("com.google.firebase:firebase-auth:21.0.1")
+//    implementation ("com.facebook.android:facebook-android-sdk:[5,6)")
+//    implementation ("androidx.browser:browser:1.0.0")
+//    // replace all com.android.support libraries with their androidx equivalents
+//    implementation ("androidx.core:core:1.5.0")
+//    // Add other androidx dependencies as needed
 }
 
 // Add repositories block if necessary
