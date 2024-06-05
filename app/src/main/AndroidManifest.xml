@@ -37,14 +37,17 @@
 
         <activity android:name=".a_user_2_signup" />
 
-        <!-- ADD ALL FREE USE LESSONS HERE -->
-        <activity android:name=".c_Lesson_freeuse_1" />
-
         <!-- ADD ALL PROGRESSIVE LESSONS HERE -->
         <activity android:name=".c_Lesson_progressive_1" />
-<!--        <activity android:name=".c_Lesson_progressive_2" />-->
-<!--        <activity android:name=".c_Lesson_progressive_3" />-->
-<!--        <activity android:name=".c_Lesson_progressive_4" />-->
+        <activity android:name=".c_Lesson_progressive_2" />
+        <activity android:name=".c_Lesson_progressive_3" />
+        <activity android:name=".c_Lesson_progressive_4" />
+
+        <!-- ADD ALL FREE USE LESSONS HERE -->
+        <activity android:name=".c_Lesson_freeuse_1" />
+        <activity android:name=".c_Lesson_freeuse_2" />
+        <activity android:name=".c_Lesson_freeuse_3" />
+        <activity android:name=".c_Lesson_freeuse_4" />
 
 
         <activity android:name=".Lesson_2" />

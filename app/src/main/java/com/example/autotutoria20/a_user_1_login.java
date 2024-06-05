@@ -34,6 +34,7 @@ public class a_user_1_login extends AppCompatActivity {
     private boolean isPasswordVisible = false;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private b_main_0_menu activity; // Assuming you have a reference to the activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,27 +109,15 @@ public class a_user_1_login extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task <AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Authentication successful
-                            Toast.makeText(a_user_1_login.this, "Authentication Successful", Toast.LENGTH_SHORT).show();
-
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            if (user != null) {
+                        if (task.isSuccessful()) { // Email and Password found on Firestore Authentication
+                            FirebaseUser user = mAuth.getCurrentUser(); // Get user ID
+                            if (user != null) { // if user is found
                                 String userId = user.getUid();
-//                                Toast.makeText(a_user_1_login.this, "Welcome, " + user.getUid(), Toast.LENGTH_SHORT).show();
-//                                Toast.makeText(a_user_1_login.this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
-                                Log.d("Firestore", "user id: " + userId);
-                                startActivity(new Intent(a_user_1_login.this, b_main_0_menu.class));
-
-                                // Fetch user details in the background
                                 fetchUserDetails(userId);
-                            } else {
-                                // User is null (handle login or prompt here)
-                                Toast.makeText(a_user_1_login.this, "User is null", Toast.LENGTH_SHORT).show();
-                            }
+                            } else // If user is not found, or no data matched
+                                Toast.makeText(a_user_1_login.this, "Account does not exist", Toast.LENGTH_SHORT).show();
 
-                        } else {
-                            // Authentication failed
+                        } else { // Email and Password is not found on Firestore Authentication
                             Toast.makeText(a_user_1_login.this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             Log.e("Firebase Authentication", "Authentication failed: " + task.getException().getMessage());
                         }
@@ -144,39 +133,9 @@ public class a_user_1_login extends AppCompatActivity {
         // Call the new method to fetch user info
         fetchUserInfo(userId);
         // Call retrieveLessonData for Progressive Mode
-        retrieveLessonData("ProgressiveMode", userId); // Change this later to Progressive <space> Mode
+        retrieveLessonData("Progressive Mode", userId); // Change this later to Progressive <space> Mode
         // Call retrieveLessonData for Free Use Mode
         retrieveLessonData("Free Use Mode", userId);
-
-
-        // Retrieve data from Free Use Mode collection
-//        userRef.collection("Free Use Mode").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    QuerySnapshot querySnapshot = task.getResult();
-//                    if (!querySnapshot.isEmpty()) {
-//                        for (DocumentSnapshot lessonDoc : querySnapshot.getDocuments()) {
-//                            // Process each lesson document
-//                            String lessonName = lessonDoc.getId(); // Get the lesson name (document ID)
-//                            Map<String, Object> lessonData = lessonDoc.getData();
-//                            processLessonData(lessonName, lessonData);
-//                        }
-//                        Toast.makeText(a_user_1_login.this, "Free Use Mode data retrieved", Toast.LENGTH_SHORT).show();
-//                        Log.d("Firestore", "Free Use Mode data retrieved");
-//                    } else {
-//                        // No lessons found in Free Use Mode collection
-//                        Toast.makeText(a_user_1_login.this, "Free Use Mode data not found", Toast.LENGTH_SHORT).show();
-//                        Log.d("Firestore", "Free Use Mode data not found");
-//                    }
-//                } else {
-//                    // Error retrieving Free Use Mode data
-//                    String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
-//                    Toast.makeText(a_user_1_login.this, "Failed to retrieve Free Use Mode data: " + errorMessage, Toast.LENGTH_SHORT).show();
-//                    Log.d("Firestore", "Failed to retrieve Free Use Mode data: " + errorMessage);
-//                }
-//            }
-//        });
     }
 
     private void fetchUserInfo(String userId) {
@@ -202,6 +161,16 @@ public class a_user_1_login extends AppCompatActivity {
                             Log.d("Firestore", "Gender: " + gender);
                             Log.d("Firestore", "Password: " + password);
                             Log.d("Firestore", "Age: " + age);
+
+                            Intent intent = new Intent (a_user_1_login.this, b_main_0_menu.class);
+
+                            // Put User Data Here
+                            intent.putExtra("firstName", firstName); // for Greeting "Hello, " + firstName
+
+
+                            startActivity(intent);
+
+
                         } else {
                             Log.d("Firestore", "User document does not exist");
                         }
@@ -301,7 +270,6 @@ public class a_user_1_login extends AppCompatActivity {
                 dialog.dismiss(); // Dismiss dialog without action
             }
         });
-
         // Show the dialog
         dialog.show();
     }

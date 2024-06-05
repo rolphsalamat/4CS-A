@@ -58,7 +58,6 @@
         android:text="Hello, "
         android:textColor="#FFF"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:contentDescription="Greeting Message"/>
+        android:textStyle="bold"/>
 
 </LinearLayout>

@@ -7,6 +7,7 @@
     import android.net.Uri;
     import android.os.Bundle;
     import android.provider.MediaStore;
+    import android.util.Log;
     import android.view.LayoutInflater;
     import android.view.MenuItem;
     import android.view.View;
@@ -15,6 +16,7 @@
     import android.widget.Button;
     import android.widget.FrameLayout;
     import android.widget.RatingBar;
+    import android.widget.TextView;
     import android.widget.Toast;
 
     import android.content.pm.PackageManager;
@@ -45,6 +47,7 @@
         private ActionBarDrawerToggle drawerToggle;
         private ViewPager viewPager;
         private PagerAdapter pagerAdapter;
+        private static TextView greetUserName;
         private List<Fragment> progressiveFragmentList;
         private List<Fragment> freeUseFragmentList;
         private List<Fragment> fragmentList;
@@ -55,11 +58,21 @@
         private FrameLayout profileFrameLayout;
         private boolean isProgressiveMode = true;
 
-        @SuppressLint("MissingInflatedId")
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.b_main_0_menu);
+
+            // Initialize the NavigationView and its header view
+            navigationView = findViewById(R.id.navigation_view);
+            View headerView = navigationView.getHeaderView(0);
+            greetUserName = headerView.findViewById(R.id.user_firstName);
+
+            // Retrieve the keyname from the intent
+            String firstName = getIntent().getStringExtra("firstName");
+            greetUserName.setText("Hello, " + firstName); // change Greeting text
+
+
 
             // Initialize ViewPager
             viewPager = findViewById(R.id.view_pager);
@@ -182,9 +195,9 @@
             });
 
             // Initialize profile image view and frame layout
-            View headerView = navigationView.getHeaderView(0);
-            profileImageView = headerView.findViewById(R.id.user_profile_picture);
-            profileFrameLayout = headerView.findViewById(R.id.profile_frame_layout);
+            View headerView1 = navigationView.getHeaderView(0);
+            profileImageView = headerView1.findViewById(R.id.user_profile_picture);
+            profileFrameLayout = headerView1.findViewById(R.id.profile_frame_layout);
 
             profileFrameLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
