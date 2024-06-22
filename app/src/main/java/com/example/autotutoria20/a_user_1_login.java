@@ -1,6 +1,7 @@
 package com.example.autotutoria20;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
@@ -27,6 +28,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class a_user_1_login extends AppCompatActivity {
@@ -34,7 +36,6 @@ public class a_user_1_login extends AppCompatActivity {
     private boolean isPasswordVisible = false;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private b_main_0_menu activity; // Assuming you have a reference to the activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +103,6 @@ public class a_user_1_login extends AppCompatActivity {
 
     // Method to authenticate user using Firebase Auth
     private void loginUser(String email, String password) {
-
-//        Toast.makeText(a_user_1_login.this, "SIGN IN BUTTON CLICKED", Toast.LENGTH_SHORT).show();
-
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -113,10 +111,10 @@ public class a_user_1_login extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser(); // Get user ID
                             if (user != null) { // if user is found
                                 String userId = user.getUid();
-                                fetchUserDetails(userId);
-                            } else // If user is not found, or no data matched
+                                fetchUserInfo(userId); // Fetch user info and lesson data
+                            } else { // If user is not found, or no data matched
                                 Toast.makeText(a_user_1_login.this, "Account does not exist", Toast.LENGTH_SHORT).show();
-
+                            }
                         } else { // Email and Password is not found on Firestore Authentication
                             Toast.makeText(a_user_1_login.this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             Log.e("Firebase Authentication", "Authentication failed: " + task.getException().getMessage());
@@ -125,111 +123,136 @@ public class a_user_1_login extends AppCompatActivity {
                 });
     }
 
-    private void fetchUserDetails(String userId) {
-        // Get reference to the user's document
-        DocumentReference userRef = db.collection("users").document(userId);
-
-
-        // Call the new method to fetch user info
-        fetchUserInfo(userId);
-        // Call retrieveLessonData for Progressive Mode
-        retrieveLessonData("Progressive Mode", userId); // Change this later to Progressive <space> Mode
-        // Call retrieveLessonData for Free Use Mode
-        retrieveLessonData("Free Use Mode", userId);
-    }
-
     private void fetchUserInfo(String userId) {
         DocumentReference userRef = db.collection("users").document(userId);
 
         userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            String firstName = document.getString("First name");
-                            String lastName = document.getString("Last name");
-                            String email = document.getString("Email Address");
-                            String gender = document.getString("Gender");
-                            String password = document.getString("Password");
-                            int age = document.getLong("Age").intValue(); // Assuming Age is stored as a Long
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String firstName = document.getString("First name");
+                        String lastName = document.getString("Last name");
+                        String email = document.getString("Email Address");
+                        String gender = document.getString("Gender");
+                        String password = document.getString("Password");
+                        int age = document.getLong("Age").intValue(); // Assuming Age is stored as a Long
 
-                            Log.d("Firestore", "First Name: " + firstName);
-                            Log.d("Firestore", "Last Name: " + lastName);
-                            Log.d("Firestore", "Email Address: " + email);
-                            Log.d("Firestore", "Gender: " + gender);
-                            Log.d("Firestore", "Password: " + password);
-                            Log.d("Firestore", "Age: " + age);
+                        Log.d("Firestore", "First Name: " + firstName);
+                        Log.d("Firestore", "Last Name: " + lastName);
+                        Log.d("Firestore", "Email Address: " + email);
+                        Log.d("Firestore", "Gender: " + gender);
+                        Log.d("Firestore", "Password: " + password);
+                        Log.d("Firestore", "Age: " + age);
 
-                            Intent intent = new Intent(a_user_1_login.this, b_main_0_menu.class);
+                        // Store user information in SharedPreferences
+                        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("firstName", firstName);
+                        editor.putString("lastName", lastName);
+                        editor.putString("email", email);
+                        editor.putString("gender", gender);
+                        editor.putInt("age", age);
+                        editor.putBoolean("isLoggedIn", true);
 
-                            // Put User Data Here
-                            intent.putExtra("firstName", firstName); // for Greeting "Hello, " + firstName
+                        // Add Lessons here??
 
 
-                            startActivity(intent);
+                        // Apply User Information
+                        editor.apply();
 
-
-                        } else {
-                            Log.d("Firestore", "User document does not exist");
-                        }
+                        // Fetch lesson data and pass it to the intent
+                        fetchLessonData(userId, firstName, lastName, email, gender, age);
                     } else {
-                        String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
-                        Log.d("Firestore", "Failed to retrieve user information: " + errorMessage);
+                        Log.d("Firestore", "User document does not exist");
                     }
+                } else {
+                    String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
+                    Log.d("Firestore", "Failed to retrieve user information: " + errorMessage);
                 }
             }
         });
     }
 
+    private void fetchLessonData(String userId, String firstName, String lastName, String email, String gender, int age) {
+        final Map<String, Map<String, Object>> progressiveModeData = new HashMap<>();
+        final Map<String, Map<String, Object>> freeUseModeData = new HashMap<>();
 
-    private void retrieveLessonData(String modeName, String userId) {
-        // Get reference to the user's lesson collection within the specified mode
-        CollectionReference lessonRef = db.collection("users").document(userId).collection(modeName);
+        CollectionReference progressiveModeRef = db.collection("users").document(userId).collection("Progressive Mode");
+        CollectionReference freeUseModeRef = db.collection("users").document(userId).collection("Free Use Mode");
 
-        lessonRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        progressiveModeRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     QuerySnapshot querySnapshot = task.getResult();
-                    if (!querySnapshot.isEmpty()) {
-                        for (DocumentSnapshot lessonDoc : querySnapshot.getDocuments()) {
-                            // Process each lesson document
-                            String lessonName = lessonDoc.getId(); // Get the lesson name (document ID)
-                            Map<String, Object> lessonData = lessonDoc.getData();
-                            processLessonData(modeName, lessonName, lessonData);
+                    if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                            progressiveModeData.put(document.getId(), document.getData());
+                            processLessonData("Progressive Mode", document.getId(), document.getData());
+                            verifySavedData(); // Verify saved data after processing each lesson
                         }
-                        Toast.makeText(a_user_1_login.this, modeName + " data retrieved", Toast.LENGTH_SHORT).show();
-                        Log.d("Firestore", modeName + " data retrieved");
+                        Log.d("Firestore", "Progressive Mode data retrieved");
                     } else {
-                        // No lessons found in the specified mode
-                        Toast.makeText(a_user_1_login.this, modeName + " data not found", Toast.LENGTH_SHORT).show();
-                        Log.d("Firestore", modeName + " data not found");
+                        Log.d("Firestore", "Progressive Mode data not found");
                     }
+
+                    // After processing Progressive Mode, fetch Free Use Mode data
+                    freeUseModeRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                QuerySnapshot querySnapshot = task.getResult();
+                                if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                                        freeUseModeData.put(document.getId(), document.getData());
+                                        processLessonData("Free Use Mode", document.getId(), document.getData());
+                                        verifySavedData(); // Verify saved data after processing each lesson
+                                    }
+                                    Log.d("Firestore", "Free Use Mode data retrieved");
+                                } else {
+                                    Log.d("Firestore", "Free Use Mode data not found");
+                                }
+                            } else {
+                                String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
+                                Log.d("Firestore", "Failed to retrieve Free Use Mode data: " + errorMessage);
+                            }
+
+                            // Proceed to next activity after fetching all data
+//                             moveToMainMenu(firstName, lastName, email, gender, age);
+                            Intent intent = new Intent(a_user_1_login.this, b_main_0_menu.class);
+                            startActivity(intent);
+                            finish(); // Finish the login activity
+                        }
+                    });
                 } else {
-                    // Error retrieving lesson data
                     String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
-                    Toast.makeText(a_user_1_login.this, "Failed to retrieve " + modeName + " data: " + errorMessage, Toast.LENGTH_SHORT).show();
-                    Log.d("Firestore", "Failed to retrieve " + modeName + " data: " + errorMessage);
+                    Log.d("Firestore", "Failed to retrieve Progressive Mode data: " + errorMessage);
                 }
             }
         });
     }
 
-
-    private void processLessonData(String modeName, String lessonName, Map<String, Object> lessonData) {
-        // Access individual fields within lessonData (M1, M2, etc.)
-        // You can use a loop or conditional statements to access specific fields
-        for (Map.Entry<String, Object> entry : lessonData.entrySet()) {
-            String fieldName = entry.getKey();
-            Object fieldValue = entry.getValue();
-
-            // Process the field name and value as needed
-            Log.d("LessonData", modeName + ": " + lessonName + ", Field: " + fieldName + ", Value: " + fieldValue);
-            // You can perform actions based on the field name and value here
+    private void verifySavedData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+        Map<String, ?> allEntries = sharedPreferences.getAll();
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            Log.d("SharedPreferences", entry.getKey() + ": " + entry.getValue().toString());
         }
     }
+
+//    private void moveToMainMenu(String firstName, String lastName, String email, String gender, int age) {
+//        Intent intent = new Intent(a_user_1_login.this, b_main_0_menu.class);
+//        intent.putExtra("firstName", firstName);
+//        intent.putExtra("lastName", lastName);
+//        intent.putExtra("email", email);
+//        intent.putExtra("gender", gender);
+//        intent.putExtra("age", age);
+//        startActivity(intent);
+//        finish(); // Finish the login activity
+//    }
+
 
     // Method to show custom dialog for resetting password
     private void showForgotPasswordDialog() {
@@ -288,44 +311,25 @@ public class a_user_1_login extends AppCompatActivity {
                     }
                 });
     }
-}
-//    }
 
-//    private void handleFacebookAccessToken(AccessToken token) {
-//        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-//        FirebaseAuth.getInstance().signInWithCredential(credential)
-//                .addOnCompleteListener(this, task -> {
-//                    if (task.isSuccessful()) {
-//                        // Sign in success
-//                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//                        Log.d(TAG, "signInWithCredential:success: " + user.getDisplayName());
-//                    } else {
-//                        // If sign in fails
-//                        Log.w(TAG, "signInWithCredential:failure", task.getException());
-//                    }
-//                });
-//    }
-//
-//    // Facebook login callback
-//    private FacebookCallback<LoginResult> mCallback = new FacebookCallback<LoginResult>() {
-//        @Override
-//        public void onSuccess(LoginResult loginResult) {
-//            handleFacebookAccessToken(loginResult.getAccessToken());
-//        }
-//
-//        @Override
-//        public void onCancel() {
-//            // Handle cancel
-//        }
-//
-//        @Override
-//        public void onError(FacebookException error) {
-//            // Handle error
-//        }
-//    };
-//
-//// In your onCreate or onActivityResult
-//LoginManager.getInstance().registerCallback(callbackManager, mCallback);
-//
-//
-//}
+    private void processLessonData(String modeName, String lessonName, Map<String, Object> lessonData) {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        for (Map.Entry<String, Object> entry : lessonData.entrySet()) {
+            String fieldName = entry.getKey();
+            Object fieldValue = entry.getValue();
+
+            if (fieldValue instanceof Long) {
+                editor.putInt(modeName + ": " + lessonName + ", " + fieldName, ((Long) fieldValue).intValue());
+            } else if (fieldValue instanceof String) {
+                editor.putString(modeName + ": " + lessonName + ", " + fieldName, (String) fieldValue);
+            }
+        }
+
+        editor.apply();
+    }
+
+
+
+}

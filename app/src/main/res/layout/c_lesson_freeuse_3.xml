@@ -75,6 +75,7 @@
                     android:textColor="@color/white"
                     android:textSize="12sp"/>
                 <TextView
+                    android:id="@+id/freeuse_lesson_3_module_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
@@ -125,6 +126,7 @@
                     android:textColor="@color/white"
                     android:textSize="12sp"/>
                 <TextView
+                    android:id="@+id/freeuse_lesson_3_module_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
@@ -175,6 +177,7 @@
                     android:textColor="@color/white"
                     android:textSize="12sp"/>
                 <TextView
+                    android:id="@+id/freeuse_lesson_3_module_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
@@ -225,6 +228,7 @@
                     android:textColor="@color/white"
                     android:textSize="12sp"/>
                 <TextView
+                    android:id="@+id/freeuse_lesson_3_module_4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"

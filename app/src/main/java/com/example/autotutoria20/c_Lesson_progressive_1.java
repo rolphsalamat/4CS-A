@@ -2,20 +2,30 @@ package com.example.autotutoria20;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class c_Lesson_progressive_1 extends AppCompatActivity {
 
     private AlertDialog dialog;
     private boolean[] cardCompletionStatus = {false, false, false}; // Track completion status of each card
+//    private int[] moduleSteps = {4, 4, 4}; // Change this accordingly
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +40,44 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
         setCardClickListener(card2, 2);
         setCardClickListener(card3, 3);
 
+        // Retrieve user session data from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+
+        // Retrieve lesson data for "Progressive Mode" for Lesson 1 only
+        HashMap<String, Map<String, Object>> progressiveModeData = getLessonDataForLesson(sharedPreferences, "Progressive Mode", "Lesson 1");
+
+        // Log and process Progressive Mode data for Lesson 1 only
+        if (progressiveModeData != null) {
+            List<String> sortedLessonNames = new ArrayList<>(progressiveModeData.keySet());
+            Collections.sort(sortedLessonNames); // Sort lesson names alphabetically
+
+            for (String lessonName : sortedLessonNames) {
+                Map<String, Object> lessonData = progressiveModeData.get(lessonName);
+
+                // Reset iteration for each lessonName
+                int iteration = 0;
+
+                for (Map.Entry<String, Object> lessonEntry : lessonData.entrySet()) {
+                    String moduleName = lessonEntry.getKey();
+                    Object moduleValue = lessonEntry.getValue();
+
+                    // Check if iteration exceeds moduleSteps array length
+                    if (iteration < z_Lesson_steps.lesson_1_steps.length) {
+                        // Example: Updating text values for module progress
+                        updateModuleProgressText("progressive_lesson_1_module_" + moduleName.charAt(1), moduleValue + "/" + z_Lesson_steps.lesson_1_steps[iteration]);
+
+                        Log.d("LessonData", "Progressive Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
+                        iteration++;
+                    } else {
+                        Log.e("LessonData", "Iteration exceeds moduleSteps array length.");
+                    }
+                }
+            }
+        } else {
+            Toast.makeText(this, "No Progressive Mode data found for Lesson 1", Toast.LENGTH_SHORT).show();
+            Log.d("No Progressive Mode", "No Progressive Mode data found for Lesson 1");
+        }
+
         Button exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,14 +87,37 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
         });
     }
 
+    private HashMap<String, Map<String, Object>> getLessonDataForLesson(SharedPreferences sharedPreferences, String mode, String lessonName) {
+        HashMap<String, Map<String, Object>> lessonData = new HashMap<>();
+        Map<String, ?> allEntries = sharedPreferences.getAll();
+
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            String key = entry.getKey();
+            if (key.startsWith(mode + ": " + lessonName)) {
+                String[] keyParts = key.split(", ");
+                if (keyParts.length == 2) {
+                    String fieldName = keyParts[1];
+                    int value = (int) entry.getValue();
+
+                    if (!lessonData.containsKey(lessonName)) {
+                        lessonData.put(lessonName, new HashMap<String, Object>());
+                    }
+                    lessonData.get(lessonName).put(fieldName, value);
+                }
+            }
+        }
+        return lessonData;
+    }
+
     private void navigateToModule(int cardNumber) {
         if (isPreviousCardCompleted(cardNumber)) {
             switch (cardNumber) {
+                // Pag isipan na kung ilang steps ba per module
                 case 1:
                     navigateToSampleModule3Steps();
                     break;
                 case 2:
-                    navigateToSampleModule3Steps(); // Assuming the same module for card 2
+                    navigateToSampleModule3Steps();
                     break;
                 case 3:
                     navigateToSampleModule4Steps();
@@ -56,6 +127,15 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
             }
         } else {
             showCustomDialog();
+        }
+    }
+
+    private void updateModuleProgressText(String textViewId, String newText) {
+        TextView textView = findViewById(getResources().getIdentifier(textViewId, "id", getPackageName()));
+        if (textView != null) {
+            textView.setText(newText);
+        } else {
+            Log.e("TextView Error", "TextView with id " + textViewId + " not found.");
         }
     }
 
@@ -158,5 +238,27 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
 
         // Show the dialog
         dialog.show();
+    }
+    private HashMap<String, Map<String, Object>> getLessonDataFromPreferences(SharedPreferences sharedPreferences, String mode) {
+        HashMap<String, Map<String, Object>> lessonData = new HashMap<>();
+        Map<String, ?> allEntries = sharedPreferences.getAll();
+
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            String key = entry.getKey();
+            if (key.startsWith(mode + ": ")) {
+                String[] keyParts = key.split(", ");
+                if (keyParts.length == 2) {
+                    String lessonName = keyParts[0].substring((mode + ": ").length());
+                    String fieldName = keyParts[1];
+                    int value = (int) entry.getValue();
+
+                    if (!lessonData.containsKey(lessonName)) {
+                        lessonData.put(lessonName, new HashMap<String, Object>());
+                    }
+                    lessonData.get(lessonName).put(fieldName, value);
+                }
+            }
+        }
+        return lessonData;
     }
 }

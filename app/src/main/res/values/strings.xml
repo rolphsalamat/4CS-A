@@ -1,5 +1,7 @@
 <resources>
 
+    <string name="default_web_client_id">916777198203-v7t3kk2k4k969h9m4igokdtc3s8645q4.apps.googleusercontent.com</string>
+    
     <string name="app_name">AutoTutoria(2.0)</string>
     <string name="open">Open Navigation Bar</string>
     <string name="close">Close Navigation Bar</string>

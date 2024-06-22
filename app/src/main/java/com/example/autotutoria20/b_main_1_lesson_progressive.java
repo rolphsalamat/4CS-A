@@ -1,9 +1,12 @@
 package com.example.autotutoria20;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +40,10 @@ public class b_main_1_lesson_progressive extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.b_main_3_lesson_progressive, container, false);
+
+        // Retrieve user session data from SharedPreferences
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserSession", MODE_PRIVATE);
+
 
         // Initialize views
         progressBarCard1 = view.findViewById(R.id.progressBar_card_1);
@@ -330,4 +337,5 @@ public class b_main_1_lesson_progressive extends Fragment {
                 break;
         }
     }
+
 }
