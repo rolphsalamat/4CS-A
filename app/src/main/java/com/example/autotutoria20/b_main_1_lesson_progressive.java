@@ -77,7 +77,7 @@ public class b_main_1_lesson_progressive extends Fragment {
         // Initialize array to store cumulative module values for each lesson
         int[] cumulativeModuleValues = new int[4]; // Assuming 4 lessons
 
-        // Iterate through lesson numbers 1, 2, 3, and 4
+// Iterate through lesson numbers 1, 2, 3, and 4
         for (int lessonNumber = 1; lessonNumber <= 4; lessonNumber++) {
             String lessonKey = "Lesson " + lessonNumber;
 
@@ -99,11 +99,12 @@ public class b_main_1_lesson_progressive extends Fragment {
                         String moduleName = lessonEntry.getKey();
                         int moduleValue = (int) lessonEntry.getValue();
 
-                        // Check if iteration exceeds moduleSteps array length
-                        if (iteration < z_Lesson_steps.getLessonSteps(lessonNumber).length) {
-                            // Example: Updating text values for module progress
-                            Log.d("LessonData", "Progressive Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
+                        // Log current module being checked
+                        Log.d("ModuleData", "Lesson " + lessonNumber + ", Module: " + moduleName + ", Value: " + moduleValue);
 
+                        // Check if iteration exceeds moduleSteps array length
+                        int[] lessonSteps = z_Lesson_steps.getLessonSteps(lessonNumber);
+                        if (iteration < lessonSteps.length) {
                             // Increment the array value with the module value
                             cumulativeModuleValues[lessonNumber - 1] += moduleValue;
 
@@ -117,21 +118,49 @@ public class b_main_1_lesson_progressive extends Fragment {
                 Toast.makeText(getActivity(), "No Progressive Mode data found for " + lessonKey, Toast.LENGTH_SHORT).show();
                 Log.d("No Progressive Mode", "No Progressive Mode data found for " + lessonKey);
             }
+
         }
 
         // Calculate total steps for all lessons
         int totalSteps = 0;
-        for (int steps : cumulativeModuleValues) {
-            totalSteps += steps;
+        for (int lessonNumber = 1; lessonNumber <= 4; lessonNumber++) {
+            int[] lessonSteps = z_Lesson_steps.getLessonSteps(lessonNumber);
+            for (int steps : lessonSteps) {
+                totalSteps += steps;
+            }
         }
 
         // Calculate and log the contribution percentages of each lesson
         for (int i = 0; i < cumulativeModuleValues.length; i++) {
             int moduleSteps = cumulativeModuleValues[i];
-            double contributionPercentage = (moduleSteps / (double) totalSteps) * 100;
+
+            // Retrieve complete steps from z_Lesson_steps
+            int lessonCompleteSteps;
+            switch (i + 1) {
+                case 1:
+                    lessonCompleteSteps = z_Lesson_steps.lesson_1_complete;
+                    break;
+                case 2:
+                    lessonCompleteSteps = z_Lesson_steps.lesson_2_complete;
+                    break;
+                case 3:
+                    lessonCompleteSteps = z_Lesson_steps.lesson_3_complete;
+                    break;
+                case 4:
+                    lessonCompleteSteps = z_Lesson_steps.lesson_4_complete;
+                    break;
+                default:
+                    lessonCompleteSteps = 0;
+            }
+
+            // Calculate contribution percentage
+            double contributionPercentage = (moduleSteps / (double) lessonCompleteSteps) * 100;
             Log.d("LessonContribution", "Lesson " + (i + 1) + " Contribution: " + contributionPercentage + "%");
-            incrementCard(i, (int)contributionPercentage);
+
+            // Update UI or perform further actions with contributionPercentage
+            incrementCard(i, (int) contributionPercentage);
         }
+
 
         return view;
     }
@@ -197,10 +226,11 @@ public class b_main_1_lesson_progressive extends Fragment {
     private void handleCardClick(int cardId) {
         // Check if the previous card is completed
         if (isPreviousCardCompleted(cardId)) {
-            // If previous card is completed, launch the lesson activity
+            showToast("Card " + cardId);
+            // If the previous card is completed, launch the lesson activity
             launchLessonActivity(cardId);
         } else {
-            // If previous card is not completed, show a toast message
+            // If the previous card is not completed, show a toast message
             showToast("Complete " + getPreviousLessonDescription(cardId) + " to access this lesson");
 
             // Show "dialog_complete_previous_lesson.xml" here...
@@ -208,6 +238,7 @@ public class b_main_1_lesson_progressive extends Fragment {
             // The dialog contains only a single button
         }
     }
+
 
     // Method to show the custom dialog
     private void showCustomDialog() {
@@ -287,6 +318,7 @@ public class b_main_1_lesson_progressive extends Fragment {
     // Method to launch activity related to the clicked card
     private void launchLessonActivity(int cardId) {
         Intent intent;
+        showToast("launchLessonActivity(" + cardId + ")");
         switch (cardId) {
             case 1:
                 intent = new Intent(getActivity(), c_Lesson_progressive_1.class);
@@ -323,6 +355,7 @@ public class b_main_1_lesson_progressive extends Fragment {
             return cardCompletionStatus[previousCardId - 1]; // Adjust index since arrays are zero-based
     }
 
+
     // Method to increment the progress of the first incomplete card
     private void incrementCardProgress() {
         for (int i = 0; i < cardCompletionStatus.length; i++) {
@@ -349,6 +382,14 @@ public class b_main_1_lesson_progressive extends Fragment {
                 cardCompletionStatus[cardId] = true;
                 hideLockedOverlay(cardId);
                 Toast.makeText(getActivity(), "Card " + (cardId + 1) + " completed", Toast.LENGTH_SHORT).show();
+
+                // Check if there is a next card to unlock
+                if (cardId < cardCompletionStatus.length - 1 && !cardCompletionStatus[cardId + 1]) {
+                    // Unlock the next card
+                    cardCompletionStatus[cardId + 1] = true;
+                    hideLockedOverlay(cardId + 1);
+                    Toast.makeText(getActivity(), "Card " + (cardId + 2) + " unlocked", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 Toast.makeText(getActivity(), "Card " + (cardId + 1) + " progress: " + cardProgress[cardId] + "%", Toast.LENGTH_SHORT).show();
                 Log.d("incrementCard()", "Card " + (cardId + 1) + " incremented by: " + incrementValue);
@@ -367,6 +408,8 @@ public class b_main_1_lesson_progressive extends Fragment {
             Toast.makeText(getActivity(), "Invalid card ID", Toast.LENGTH_SHORT).show();
         }
     }
+
+
 
     // Helper methods to get the ProgressBar and TextView IDs
     private int getProgressBarId(int index) {
@@ -401,18 +444,29 @@ public class b_main_1_lesson_progressive extends Fragment {
 
     // Method to hide the locked overlay for a completed card
     private void hideLockedOverlay(int cardId) {
-        switch (cardId) {
-            case 0:
-                getView().findViewById(R.id.card2_locked_overlay).setVisibility(View.GONE);
-                break;
-            case 1:
-                getView().findViewById(R.id.card3_locked_overlay).setVisibility(View.GONE);
-                break;
-            case 2:
-                getView().findViewById(R.id.card4_locked_overlay).setVisibility(View.GONE);
-                break;
-            default:
-                break;
+        View rootView = getView(); // Get the root view
+
+        if (rootView != null) {
+            switch (cardId) {
+                case 0:
+                    rootView.findViewById(R.id.card2_locked_overlay).setVisibility(View.GONE);
+                    break;
+                case 1:
+                    rootView.findViewById(R.id.card3_locked_overlay).setVisibility(View.GONE);
+                    break;
+                case 2:
+                    rootView.findViewById(R.id.card4_locked_overlay).setVisibility(View.GONE);
+                    break;
+                case 3:
+                    // If there is a fourth card, unlock any potential overlay for future cards
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            Log.e("hideLockedOverlay", "Root view is null");
         }
     }
+
+
 }

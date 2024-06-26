@@ -132,6 +132,7 @@ public class a_user_1_login extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
+
                         String firstName = document.getString("First name");
                         String lastName = document.getString("Last name");
                         String email = document.getString("Email Address");
@@ -149,6 +150,7 @@ public class a_user_1_login extends AppCompatActivity {
                         // Store user information in SharedPreferences
                         SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("userId", userId);
                         editor.putString("firstName", firstName);
                         editor.putString("lastName", lastName);
                         editor.putString("email", email);

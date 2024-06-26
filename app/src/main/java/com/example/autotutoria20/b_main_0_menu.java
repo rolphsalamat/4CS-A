@@ -32,13 +32,18 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -86,12 +91,22 @@ public class b_main_0_menu extends AppCompatActivity {
 
         // Retrieve user session data from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+        String userId = sharedPreferences.getString("userId", null);
         String firstName = sharedPreferences.getString("firstName", null);
         String lastName = sharedPreferences.getString("lastName", null);
         String email = sharedPreferences.getString("email", null);
         String gender = sharedPreferences.getString("gender", null);
         int age = sharedPreferences.getInt("age", -1);
         boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+
+        if (firstName != null && lastName != null && email != null && gender != null && age != -1) {
+            greetUserName.setText("Hello, " + firstName);
+
+            // Call fetchLessonData method
+            fetchLessonData(userId, firstName, lastName, email, gender, age);
+        } else {
+            Toast.makeText(this, "User data not found", Toast.LENGTH_SHORT).show();
+        }
 
         if (isLoggedIn) {
             // User is logged in, set up the UI with user information
@@ -134,41 +149,41 @@ public class b_main_0_menu extends AppCompatActivity {
 
             Log.d("Main Menu", "Meron nako'ng data ng Lessons");
 
-            // Log and process Progressive Mode data
-            if (progressiveModeData != null) {
-                List<String> sortedLessonNames = new ArrayList<>(progressiveModeData.keySet());
-                Collections.sort(sortedLessonNames); // Sort lesson names alphabetically
-
-                for (String lessonName : sortedLessonNames) {
-                    Map<String, Object> lessonData = progressiveModeData.get(lessonName);
-                    for (Map.Entry<String, Object> lessonEntry : lessonData.entrySet()) {
-                        String moduleName = lessonEntry.getKey();
-                        Object moduleValue = lessonEntry.getValue();
-                        Log.d("LessonData", "hihi Progressive Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
-                    }
-                }
-            } else {
-                Toast.makeText(this, "Wala par", Toast.LENGTH_SHORT).show();
-                Log.d("No Progressive Mode", "Wala ako nakitang Progressive Mode par, sensya na you");
-            }
-
-            // Log and process Free Use Mode data
-            if (freeUseModeData != null) {
-                List<String> sortedLessonNames = new ArrayList<>(freeUseModeData.keySet());
-                Collections.sort(sortedLessonNames); // Sort lesson names alphabetically
-
-                for (String lessonName : sortedLessonNames) {
-                    Map<String, Object> lessonData = freeUseModeData.get(lessonName);
-                    for (Map.Entry<String, Object> lessonEntry : lessonData.entrySet()) {
-                        String moduleName = lessonEntry.getKey();
-                        Object moduleValue = lessonEntry.getValue();
-                        Log.d("LessonData", "hihi Free Use Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
-                    }
-                }
-            } else {
-                Toast.makeText(this, "Wala par", Toast.LENGTH_SHORT).show();
-                Log.d("No Free Use Mode", "Wala ako nakitang Free Use Mode par, sensya na you");
-            }
+//            // Log and process Progressive Mode data
+//            if (progressiveModeData != null) {
+//                List<String> sortedLessonNames = new ArrayList<>(progressiveModeData.keySet());
+//                Collections.sort(sortedLessonNames); // Sort lesson names alphabetically
+//
+//                for (String lessonName : sortedLessonNames) {
+//                    Map<String, Object> lessonData = progressiveModeData.get(lessonName);
+//                    for (Map.Entry<String, Object> lessonEntry : lessonData.entrySet()) {
+//                        String moduleName = lessonEntry.getKey();
+//                        Object moduleValue = lessonEntry.getValue();
+//                        Log.d("LessonData", "hihi Progressive Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
+//                    }
+//                }
+//            } else {
+//                Toast.makeText(this, "Wala par", Toast.LENGTH_SHORT).show();
+//                Log.d("No Progressive Mode", "Wala ako nakitang Progressive Mode par, sensya na you");
+//            }
+//
+//            // Log and process Free Use Mode data
+//            if (freeUseModeData != null) {
+//                List<String> sortedLessonNames = new ArrayList<>(freeUseModeData.keySet());
+//                Collections.sort(sortedLessonNames); // Sort lesson names alphabetically
+//
+//                for (String lessonName : sortedLessonNames) {
+//                    Map<String, Object> lessonData = freeUseModeData.get(lessonName);
+//                    for (Map.Entry<String, Object> lessonEntry : lessonData.entrySet()) {
+//                        String moduleName = lessonEntry.getKey();
+//                        Object moduleValue = lessonEntry.getValue();
+//                        Log.d("LessonData", "hihi Free Use Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
+//                    }
+//                }
+//            } else {
+//                Toast.makeText(this, "Wala par", Toast.LENGTH_SHORT).show();
+//                Log.d("No Free Use Mode", "Wala ako nakitang Free Use Mode par, sensya na you");
+//            }
         } else {
             // User is not logged in, redirect to login screen
             Intent loginIntent = new Intent(this, a_user_1_login.class);
@@ -309,6 +324,135 @@ public class b_main_0_menu extends AppCompatActivity {
         });
 
     }
+
+    public void fetchLessonData(String userId, String firstName, String lastName, String email, String gender, int age) {
+        final Map<String, Map<String, Object>> progressiveModeData = new HashMap<>();
+        final Map<String, Map<String, Object>> freeUseModeData = new HashMap<>();
+
+        CollectionReference progressiveModeRef = db.collection("users").document(userId).collection("Progressive Mode");
+        CollectionReference freeUseModeRef = db.collection("users").document(userId).collection("Free Use Mode");
+
+        progressiveModeRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot querySnapshot = task.getResult();
+                    if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                            progressiveModeData.put(document.getId(), document.getData());
+                            processLessonData("Progressive Mode", document.getId(), document.getData());
+//                            verifySavedData(); // Verify saved data after processing each lesson
+                        }
+                        Log.d("Firestore", "Progressive Mode data retrieved");
+                    } else {
+                        Log.d("Firestore", "Progressive Mode data not found");
+                    }
+                } else {
+                    String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
+                    Log.d("Firestore", "Failed to retrieve Progressive Mode data: " + errorMessage);
+                }
+
+                // After processing Progressive Mode, fetch Free Use Mode data
+                freeUseModeRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            QuerySnapshot querySnapshot = task.getResult();
+                            if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                                for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                                    freeUseModeData.put(document.getId(), document.getData());
+                                    processLessonData("Free Use Mode", document.getId(), document.getData());
+//                                    verifySavedData(); // Verify saved data after processing each lesson
+                                }
+                                Log.d("Firestore", "Free Use Mode data retrieved");
+                            } else {
+                                Log.d("Firestore", "Free Use Mode data not found");
+                            }
+                        } else {
+                            String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
+                            Log.d("Firestore", "Failed to retrieve Free Use Mode data: " + errorMessage);
+                        }
+
+                        // Update UI here or perform any necessary UI operations based on fetched data
+                        // For example:
+                        updateUIAfterDataFetch(firstName, gender);
+                    }
+                });
+            }
+        });
+    }
+
+    private void updateUIAfterDataFetch(String firstName, String gender) {
+        // Update UI elements like greetUserName, profileImageView, etc.
+        greetUserName.setText("Hello, " + firstName);
+
+        // Check if the user has a custom profile picture
+        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+        boolean hasCustomProfilePicture = sharedPreferences.getBoolean("hasCustomProfilePicture", false);
+
+        if (hasCustomProfilePicture) {
+            // Set layout picture to custom profile picture
+            String customProfilePictureUrl = sharedPreferences.getString("profilePictureUrl", null);
+            if (customProfilePictureUrl != null) {
+                Picasso.get().load(customProfilePictureUrl).into(profileImageView);
+            }
+        } else {
+            // User does not have a custom profile picture yet
+            if (gender != null) {
+                if (gender.equalsIgnoreCase("male")) {
+                    // Apply male anonymous avatar
+                    profileImageView.setImageResource(R.drawable.default_male);
+                } else if (gender.equalsIgnoreCase("female")) {
+                    // Apply female anonymous avatar
+                    profileImageView.setImageResource(R.drawable.deafult_female);
+                }
+            } else {
+                // Handle case where gender is null
+//            profileImageView.setImageResource(R.drawable.pnc_logo);
+                Toast.makeText(this, "Par wala kang Gender??", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        // Retrieve lesson data for both "Progressive Mode" and "Free Use Mode"
+        HashMap<String, Map<String, Object>> progressiveModeData = getLessonDataFromPreferences(sharedPreferences, "Progressive Mode");
+        HashMap<String, Map<String, Object>> freeUseModeData = getLessonDataFromPreferences(sharedPreferences, "Free Use Mode");
+
+        Log.d("User Info", "Nasa Main Menu kana, eto mga retrieved:");
+        Log.d("User Info", "First Name: " + firstName);
+        Log.d("User Info", "Gender: " + gender);
+
+        // Log and process Progressive Mode data
+        // (Code for logging and processing data remains the same)
+
+        // Log and process Free Use Mode data
+        // (Code for logging and processing data remains the same)
+    }
+
+    private void processLessonData(String modeName, String lessonName, Map<String, Object> lessonData) {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        for (Map.Entry<String, Object> entry : lessonData.entrySet()) {
+            String fieldName = entry.getKey();
+            Object fieldValue = entry.getValue();
+
+            if (fieldValue instanceof Long) {
+                editor.putInt(modeName + ": " + lessonName + ", " + fieldName, ((Long) fieldValue).intValue());
+            } else if (fieldValue instanceof String) {
+                editor.putString(modeName + ": " + lessonName + ", " + fieldName, (String) fieldValue);
+            }
+        }
+
+        editor.apply();
+    }
+
+//    private void verifySavedData() {
+//        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+//        Map<String, ?> allEntries = sharedPreferences.getAll();
+//        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+//            Log.d("SharedPreferences", entry.getKey() + ": " + entry.getValue().toString());
+//        }
+//    }
 
     // Add this method to handle the result of image selection
     @Override

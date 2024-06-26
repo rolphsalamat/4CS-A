@@ -29,7 +29,7 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.c_lesson_progressive_1);
+        setContentView(R.layout.c_lesson_progressive_3);
 
         FrameLayout card1 = findViewById(R.id.card1);
         FrameLayout card2 = findViewById(R.id.card2);
