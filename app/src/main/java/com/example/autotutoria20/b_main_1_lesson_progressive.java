@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,17 +20,21 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class b_main_1_lesson_progressive extends Fragment {
     private static TextView learningModeText;
     private ProgressBar progressBarCard1, progressBarCard2, progressBarCard3, progressBarCard4;
     private TextView progressTextCard1, progressTextCard2, progressTextCard3, progressTextCard4;
-    private TextView card_number, increment_value;
     private Button incrementCard1Button;
     private boolean isProgressiveMode = true; // Default mode is progressive mode
     private static View view;
     private Dialog dialog;
-    private Button increment;
+
     // Define card progress array
     private int[] cardProgress = new int[4]; // Assuming there are 4 cards
 
@@ -40,10 +45,6 @@ public class b_main_1_lesson_progressive extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.b_main_3_lesson_progressive, container, false);
-
-        // Retrieve user session data from SharedPreferences
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserSession", MODE_PRIVATE);
-
 
         // Initialize views
         progressBarCard1 = view.findViewById(R.id.progressBar_card_1);
@@ -62,7 +63,7 @@ public class b_main_1_lesson_progressive extends Fragment {
         // Set click listeners for the cards
         setCardClickListeners();
 
-        increment = view.findViewById(R.id.increment_progress); // Call findViewById on the view object
+        Button increment = view.findViewById(R.id.increment_progress); // Call findViewById on the view object
         increment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,7 +71,91 @@ public class b_main_1_lesson_progressive extends Fragment {
             }
         });
 
+        // Retrieve user session data from SharedPreferences
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserSession", MODE_PRIVATE);
+
+        // Initialize array to store cumulative module values for each lesson
+        int[] cumulativeModuleValues = new int[4]; // Assuming 4 lessons
+
+        // Iterate through lesson numbers 1, 2, 3, and 4
+        for (int lessonNumber = 1; lessonNumber <= 4; lessonNumber++) {
+            String lessonKey = "Lesson " + lessonNumber;
+
+            // Retrieve lesson data for "Progressive Mode" for the current lesson
+            HashMap<String, Map<String, Object>> progressiveModeData = getLessonDataForLesson(sharedPreferences, "Progressive Mode", lessonKey);
+
+            // Log and process Progressive Mode data for the current lesson
+            if (progressiveModeData != null) {
+                List<String> sortedLessonNames = new ArrayList<>(progressiveModeData.keySet());
+                Collections.sort(sortedLessonNames); // Sort lesson names alphabetically
+
+                for (String lessonName : sortedLessonNames) {
+                    Map<String, Object> lessonData = progressiveModeData.get(lessonName);
+
+                    // Reset iteration for each lessonName
+                    int iteration = 0;
+
+                    for (Map.Entry<String, Object> lessonEntry : lessonData.entrySet()) {
+                        String moduleName = lessonEntry.getKey();
+                        int moduleValue = (int) lessonEntry.getValue();
+
+                        // Check if iteration exceeds moduleSteps array length
+                        if (iteration < z_Lesson_steps.getLessonSteps(lessonNumber).length) {
+                            // Example: Updating text values for module progress
+                            Log.d("LessonData", "Progressive Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
+
+                            // Increment the array value with the module value
+                            cumulativeModuleValues[lessonNumber - 1] += moduleValue;
+
+                            iteration++;
+                        } else {
+                            Log.e("LessonData", "Iteration exceeds moduleSteps array length.");
+                        }
+                    }
+                }
+            } else {
+                Toast.makeText(getActivity(), "No Progressive Mode data found for " + lessonKey, Toast.LENGTH_SHORT).show();
+                Log.d("No Progressive Mode", "No Progressive Mode data found for " + lessonKey);
+            }
+        }
+
+        // Calculate total steps for all lessons
+        int totalSteps = 0;
+        for (int steps : cumulativeModuleValues) {
+            totalSteps += steps;
+        }
+
+        // Calculate and log the contribution percentages of each lesson
+        for (int i = 0; i < cumulativeModuleValues.length; i++) {
+            int moduleSteps = cumulativeModuleValues[i];
+            double contributionPercentage = (moduleSteps / (double) totalSteps) * 100;
+            Log.d("LessonContribution", "Lesson " + (i + 1) + " Contribution: " + contributionPercentage + "%");
+            incrementCard(i, (int)contributionPercentage);
+        }
+
         return view;
+    }
+
+    private HashMap<String, Map<String, Object>> getLessonDataForLesson(SharedPreferences sharedPreferences, String mode, String lessonName) {
+        HashMap<String, Map<String, Object>> lessonData = new HashMap<>();
+        Map<String, ?> allEntries = sharedPreferences.getAll();
+
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            String key = entry.getKey();
+            if (key.startsWith(mode + ": " + lessonName)) {
+                String[] keyParts = key.split(", ");
+                if (keyParts.length == 2) {
+                    String fieldName = keyParts[1];
+                    int value = (int) entry.getValue();
+
+                    if (!lessonData.containsKey(lessonName)) {
+                        lessonData.put(lessonName, new HashMap<String, Object>());
+                    }
+                    lessonData.get(lessonName).put(fieldName, value);
+                }
+            }
+        }
+        return lessonData;
     }
 
     // Method to set click listeners for the cards
@@ -106,13 +191,6 @@ public class b_main_1_lesson_progressive extends Fragment {
                 handleCardClick(4);
             }
         });
-    }
-
-    // Method to update the learning mode text
-    public static void updateLearningModeText(String mode) {
-        if (learningModeText != null) {
-            learningModeText.setText(mode);
-        }
     }
 
     // Method to handle click on a card
@@ -244,6 +322,7 @@ public class b_main_1_lesson_progressive extends Fragment {
         else
             return cardCompletionStatus[previousCardId - 1]; // Adjust index since arrays are zero-based
     }
+
     // Method to increment the progress of the first incomplete card
     private void incrementCardProgress() {
         for (int i = 0; i < cardCompletionStatus.length; i++) {
@@ -272,21 +351,23 @@ public class b_main_1_lesson_progressive extends Fragment {
                 Toast.makeText(getActivity(), "Card " + (cardId + 1) + " completed", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getActivity(), "Card " + (cardId + 1) + " progress: " + cardProgress[cardId] + "%", Toast.LENGTH_SHORT).show();
+                Log.d("incrementCard()", "Card " + (cardId + 1) + " incremented by: " + incrementValue);
             }
 
-            // Update the progress bar and text for the current card
-            ProgressBar progressBar = getActivity().findViewById(getProgressBarId(cardId));
-            TextView progressText = getActivity().findViewById(getProgressTextId(cardId));
+            ProgressBar progressBar = view.findViewById(getProgressBarId(cardId));
+            TextView progressText = view.findViewById(getProgressTextId(cardId));
 
             if (progressBar != null && progressText != null) {
                 progressBar.setProgress(cardProgress[cardId]);
                 progressText.setText(cardProgress[cardId] + "% Completed");
             }
+
         } else {
             // Handle invalid cardId here, maybe show a toast indicating the issue
             Toast.makeText(getActivity(), "Invalid card ID", Toast.LENGTH_SHORT).show();
         }
     }
+
     // Helper methods to get the ProgressBar and TextView IDs
     private int getProgressBarId(int index) {
         switch (index) {
@@ -317,9 +398,9 @@ public class b_main_1_lesson_progressive extends Fragment {
                 return 0;
         }
     }
+
     // Method to hide the locked overlay for a completed card
     private void hideLockedOverlay(int cardId) {
-        Toast.makeText(getActivity(), "UNLOCK " + cardId, Toast.LENGTH_SHORT).show();
         switch (cardId) {
             case 0:
                 getView().findViewById(R.id.card2_locked_overlay).setVisibility(View.GONE);
@@ -330,12 +411,8 @@ public class b_main_1_lesson_progressive extends Fragment {
             case 2:
                 getView().findViewById(R.id.card4_locked_overlay).setVisibility(View.GONE);
                 break;
-//            case 3:
-//                getView().findViewById(R.id.card4_locked_overlay).setVisibility(View.GONE);
-//                break;
             default:
                 break;
         }
     }
-
 }

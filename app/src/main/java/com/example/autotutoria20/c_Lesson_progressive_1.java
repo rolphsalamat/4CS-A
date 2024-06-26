@@ -25,7 +25,6 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
 
     private AlertDialog dialog;
     private boolean[] cardCompletionStatus = {false, false, false}; // Track completion status of each card
-//    private int[] moduleSteps = {4, 4, 4}; // Change this accordingly
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -368,17 +368,29 @@ public class b_main_0_menu extends AppCompatActivity {
                 });
     }
 
-    // Method to show the Logout dialog with wrap content width and height
+    // Method to show the Logout dialog with custom layout handling positive and negative actions
     private void showLogoutDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.b_main_0_menu_logout, null);
         builder.setView(dialogView);
 
+        // Initialize views from custom layout
+        Button cancelButton = dialogView.findViewById(R.id.button_cancel);
         Button logoutButton = dialogView.findViewById(R.id.button_logout);
 
-        AlertDialog dialog = builder.create();
+        // Create AlertDialog
+        final AlertDialog dialog = builder.create();
 
+        // Set click listener for Cancel button
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss(); // Dismiss the dialog without action
+            }
+        });
+
+        // Set click listener for Logout button
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -402,8 +414,11 @@ public class b_main_0_menu extends AppCompatActivity {
                 finish();
             }
         });
+
+        // Show the dialog
         dialog.show();
     }
+
 
     // Method to show the Rate Us dialog
     private void showRateUsDialog() {

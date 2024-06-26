@@ -43,7 +43,7 @@ public class c_Lesson_progressive_4 extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
 
         // Retrieve lesson data for "Progressive Mode" for Lesson 1 only
-        HashMap<String, Map<String, Object>> progressiveModeData = getLessonDataForLesson(sharedPreferences, "Progressive Mode", "Lesson 1");
+        HashMap<String, Map<String, Object>> progressiveModeData = getLessonDataForLesson(sharedPreferences, "Progressive Mode", "Lesson 4");
 
         // Log and process Progressive Mode data for Lesson 1 only
         if (progressiveModeData != null) {
