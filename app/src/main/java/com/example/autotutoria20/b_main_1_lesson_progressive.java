@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ import java.util.Map;
 
 public class b_main_1_lesson_progressive extends Fragment {
     private static TextView learningModeText;
+    private FrameLayout lockedOverlayCard1, lockedOverlayCard2, lockedOverlayCard3, lockedOverlayCard4;
     private ProgressBar progressBarCard1, progressBarCard2, progressBarCard3, progressBarCard4;
     private TextView progressTextCard1, progressTextCard2, progressTextCard3, progressTextCard4;
     private Button incrementCard1Button;
@@ -41,35 +43,12 @@ public class b_main_1_lesson_progressive extends Fragment {
     // Track completion status of each card
     private boolean[] cardCompletionStatus = {false, false, false, false}; // Default is false for all cards
 
-    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.b_main_3_lesson_progressive, container, false);
 
         // Initialize views
-        progressBarCard1 = view.findViewById(R.id.progressBar_card_1);
-        progressBarCard2 = view.findViewById(R.id.progressBar_card_2);
-        progressBarCard3 = view.findViewById(R.id.progressBar_card_3);
-        progressBarCard4 = view.findViewById(R.id.progressBar_card_4);
-
-        progressTextCard1 = view.findViewById(R.id.progressText_card_1);
-        progressTextCard2 = view.findViewById(R.id.progressText_card_2);
-        progressTextCard3 = view.findViewById(R.id.progressText_card_3);
-        progressTextCard4 = view.findViewById(R.id.progressText_card_4);
-
-        // Initialize views
-        learningModeText = view.findViewById(R.id.learning_mode_text);
-
-        // Set click listeners for the cards
-        setCardClickListeners();
-
-        Button increment = view.findViewById(R.id.increment_progress); // Call findViewById on the view object
-        increment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                incrementCardProgress();
-            }
-        });
+        initializeViews();
 
         // Retrieve user session data from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserSession", MODE_PRIVATE);
@@ -77,7 +56,7 @@ public class b_main_1_lesson_progressive extends Fragment {
         // Initialize array to store cumulative module values for each lesson
         int[] cumulativeModuleValues = new int[4]; // Assuming 4 lessons
 
-// Iterate through lesson numbers 1, 2, 3, and 4
+        // Iterate through lesson numbers 1, 2, 3, and 4
         for (int lessonNumber = 1; lessonNumber <= 4; lessonNumber++) {
             String lessonKey = "Lesson " + lessonNumber;
 
@@ -115,43 +94,20 @@ public class b_main_1_lesson_progressive extends Fragment {
                     }
                 }
             } else {
-                Toast.makeText(getActivity(), "No Progressive Mode data found for " + lessonKey, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "No Progressive Mode data found for " + lessonKey, Toast.LENGTH_SHORT).show();
                 Log.d("No Progressive Mode", "No Progressive Mode data found for " + lessonKey);
             }
-
         }
 
         // Calculate total steps for all lessons
-        int totalSteps = 0;
-        for (int lessonNumber = 1; lessonNumber <= 4; lessonNumber++) {
-            int[] lessonSteps = z_Lesson_steps.getLessonSteps(lessonNumber);
-            for (int steps : lessonSteps) {
-                totalSteps += steps;
-            }
-        }
+        int totalSteps = calculateTotalSteps();
 
         // Calculate and log the contribution percentages of each lesson
         for (int i = 0; i < cumulativeModuleValues.length; i++) {
             int moduleSteps = cumulativeModuleValues[i];
 
             // Retrieve complete steps from z_Lesson_steps
-            int lessonCompleteSteps;
-            switch (i + 1) {
-                case 1:
-                    lessonCompleteSteps = z_Lesson_steps.lesson_1_complete;
-                    break;
-                case 2:
-                    lessonCompleteSteps = z_Lesson_steps.lesson_2_complete;
-                    break;
-                case 3:
-                    lessonCompleteSteps = z_Lesson_steps.lesson_3_complete;
-                    break;
-                case 4:
-                    lessonCompleteSteps = z_Lesson_steps.lesson_4_complete;
-                    break;
-                default:
-                    lessonCompleteSteps = 0;
-            }
+            int lessonCompleteSteps = getLessonCompleteSteps(i + 1);
 
             // Calculate contribution percentage
             double contributionPercentage = (moduleSteps / (double) lessonCompleteSteps) * 100;
@@ -161,8 +117,73 @@ public class b_main_1_lesson_progressive extends Fragment {
             incrementCard(i, (int) contributionPercentage);
         }
 
+        Button increment = view.findViewById(R.id.increment_progress);
+        increment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 0; i < 4; i++) {
+                    if (cardProgress[i] < 100) {
+                        incrementCard(i, 25);
+                        break;
+                    }
+                }
+            }
+        });
+
 
         return view;
+    }
+
+    private void initializeViews() {
+        progressBarCard1 = view.findViewById(R.id.progressBar_card_1);
+        progressBarCard2 = view.findViewById(R.id.progressBar_card_2);
+        progressBarCard3 = view.findViewById(R.id.progressBar_card_3);
+        progressBarCard4 = view.findViewById(R.id.progressBar_card_4);
+
+        progressTextCard1 = view.findViewById(R.id.progressText_card_1);
+        progressTextCard2 = view.findViewById(R.id.progressText_card_2);
+        progressTextCard3 = view.findViewById(R.id.progressText_card_3);
+        progressTextCard4 = view.findViewById(R.id.progressText_card_4);
+
+        learningModeText = view.findViewById(R.id.learning_mode_text);
+
+        lockedOverlayCard1 = view.findViewById(R.id.card1_locked_overlay);
+        lockedOverlayCard2 = view.findViewById(R.id.card2_locked_overlay);
+        lockedOverlayCard3 = view.findViewById(R.id.card3_locked_overlay);
+        lockedOverlayCard4 = view.findViewById(R.id.card4_locked_overlay);
+
+        setCardClickListeners();
+
+
+    }
+
+
+    // Method to calculate total steps for all lessons
+    private int calculateTotalSteps() {
+        int totalSteps = 0;
+        for (int lessonNumber = 1; lessonNumber <= 4; lessonNumber++) {
+            int[] lessonSteps = z_Lesson_steps.getLessonSteps(lessonNumber);
+            for (int steps : lessonSteps) {
+                totalSteps += steps;
+            }
+        }
+        return totalSteps;
+    }
+
+    // Method to get lesson complete steps
+    private int getLessonCompleteSteps(int lessonNumber) {
+        switch (lessonNumber) {
+            case 1:
+                return z_Lesson_steps.lesson_1_complete;
+            case 2:
+                return z_Lesson_steps.lesson_2_complete;
+            case 3:
+                return z_Lesson_steps.lesson_3_complete;
+            case 4:
+                return z_Lesson_steps.lesson_4_complete;
+            default:
+                return 0;
+        }
     }
 
     private HashMap<String, Map<String, Object>> getLessonDataForLesson(SharedPreferences sharedPreferences, String mode, String lessonName) {
@@ -224,20 +245,52 @@ public class b_main_1_lesson_progressive extends Fragment {
 
     // Method to handle click on a card
     private void handleCardClick(int cardId) {
-        // Check if the previous card is completed
+        Log.d("CardClick", "Card " + cardId + " clicked.");
         if (isPreviousCardCompleted(cardId)) {
-            showToast("Card " + cardId);
-            // If the previous card is completed, launch the lesson activity
+//            Intent intent = new Intent(getActivity(), progressive_lessons.class);
+//            intent.putExtra("lesson_id", cardId + 1);
+//            startActivity(intent);
             launchLessonActivity(cardId);
         } else {
-            // If the previous card is not completed, show a toast message
-            showToast("Complete " + getPreviousLessonDescription(cardId) + " to access this lesson");
+            // Create a dialog builder
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-            // Show "dialog_complete_previous_lesson.xml" here...
-            showCustomDialog();
-            // The dialog contains only a single button
+            // Inflate the custom dialog layout
+            LayoutInflater inflater = getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.dialog_complete_previous_lesson, null);
+            builder.setView(dialogView);
+
+            // Create the AlertDialog
+            AlertDialog dialog = builder.create();
+
+            // Find the "Okay" button in the custom layout
+            Button exitButton = dialogView.findViewById(R.id.okay_button);
+            exitButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Dismiss the dialog when the button is clicked
+                    dialog.dismiss();
+                }
+            });
+
+            // Set the dialog window attributes
+            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    // Convert dp to pixels
+                    int width = (int) (350 * getResources().getDisplayMetrics().density);
+                    int height = (int) (350 * getResources().getDisplayMetrics().density);
+
+                    // Set the fixed size for the dialog
+                    dialog.getWindow().setLayout(width, height);
+                }
+            });
+
+            // Show the dialog
+            dialog.show();
         }
     }
+
 
 
     // Method to show the custom dialog
@@ -318,7 +371,7 @@ public class b_main_1_lesson_progressive extends Fragment {
     // Method to launch activity related to the clicked card
     private void launchLessonActivity(int cardId) {
         Intent intent;
-        showToast("launchLessonActivity(" + cardId + ")");
+//        showToast("launchLessonActivity(" + cardId + ")");
         switch (cardId) {
             case 1:
                 intent = new Intent(getActivity(), c_Lesson_progressive_1.class);
@@ -345,70 +398,71 @@ public class b_main_1_lesson_progressive extends Fragment {
 
     // Method to check if the previous card is completed to unlock the current card
     private boolean isPreviousCardCompleted(int cardId) {
-        // Assuming cardIds start from 1
-        int previousCardId = cardId - 1;
-
-        // If the previous card is the first card, it is always considered completed
-        if (previousCardId <= 0)
+        if (cardId == 0) {
+            // If it's the first card, there's no previous card, so it's considered completed
             return true;
-        else
-            return cardCompletionStatus[previousCardId - 1]; // Adjust index since arrays are zero-based
-    }
-
-
-    // Method to increment the progress of the first incomplete card
-    private void incrementCardProgress() {
-        for (int i = 0; i < cardCompletionStatus.length; i++) {
-            // If the current card is not complete, increment its progress
-            if (!cardCompletionStatus[i]) {
-                incrementCard(i, 25); // Increment progress by 25%
-                return;
-            }
         }
-
-        Toast.makeText(getActivity(), "All cards are already completed", Toast.LENGTH_SHORT).show();
+        boolean isCompleted = cardCompletionStatus[cardId - 1];
+        Log.d("CardCheck", "Card " + cardId + " previous card completion status: " + isCompleted);
+        return isCompleted;
     }
 
-    // Helper method to increment progress of a specific card
+
+//    private void incrementCardProgress() {
+//        for (int i = 0; i < cardCompletionStatus.length; i++) {
+//            // If the current card is not complete, increment its progress
+//            if (!cardCompletionStatus[i]) {
+//                int currentProgress = cardProgress[i];
+//                Log.d("incrementCardProgress()", "current progress: " + currentProgress);
+//                int incrementValue = 25; // Increment progress by 25%
+//                Log.d("incrementCardProgress()", "increment value: " + incrementValue);
+//                int newProgress = Math.min(currentProgress + incrementValue, 100); // Ensure it does not exceed 100%
+//                Log.d("incrementCardProgress()", "new progress: " + newProgress);
+//
+//
+//                incrementCard(i, incrementValue); // Pass the difference as the increment value
+//                showToast("Increment Button [" + i + "] : " + newProgress + "%");
+//
+////                incrementCard(i, newProgress - currentProgress); // Pass the difference as the increment value
+////                showToast("Increment Button [" + (i) + "] : " + (newProgress - currentProgress) + "%");
+//                return; // Exit the loop and method after incrementing the first incomplete card
+//            }
+//        }
+//
+//        Toast.makeText(getActivity(), "All cards are already completed", Toast.LENGTH_SHORT).show();
+//    }
+
     private void incrementCard(int cardId, int incrementValue) {
-        // Ensure the cardId is within the valid range
         if (cardId >= 0 && cardId < cardProgress.length) {
             // Increment progress by the specified value
-            cardProgress[cardId] = Math.min(cardProgress[cardId] + incrementValue, 100);
+            int newProgress = cardProgress[cardId] + incrementValue;
+
+            // Ensure progress does not exceed 100%
+            cardProgress[cardId] = Math.min(newProgress, 100);
 
             // Check if the card is completed
-            if (cardProgress[cardId] == 100) {
-                // Update card completion status
+            if (cardProgress[cardId] >= 100) {
                 cardCompletionStatus[cardId] = true;
-                hideLockedOverlay(cardId);
-                Toast.makeText(getActivity(), "Card " + (cardId + 1) + " completed", Toast.LENGTH_SHORT).show();
+                Log.d("incrementCard()", "Card " + (cardId + 1) + " completed.");
 
-                // Check if there is a next card to unlock
+                // Hide locked overlay for this card
+                hideLockedOverlay(cardId + 1);
+
+                // Unlock the next card if there is one
                 if (cardId < cardCompletionStatus.length - 1 && !cardCompletionStatus[cardId + 1]) {
-                    // Unlock the next card
                     cardCompletionStatus[cardId + 1] = true;
-                    hideLockedOverlay(cardId + 1);
-                    Toast.makeText(getActivity(), "Card " + (cardId + 2) + " unlocked", Toast.LENGTH_SHORT).show();
+                    Log.d("incrementCard()", "Card " + (cardId + 2) + " unlocked.");
                 }
-            } else {
-                Toast.makeText(getActivity(), "Card " + (cardId + 1) + " progress: " + cardProgress[cardId] + "%", Toast.LENGTH_SHORT).show();
-                Log.d("incrementCard()", "Card " + (cardId + 1) + " incremented by: " + incrementValue);
             }
 
+            // Update UI for the current card
             ProgressBar progressBar = view.findViewById(getProgressBarId(cardId));
             TextView progressText = view.findViewById(getProgressTextId(cardId));
 
-            if (progressBar != null && progressText != null) {
-                progressBar.setProgress(cardProgress[cardId]);
-                progressText.setText(cardProgress[cardId] + "% Completed");
-            }
-
-        } else {
-            // Handle invalid cardId here, maybe show a toast indicating the issue
-            Toast.makeText(getActivity(), "Invalid card ID", Toast.LENGTH_SHORT).show();
+            progressBar.setProgress(cardProgress[cardId]);
+            progressText.setText(cardProgress[cardId] + "% Completed");
         }
     }
-
 
 
     // Helper methods to get the ProgressBar and TextView IDs
@@ -442,31 +496,38 @@ public class b_main_1_lesson_progressive extends Fragment {
         }
     }
 
-    // Method to hide the locked overlay for a completed card
     private void hideLockedOverlay(int cardId) {
-        View rootView = getView(); // Get the root view
+        // Ensure view is not null and get the root view
+        if (view != null) {
+            // Determine the correct locked overlay view ID based on the card ID
+            int lockedOverlayId = getLockedOverlayId(cardId);
 
-        if (rootView != null) {
-            switch (cardId) {
-                case 0:
-                    rootView.findViewById(R.id.card2_locked_overlay).setVisibility(View.GONE);
-                    break;
-                case 1:
-                    rootView.findViewById(R.id.card3_locked_overlay).setVisibility(View.GONE);
-                    break;
-                case 2:
-                    rootView.findViewById(R.id.card4_locked_overlay).setVisibility(View.GONE);
-                    break;
-                case 3:
-                    // If there is a fourth card, unlock any potential overlay for future cards
-                    break;
-                default:
-                    break;
+            View lockedOverlay = view.findViewById(lockedOverlayId);
+            if (lockedOverlay != null) {
+                lockedOverlay.setVisibility(View.GONE);
+                Log.d("hideLockedOverlay", "Overlay for card " + (cardId + 1) + " set to GONE");
+            } else {
+                Log.e("hideLockedOverlay", "Locked overlay view is null for card " + (cardId + 1));
             }
         } else {
             Log.e("hideLockedOverlay", "Root view is null");
         }
     }
 
+    // Method to get the correct locked overlay view ID based on the card ID
+    private int getLockedOverlayId(int cardId) {
+        switch (cardId) {
+            case 0:
+                return R.id.card1_locked_overlay;
+            case 1:
+                return R.id.card2_locked_overlay;
+            case 2:
+                return R.id.card3_locked_overlay;
+            case 3:
+                return R.id.card4_locked_overlay;
+            default:
+                return -1; // Invalid card ID
+        }
+    }
 
 }
