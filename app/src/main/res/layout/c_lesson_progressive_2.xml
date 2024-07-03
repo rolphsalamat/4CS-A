@@ -78,6 +78,7 @@
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
                     <TextView
+                        android:id="@+id/progressive_lesson_2_module_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center_vertical"
@@ -152,15 +153,16 @@
                         android:text="Production Rules"
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
+
                     <TextView
+                        android:id="@+id/progressive_lesson_2_module_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center_vertical"
                         android:layout_marginEnd="30dp"
-                        android:text="0/4"
-                        android:textSize="20sp"
+                        android:text="0/5"
                         android:textColor="@color/white"
-                        />
+                        android:textSize="20sp" />
                 </FrameLayout>
             </androidx.cardview.widget.CardView>
         </FrameLayout>
@@ -228,15 +230,16 @@
                         android:text="Derivations and Parse Trees"
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
+
                     <TextView
+                        android:id="@+id/progressive_lesson_2_module_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center_vertical"
                         android:layout_marginEnd="30dp"
-                        android:text="0/4"
-                        android:textSize="20sp"
+                        android:text="0/6"
                         android:textColor="@color/white"
-                        />
+                        android:textSize="20sp" />
                 </FrameLayout>
             </androidx.cardview.widget.CardView>
         </FrameLayout>

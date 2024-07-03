@@ -35,7 +35,6 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
         FrameLayout card2 = findViewById(R.id.card2);
         FrameLayout card3 = findViewById(R.id.card3);
 
-
         // Assuming numberOfSteps is determined based on your logic
         int numberOfStepsForCard1 = 4; // Example value, replace with your logic
         int numberOfStepsForCard2 = 6; // Example value, replace with your logic
@@ -93,6 +92,11 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
         } else {
             Toast.makeText(this, "No Progressive Mode data found for Lesson 1", Toast.LENGTH_SHORT).show();
             Log.d("No Progressive Mode", "No Progressive Mode data found for Lesson 1");
+        }
+
+        // Update locked overlay visibility for all cards based on their completion status
+        for (int i = 0; i < cardCompletionStatus.length; i++) {
+            updateLockedOverlayVisibility(i + 1);
         }
 
         Button exitButton = findViewById(R.id.exitButton);
@@ -272,28 +276,6 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
         // Show the dialog
         dialog.show();
     }
-    private HashMap<String, Map<String, Object>> getLessonDataFromPreferences(SharedPreferences sharedPreferences, String mode) {
-        HashMap<String, Map<String, Object>> lessonData = new HashMap<>();
-        Map<String, ?> allEntries = sharedPreferences.getAll();
-
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            String key = entry.getKey();
-            if (key.startsWith(mode + ": ")) {
-                String[] keyParts = key.split(", ");
-                if (keyParts.length == 2) {
-                    String lessonName = keyParts[0].substring((mode + ": ").length());
-                    String fieldName = keyParts[1];
-                    int value = (int) entry.getValue();
-
-                    if (!lessonData.containsKey(lessonName)) {
-                        lessonData.put(lessonName, new HashMap<String, Object>());
-                    }
-                    lessonData.get(lessonName).put(fieldName, value);
-                }
-            }
-        }
-        return lessonData;
-    }
 
     private void updateLockedOverlayVisibility(int cardIndex) {
         String overlayId = "card" + cardIndex + "_locked_overlay";
@@ -324,8 +306,5 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
             Log.e("Overlay Visibility", "Resource ID not found for " + overlayId);
             showToast("Resource ID not found for " + overlayId);
         }
-
     }
-
-
 }

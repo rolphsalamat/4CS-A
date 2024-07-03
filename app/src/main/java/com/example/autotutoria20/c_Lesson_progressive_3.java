@@ -34,18 +34,27 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         FrameLayout card1 = findViewById(R.id.card1);
         FrameLayout card2 = findViewById(R.id.card2);
         FrameLayout card3 = findViewById(R.id.card3);
+        FrameLayout card4 = findViewById(R.id.card4);
 
-        setCardClickListener(card1, 1);
-        setCardClickListener(card2, 2);
-        setCardClickListener(card3, 3);
+
+        // Assuming numberOfSteps is determined based on your logic
+        int numberOfStepsForCard1 = 3; // Example value, replace with your logic
+        int numberOfStepsForCard2 = 4; // Example value, replace with your logic
+        int numberOfStepsForCard3 = 5; // Example value, replace with your logic
+        int numberOfStepsForCard4 = 6; // Example value, replace with your logic
+
+        setCardClickListener(card1, 1, numberOfStepsForCard1);
+        setCardClickListener(card2, 2, numberOfStepsForCard2);
+        setCardClickListener(card3, 3, numberOfStepsForCard3);
+        setCardClickListener(card4, 4, numberOfStepsForCard4);
 
         // Retrieve user session data from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
 
-        // Retrieve lesson data for "Progressive Mode" for Lesson 1 only
+        // Retrieve lesson data for "Progressive Mode" for Lesson 3 only
         HashMap<String, Map<String, Object>> progressiveModeData = getLessonDataForLesson(sharedPreferences, "Progressive Mode", "Lesson 3");
 
-        // Log and process Progressive Mode data for Lesson 1 only
+        // Log and process Progressive Mode data for Lesson 3 only
         if (progressiveModeData != null) {
             List<String> sortedLessonNames = new ArrayList<>(progressiveModeData.keySet());
             Collections.sort(sortedLessonNames); // Sort lesson names alphabetically
@@ -62,8 +71,20 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
 
                     // Check if iteration exceeds moduleSteps array length
                     if (iteration < z_Lesson_steps.lesson_3_steps.length) {
+                        int lessonStep = z_Lesson_steps.lesson_3_steps[iteration];
+
+                        if ((int) moduleValue == lessonStep) {
+                            showToast((int) moduleValue + " == " + lessonStep + "!!! NEXT PLEASE!!");
+
+                            // Mark the current card as completed
+                            setCardCompletionStatus(iteration, true);
+
+                            // Update the locked overlay visibility for the next card
+                            updateLockedOverlayVisibility(iteration + 2); // +2 because cardIndex starts from 1 and next card index is iteration + 2
+                        }
+
                         // Example: Updating text values for module progress
-                        updateModuleProgressText("progressive_lesson_3_module_" + moduleName.charAt(1), moduleValue + "/" + z_Lesson_steps.lesson_3_steps[iteration]);
+                        updateModuleProgressText("progressive_lesson_3_module_" + moduleName.charAt(1), moduleValue + "/" + lessonStep);
 
                         Log.d("LessonData", "Progressive Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
                         iteration++;
@@ -73,8 +94,8 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
                 }
             }
         } else {
-            Toast.makeText(this, "No Progressive Mode data found for Lesson 1", Toast.LENGTH_SHORT).show();
-            Log.d("No Progressive Mode", "No Progressive Mode data found for Lesson 1");
+            Toast.makeText(this, "No Progressive Mode data found for Lesson 3", Toast.LENGTH_SHORT).show();
+            Log.d("No Progressive Mode", "No Progressive Mode data found for Lesson 3");
         }
 
         Button exitButton = findViewById(R.id.exitButton);
@@ -86,14 +107,13 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         });
     }
 
-    private void updateModuleProgressText(String textViewId, String newText) {
-        TextView textView = findViewById(getResources().getIdentifier(textViewId, "id", getPackageName()));
-        if (textView != null) {
-            textView.setText(newText);
-        } else {
-            Log.e("TextView Error", "TextView with id " + textViewId + " not found.");
+
+    private void setCardCompletionStatus(int cardIndex, boolean isCompleted) {
+        if (cardIndex >= 0 && cardIndex < cardCompletionStatus.length) {
+            cardCompletionStatus[cardIndex] = isCompleted;
         }
     }
+
 
     private HashMap<String, Map<String, Object>> getLessonDataForLesson(SharedPreferences sharedPreferences, String mode, String lessonName) {
         HashMap<String, Map<String, Object>> lessonData = new HashMap<>();
@@ -117,40 +137,17 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         return lessonData;
     }
 
-    private HashMap<String, Map<String, Object>> getLessonDataFromPreferences(SharedPreferences sharedPreferences, String mode) {
-        HashMap<String, Map<String, Object>> lessonData = new HashMap<>();
-        Map<String, ?> allEntries = sharedPreferences.getAll();
-
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            String key = entry.getKey();
-            if (key.startsWith(mode + ": ")) {
-                String[] keyParts = key.split(", ");
-                if (keyParts.length == 2) {
-                    String lessonName = keyParts[0].substring((mode + ": ").length());
-                    String fieldName = keyParts[1];
-                    int value = (int) entry.getValue();
-
-                    if (!lessonData.containsKey(lessonName)) {
-                        lessonData.put(lessonName, new HashMap<String, Object>());
-                    }
-                    lessonData.get(lessonName).put(fieldName, value);
-                }
-            }
-        }
-        return lessonData;
-    }
-
-    private void navigateToModule(int cardNumber) {
+    private void navigateToModule(int cardNumber, int numberOfSteps) {
         if (isPreviousCardCompleted(cardNumber)) {
             switch (cardNumber) {
                 case 1:
-                    navigateToSampleModule3Steps();
+                    navigateToModuleActivity(d_Lesson_container.class, numberOfSteps);
                     break;
                 case 2:
-                    navigateToSampleModule3Steps(); // Assuming the same module for card 2
+                    navigateToModuleActivity(d_Lesson_container.class, numberOfSteps);
                     break;
                 case 3:
-                    navigateToSampleModule4Steps();
+                    navigateToModuleActivity(d_Lesson_container.class, numberOfSteps);
                     break;
                 default:
                     break;
@@ -160,21 +157,37 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         }
     }
 
-    private void navigateToSampleModule3Steps() {
+    private void navigateToModuleActivity(Class<?> moduleActivityClass, int numberOfSteps) {
+        // Store user information in SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("ModulePreferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("numberOfSteps", numberOfSteps);
+        editor.apply();
+
+        Intent intent = new Intent(c_Lesson_progressive_3.this, moduleActivityClass);
+        startActivity(intent);
+    }
+
+
+    private void updateModuleProgressText(String textViewId, String newText) {
+        TextView textView = findViewById(getResources().getIdentifier(textViewId, "id", getPackageName()));
+        if (textView != null) {
+            textView.setText(newText);
+        } else {
+            Log.e("TextView Error", "TextView with id " + textViewId + " not found.");
+        }
+    }
+
+    private void openModuleActivity() {
         Intent intent = new Intent(c_Lesson_progressive_3.this, d_Lesson_container.class);
         startActivity(intent);
     }
 
-    private void navigateToSampleModule4Steps() {
-        Intent intent = new Intent(c_Lesson_progressive_3.this, module_4_steps.class);
-        startActivity(intent);
-    }
-
-    private void setCardClickListener(FrameLayout frame, final int cardNumber) {
+    private void setCardClickListener(FrameLayout frame, final int cardNumber, final int numberOfSteps) {
         frame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateToModule(cardNumber);
+                navigateToModule(cardNumber, numberOfSteps);
             }
         });
     }
@@ -211,13 +224,15 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
     }
 
     private boolean isPreviousCardCompleted(int cardNumber) {
-        // Assuming card numbers start from 1
-        if (cardNumber <= 1) {
-            // If it's the first card, consider it completed
+        if (cardNumber == 1) {
             return true;
         } else {
-            // Check the completion status of the previous card
-            return cardCompletionStatus[cardNumber - 2];
+            int previousCardIndex = cardNumber - 2;
+            if (previousCardIndex >= 0 && previousCardIndex < cardCompletionStatus.length) {
+                return cardCompletionStatus[previousCardIndex];
+            } else {
+                return false;
+            }
         }
     }
 
@@ -260,4 +275,60 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         // Show the dialog
         dialog.show();
     }
+    private HashMap<String, Map<String, Object>> getLessonDataFromPreferences(SharedPreferences sharedPreferences, String mode) {
+        HashMap<String, Map<String, Object>> lessonData = new HashMap<>();
+        Map<String, ?> allEntries = sharedPreferences.getAll();
+
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            String key = entry.getKey();
+            if (key.startsWith(mode + ": ")) {
+                String[] keyParts = key.split(", ");
+                if (keyParts.length == 2) {
+                    String lessonName = keyParts[0].substring((mode + ": ").length());
+                    String fieldName = keyParts[1];
+                    int value = (int) entry.getValue();
+
+                    if (!lessonData.containsKey(lessonName)) {
+                        lessonData.put(lessonName, new HashMap<String, Object>());
+                    }
+                    lessonData.get(lessonName).put(fieldName, value);
+                }
+            }
+        }
+        return lessonData;
+    }
+
+    private void updateLockedOverlayVisibility(int cardIndex) {
+        String overlayId = "card" + cardIndex + "_locked_overlay";
+        int resourceId = getResources().getIdentifier(overlayId, "id", getPackageName());
+
+        Log.d("Overlay Visibility", "Overlay ID: " + overlayId + ", Resource ID: " + resourceId);
+
+        if (resourceId != 0) {
+            FrameLayout lockedOverlay = findViewById(resourceId);
+
+            if (lockedOverlay == null) {
+                Log.e("Overlay Visibility", "Locked overlay not found for resource ID: " + resourceId);
+                showToast("Locked overlay not found for resource ID: " + resourceId);
+                return;
+            }
+
+            // Proceed with setting visibility based on completion status
+            if (cardIndex > 0 && cardIndex - 1 < cardCompletionStatus.length && !cardCompletionStatus[cardIndex - 1]) {
+                lockedOverlay.setVisibility(View.VISIBLE);
+                Log.d("Overlay Visibility", "Showing locked overlay for card " + cardIndex);
+                showToast("Showing locked overlay for card " + cardIndex);
+            } else {
+                lockedOverlay.setVisibility(View.GONE);
+                Log.d("Overlay Visibility", "Hiding locked overlay for card " + cardIndex);
+                showToast("Hiding locked overlay for card " + cardIndex);
+            }
+        } else {
+            Log.e("Overlay Visibility", "Resource ID not found for " + overlayId);
+            showToast("Resource ID not found for " + overlayId);
+        }
+
+    }
+
+
 }
