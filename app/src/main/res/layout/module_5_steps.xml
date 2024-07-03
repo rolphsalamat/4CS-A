@@ -8,7 +8,7 @@
     android:background="@drawable/autotutoria_background_color"
     android:orientation="vertical"
     android:rowCount="1"
-    tools:context=".module_3_steps">
+    tools:context=".d_Lesson_container">
 
     <GridLayout
         android:id="@+id/gridLayout"

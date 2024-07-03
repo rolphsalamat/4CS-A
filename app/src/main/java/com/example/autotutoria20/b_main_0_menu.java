@@ -251,7 +251,7 @@ public class b_main_0_menu extends AppCompatActivity {
                 } else if (id == R.id.free_use_mode) {
                     showSwitchModeDialog("Free Use Mode");
                 } else if (id == R.id.rate) {
-                    Toast.makeText(b_main_0_menu.this, "Rate Us", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(b_main_0_menu.this, "Rate U s", Toast.LENGTH_SHORT).show();
                     showRateUsDialog();
                 } else if (id == R.id.follow) {
                     openFacebookPage();
@@ -259,8 +259,8 @@ public class b_main_0_menu extends AppCompatActivity {
                     Toast.makeText(b_main_0_menu.this, "Logout", Toast.LENGTH_SHORT).show();
                     showLogoutDialog();
                 }
-                // Handle other options if necessary
-                return false;
+                    // Handle other options if necessary
+                    return false;
             }
         });
 

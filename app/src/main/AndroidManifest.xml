@@ -54,7 +54,7 @@
         <activity android:name=".Lesson_3" />
 
         <!-- ADD ALL MODULES HERE -->
-        <activity android:name=".module_3_steps" />
+        <activity android:name=".d_Lesson_container" />
         <activity android:name=".module_4_steps" />
         <activity android:name=".module_5_steps" />
     </application>

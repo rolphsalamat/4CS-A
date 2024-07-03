@@ -68,7 +68,7 @@ public class Lesson_2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showToast("Module " + cardNumber + " clicked");
-                startActivity(new Intent(Lesson_2.this, module_3_steps.class));
+                startActivity(new Intent(Lesson_2.this, d_Lesson_container.class));
             }
         });
     }

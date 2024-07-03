@@ -162,7 +162,7 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
     }
 
     private void navigateToSampleModule3Steps() {
-        Intent intent = new Intent(c_Lesson_progressive_2.this, module_3_steps.class);
+        Intent intent = new Intent(c_Lesson_progressive_2.this, d_Lesson_container.class);
         startActivity(intent);
     }
 

@@ -126,6 +126,9 @@ public class b_main_1_lesson_progressive extends Fragment {
                         incrementCard(i, 25);
                         break;
                     }
+                    if (i == 3 && cardProgress[i] >= 100) {
+                        showToast("Progressive Mode is Complete.");
+                    }
                 }
             }
         });
