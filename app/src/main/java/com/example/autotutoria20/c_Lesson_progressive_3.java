@@ -24,7 +24,7 @@ import java.util.Map;
 public class c_Lesson_progressive_3 extends AppCompatActivity {
 
     private AlertDialog dialog;
-    private boolean[] cardCompletionStatus = {false, false, false}; // Track completion status of each card
+    private boolean[] cardCompletionStatus = {false, false, false, false}; // Track completion status of each card
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,6 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         FrameLayout card2 = findViewById(R.id.card2);
         FrameLayout card3 = findViewById(R.id.card3);
         FrameLayout card4 = findViewById(R.id.card4);
-
 
         // Assuming numberOfSteps is determined based on your logic
         int numberOfStepsForCard1 = 3; // Example value, replace with your logic
@@ -83,6 +82,8 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
                             updateLockedOverlayVisibility(iteration + 2); // +2 because cardIndex starts from 1 and next card index is iteration + 2
                         }
 
+                        showToast("Module Progress: " + moduleValue);
+
                         // Example: Updating text values for module progress
                         updateModuleProgressText("progressive_lesson_3_module_" + moduleName.charAt(1), moduleValue + "/" + lessonStep);
 
@@ -98,6 +99,11 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
             Log.d("No Progressive Mode", "No Progressive Mode data found for Lesson 3");
         }
 
+        // Update locked overlay visibility for all cards based on their completion status
+        for (int i = 0; i < cardCompletionStatus.length; i++) {
+            updateLockedOverlayVisibility(i + 1);
+        }
+
         Button exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,13 +113,11 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         });
     }
 
-
     private void setCardCompletionStatus(int cardIndex, boolean isCompleted) {
         if (cardIndex >= 0 && cardIndex < cardCompletionStatus.length) {
             cardCompletionStatus[cardIndex] = isCompleted;
         }
     }
-
 
     private HashMap<String, Map<String, Object>> getLessonDataForLesson(SharedPreferences sharedPreferences, String mode, String lessonName) {
         HashMap<String, Map<String, Object>> lessonData = new HashMap<>();
@@ -149,6 +153,9 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
                 case 3:
                     navigateToModuleActivity(d_Lesson_container.class, numberOfSteps);
                     break;
+                case 4:
+                    navigateToModuleActivity(d_Lesson_container.class, numberOfSteps);
+                    break;
                 default:
                     break;
             }
@@ -168,7 +175,6 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         startActivity(intent);
     }
 
-
     private void updateModuleProgressText(String textViewId, String newText) {
         TextView textView = findViewById(getResources().getIdentifier(textViewId, "id", getPackageName()));
         if (textView != null) {
@@ -176,11 +182,6 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         } else {
             Log.e("TextView Error", "TextView with id " + textViewId + " not found.");
         }
-    }
-
-    private void openModuleActivity() {
-        Intent intent = new Intent(c_Lesson_progressive_3.this, d_Lesson_container.class);
-        startActivity(intent);
     }
 
     private void setCardClickListener(FrameLayout frame, final int cardNumber, final int numberOfSteps) {
@@ -249,7 +250,7 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         // Create the AlertDialog
         AlertDialog dialog = builder.create();
 
-        // Find the "Okay" button in    the custom layout
+        // Find the "Okay" button in the custom layout
         Button exitButton = dialogView.findViewById(R.id.okay_button);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -275,6 +276,7 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         // Show the dialog
         dialog.show();
     }
+
     private HashMap<String, Map<String, Object>> getLessonDataFromPreferences(SharedPreferences sharedPreferences, String mode) {
         HashMap<String, Map<String, Object>> lessonData = new HashMap<>();
         Map<String, ?> allEntries = sharedPreferences.getAll();
@@ -314,7 +316,7 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
             }
 
             // Proceed with setting visibility based on completion status
-            if (cardIndex > 0 && cardIndex - 1 < cardCompletionStatus.length && !cardCompletionStatus[cardIndex - 1]) {
+            if (cardIndex > 1 && cardIndex - 2 < cardCompletionStatus.length && !cardCompletionStatus[cardIndex - 2]) {
                 lockedOverlay.setVisibility(View.VISIBLE);
                 Log.d("Overlay Visibility", "Showing locked overlay for card " + cardIndex);
                 showToast("Showing locked overlay for card " + cardIndex);
@@ -327,8 +329,5 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
             Log.e("Overlay Visibility", "Resource ID not found for " + overlayId);
             showToast("Resource ID not found for " + overlayId);
         }
-
     }
-
-
 }

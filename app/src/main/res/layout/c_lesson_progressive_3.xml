@@ -78,11 +78,11 @@
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
                     <TextView
+                        android:id="@+id/progressive_lesson_3_module_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center_vertical"
                         android:layout_marginEnd="30dp"
-                        android:text="0/4"
                         android:textSize="20sp"
                         android:textColor="@color/white"
                         />
@@ -153,11 +153,11 @@
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
                     <TextView
+                        android:id="@+id/progressive_lesson_3_module_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center_vertical"
                         android:layout_marginEnd="30dp"
-                        android:text="0/4"
                         android:textSize="20sp"
                         android:textColor="@color/white"
                         />
@@ -229,11 +229,11 @@
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
                     <TextView
+                        android:id="@+id/progressive_lesson_3_module_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center_vertical"
                         android:layout_marginEnd="30dp"
-                        android:text="0/4"
                         android:textSize="20sp"
                         android:textColor="@color/white"
                         />
@@ -305,11 +305,11 @@
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
                     <TextView
+                        android:id="@+id/progressive_lesson_3_module_4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center_vertical"
                         android:layout_marginEnd="30dp"
-                        android:text="0/4"
                         android:textSize="20sp"
                         android:textColor="@color/white"
                         />

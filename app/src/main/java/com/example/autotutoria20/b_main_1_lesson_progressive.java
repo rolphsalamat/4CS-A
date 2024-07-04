@@ -451,8 +451,8 @@ public class b_main_1_lesson_progressive extends Fragment {
                 // Hide locked overlay for this card
                 hideLockedOverlay(cardId + 1);
 
-                // Unlock the next card if there is one
-                if (cardId < cardCompletionStatus.length - 1 && !cardCompletionStatus[cardId + 1]) {
+                // Unlock the next card if there is one and all previous cards are completed
+                if (cardId < cardCompletionStatus.length - 1 && areAllPreviousCardsCompleted(cardId + 1)) {
                     cardCompletionStatus[cardId + 1] = true;
                     Log.d("incrementCard()", "Card " + (cardId + 2) + " unlocked.");
                 }
@@ -465,6 +465,15 @@ public class b_main_1_lesson_progressive extends Fragment {
             progressBar.setProgress(cardProgress[cardId]);
             progressText.setText(cardProgress[cardId] + "% Completed");
         }
+    }
+
+    private boolean areAllPreviousCardsCompleted(int cardId) {
+        for (int i = 0; i < cardId - 1; i++) {
+            if (!cardCompletionStatus[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
