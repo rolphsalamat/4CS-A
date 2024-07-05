@@ -4,4 +4,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#FFEB3B</color>
     <color name="facebook">#1876f3</color>
+
+    <!-- Other color definitions -->
+    <color name="button_background_color">#1b5694</color> <!-- This is the blue color used for the logout button -->
+    <color name="button_cancel_background_color">#FFFFFF</color> <!-- This is white color used for the cancel button -->
+    <color name="button_pressed_background_color">#dddddd</color> <!-- This is a light grey color used when the button is pressed -->
+
 </resources>

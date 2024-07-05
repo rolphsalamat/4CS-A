@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -27,7 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class a_user_2_signup extends AppCompatActivity {
 
-    private static final String TAG = "";
+    private static final String TAG = "SignupActivity";
     private boolean isPasswordVisible = false;
     TextView firstNameEditText;
     TextView lastNameEditText;
@@ -76,7 +77,6 @@ public class a_user_2_signup extends AppCompatActivity {
 
         // Set onClickListener for the sign-up button
         signupButton.setOnClickListener(new View.OnClickListener() {
-            String TAG = "SignupActivity";
             @Override
             public void onClick(View v) {
                 // Retrieve the values from the EditText views
@@ -276,7 +276,11 @@ public class a_user_2_signup extends AppCompatActivity {
                                                     } else {
                                                         // If sign up fails, display a message to the user.
                                                         Log.w(TAG, "createUserWithEmail:failure", createUserTask.getException());
-                                                        Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                                                        if (createUserTask.getException() instanceof FirebaseAuthUserCollisionException) {
+                                                            Toast.makeText(getApplicationContext(), "The email is already taken.", Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Toast.makeText(getApplicationContext(), "Authentication failed: " + createUserTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                        }
                                                     }
                                                 });
                                     }
@@ -412,4 +416,5 @@ public class a_user_2_signup extends AppCompatActivity {
                     Log.e(TAG, "Error adding Free Use Mode - Lesson 4 document", e);
                 });
     }
+
 }

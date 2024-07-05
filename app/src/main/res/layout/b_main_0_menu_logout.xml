@@ -1,46 +1,53 @@
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="375dp"
-    android:orientation="vertical"
-    android:gravity="bottom">
+    android:layout_height="wrap_content">
 
-    <!-- Your content here -->
-
+    <!-- Background Image -->
     <ImageView
+        android:id="@+id/dialog_background"
         android:layout_width="match_parent"
-        android:layout_height="375dp"
-        android:background="@drawable/logout_0"
+        android:layout_height="365dp"
+        android:layout_gravity="top"
+        android:src="@drawable/logout_0"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
         />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-65dp"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal"
-        android:layout_gravity="bottom">
-
-        <Button
-            android:id="@+id/button_cancel"
-            android:layout_width="wrap_content"
+        <!-- Buttons Layout -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Cancel"
-            android:textColor="#000"
-            android:backgroundTint="#FFF"
-            android:elevation="30dp"
-            android:layout_weight="1" />
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_gravity="bottom"
+            android:layout_margin="5dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
-        <Button
-            android:id="@+id/button_logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Logout"
-            android:textColor="#FFF"
-            android:backgroundTint="#1b5694"
-            android:elevation="30dp"
-            android:layout_weight="1" />
-    </LinearLayout>
-</LinearLayout>
+            <Button
+                android:id="@+id/button_cancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Cancel"
+                android:textColor="#000"
+                android:backgroundTint="#FFF"
+                android:elevation="10dp"
+                android:layout_weight="1"
+                />
+
+            <Button
+                android:id="@+id/button_logout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Logout"
+                android:textColor="#FFF"
+                android:backgroundTint="#1b5694"
+                android:elevation="10dp"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
+    </FrameLayout>
