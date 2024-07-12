@@ -4,6 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#FFEB3B</color>
     <color name="facebook">#1876f3</color>
+    <color name="navy_blue">#212e5a</color>
 
     <!-- Other color definitions -->
     <color name="button_background_color">#1b5694</color> <!-- This is the blue color used for the logout button -->

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.RatingBar;
@@ -556,6 +557,25 @@ public class b_main_0_menu extends AppCompatActivity {
 
                 // Finish the current activity
                 finish();
+            }
+        });
+
+        // Set the dialog window attributes
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                // Convert dp to pixels
+                int width = (int) (400 * getResources().getDisplayMetrics().density);
+                int height = (int) (400 * getResources().getDisplayMetrics().density);
+
+                // Set the fixed size for the dialog
+                dialog.getWindow().setLayout(width, height);
+
+                // Set the dim amount for the background
+                WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+                lp.dimAmount = 0.5f; // Change this value to adjust the dim level (0.0 to 1.0)
+                dialog.getWindow().setAttributes(lp);
+                dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             }
         });
 

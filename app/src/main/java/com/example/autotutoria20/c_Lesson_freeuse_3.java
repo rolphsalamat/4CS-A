@@ -177,7 +177,7 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
         });
 
         // Find "No" button in custom layout
-        Button btnCancel = dialogView.findViewById(R.id.cancel_exit_module_);
+        Button btnCancel = dialogView.findViewById(R.id.cancel_exit_module);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

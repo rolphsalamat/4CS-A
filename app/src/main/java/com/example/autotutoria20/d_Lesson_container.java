@@ -1,5 +1,6 @@
 package com.example.autotutoria20;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,17 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import androidx.annotation.NonNull;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class d_Lesson_container extends AppCompatActivity {
 
     private static final String TAG = "Module3Steps";
@@ -20,20 +32,43 @@ public class d_Lesson_container extends AppCompatActivity {
     private AlertDialog dialog;
     private int currentStep = 0; // Track the current step
     private int numberOfSteps = 0; // Track the number of steps
+    private FirebaseFirestore db;
+    private String learningMode;
+    private String currentLesson;
+    private String currentModule;
+    private Map<String, Class<?>> navigationMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.module_3_steps);
 
+        // Initialize the navigation map
+        navigationMap = new HashMap<>();
+        navigationMap.put("Progressive Mode_Lesson 1", c_Lesson_progressive_1.class);
+        navigationMap.put("Progressive Mode_Lesson 2", c_Lesson_progressive_2.class);
+        navigationMap.put("Progressive Mode_Lesson 3", c_Lesson_progressive_3.class);
+        navigationMap.put("Progressive Mode_Lesson 4", c_Lesson_progressive_4.class);
+        navigationMap.put("Free Use Mode_Lesson 1", c_Lesson_freeuse_1.class);
+        navigationMap.put("Free Use Mode_Lesson 2", c_Lesson_freeuse_2.class);
+        navigationMap.put("Free Use Mode_Lesson 3", c_Lesson_freeuse_3.class);
+        navigationMap.put("Free Use Mode_Lesson 4", c_Lesson_freeuse_4.class);
+        // Add more mappings as needed
+
         gridLayout = findViewById(R.id.gridLayout);
+        db = FirebaseFirestore.getInstance();
 
-        // Retrieve the number of steps from SharedPreferences or Intent extras
+        // Retrieve the data from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("ModulePreferences", MODE_PRIVATE);
-        numberOfSteps = sharedPreferences.getInt("numberOfSteps", 5); // Default to 5 if not set
-
+        numberOfSteps = sharedPreferences.getInt("numberOfSteps", -1); // Default to -1 if not set
+        learningMode = sharedPreferences.getString("learningMode", null);
+        currentLesson = sharedPreferences.getString("currentLesson", null);
+        currentModule = sharedPreferences.getString("currentModule", null);
 
         Log.d(TAG, "Number of steps: " + numberOfSteps);
+        Log.d(TAG, "Learning Mode: " + learningMode);
+        Log.d(TAG, "Current Lesson: " + currentLesson);
+        Log.d(TAG, "Current Module: " + currentModule);
 
         // Dynamically populate the GridLayout with steps
         populateGridLayout();
@@ -55,6 +90,8 @@ public class d_Lesson_container extends AppCompatActivity {
         });
     }
 
+
+
     private void populateGridLayout() {
         gridLayout.removeAllViews(); // Clear existing views
 
@@ -66,12 +103,21 @@ public class d_Lesson_container extends AppCompatActivity {
             params.height = (int) (10 * getResources().getDisplayMetrics().density);
             params.columnSpec = GridLayout.spec(i * 2, 1, 1f); // Span one column with equal weight
             stepView.setLayoutParams(params);
-            stepView.setBackgroundResource(R.drawable.rounded_corners);
+
+            // Highlight the completed steps and current step
+            if (i < currentStep) {
+                stepView.setBackgroundResource(R.drawable.rounded_corners_completed); // Define a different drawable for completed steps
+            } else if (i == currentStep) {
+                stepView.setBackgroundResource(R.drawable.rounded_corners); // Define a different drawable for the current step
+            } else {
+                stepView.setBackgroundResource(R.drawable.rounded_corners); // Default drawable for uncompleted steps
+            }
+
             stepView.setTag(i); // Tag the view with its index
             gridLayout.addView(stepView);
 
             // Log each added step
-            Log.d(TAG, "Added step view " + (i + 1));
+//            Log.d(TAG, "Added step view " + (i + 1));
 
             // Add a Space between steps except for the last one
             if (i < numberOfSteps - 1) {
@@ -83,31 +129,95 @@ public class d_Lesson_container extends AppCompatActivity {
                 gridLayout.addView(space);
 
                 // Log each added space
-                Log.d(TAG, "Added space after step " + (i + 1));
+//                Log.d(TAG, "Added space after step " + (i + 1));
             }
         }
 
         // Adjust GridLayout column count
         gridLayout.setColumnCount(numberOfSteps * 2 - 1);
-        Log.d(TAG, "GridLayout column count set to " + gridLayout.getColumnCount());
+//        Log.d(TAG, "GridLayout column count set to " + gridLayout.getColumnCount());
     }
 
     private void onNextButtonClicked() {
-        if (currentStep < numberOfSteps) {
-            // Find the current step view by its tag
-            View stepView = gridLayout.findViewWithTag(currentStep);
-            if (stepView != null) {
-                // Change the background color of the current step to blue
-                stepView.setBackgroundResource(R.color.facebook);
-            }
 
-            currentStep++; // Move to the next step
-            Log.d(TAG, "Current step: " + currentStep);
-        }
+        currentStep++; // Increment the current step
+        Log.d(TAG, "Next button clicked. Current step: " + currentStep);
 
-        if (currentStep == numberOfSteps) {
+        if (currentStep >= numberOfSteps) {
+            Log.d(TAG, "Next button clicked. Final step: " + currentStep);
+
+            updateCurrentModuleInDatabase();
+
             Toast.makeText(this, "All steps completed!", Toast.LENGTH_SHORT).show();
-            finish();
+
+            // Construct the key for the navigation map
+            String key = learningMode + "_" + currentLesson;
+
+            // Retrieve the target class from the map
+            Class<?> targetClass = navigationMap.get(key);
+
+            if (targetClass != null) {
+                // Create an intent to navigate to the target class
+                Intent intent = new Intent(d_Lesson_container.this, targetClass);
+
+                // Optionally, add any data you want to pass back
+                intent.putExtra("moduleCompleted", currentModule);
+                intent.putExtra("numberOfStepsCompleted", numberOfSteps); // Pass the number of steps
+
+//                Toast.makeText(this, "target class: " + targetClass, Toast.LENGTH_SHORT).show();
+
+                // Store user information in SharedPreferences
+                SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                editor.putString("Current Module", currentModule);
+                editor.putInt("Module Progress", currentStep); // Save the progress here
+
+                editor.apply();
+
+                startActivity(intent);
+
+                // Finish this activity to prevent going back here
+                finish();
+            } else {
+                // Handle the case where the target class is not found in the map
+                Toast.makeText(this, "Navigation target not found for " + key, Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            updateCurrentModuleInDatabase();
+            populateGridLayout(); // Refresh the GridLayout to reflect the updated step
+        }
+    }
+
+    private void updateCurrentModuleInDatabase() {
+        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+        String userId = sharedPreferences.getString("userId", "");
+
+        if (!userId.isEmpty()) {
+            // Reference to the user's document in the database
+            DocumentReference userRef = db.collection("users").document(userId)
+                    .collection(learningMode).document(currentLesson);
+
+            // Attempt to update the current step value in the database
+            userRef.update(currentModule, currentStep)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "Current step updated successfully in the database.");
+                            } else {
+                                Log.d(TAG, "Failed to update current step: " +  task.getException().getMessage());
+                                if (task.getException() instanceof FirebaseFirestoreException) {
+                                    FirebaseFirestoreException firestoreException = (FirebaseFirestoreException) task.getException();
+                                    if (firestoreException.getCode() == FirebaseFirestoreException.Code.NOT_FOUND) {
+                                        Log.d(TAG, "The specified document does not exist.");
+                                    }
+                                }
+                            }
+                        }
+                    });
+        } else {
+            Log.d(TAG, "User ID not found in SharedPreferences.");
         }
     }
 
@@ -133,7 +243,7 @@ public class d_Lesson_container extends AppCompatActivity {
         });
 
         // Find "No" button in custom layout
-        Button btnCancel = dialogView.findViewById(R.id.cancel_exit_module_);
+        Button btnCancel = dialogView.findViewById(R.id.cancel_exit_module);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,5 +254,4 @@ public class d_Lesson_container extends AppCompatActivity {
         // Show the dialog
         dialog.show();
     }
-
 }

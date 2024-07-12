@@ -1,12 +1,12 @@
 package com.example.autotutoria20;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -47,6 +47,27 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
         // Retrieve user session data from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
 
+        // Initialize progress based on saved data
+        refreshProgress(sharedPreferences);
+
+        Button exitButton = findViewById(R.id.exitButton);
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showExitConfirmationDialog();
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Retrieve user session data from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+        refreshProgress(sharedPreferences);
+    }
+
+    private void refreshProgress(SharedPreferences sharedPreferences) {
         // Retrieve lesson data for "Progressive Mode" for Lesson 2 only
         HashMap<String, Map<String, Object>> progressiveModeData = getLessonDataForLesson(sharedPreferences, "Progressive Mode", "Lesson 2");
 
@@ -70,7 +91,7 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
                         int lessonStep = z_Lesson_steps.lesson_2_steps[iteration];
 
                         if ((int) moduleValue == lessonStep) {
-                            showToast((int) moduleValue + " == " + lessonStep + "!!! NEXT PLEASE!!");
+//                            showToast((int) moduleValue + " == " + lessonStep + "!!! NEXT PLEASE!!");
 
                             // Mark the current card as completed
                             setCardCompletionStatus(iteration, true);
@@ -79,7 +100,7 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
                             updateLockedOverlayVisibility(iteration + 2); // +2 because cardIndex starts from 1 and next card index is iteration + 2
                         }
 
-                        showToast("Module Progress: " + moduleValue);
+//                        showToast("Module Progress: " + moduleValue);
 
                         // Example: Updating text values for module progress
                         updateModuleProgressText("progressive_lesson_2_module_" + moduleName.charAt(1), moduleValue + "/" + lessonStep);
@@ -100,14 +121,6 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
         for (int i = 0; i < cardCompletionStatus.length; i++) {
             updateLockedOverlayVisibility(i + 1);
         }
-
-        Button exitButton = findViewById(R.id.exitButton);
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showExitConfirmationDialog();
-            }
-        });
     }
 
     private void setCardCompletionStatus(int cardIndex, boolean isCompleted) {
@@ -138,31 +151,23 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
         return lessonData;
     }
 
+
     private void navigateToModule(int cardNumber, int numberOfSteps) {
         if (isPreviousCardCompleted(cardNumber)) {
-            switch (cardNumber) {
-                case 1:
-                    navigateToModuleActivity(d_Lesson_container.class, numberOfSteps);
-                    break;
-                case 2:
-                    navigateToModuleActivity(d_Lesson_container.class, numberOfSteps);
-                    break;
-                case 3:
-                    navigateToModuleActivity(d_Lesson_container.class, numberOfSteps);
-                    break;
-                default:
-                    break;
-            }
+            navigateToModuleActivity(d_Lesson_container.class, numberOfSteps, cardNumber);
         } else {
             showCustomDialog();
         }
     }
 
-    private void navigateToModuleActivity(Class<?> moduleActivityClass, int numberOfSteps) {
+    private void navigateToModuleActivity(Class<?> moduleActivityClass, int numberOfSteps, int cardNumber) {
         // Store user information in SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("ModulePreferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("numberOfSteps", numberOfSteps);
+        editor.putString("learningMode", "Progressive Mode");
+        editor.putString("currentLesson", "Lesson 2");
+        editor.putString("currentModule", "M" + cardNumber);
         editor.apply();
 
         Intent intent = new Intent(c_Lesson_progressive_2.this, moduleActivityClass);
@@ -177,8 +182,6 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
             Log.e("TextView Error", "TextView with id " + textViewId + " not found.");
         }
     }
-
-
 
     private void setCardClickListener(FrameLayout frame, final int cardNumber, final int numberOfSteps) {
         frame.setOnClickListener(new View.OnClickListener() {
@@ -197,21 +200,48 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_exit_confirmation, null);
         builder.setView(dialogView);
+        builder.setCancelable(true);
 
-        Button btnYes = dialogView.findViewById(R.id.exit_module);
-        btnYes.setOnClickListener(new View.OnClickListener() {
+        Button btnCancel = dialogView.findViewById(R.id.cancel_exit_module);
+        Button btnExit = dialogView.findViewById(R.id.exit_module);
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(c_Lesson_progressive_2.this, "Exiting module", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 finish();
             }
         });
 
-        Button btnCancel = dialogView.findViewById(R.id.cancel_exit_module_);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        dialog = builder.create();
+        dialog.show();
+
+        // Adjust dialog window size
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        dialog.getWindow().setAttributes(layoutParams);
+    }
+
+    private void showCustomDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_complete_previous_lesson, null);
+        builder.setView(dialogView);
+
+        builder.setCancelable(true);
+
+        Button btnOk = dialogView.findViewById(R.id.okay_button);
+        btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(c_Lesson_progressive_2.this, "Cancel Exit", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -220,111 +250,35 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
         dialog.show();
     }
 
-    private boolean isPreviousCardCompleted(int cardNumber) {
-        if (cardNumber == 1) {
-            return true;
-        } else {
-            int previousCardIndex = cardNumber - 2;
-            if (previousCardIndex >= 0 && previousCardIndex < cardCompletionStatus.length) {
-                return cardCompletionStatus[previousCardIndex];
-            } else {
-                return false;
-            }
+    private boolean isPreviousCardCompleted(int cardIndex) {
+        if (cardIndex == 1) {
+            return true; // First card is always available
         }
-    }
 
-    // Method to show the custom dialog
-    private void showCustomDialog() {
-        // Create a dialog builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        // Inflate the custom dialog layout
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_complete_previous_lesson, null);
-        builder.setView(dialogView);
-
-        // Create the AlertDialog
-        AlertDialog dialog = builder.create();
-
-        // Find the "Okay" button in the custom layout
-        Button exitButton = dialogView.findViewById(R.id.okay_button);
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Dismiss the dialog when the button is clicked
-                dialog.dismiss();
-            }
-        });
-
-        // Set the dialog window attributes
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                // Convert dp to pixels
-                int width = (int) (350 * getResources().getDisplayMetrics().density);
-                int height = (int) (350 * getResources().getDisplayMetrics().density);
-
-                // Set the fixed size for the dialog
-                dialog.getWindow().setLayout(width, height);
-            }
-        });
-
-        // Show the dialog
-        dialog.show();
-    }
-
-    private HashMap<String, Map<String, Object>> getLessonDataFromPreferences(SharedPreferences sharedPreferences, String mode) {
-        HashMap<String, Map<String, Object>> lessonData = new HashMap<>();
-        Map<String, ?> allEntries = sharedPreferences.getAll();
-
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            String key = entry.getKey();
-            if (key.startsWith(mode + ": ")) {
-                String[] keyParts = key.split(", ");
-                if (keyParts.length == 2) {
-                    String lessonName = keyParts[0].substring((mode + ": ").length());
-                    String fieldName = keyParts[1];
-                    int value = (int) entry.getValue();
-
-                    if (!lessonData.containsKey(lessonName)) {
-                        lessonData.put(lessonName, new HashMap<String, Object>());
-                    }
-                    lessonData.get(lessonName).put(fieldName, value);
-                }
-            }
+        if (cardIndex > 1 && cardIndex <= cardCompletionStatus.length) {
+            return cardCompletionStatus[cardIndex - 2]; // Check the completion status of the previous card
         }
-        return lessonData;
+
+        return false;
     }
 
     private void updateLockedOverlayVisibility(int cardIndex) {
+
+//        cardIndex -= 1;
+
         String overlayId = "card" + cardIndex + "_locked_overlay";
-        int resourceId = getResources().getIdentifier(overlayId, "id", getPackageName());
+        View lockedOverlay = findViewById(getResources().getIdentifier(overlayId, "id", getPackageName()));
 
-        Log.d("Overlay Visibility", "Overlay ID: " + overlayId + ", Resource ID: " + resourceId);
+        showToast("Card #" + cardIndex);
 
-        if (resourceId != 0) {
-            FrameLayout lockedOverlay = findViewById(resourceId);
-
-            if (lockedOverlay == null) {
-                Log.e("Overlay Visibility", "Locked overlay not found for resource ID: " + resourceId);
-                showToast("Locked overlay not found for resource ID: " + resourceId);
-                return;
-            }
-
-            // Proceed with setting visibility based on completion status
-            if (cardIndex > 0 && cardIndex - 1 < cardCompletionStatus.length && !cardCompletionStatus[cardIndex - 1]) {
-                lockedOverlay.setVisibility(View.VISIBLE);
-                Log.d("Overlay Visibility", "Showing locked overlay for card " + cardIndex);
-                showToast("Showing locked overlay for card " + cardIndex);
+        if (lockedOverlay != null) {
+            if (cardIndex == 0 || isPreviousCardCompleted(cardIndex)) {
+                lockedOverlay.setVisibility(View.GONE); // Hide locked overlay if previous card is completed
             } else {
-                lockedOverlay.setVisibility(View.GONE);
-                Log.d("Overlay Visibility", "Hiding locked overlay for card " + cardIndex);
-                showToast("Hiding locked overlay for card " + cardIndex);
+                lockedOverlay.setVisibility(View.VISIBLE); // Show locked overlay if previous card is not completed
             }
         } else {
-            Log.e("Overlay Visibility", "Resource ID not found for " + overlayId);
-            showToast("Resource ID not found for " + overlayId);
+            Log.e("Overlay Error", "Locked overlay with id " + overlayId + " not found.");
         }
-
     }
 }
