@@ -2,13 +2,14 @@ package com.example.autotutoria20;
 
 public class z_Lesson_steps
 {
-    public static final int[] lesson_1_steps = {4, 6, 6}; // Adjust these values accordingly
+    public static final int total_module_count = 4; // Kung ilang cards sa main menu
+    public static final int[] lesson_1_steps = {4, 6, 6}; // Kung ilang cards sa Lesson 1
     public static final int lesson_1_complete = 16;
-    public static final int[] lesson_2_steps = {4, 5, 6}; // Adjust these values accordingly
+    public static final int[] lesson_2_steps = {4, 5, 6}; // Kung ilang cards sa Lesson 2
     public static final int lesson_2_complete = 15;
-    public static final int[] lesson_3_steps = {3, 4, 5, 6}; // Adjust these values accordingly
+    public static final int[] lesson_3_steps = {3, 4, 5, 6}; // Kung ilang cards sa Lesson 3
     public static final int lesson_3_complete = 18;
-    public static final int[] lesson_4_steps = {6, 7, 8}; // Adjust these values accordingly
+    public static final int[] lesson_4_steps = {6, 7, 8}; // Kung ilang cards sa Lesson 4
     public static final int lesson_4_complete = 21;
 
     // Private constructor to prevent instantiation

@@ -78,6 +78,7 @@
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
                     <TextView
+                        android:id="@+id/progressive_lesson_4_module_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center_vertical"
@@ -101,17 +102,17 @@
             app:layout_constraintBottom_toBottomOf="@id/card1"
             android:layout_marginHorizontal="20dp"
             >
-                        <!-- Background for the locked lesson cover -->
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/locked_lesson_cover" />
-                        <!-- Lock icon -->
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/lock"/>
+<!--                        &lt;!&ndash; Background for the locked lesson cover &ndash;&gt;-->
+<!--                        <ImageView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:background="@drawable/locked_lesson_cover" />-->
+<!--                        &lt;!&ndash; Lock icon &ndash;&gt;-->
+<!--                        <ImageView-->
+<!--                            android:layout_width="40dp"-->
+<!--                            android:layout_height="50dp"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:src="@drawable/lock"/>-->
         </FrameLayout>
 
         <!-- Card #2 -->
@@ -153,6 +154,7 @@
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
                     <TextView
+                        android:id="@+id/progressive_lesson_4_module_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center_vertical"
@@ -229,6 +231,7 @@
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
                     <TextView
+                        android:id="@+id/progressive_lesson_4_module_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|center_vertical"

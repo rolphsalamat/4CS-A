@@ -484,15 +484,15 @@
                 />
         </FrameLayout>
 
-        <Button
-            android:id="@+id/increment_progress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Increment progress"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+<!--        <Button-->
+<!--            android:id="@+id/increment_progress"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Increment progress"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -93,9 +93,22 @@ public class d_Lesson_container extends AppCompatActivity {
 
 
     private void populateGridLayout() {
+
         gridLayout.removeAllViews(); // Clear existing views
 
+        // This code works, just need to implement a sample of Pre-Test and Post-Test
+        if (currentStep == 0) { // First [0] Step | Pre-Test
+            Toast.makeText(d_Lesson_container.this, "Pre-Test", Toast.LENGTH_SHORT).show();
+            // Show the pre-test in this part of the code
+
+        } else if (currentStep == numberOfSteps-1) { // Last [n] Step | Post-Test
+            Toast.makeText(d_Lesson_container.this, "Post-Test", Toast.LENGTH_SHORT).show();
+            // Show the post-test in this part of the code
+        }
+
         for (int i = 0; i < numberOfSteps; i++) {
+
+
             // Create a new View for each step
             View stepView = new View(this);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
@@ -141,44 +154,48 @@ public class d_Lesson_container extends AppCompatActivity {
     private void onNextButtonClicked() {
 
         currentStep++; // Increment the current step
+
+        updateCurrentModuleInDatabase();
         Log.d(TAG, "Next button clicked. Current step: " + currentStep);
 
         if (currentStep >= numberOfSteps) {
             Log.d(TAG, "Next button clicked. Final step: " + currentStep);
 
-            updateCurrentModuleInDatabase();
-
-            Toast.makeText(this, "All steps completed!", Toast.LENGTH_SHORT).show();
-
             // Construct the key for the navigation map
             String key = learningMode + "_" + currentLesson;
+
+            Log.d("Next Button", "String key: " + key);
 
             // Retrieve the target class from the map
             Class<?> targetClass = navigationMap.get(key);
 
             if (targetClass != null) {
-                // Create an intent to navigate to the target class
-                Intent intent = new Intent(d_Lesson_container.this, targetClass);
 
-                // Optionally, add any data you want to pass back
-                intent.putExtra("moduleCompleted", currentModule);
-                intent.putExtra("numberOfStepsCompleted", numberOfSteps); // Pass the number of steps
-
-//                Toast.makeText(this, "target class: " + targetClass, Toast.LENGTH_SHORT).show();
-
-                // Store user information in SharedPreferences
-                SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                editor.putString("Current Module", currentModule);
-                editor.putInt("Module Progress", currentStep); // Save the progress here
-
-                editor.apply();
-
-                startActivity(intent);
+//                // Create an intent to navigate to the target class
+//                Intent intent = new Intent(d_Lesson_container.this, targetClass);
+//
+//                // Optionally, add any data you want to pass back
+//                intent.putExtra("moduleCompleted", currentModule);
+//                intent.putExtra("numberOfStepsCompleted", numberOfSteps); // Pass the number of steps
+//
+//                // Store user information in SharedPreferences
+//                SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//
+//                editor.putString("Current Module", currentModule);
+//                editor.putInt("Module Progress", currentStep); // Save the progress here
+//
+//                Log.d("exit lesson container","Module: " + currentModule);
+//                Log.d("exit lesson container","Step: " + currentStep);
+//
+//
+//                editor.apply();
+//
+//                startActivity(intent);
 
                 // Finish this activity to prevent going back here
                 finish();
+
             } else {
                 // Handle the case where the target class is not found in the map
                 Toast.makeText(this, "Navigation target not found for " + key, Toast.LENGTH_SHORT).show();

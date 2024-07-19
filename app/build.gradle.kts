@@ -44,6 +44,8 @@ dependencies {
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-appcheck")
+    implementation("com.google.firebase:firebase-appcheck-playintegrity")
+
 
     // Google Play Services dependencies
     implementation("com.google.android.gms:play-services-auth:19.2.0")

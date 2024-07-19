@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +20,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,144 +47,162 @@ import java.util.Map;
     private boolean isProgressiveMode = true; // Default mode is progressive mode
     private static View view;
     private Dialog dialog;
+    private Dialog loadingDialog;
 
     // Define card progress array
-    private int[] cardProgress = new int[4]; // Assuming there are 4 cards
+    private int[] cardProgress = new int[z_Lesson_steps.total_module_count]; // refer to the assigned value
 
     // Track completion status of each card
     private boolean[] cardCompletionStatus = {false, false, false, false}; // Default is false for all cards
 
-    @Override
+        @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.b_main_3_lesson_progressive, container, false);
 
         // Initialize views
         initializeViews();
 
-        // Set up the increment button
-        Button increment = view.findViewById(R.id.increment_progress);
-        increment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (int i = 0; i < 4; i++) {
-                    if (cardProgress[i] < 100) {
-                        incrementCard(i, 25);
-                        break;
-                    }
-                    if (i == 3 && cardProgress[i] >= 100) {
-                        showToast("Progressive Mode is Complete.");
-                    }
-                }
-            }
-        });
+        // Show loading dialog
+        showLoadingDialog();
+
+//        // Set up the increment button
+//        Button increment = view.findViewById(R.id.increment_progress);
+//        increment.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                for (int i = 0; i < 4; i++) {
+//                    if (cardProgress[i] < 100) {
+//                        incrementCard(i, 25);
+//                        break;
+//                    }
+//                    if (i == 3 && cardProgress[i] >= 100) {
+//                        showToast("Progressive Mode is Complete.");
+//                    }
+//                }
+//            }
+//        });
 
         return view;
     }
 
-        @Override
-        public void onResume() {
-            super.onResume();
+        private void showLoadingDialog() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            LayoutInflater inflater = getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.dialog_loading, null);
+            builder.setView(dialogView);
+            builder.setCancelable(false); // Prevent closing the dialog
+            loadingDialog = builder.create();
+            loadingDialog.show();
+        }
 
-            // Retrieve user session data from SharedPreferences
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserSession", MODE_PRIVATE);
+        private void hideLoadingDialog() {
+            if (loadingDialog != null && loadingDialog.isShowing()) {
+                loadingDialog.dismiss();
+            }
+        }
 
-            // Initialize array to store cumulative module values for each lesson
-            int[] cumulativeModuleValues = new int[4]; // Assuming 4 lessons
+    // onResume is called everytime the user returns to main menu
+    // From the Lessons Layout
+    @Override
+    public void onResume() {
+        super.onResume();
+        fetchAllProgressData();
+    }
 
-            // Iterate through lesson numbers 1, 2, 3, and 4
-            for (int lessonNumber = 1; lessonNumber <= 4; lessonNumber++) {
-                String lessonKey = "Lesson " + lessonNumber;
+    private void fetchAllProgressData() {
+        Log.d("fetchAllProgressData", "Method called");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String TAG = "fetchAllProgressData()";
 
-                // Retrieve lesson data for "Progressive Mode" for the current lesson
-                HashMap<String, Map<String, Object>> progressiveModeData = getLessonDataForLesson(sharedPreferences, "Progressive Mode", lessonKey);
+        // Reference to the user's progress data collection
+        CollectionReference progressRef =
+                db.collection("users")
+                .document(userId)
+                .collection("Progressive Mode");
 
-                // Log and process Progressive Mode data for the current lesson
-                if (progressiveModeData != null) {
-                    List<String> sortedLessonNames = new ArrayList<>(progressiveModeData.keySet());
-                    Collections.sort(sortedLessonNames); // Sort lesson names alphabetically
+        // Directory ends at Progressive Mode
+        // Meaning, this retrieves all of the Lessons
 
-                    for (String lessonName : sortedLessonNames) {
-                        Map<String, Object> lessonData = progressiveModeData.get(lessonName);
+        // Fetch all lessons
+        progressRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot lessonDoc : task.getResult()) {
+                        String lesson = lessonDoc.getId();
+                        Log.d(TAG, "Lesson: " + lesson);
 
-                        // Reset iteration for each lessonName
-                        int iteration = 0;
+                        // Initialize variables for total progress calculation
+                        int totalProgress = 0;
+                        int totalMaxProgress = 0;
 
-                        for (Map.Entry<String, Object> lessonEntry : lessonData.entrySet()) {
-                            String moduleName = lessonEntry.getKey();
-                            int moduleValue = (int) lessonEntry.getValue();
+                        // Get lesson number from the lesson name
 
-                            // Log current module being checked
-                            Log.d("ModuleData", "Lesson " + lessonNumber + ", Module: " + moduleName + ", Value: " + moduleValue);
+                        // substring 7 kasi nasa 7th character yung number ng Lesson
+                        int lessonNumber = Integer.parseInt(lesson.substring(7).trim());
+                        int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
 
-                            // Check if iteration exceeds moduleSteps array length
-                            int[] lessonSteps = z_Lesson_steps.getLessonSteps(lessonNumber);
-                            if (iteration < lessonSteps.length) {
-                                // Increment the array value with the module value
-                                cumulativeModuleValues[lessonNumber - 1] += moduleValue;
+                        // This part of the code retrieves the individual modules
+                        // within a certain Lesson
 
-                                iteration++;
+                        // Iterate over all fields to get module progress
+                        for (int i = 0; i < maxProgressValues.length; i++) {
+                            String key = "M" + (i + 1);
+                            Long moduleProgress = lessonDoc.getLong(key);
+                            if (moduleProgress != null) {
+                                // Update total progress and max progress
+                                totalProgress += moduleProgress;
+                                totalMaxProgress += maxProgressValues[i];
+
+                                // Log the progress for checking
+                                Log.d(TAG, "Progressive Mode | " + lesson + " | " + key + " Progress: " + moduleProgress + "/" + maxProgressValues[i]);
                             } else {
-                                Log.e("LessonData", "Iteration exceeds moduleSteps array length.");
+                                Log.d(TAG, lesson + " | " + key + " Progress data not found.");
                             }
+                        }
+
+                        // Calculate overall progress for the lesson
+                        if (totalMaxProgress > 0) {
+                            double overallProgress = ((double) totalProgress / totalMaxProgress) * 100;
+                            int overallProgressInt = (int) Math.round(overallProgress);
+
+                            Log.d(TAG, lesson + " | Overall Progress: " + overallProgress + "%");
+
+                            // Update the layout based on overallProgress
+                            updateCompletionStatus(lessonNumber);
+                            Log.e(TAG, "Let's call incrementCard() method");
+                            incrementCard(lessonNumber, overallProgressInt);
+                        } else {
+                            Log.d(TAG, lesson + " | No progress data available.");
                         }
                     }
                 } else {
-                    Log.d("No Progressive Mode", "No Progressive Mode data found for " + lessonKey);
+                    Log.d(TAG, "get failed with ", task.getException());
                 }
             }
+        });
+    }
 
-            // Calculate and log the contribution percentages of each lesson
-            for (int i = 0; i < cumulativeModuleValues.length; i++) {
-                int moduleSteps = cumulativeModuleValues[i];
+    private void initializeViews() {
 
-                // Retrieve complete steps from z_Lesson_steps
-                int lessonCompleteSteps = getLessonCompleteSteps(i + 1);
-
-                // Calculate contribution percentage
-                double contributionPercentage = (moduleSteps / (double) lessonCompleteSteps) * 100;
-                Log.d("LessonContribution", "Lesson " + (i + 1) + " Contribution: " + contributionPercentage + "%");
-
-                // Update UI or perform further actions with contributionPercentage
-                incrementCard(i, (int) contributionPercentage);
-            }
-        }
-
-        private HashMap<String, Map<String, Object>> getLessonDataForLesson(SharedPreferences sharedPreferences, String mode, String lessonName) {
-            HashMap<String, Map<String, Object>> lessonData = new HashMap<>();
-            Map<String, ?> allEntries = sharedPreferences.getAll();
-
-            for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-                String key = entry.getKey();
-                if (key.startsWith(mode + ": " + lessonName)) {
-                    String[] keyParts = key.split(", ");
-                    if (keyParts.length == 2) {
-                        String fieldName = keyParts[1];
-                        Object value = entry.getValue();
-
-                        if (!lessonData.containsKey(lessonName)) {
-                            lessonData.put(lessonName, new HashMap<String, Object>());
-                        }
-                        lessonData.get(lessonName).put(fieldName, value);
-                    }
-                }
-            }
-            return lessonData;
-        }
-
-
-        private void initializeViews() {
+        // Progress Bar
         progressBarCard1 = view.findViewById(R.id.progressBar_card_1);
         progressBarCard2 = view.findViewById(R.id.progressBar_card_2);
         progressBarCard3 = view.findViewById(R.id.progressBar_card_3);
         progressBarCard4 = view.findViewById(R.id.progressBar_card_4);
 
+        // Progress Text
         progressTextCard1 = view.findViewById(R.id.progressText_card_1);
         progressTextCard2 = view.findViewById(R.id.progressText_card_2);
         progressTextCard3 = view.findViewById(R.id.progressText_card_3);
         progressTextCard4 = view.findViewById(R.id.progressText_card_4);
 
+        // Learning Mode? Ewan para san ba to
+        // PWEDE I-REMOVE ITO PWEDE I-REMOVE ITO PWEDE I-REMOVE ITO PWEDE I-REMOVE ITO PWEDE I-REMOVE ITO PWEDE I-REMOVE ITO
         learningModeText = view.findViewById(R.id.learning_mode_text);
 
+        // Locked Overlay
         lockedOverlayCard1 = view.findViewById(R.id.card1_locked_overlay);
         lockedOverlayCard2 = view.findViewById(R.id.card2_locked_overlay);
         lockedOverlayCard3 = view.findViewById(R.id.card3_locked_overlay);
@@ -181,36 +210,6 @@ import java.util.Map;
 
         setCardClickListeners();
 
-
-    }
-
-
-    // Method to calculate total steps for all lessons
-    private int calculateTotalSteps() {
-        int totalSteps = 0;
-        for (int lessonNumber = 1; lessonNumber <= 4; lessonNumber++) {
-            int[] lessonSteps = z_Lesson_steps.getLessonSteps(lessonNumber);
-            for (int steps : lessonSteps) {
-                totalSteps += steps;
-            }
-        }
-        return totalSteps;
-    }
-
-    // Method to get lesson complete steps
-    private int getLessonCompleteSteps(int lessonNumber) {
-        switch (lessonNumber) {
-            case 1:
-                return z_Lesson_steps.lesson_1_complete;
-            case 2:
-                return z_Lesson_steps.lesson_2_complete;
-            case 3:
-                return z_Lesson_steps.lesson_3_complete;
-            case 4:
-                return z_Lesson_steps.lesson_4_complete;
-            default:
-                return 0;
-        }
     }
 
     // Method to set click listeners for the cards
@@ -250,120 +249,56 @@ import java.util.Map;
 
     // Method to handle click on a card
     private void handleCardClick(int cardId) {
-        Log.d("CardClick", "Card " + cardId + " clicked.");
 
         // checks if previous card is complete, but also allows if cardId is 1
-        // because 1 should always be accessible as it is the beginning
+        // because Card 1 should always be accessible as it is the beginning of the lesson
         if (isPreviousCardCompleted(cardId) || cardId == 1) {
             launchLessonActivity(cardId);
-        } else {
-            // Create a dialog builder
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-            // Inflate the custom dialog layout
-            LayoutInflater inflater = getLayoutInflater();
-            View dialogView = inflater.inflate(R.layout.dialog_complete_previous_lesson, null);
-            builder.setView(dialogView);
-
-            // Create the AlertDialog
-            AlertDialog dialog = builder.create();
-
-            // Find the "Okay" button in the custom layout
-            Button exitButton = dialogView.findViewById(R.id.okay_button);
-            exitButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Dismiss the dialog when the button is clicked
-                    dialog.dismiss();
-                }
-            });
-
-            // Set the dialog window attributes
-            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialogInterface) {
-                    // Convert dp to pixels
-                    int width = (int) (350 * getResources().getDisplayMetrics().density);
-                    int height = (int) (350 * getResources().getDisplayMetrics().density);
-
-                    // Set the fixed size for the dialog
-                    dialog.getWindow().setLayout(width, height);
-                }
-            });
-
-            // Show the dialog
-            dialog.show();
+        }
+        // Else, if clicked Card is not yet unlocked...
+        else {
+            showCustomDialog();
         }
     }
 
+    private void showCustomDialog() {
 
+        // Create a dialog builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-    // Method to show the custom dialog
-//    private void showCustomDialog() {
-//        // Create a dialog builder
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//
-//        // Inflate the custom dialog layout
-//        LayoutInflater inflater = getLayoutInflater();
-//        View dialogView = inflater.inflate(R.layout.dialog_complete_previous_lesson, null);
-//        builder.setView(dialogView);
-//
-//        // Create the AlertDialog
-//        AlertDialog dialog = builder.create();
-//
-//        // Find the "Okay" button in the custom layout
-//        Button exitButton = dialogView.findViewById(R.id.okay_button);
-//        exitButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Dismiss the dialog when the button is clicked
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        // Set the dialog window attributes
-//        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-//            @Override
-//            public void onShow(DialogInterface dialogInterface) {
-//                // Convert dp to pixels
-//                int width = (int) (350 * getResources().getDisplayMetrics().density);
-//                int height = (int) (350 * getResources().getDisplayMetrics().density);
-//
-//                // Set the fixed size for the dialog
-//                dialog.getWindow().setLayout(width, height);
-//            }
-//        });
-//
-//        // Show the dialog
-//        dialog.show();
-//    }
+        // Inflate the custom dialog layout
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_complete_previous_lesson, null);
+        builder.setView(dialogView);
 
-    // Method to get the lesson description of the previous card
-    private String getPreviousLessonDescription(int cardId) {
-        if (cardId > 1) {
-            int previousCardId = cardId - 1;
-            TextView previousLessonDescription = null;
-            switch (previousCardId) {
-                case 1:
-                    previousLessonDescription = view.findViewById(R.id.lesson_description_1);
-                    break;
-                case 2:
-                    previousLessonDescription = view.findViewById(R.id.lesson_description_2);
-                    break;
-                case 3:
-                    previousLessonDescription = view.findViewById(R.id.lesson_description_3);
-                    break;
-                case 4:
-                    previousLessonDescription = view.findViewById(R.id.lesson_description_4);
-                    break;
-                default:
-                    break;
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        // Find the "Okay" button in the custom layout
+        Button exitButton = dialogView.findViewById(R.id.okay_button);
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Dismiss the dialog when the button is clicked
+                dialog.dismiss();
             }
-            if (previousLessonDescription != null) {
-                return previousLessonDescription.getText().toString();
+        });
+
+        // Set the dialog window attributes
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                // Convert dp to pixels
+                int width = (int) (350 * getResources().getDisplayMetrics().density);
+                int height = (int) (350 * getResources().getDisplayMetrics().density);
+
+                // Set the fixed size for the dialog
+                dialog.getWindow().setLayout(width, height);
             }
-        }
-        return "";
+        });
+
+        // Show the dialog
+        dialog.show();
     }
 
     // Method to update the completion status of the previous card
@@ -403,67 +338,103 @@ import java.util.Map;
 
     // Method to check if the previous card is completed to unlock the current card
     private boolean isPreviousCardCompleted(int cardId) {
-        if (cardId == 0) {
+        // Adjust cardId to array index
+        int index = cardId - 1;
+        if (index == 0) {
             // If it's the first card, there's no previous card, so it's considered completed
             return true;
         }
-        boolean isCompleted = cardCompletionStatus[cardId - 1];
+        boolean isCompleted = cardCompletionStatus[index - 1];
         Log.d("CardCheck", "Card " + cardId + " previous card completion status: " + isCompleted);
         return isCompleted;
     }
 
-    private void incrementCard(int cardId, int incrementValue) {
-        if (cardId >= 0 && cardId < cardProgress.length) {
-            // Increment progress by the specified value
-            int newProgress = cardProgress[cardId] + incrementValue;
 
-            // Ensure progress does not exceed 100%
-            cardProgress[cardId] = Math.min(newProgress, 100);
+        private void incrementCard(int cardId, int incrementValue) {
 
-            // Check if the card is completed
-            if (cardProgress[cardId] >= 100) {
-                cardCompletionStatus[cardId] = true;
-                Log.d("incrementCard()", "Card " + (cardId + 1) + " completed.");
+        // Card ID from called method ranges from [1 -> 4]
+        // But the Array              ranges from [0 -> 3]
+        // So decrementing by 1 fixes the problem.
+        cardId -= 1;
 
-                // Hide locked overlay for this card
-                hideLockedOverlay(cardId + 1);
+        String TAG = "incrementCard()"; // For debugging purposes
 
-                // Unlock the next card if there is one and all previous cards are completed
-                if (cardId < cardCompletionStatus.length - 1 && areAllPreviousCardsCompleted(cardId + 1)) {
-                    cardCompletionStatus[cardId + 1] = true;
-                    Log.d("incrementCard()", "Card " + (cardId + 2) + " unlocked.");
+        // add the current progress with the increment value
+        // and set to an int variable
+        int newProgress = cardProgress[cardId] + incrementValue;
+
+        // set the new value
+        // Math.min is used to ensure it will only be maxed to 100%
+        cardProgress[cardId] = Math.min(newProgress, 100);
+
+        // if current card is complete
+        // array is still from [0 -> 3]
+        // so no need to increment the cardId yet.
+        if (cardProgress[cardId] >= 100) {
+            cardCompletionStatus[cardId] = true;
+
+            // Hide locked overlay for the next card
+            // But uses if statement to ensure there is a next card
+            // if cardId reaches 3, the array is maxed at 3
+            // so it will not increment anymore, making this part of the code
+            // a double for error handling
+            if (cardId < cardCompletionStatus.length) {
+                // +2 because decrement by 1 is called above
+                // and the layout which is being used as parameter
+                // starts from 1 not 0
+                hideLockedOverlay(cardId + 2);
+            }
+        }
+
+        // increment cardId in this part
+        // because the layout uses range from [1 -> 4]
+        // rather than how array works   from [0 -> 3]
+        cardId += 1;
+
+        // Update UI for the current card
+        ProgressBar progressBar = view.findViewById(getProgressBarId(cardId));
+        TextView progressText = view.findViewById(getProgressTextId(cardId));
+
+        // decrement again
+        // same reason, but why??
+        // because the progressBar and progressText
+        // should be initialized first
+        cardId -= 1;
+
+        progressBar.setProgress(cardProgress[cardId]);
+        progressText.setText(cardProgress[cardId] + "% Completed");
+
+        if (cardId == 3) {
+
+            showToast("This is the end my friend");
+            Log.e(TAG, "This is the end my friend");
+
+            // Change this value accordingly
+            double delayInSeconds = 2.5;
+            int delayMillis = (int) (delayInSeconds * 1000);
+
+            // Add a delay before hiding the loading dialog
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    hideLoadingDialog();
+                    // Show main menu or update UI accordingly
                 }
-            }
-
-            // Update UI for the current card
-            ProgressBar progressBar = view.findViewById(getProgressBarId(cardId));
-            TextView progressText = view.findViewById(getProgressTextId(cardId));
-
-            progressBar.setProgress(cardProgress[cardId]);
-            progressText.setText(cardProgress[cardId] + "% Completed");
+            }, delayMillis);
         }
-    }
 
-    private boolean areAllPreviousCardsCompleted(int cardId) {
-        for (int i = 0; i < cardId - 1; i++) {
-            if (!cardCompletionStatus[i]) {
-                return false;
-            }
-        }
-        return true;
     }
-
 
     // Helper methods to get the ProgressBar and TextView IDs
     private int getProgressBarId(int index) {
         switch (index) {
-            case 0:
-                return R.id.progressive_progressbar_lesson_1;
             case 1:
-                return R.id.progressive_progressbar_lesson_2;
+                return R.id.progressive_progressbar_lesson_1;
             case 2:
-                return R.id.progressive_progressbar_lesson_3;
+                return R.id.progressive_progressbar_lesson_2;
             case 3:
+                return R.id.progressive_progressbar_lesson_3;
+            case 4:
                 return R.id.progressive_progressbar_lesson_4;
             default:
                 return 0;
@@ -472,13 +443,13 @@ import java.util.Map;
 
     private int getProgressTextId(int index) {
         switch (index) {
-            case 0:
-                return R.id.progressive_progresstext_lesson_1;
             case 1:
-                return R.id.progressive_progresstext_lesson_2;
+                return R.id.progressive_progresstext_lesson_1;
             case 2:
-                return R.id.progressive_progresstext_lesson_3;
+                return R.id.progressive_progresstext_lesson_2;
             case 3:
+                return R.id.progressive_progresstext_lesson_3;
+            case 4:
                 return R.id.progressive_progresstext_lesson_4;
             default:
                 return 0;
@@ -486,17 +457,19 @@ import java.util.Map;
     }
 
     private void hideLockedOverlay(int cardId) {
+
         // Ensure view is not null and get the root view
         if (view != null) {
+
             // Determine the correct locked overlay view ID based on the card ID
             int lockedOverlayId = getLockedOverlayId(cardId);
-
             View lockedOverlay = view.findViewById(lockedOverlayId);
+
+            // If it is not null, or if the object is find within the layout
             if (lockedOverlay != null) {
                 lockedOverlay.setVisibility(View.GONE);
-                Log.d("hideLockedOverlay", "Overlay for card " + (cardId + 1) + " set to GONE");
             } else {
-                Log.e("hideLockedOverlay", "Locked overlay view is null for card " + (cardId + 1));
+                Log.e("hideLockedOverlay", "Locked overlay view is null for card " + cardId);
             }
         } else {
             Log.e("hideLockedOverlay", "Root view is null");
@@ -506,13 +479,13 @@ import java.util.Map;
     // Method to get the correct locked overlay view ID based on the card ID
     private int getLockedOverlayId(int cardId) {
         switch (cardId) {
-            case 0:
-                return R.id.card1_locked_overlay;
             case 1:
-                return R.id.card2_locked_overlay;
+                return R.id.card1_locked_overlay;
             case 2:
-                return R.id.card3_locked_overlay;
+                return R.id.card2_locked_overlay;
             case 3:
+                return R.id.card3_locked_overlay;
+            case 4:
                 return R.id.card4_locked_overlay;
             default:
                 return -1; // Invalid card ID

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,26 +20,24 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import android.content.pm.PackageManager;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -63,11 +62,10 @@ public class b_main_0_menu extends AppCompatActivity {
     private NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
     private ViewPager viewPager;
-    private PagerAdapter pagerAdapter;
+    private CustomPagerAdapter pagerAdapter;
     private static TextView greetUserName;
     private List<Fragment> progressiveFragmentList;
     private List<Fragment> freeUseFragmentList;
-    private List<Fragment> fragmentList;
     private long backPressedTime;
     private Button increment_progress;
     private View module, description;
@@ -102,9 +100,6 @@ public class b_main_0_menu extends AppCompatActivity {
 
         if (firstName != null && lastName != null && email != null && gender != null && age != -1) {
             greetUserName.setText("Hello, " + firstName);
-
-            // Call fetchLessonData method
-            fetchLessonData(userId, firstName, lastName, email, gender, age);
         } else {
             Toast.makeText(this, "User data not found", Toast.LENGTH_SHORT).show();
         }
@@ -142,49 +137,48 @@ public class b_main_0_menu extends AppCompatActivity {
                     }
                 } else {
                     // Handle case where gender is null
-//                    profileImageView.setImageResource(R.drawable.pnc_logo);
                     Toast.makeText(this, "Par wala kang Gender??", Toast.LENGTH_SHORT).show();
                 }
             }
 
-
             Log.d("Main Menu", "Meron nako'ng data ng Lessons");
 
-//            // Log and process Progressive Mode data
-//            if (progressiveModeData != null) {
-//                List<String> sortedLessonNames = new ArrayList<>(progressiveModeData.keySet());
-//                Collections.sort(sortedLessonNames); // Sort lesson names alphabetically
-//
-//                for (String lessonName : sortedLessonNames) {
-//                    Map<String, Object> lessonData = progressiveModeData.get(lessonName);
-//                    for (Map.Entry<String, Object> lessonEntry : lessonData.entrySet()) {
-//                        String moduleName = lessonEntry.getKey();
-//                        Object moduleValue = lessonEntry.getValue();
-//                        Log.d("LessonData", "hihi Progressive Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
-//                    }
-//                }
-//            } else {
-//                Toast.makeText(this, "Wala par", Toast.LENGTH_SHORT).show();
-//                Log.d("No Progressive Mode", "Wala ako nakitang Progressive Mode par, sensya na you");
-//            }
-//
-//            // Log and process Free Use Mode data
-//            if (freeUseModeData != null) {
-//                List<String> sortedLessonNames = new ArrayList<>(freeUseModeData.keySet());
-//                Collections.sort(sortedLessonNames); // Sort lesson names alphabetically
-//
-//                for (String lessonName : sortedLessonNames) {
-//                    Map<String, Object> lessonData = freeUseModeData.get(lessonName);
-//                    for (Map.Entry<String, Object> lessonEntry : lessonData.entrySet()) {
-//                        String moduleName = lessonEntry.getKey();
-//                        Object moduleValue = lessonEntry.getValue();
-//                        Log.d("LessonData", "hihi Free Use Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
-//                    }
-//                }
-//            } else {
-//                Toast.makeText(this, "Wala par", Toast.LENGTH_SHORT).show();
-//                Log.d("No Free Use Mode", "Wala ako nakitang Free Use Mode par, sensya na you");
-//            }
+            // Log and process Progressive Mode data
+            if (progressiveModeData != null) {
+                List<String> sortedLessonNames = new ArrayList<>(progressiveModeData.keySet());
+                Collections.sort(sortedLessonNames); // Sort lesson names alphabetically
+
+                for (String lessonName : sortedLessonNames) {
+                    Map<String, Object> lessonData = progressiveModeData.get(lessonName);
+                    for (Map.Entry<String, Object> lessonEntry : lessonData.entrySet()) {
+                        String moduleName = lessonEntry.getKey();
+                        Object moduleValue = lessonEntry.getValue();
+                        Log.d("LessonData", "hihi Progressive Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
+                    }
+                }
+            } else {
+                Toast.makeText(this, "Wala par", Toast.LENGTH_SHORT).show();
+                Log.d("No Progressive Mode", "Wala ako nakitang Progressive Mode par, sensya na you");
+            }
+
+            // Log and process Free Use Mode data
+            if (freeUseModeData != null) {
+                List<String> sortedLessonNames = new ArrayList<>(freeUseModeData.keySet());
+                Collections.sort(sortedLessonNames); // Sort lesson names alphabetically
+
+                for (String lessonName : sortedLessonNames) {
+                    Map<String, Object> lessonData = freeUseModeData.get(lessonName);
+                    for (Map.Entry<String, Object> lessonEntry : lessonData.entrySet()) {
+                        String moduleName = lessonEntry.getKey();
+                        Object moduleValue = lessonEntry.getValue();
+                        Log.d("LessonData", "hihi Free Use Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
+                    }
+                }
+            } else {
+                Toast.makeText(this, "Wala par", Toast.LENGTH_SHORT).show();
+                Log.d("No Free Use Mode", "Wala ako nakitang Free Use Mode par, sensya na you");
+            }
+
         } else {
             // User is not logged in, redirect to login screen
             Intent loginIntent = new Intent(this, a_user_1_login.class);
@@ -195,24 +189,20 @@ public class b_main_0_menu extends AppCompatActivity {
         // Initialize ViewPager
         viewPager = findViewById(R.id.view_pager);
 
-        // Initialize fragment lists
-        progressiveFragmentList = new ArrayList<>();
-        freeUseFragmentList = new ArrayList<>();
-        fragmentList = new ArrayList<>();
+        if (progressiveFragmentList == null) {
+            progressiveFragmentList = new ArrayList<>();
+            progressiveFragmentList.add(new b_main_1_lesson_progressive());
+            progressiveFragmentList.add(new b_main_3_description());
+        }
 
-        // Add fragments to the lists
-        progressiveFragmentList.add(new b_main_1_lesson_progressive());
-        progressiveFragmentList.add(new b_main_3_description());
+        if (freeUseFragmentList == null) {
+            freeUseFragmentList = new ArrayList<>();
+            freeUseFragmentList.add(new b_main_2_lesson_freeuse());
+            freeUseFragmentList.add(new b_main_3_description());
+        }
 
-        freeUseFragmentList.add(new b_main_2_lesson_freeuse());
-        freeUseFragmentList.add(new b_main_3_description());
-
-        // Set up ViewPager with adapter
-        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), fragmentList);
+        pagerAdapter = new CustomPagerAdapter(getSupportFragmentManager(), progressiveFragmentList);
         viewPager.setAdapter(pagerAdapter);
-
-        // Set initial fragment list based on mode
-        switchMode();
 
         // Button highlighter for Header
         module = findViewById(R.id.modulesSelected);
@@ -252,16 +242,14 @@ public class b_main_0_menu extends AppCompatActivity {
                 } else if (id == R.id.free_use_mode) {
                     showSwitchModeDialog("Free Use Mode");
                 } else if (id == R.id.rate) {
-                    Toast.makeText(b_main_0_menu.this, "Rate U s", Toast.LENGTH_SHORT).show();
                     showRateUsDialog();
                 } else if (id == R.id.follow) {
                     openFacebookPage();
                 } else if (id == R.id.log_out) {
-                    Toast.makeText(b_main_0_menu.this, "Logout", Toast.LENGTH_SHORT).show();
                     showLogoutDialog();
                 }
-                    // Handle other options if necessary
-                    return false;
+                // Handle other options if necessary
+                return false;
             }
         });
 
@@ -312,9 +300,7 @@ public class b_main_0_menu extends AppCompatActivity {
         });
 
         // Initialize profile image view and frame layout
-        View headerView1 = navigationView.getHeaderView(0);
-        profileImageView = headerView1.findViewById(R.id.user_profile_picture);
-        profileFrameLayout = headerView1.findViewById(R.id.profile_frame_layout);
+        profileFrameLayout = headerView.findViewById(R.id.profile_frame_layout);
 
         profileFrameLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -323,211 +309,42 @@ public class b_main_0_menu extends AppCompatActivity {
                 startActivityForResult(intent, PICK_IMAGE_REQUEST);
             }
         });
-
     }
 
-    public void fetchLessonData(String userId, String firstName, String lastName, String email, String gender, int age) {
-        final Map<String, Map<String, Object>> progressiveModeData = new HashMap<>();
-        final Map<String, Map<String, Object>> freeUseModeData = new HashMap<>();
+    private void showRateUsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.b_main_0_menu_rateus, null);
+        builder.setView(dialogView);
 
-        CollectionReference progressiveModeRef = db.collection("users").document(userId).collection("Progressive Mode");
-        CollectionReference freeUseModeRef = db.collection("users").document(userId).collection("Free Use Mode");
+        RatingBar ratingBar = dialogView.findViewById(R.id.ratingBar);
+        Button submitButton = dialogView.findViewById(R.id.submit_button);
 
-        progressiveModeRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        AlertDialog dialog = builder.create();
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    QuerySnapshot querySnapshot = task.getResult();
-                    if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                            progressiveModeData.put(document.getId(), document.getData());
-                            processLessonData("Progressive Mode", document.getId(), document.getData());
-//                            verifySavedData(); // Verify saved data after processing each lesson
-                        }
-                        Log.d("Firestore", "Progressive Mode data retrieved");
-                    } else {
-                        Log.d("Firestore", "Progressive Mode data not found");
-                    }
-                } else {
-                    String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
-                    Log.d("Firestore", "Failed to retrieve Progressive Mode data: " + errorMessage);
-                }
-
-                // After processing Progressive Mode, fetch Free Use Mode data
-                freeUseModeRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            QuerySnapshot querySnapshot = task.getResult();
-                            if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                                for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                                    freeUseModeData.put(document.getId(), document.getData());
-                                    processLessonData("Free Use Mode", document.getId(), document.getData());
-//                                    verifySavedData(); // Verify saved data after processing each lesson
-                                }
-                                Log.d("Firestore", "Free Use Mode data retrieved");
-                            } else {
-                                Log.d("Firestore", "Free Use Mode data not found");
-                            }
-                        } else {
-                            String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
-                            Log.d("Firestore", "Failed to retrieve Free Use Mode data: " + errorMessage);
-                        }
-
-                        // Update UI here or perform any necessary UI operations based on fetched data
-                        // For example:
-                        updateUIAfterDataFetch(firstName, gender);
-                    }
-                });
+            public void onClick(View v) {
+                float rating = ratingBar.getRating();
+                Toast.makeText(b_main_0_menu.this, "Rating: " + rating, Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
+
+        dialog.show();
     }
 
-    private void updateUIAfterDataFetch(String firstName, String gender) {
-        // Update UI elements like greetUserName, profileImageView, etc.
-        greetUserName.setText("Hello, " + firstName);
-
-        // Check if the user has a custom profile picture
-        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
-        boolean hasCustomProfilePicture = sharedPreferences.getBoolean("hasCustomProfilePicture", false);
-
-        if (hasCustomProfilePicture) {
-            // Set layout picture to custom profile picture
-            String customProfilePictureUrl = sharedPreferences.getString("profilePictureUrl", null);
-            if (customProfilePictureUrl != null) {
-                Picasso.get().load(customProfilePictureUrl).into(profileImageView);
-            }
-        } else {
-            // User does not have a custom profile picture yet
-            if (gender != null) {
-                if (gender.equalsIgnoreCase("male")) {
-                    // Apply male anonymous avatar
-                    profileImageView.setImageResource(R.drawable.default_male);
-                } else if (gender.equalsIgnoreCase("female")) {
-                    // Apply female anonymous avatar
-                    profileImageView.setImageResource(R.drawable.deafult_female);
-                }
-            } else {
-                // Handle case where gender is null
-//            profileImageView.setImageResource(R.drawable.pnc_logo);
-                Toast.makeText(this, "Par wala kang Gender??", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        // Retrieve lesson data for both "Progressive Mode" and "Free Use Mode"
-        HashMap<String, Map<String, Object>> progressiveModeData = getLessonDataFromPreferences(sharedPreferences, "Progressive Mode");
-        HashMap<String, Map<String, Object>> freeUseModeData = getLessonDataFromPreferences(sharedPreferences, "Free Use Mode");
-
-        Log.d("User Info", "Nasa Main Menu kana, eto mga retrieved:");
-        Log.d("User Info", "First Name: " + firstName);
-        Log.d("User Info", "Gender: " + gender);
-
-        // Log and process Progressive Mode data
-        // (Code for logging and processing data remains the same)
-
-        // Log and process Free Use Mode data
-        // (Code for logging and processing data remains the same)
-    }
-
-    private void processLessonData(String modeName, String lessonName, Map<String, Object> lessonData) {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        for (Map.Entry<String, Object> entry : lessonData.entrySet()) {
-            String fieldName = entry.getKey();
-            Object fieldValue = entry.getValue();
-
-            if (fieldValue instanceof Long) {
-                editor.putInt(modeName + ": " + lessonName + ", " + fieldName, ((Long) fieldValue).intValue());
-            } else if (fieldValue instanceof String) {
-                editor.putString(modeName + ": " + lessonName + ", " + fieldName, (String) fieldValue);
-            }
-        }
-
-        editor.apply();
-    }
-
-//    private void verifySavedData() {
-//        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
-//        Map<String, ?> allEntries = sharedPreferences.getAll();
-//        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-//            Log.d("SharedPreferences", entry.getKey() + ": " + entry.getValue().toString());
-//        }
-//    }
-
-    // Add this method to handle the result of image selection
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri imageUri = data.getData();
-            updateProfilePicture(imageUri);
-        }
-    }
-
-    // Method to update the profile picture
-    private void updateProfilePicture(Uri imageUri) {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // Ensure mAuth is initialized
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference()
-                .child("profile_pictures")
-                .child(mAuth.getCurrentUser().getUid());
-
-        storageRef.putFile(imageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                String imageUrl = uri.toString();
-                                updateProfilePictureField(imageUrl);
-                                Picasso.get().load(imageUrl).into(profileImageView);
-                            }
-                        });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("Firebase Storage", "Failed to upload profile picture", e);
-                    }
-                });
-    }
-
-    // Method to update the "Profile Picture" field in the database
-    private void updateProfilePictureField(String imageUrl) {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // Ensure mAuth is initialized
-        DocumentReference userRef = db.collection("users").document(mAuth.getCurrentUser().getUid());
-        userRef.update("Profile Picture", imageUrl)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Firestore", "Profile picture URL updated successfully");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("Firestore", "Failed to update profile picture URL", e);
-                    }
-                });
-    }
-
-    // Method to show the Logout dialog with custom layout handling positive and negative actions
     private void showLogoutDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.b_main_0_menu_logout, null);
         builder.setView(dialogView);
 
-        // Initialize views from custom layout
         Button cancelButton = dialogView.findViewById(R.id.button_cancel);
         Button logoutButton = dialogView.findViewById(R.id.button_logout);
 
-        // Create AlertDialog
-        final AlertDialog dialog = builder.create();
+        AlertDialog dialog = builder.create();
 
-        // Set click listener for Cancel button
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -535,7 +352,6 @@ public class b_main_0_menu extends AppCompatActivity {
             }
         });
 
-        // Set click listener for Logout button
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -579,33 +395,24 @@ public class b_main_0_menu extends AppCompatActivity {
             }
         });
 
-        // Show the dialog
         dialog.show();
     }
 
 
-    // Method to show the Rate Us dialog
-    private void showRateUsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.b_main_0_menu_rateus, null);
-        builder.setView(dialogView);
+    private void switchMode() {
+        Log.d("switchMode()", "Switching mode...");
+        if (isProgressiveMode) {
+            pagerAdapter.setFragmentList(progressiveFragmentList);
+            viewPager.setCurrentItem(progressiveFragmentList.indexOf(new b_main_1_lesson_progressive()));
+        } else {
+            pagerAdapter.setFragmentList(freeUseFragmentList);
+            viewPager.setCurrentItem(freeUseFragmentList.indexOf(new b_main_2_lesson_freeuse()));
+        }
 
-        RatingBar ratingBar = dialogView.findViewById(R.id.ratingBar);
-        Button submitButton = dialogView.findViewById(R.id.submit_button);
-
-        AlertDialog dialog = builder.create();
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                float rating = ratingBar.getRating();
-                Toast.makeText(b_main_0_menu.this, "Rating: " + rating, Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
+        // Close the navigation drawer
+        drawerLayout.closeDrawer(GravityCompat.START);
+//        pagerAdapter.notifyDataSetChanged();
+        Log.d("switchMode()", "Mode switched.");
     }
 
     private void showSwitchModeDialog(final String mode) {
@@ -613,7 +420,6 @@ public class b_main_0_menu extends AppCompatActivity {
         builder.setMessage("Do you want to switch to " + mode + "?")
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // Set Boolean for which mode is being used
                         if (mode.equals("Progressive Mode")) {
                             isProgressiveMode = true;
                         } else if (mode.equals("Free Use Mode")) {
@@ -628,17 +434,6 @@ public class b_main_0_menu extends AppCompatActivity {
                     }
                 });
         builder.create().show();
-    }
-
-    private void switchMode() {
-        if (isProgressiveMode) {
-            pagerAdapter.setFragmentList(progressiveFragmentList);
-        } else {
-            pagerAdapter.setFragmentList(freeUseFragmentList);
-        }
-        // Force the ViewPager to refresh
-        viewPager.setAdapter(null);
-        viewPager.setAdapter(pagerAdapter);
     }
 
     @Override
@@ -718,6 +513,4 @@ public class b_main_0_menu extends AppCompatActivity {
         }
         return lessonData;
     }
-
-
 }
