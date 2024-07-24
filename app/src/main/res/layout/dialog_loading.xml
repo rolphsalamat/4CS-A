@@ -4,16 +4,34 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="20dp">
+    android:background="@drawable/autotutoria_background_color">
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminate="true"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/autotutoria_background_color"
+        android:gravity="center">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Loading, please wait..."
-        android:paddingTop="10dp"/>
+        <ProgressBar
+            android:id="@+id/progressBar_loading"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="0"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Loading, please wait..."
+            android:paddingTop="10dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp" />
+
+    </FrameLayout>
+
 </LinearLayout>

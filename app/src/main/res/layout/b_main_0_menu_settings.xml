@@ -32,7 +32,7 @@
                 android:paddingBottom="16dp" />
         </LinearLayout>
 
-        <!-- Header Seperator -->
+        <!-- Header Separator -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -59,11 +59,6 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-<!--        <View-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:background="?attr/colorControlNormal" />-->
-
         <!-- Row 3 -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,12 +79,7 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-<!--        <View-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:background="?attr/colorControlNormal" />-->
-
-        <!-- Row 3 -->
+        <!-- Row 4 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -108,11 +98,5 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-
-<!--        <View-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:background="?attr/colorControlNormal" />-->
-
     </LinearLayout>
 </ScrollView>

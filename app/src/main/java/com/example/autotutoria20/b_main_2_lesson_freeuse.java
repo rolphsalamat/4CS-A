@@ -1,12 +1,7 @@
 package com.example.autotutoria20;
 
-import static android.content.Context.MODE_PRIVATE;
-
-import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -21,9 +16,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.example.autotutoria20.R;
+import com.example.autotutoria20.c_Lesson_freeuse_1;
+import com.example.autotutoria20.c_Lesson_freeuse_2;
+import com.example.autotutoria20.c_Lesson_freeuse_3;
+import com.example.autotutoria20.c_Lesson_freeuse_4;
+import com.example.autotutoria20.z_Lesson_steps;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,12 +31,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class b_main_2_lesson_freeuse extends Fragment {
     private static TextView learningModeText;
@@ -46,8 +40,8 @@ public class b_main_2_lesson_freeuse extends Fragment {
     private Button incrementCard1Button;
     private boolean isProgressiveMode = true; // Default mode is progressive mode
     private static View view;
-    private Dialog dialog;
-    private Dialog loadingDialog;
+
+    private CustomLoadingDialog loadingDialog;
 
     // Define card progress array
     private int[] cardProgress = new int[z_Lesson_steps.total_module_count]; // refer to the assigned value
@@ -93,23 +87,6 @@ public class b_main_2_lesson_freeuse extends Fragment {
         return view;
     }
 
-    private void showLoadingDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_loading, null);
-        builder.setView(dialogView);
-        builder.setCancelable(false); // Prevent closing the dialog
-        loadingDialog = builder.create();
-        loadingDialog.show();
-    }
-
-    private void hideLoadingDialog() {
-        Log.e("HIDE", "Hide Loading Dialog PLEASE!");
-        if (loadingDialog != null && loadingDialog.isShowing()) {
-            loadingDialog.dismiss();
-        }
-    }
-
     // onResume is called everytime the user returns to main menu
     // From the Lessons Layout
     @Override
@@ -118,74 +95,117 @@ public class b_main_2_lesson_freeuse extends Fragment {
         fetchAllProgressData();
     }
 
+    private void showLoadingDialog() {
+        loadingDialog = new CustomLoadingDialog(getActivity());
+        loadingDialog.setCancelable(false); // Prevent closing the dialog
+        loadingDialog.show();
+    }
+
+    private void updateProgress(int progress) {
+        if (loadingDialog != null) {
+            loadingDialog.setProgress(progress);
+        }
+    }
+
+    private void hideLoadingDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
+    }
+
     private void fetchAllProgressData() {
         Log.d("fetchAllProgressData", "Method called");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String TAG = "fetchAllProgressData()";
 
-        // Reference to the user's progress data collection
-        CollectionReference progressRef =
-                db.collection("users")
-                        .document(userId)
-                        .collection("Free Use Mode");
+        CollectionReference progressRef = db.collection("users").document(userId).collection("Free Use Mode");
 
-        // Directory ends at Progressive Mode
-        // Meaning, this retrieves all of the Lessons
-
-        // Fetch all lessons
         progressRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
+                    int totalModules = 0;
+
+                    for (DocumentSnapshot lessonDoc : task.getResult()) {
+                        int lessonNumber = Integer.parseInt(lessonDoc.getId().substring(7).trim());
+                        int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
+                        totalModules += maxProgressValues.length;
+                    }
+
+                    int moduleCounter = 0;
+                    final Handler handler = new Handler(Looper.getMainLooper());
+
                     for (DocumentSnapshot lessonDoc : task.getResult()) {
                         String lesson = lessonDoc.getId();
-                        Log.d(TAG, "Lesson: " + lesson);
-
-                        // Initialize variables for total progress calculation
                         int totalProgress = 0;
                         int totalMaxProgress = 0;
-
-                        // Get lesson number from the lesson name
-
-                        // substring 7 kasi nasa 7th character yung number ng Lesson
                         int lessonNumber = Integer.parseInt(lesson.substring(7).trim());
                         int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
 
-                        // This part of the code retrieves the individual modules
-                        // within a certain Lesson
-
-                        // Iterate over all fields to get module progress
                         for (int i = 0; i < maxProgressValues.length; i++) {
                             String key = "M" + (i + 1);
                             Long moduleProgress = lessonDoc.getLong(key);
                             if (moduleProgress != null) {
-                                // Update total progress and max progress
                                 totalProgress += moduleProgress;
                                 totalMaxProgress += maxProgressValues[i];
-
-                                // Log the progress for checking
-                                Log.d(TAG, "Free Use Mode | " + lesson + " | " + key + " Progress: " + moduleProgress + "/" + maxProgressValues[i]);
-                            } else {
-                                Log.d(TAG, lesson + " | " + key + " Progress data not found.");
                             }
+
+                            moduleCounter++;
+                            final int progress = (int) ((moduleCounter / (float) totalModules) * 100);
+                            updateProgress(progress);
                         }
 
-                        // Calculate overall progress for the lesson
                         if (totalMaxProgress > 0) {
                             double overallProgress = ((double) totalProgress / totalMaxProgress) * 100;
                             int overallProgressInt = (int) Math.round(overallProgress);
 
-                            Log.d(TAG, lesson + " | Overall Progress: " + overallProgress + "%");
-
-                            Log.e(TAG, "Let's call incrementCard() method");
-                            incrementCard(lessonNumber, overallProgressInt);
-                        } else {
-                            Log.d(TAG, lesson + " | No progress data available.");
+                            updateCompletionStatus(lessonNumber);
+                            incrementCard(lessonNumber, overallProgressInt, new b_main_1_lesson_progressive.ProgressUpdateListener() {
+                                @Override
+                                public void onProgressUpdated() {
+                                    incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            hideLoadingDialog();
+                                        }
+                                    });
+                                }
+                            });
                         }
                     }
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    private void updateCompletionStatus(int cardId) {
+        if (cardId > 1) {
+            cardCompletionStatus[cardId - 2] = true;
+        }
+    }
+
+    private void incrementLoadingProgressBar(final ProgressBar progressBar, final int duration, final Runnable onComplete) {
+        final Handler handler = new Handler(Looper.getMainLooper());
+        final long startTime = System.currentTimeMillis();
+        final long endTime = startTime + duration;
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long currentTime = System.currentTimeMillis();
+                float progressFraction = (float) (currentTime - startTime) / duration;
+                int currentProgress = (int) (progressFraction * 100);
+
+                progressBar.setProgress(currentProgress);
+
+                if (currentTime < endTime) {
+                    handler.postDelayed(this, 16); // approximately 60fps
+                } else {
+                    progressBar.setProgress(100); // ensure we end exactly at 100%
+                    onComplete.run();
                 }
             }
         });
@@ -254,73 +274,112 @@ public class b_main_2_lesson_freeuse extends Fragment {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
-    private void incrementCard(int cardId, int incrementValue) {
-        // Card ID from called method ranges from [1 -> 4]
-        // But the Array              ranges from [0 -> 3]
-        // So decrementing by 1 fixes the problem.
+    private void incrementCard(int cardId, int incrementValue, b_main_1_lesson_progressive.ProgressUpdateListener listener) {
         cardId -= 1;
-
-        String TAG = "incrementCard()"; // For debugging purposes
-
-        // add the current progress with the increment value
-        // and set to an int variable
+        String TAG = "incrementCard()";
         int newProgress = cardProgress[cardId] + incrementValue;
-
-        // set the new value
-        // Math.min is used to ensure it will only be maxed to 100%
         cardProgress[cardId] = Math.min(newProgress, 100);
 
-        // if current card is complete
-        // array is still from [0 -> 3]
-        // so no need to increment the cardId yet.
-        if (cardProgress[cardId] >= 100) {
-            cardCompletionStatus[cardId] = true;
-        }
-
-        // increment cardId in this part
-        // because the layout uses range from [1 -> 4]
-        // rather than how array works   from [0 -> 3]
         cardId += 1;
-
-        // Update UI for the current card
         ProgressBar progressBar = view.findViewById(getProgressBarId(cardId));
         TextView progressText = view.findViewById(getProgressTextId(cardId));
-
-        if (progressBar == null || progressText == null) {
-            Log.e(TAG, "ProgressBar or ProgressText is null for cardId: " + cardId);
-            return;
-        }
-
-        // decrement again
-        // same reason, but why??
-        // because the progressBar and progressText
-        // should be initialized first
         cardId -= 1;
 
         progressBar.setProgress(cardProgress[cardId]);
         progressText.setText(cardProgress[cardId] + "% Completed");
 
+        if (listener != null) {
+            listener.onProgressUpdated();
+        }
+
         if (cardId == 3) {
-            showToast("This is the end my friend");
-            Log.e(TAG, "This is the end my friend");
-
-            // Change this value accordingly
-            double delayInSeconds = 2.5;
-            int delayMillis = (int) (delayInSeconds * 1000);
-
-            Log.e(TAG, "Imma end this dialog");
-
-            // Add a delay before hiding the loading dialog
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
                 @Override
                 public void run() {
-                    Log.e(TAG, "ETO NAAAA ");
-                    hideLoadingDialog();
-                    // Show main menu or update UI accordingly
+                    showToast("This is the end my friend");
+                    Log.e(TAG, "This is the end my friend");
+
+                    double delayInSeconds = 2.5;
+                    int delayMillis = (int) (delayInSeconds * 1000);
+
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            hideLoadingDialog();
+                        }
+                    }, delayMillis);
                 }
-            }, delayMillis);
+            });
         }
     }
+
+//    private void incrementCard(int cardId, int incrementValue) {
+//        // Card ID from called method ranges from [1 -> 4]
+//        // But the Array              ranges from [0 -> 3]
+//        // So decrementing by 1 fixes the problem.
+//        cardId -= 1;
+//
+//        String TAG = "incrementCard()"; // For debugging purposes
+//
+//        // add the current progress with the increment value
+//        // and set to an int variable
+//        int newProgress = cardProgress[cardId] + incrementValue;
+//
+//        // set the new value
+//        // Math.min is used to ensure it will only be maxed to 100%
+//        cardProgress[cardId] = Math.min(newProgress, 100);
+//
+//        // if current card is complete
+//        // array is still from [0 -> 3]
+//        // so no need to increment the cardId yet.
+//        if (cardProgress[cardId] >= 100) {
+//            cardCompletionStatus[cardId] = true;
+//        }
+//
+//        // increment cardId in this part
+//        // because the layout uses range from [1 -> 4]
+//        // rather than how array works   from [0 -> 3]
+//        cardId += 1;
+//
+//        // Update UI for the current card
+//        ProgressBar progressBar = view.findViewById(getProgressBarId(cardId));
+//        TextView progressText = view.findViewById(getProgressTextId(cardId));
+//
+//        if (progressBar == null || progressText == null) {
+//            Log.e(TAG, "ProgressBar or ProgressText is null for cardId: " + cardId);
+//            return;
+//        }
+//
+//        // decrement again
+//        // same reason, but why??
+//        // because the progressBar and progressText
+//        // should be initialized first
+//        cardId -= 1;
+//
+//        progressBar.setProgress(cardProgress[cardId]);
+//        progressText.setText(cardProgress[cardId] + "% Completed");
+//
+//        if (cardId == 3) {
+//            showToast("This is the end my friend");
+//            Log.e(TAG, "This is the end my friend");
+//
+//            // Change this value accordingly
+//            double delayInSeconds = 2.5;
+//            int delayMillis = (int) (delayInSeconds * 1000);
+//
+//            Log.e(TAG, "Imma end this dialog");
+//
+//            // Add a delay before hiding the loading dialog
+//            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Log.e(TAG, "ETO NAAAA ");
+//                    hideLoadingDialog();
+//                    // Show main menu or update UI accordingly
+//                }
+//            }, delayMillis);
+//        }
+//    }
 
     // Helper methods to get the ProgressBar and TextView IDs
     private int getProgressBarId(int index) {

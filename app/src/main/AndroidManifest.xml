@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +16,16 @@
         android:theme="@style/Theme.AutoTutoria20"
         tools:targetApi="31">
 
+        <!-- For the Notification -->
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".LauncherActivity"
             android:exported="true">
@@ -24,38 +35,44 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".a_user_1_login"
-            android:exported="true">
-        </activity>
+        <!-- LOGIN & SIGNUP -->
+        <activity android:name=".a_user_1_login" android:exported="true"/>
+        <activity android:name=".a_user_2_signup" android:exported="true"/>
 
-        <activity
-            android:name=".b_main_0_menu"
-            android:exported="true">
-        </activity>
+        <!-- MAIN MENU -->
+        <activity android:name=".b_main_0_menu" android:exported="true"/>
+        <activity android:name=".b_main_0_menu_logout" android:exported="true"/>
+        <activity android:name=".b_main_0_menu_rateUs" android:exported="true"/>
+        <activity android:name=".b_main_0_menu_settings" android:exported="true"/>
+        <activity android:name=".b_main_1_lesson_progressive" android:exported="true"/>
+        <activity android:name=".b_main_2_lesson_freeuse" android:exported="true"/>
+        <activity android:name=".b_main_3_description" android:exported="true"/>
 
-        <activity android:name=".b_main_0_menu_rateUs" />
-        <activity android:name=".b_main_0_menu_settings" />
-        <activity android:name=".a_user_2_signup" />
+        <!-- Subs (Modules or Lessons?? HAHAHA) -->
+        <activity android:name=".c_Lesson_freeuse_1" android:exported="true"/>
+        <activity android:name=".c_Lesson_freeuse_2" android:exported="true"/>
+        <activity android:name=".c_Lesson_freeuse_3" android:exported="true"/>
+        <activity android:name=".c_Lesson_freeuse_4" android:exported="true"/>
+        <activity android:name=".c_Lesson_progressive_1" android:exported="true"/>
+        <activity android:name=".c_Lesson_progressive_2" android:exported="true"/>
+        <activity android:name=".c_Lesson_progressive_3" android:exported="true"/>
+        <activity android:name=".c_Lesson_progressive_4" android:exported="true"/>
 
-        <!-- ADD ALL PROGRESSIVE LESSONS HERE -->
-        <activity android:name=".c_Lesson_progressive_1" />
-        <activity android:name=".c_Lesson_progressive_2" />
-        <activity android:name=".c_Lesson_progressive_3" />
-        <activity android:name=".c_Lesson_progressive_4" />
+        <!-- I dont know these shits -->
+        <activity android:name=".CustomLoadingDialog" android:exported="true"/>
+        <activity android:name=".CustomPagerAdapter" android:exported="true"/>
 
-        <!-- ADD ALL FREE USE LESSONS HERE -->
-        <activity android:name=".c_Lesson_freeuse_1" />
-        <activity android:name=".c_Lesson_freeuse_2" />
-        <activity android:name=".c_Lesson_freeuse_3" />
-        <activity android:name=".c_Lesson_freeuse_4" />
+        <!-- Container for all iterations -->
+        <activity android:name=".d_Lesson_container" android:exported="true"/>
 
-        <activity android:name=".Lesson_2" />
-        <activity android:name=".Lesson_3" />
+        <!-- Di ko alam, pero most likely di na gagamitin tong mga to -->
+        <activity android:name=".Lesson_2" android:exported="true"/>
+        <activity android:name=".Lesson_3" android:exported="true"/>
+        <activity android:name=".Lesson_4" android:exported="true"/>
+        <activity android:name=".module_4_steps" android:exported="true"/>
+        <activity android:name=".module_5_steps" android:exported="true"/>
 
-        <!-- ADD ALL MODULES HERE -->
-        <activity android:name=".d_Lesson_container" />
-        <activity android:name=".module_4_steps" />
-        <activity android:name=".module_5_steps" />
+        <!-- Add more activities here as needed -->
+
     </application>
 </manifest>

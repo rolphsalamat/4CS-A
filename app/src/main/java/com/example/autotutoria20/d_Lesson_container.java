@@ -108,7 +108,6 @@ public class d_Lesson_container extends AppCompatActivity {
 
         for (int i = 0; i < numberOfSteps; i++) {
 
-
             // Create a new View for each step
             View stepView = new View(this);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();

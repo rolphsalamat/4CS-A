@@ -35,10 +35,11 @@ android {
 }
 
 dependencies {
-    // Use the Firebase BoM to manage Firebase library versions
-    implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
+
+    implementation("androidx.work:work-runtime:2.7.1")
 
     // Firebase dependencies
+    implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")

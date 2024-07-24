@@ -216,13 +216,20 @@ public class a_user_2_signup extends AppCompatActivity {
 
                 // Create a map to store user data
                 Map<String, Object> userData = new HashMap<>();
-                userData.put("First name", firstName);
-                userData.put("Last name", lastName);
+
+                // changed name to Name
+                userData.put("First Name", firstName);
+                userData.put("Last Name", lastName);
                 userData.put("Email Address", email);
                 userData.put("Password", password);
                 userData.put("Gender", gender);
                 userData.put("Profile Picture", defaultProfilePicture);
                 userData.put("Age", age);
+
+                // add dito yung settings?? BOOLEAN
+                userData.put("App Update Notification", true);
+                userData.put("New Course Available Notification", true);
+                userData.put("Reminder Notification", true);
 
                 // Initialize Firebase Authentication
                 FirebaseAuth mAuth = FirebaseAuth.getInstance();
