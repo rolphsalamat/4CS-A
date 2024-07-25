@@ -1,6 +1,16 @@
 <resources>
 
     <string name="default_web_client_id">916777198203-v7t3kk2k4k969h9m4igokdtc3s8645q4.apps.googleusercontent.com</string>
+
+    <string-array name="interval_units">
+        <item>second(s)</item>
+        <item>minute(s)</item>
+        <item>hour(s)</item>
+        <item>day(s)</item>
+        <item>week(s)</item>
+        <item>month(s)</item>
+        <item>year(s)</item>
+    </string-array>
     
     <string name="app_name">AutoTutoria(2.0)</string>
     <string name="open">Open Navigation Bar</string>

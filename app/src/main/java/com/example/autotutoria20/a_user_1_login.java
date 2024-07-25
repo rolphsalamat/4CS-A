@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +49,7 @@ public class a_user_1_login extends AppCompatActivity {
 
         // Initialize views and buttons
         TextView loginButton = findViewById(R.id.btnLogin);
-        TextView signupButton = findViewById(R.id.btnSignup);
+        LinearLayout signupButton = findViewById(R.id.btnSignup);
         EditText emailAddressTextView = findViewById(R.id.textUsername);
         EditText passwordTextView = findViewById(R.id.textPassword);
 
@@ -133,8 +134,8 @@ public class a_user_1_login extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
 
-                        String firstName = document.getString("First name");
-                        String lastName = document.getString("Last name");
+                        String firstName = document.getString("First Name");
+                        String lastName = document.getString("Last Name");
                         String email = document.getString("Email Address");
                         String gender = document.getString("Gender");
                         String password = document.getString("Password");
@@ -258,6 +259,10 @@ public class a_user_1_login extends AppCompatActivity {
 
     // Method to show custom dialog for resetting password
     private void showForgotPasswordDialog() {
+
+        // eto yung technique pano na show ung rounded corners :D
+//        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
         // Inflate the custom layout
         View dialogView = getLayoutInflater().inflate(R.layout.a_user_3_forgot_password, null);
 
@@ -265,6 +270,9 @@ public class a_user_1_login extends AppCompatActivity {
         EditText emailEditText = dialogView.findViewById(R.id.email_edittext);
         Button resetButton = dialogView.findViewById(R.id.btn_reset);
         Button cancelButton = dialogView.findViewById(R.id.btn_cancel);
+
+        Button createAccount = dialogView.findViewById(R.id.btn_create_new_account);
+        Button login = dialogView.findViewById(R.id.btn_login);
 
         // Create AlertDialog Builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -295,9 +303,31 @@ public class a_user_1_login extends AppCompatActivity {
                 dialog.dismiss(); // Dismiss dialog without action
             }
         });
+
+        createAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                startActivity(new Intent(a_user_1_login.this, a_user_2_signup.class));
+            }
+        });
+
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
         // Show the dialog
         dialog.show();
+
+        // Ensure the dialog respects rounded corners
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
     }
+
 
     // Method to reset password
     private void resetPassword(String email) {

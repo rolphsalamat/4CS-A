@@ -17,7 +17,7 @@ public class BootReceiver extends BroadcastReceiver {
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
 
             // Minutes interval ng Notification Reminder
-            int notificationReminderInterval = 15;
+            int notificationReminderInterval = 1;
 
             // Create a periodic work request to be triggered every 15 minutes
             PeriodicWorkRequest periodicWorkRequest =

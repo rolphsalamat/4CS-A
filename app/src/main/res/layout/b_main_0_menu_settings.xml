@@ -98,5 +98,40 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+
+<!--        &lt;!&ndash; Hidden Dropdown and EditText for Reminder Notification &ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:id="@+id/reminder_interval_layout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:visibility="gone"-->
+<!--            android:paddingVertical="12dp"-->
+<!--            android:gravity="center_vertical">-->
+<!--            &lt;!&ndash; Interval Input &ndash;&gt;-->
+<!--            <EditText-->
+<!--                android:id="@+id/edit_text_interval"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:hint="Enter number"-->
+<!--                android:inputType="number" />-->
+<!--            &lt;!&ndash; Interval Unit Dropdown &ndash;&gt;-->
+<!--            <Spinner-->
+<!--                android:id="@+id/spinner_interval_unit"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:entries="@array/interval_units" />-->
+<!--        </LinearLayout>-->
+
+<!--        &lt;!&ndash; Confirm Button &ndash;&gt;-->
+<!--        <Button-->
+<!--            android:id="@+id/confirm_interval_button"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="end"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:text="Confirm"-->
+<!--            android:visibility="gone" />-->
     </LinearLayout>
 </ScrollView>

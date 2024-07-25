@@ -11,27 +11,87 @@ import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.concurrent.CountDownLatch;
+import java.util.Random;
 
 public class NotificationWorker extends Worker {
 
     private static final String TAG = "NotificationWorker";
     public static final String CHANNEL_ID = "reminder_channel";
     private static final int NOTIFICATION_ID = 1;
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+
+    private static final String[][] REMINDERS = {
+            {"Time to Learn!", "Come back to learn more about Context Free Grammar."},
+            {"Don't Miss Out!", "Continue your journey on Context Free Grammar now."},
+            {"Grammar Boost!", "Enhance your skills in Context Free Grammar today."},
+            {"Learning Awaits!", "Your Context Free Grammar lessons are waiting for you."},
+            {"Stay Sharp!", "Keep up with your Context Free Grammar studies."},
+            {"Boost Your Knowledge!", "Dive back into Context Free Grammar."},
+            {"Keep Learning!", "Context Free Grammar lessons are just a tap away."},
+            {"Refresh Your Skills!", "Review Context Free Grammar to stay ahead."},
+            {"Learning Reminder!", "Don’t forget to study Context Free Grammar."},
+            {"Continue Learning!", "Your Context Free Grammar lessons are waiting."}
+    };
 
     public NotificationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @NonNull
     @Override
     public Result doWork() {
-        try {
-            sendNotification();
+        // Retrieve the reminder notification setting from Firestore
+        boolean reminderNotification = getReminderNotificationSetting();
+
+        if (reminderNotification) {
+            Log.e(TAG, "Reminder Notification is ON");
+            try {
+                sendNotification();
+                return Result.success();
+            } catch (Exception e) {
+                Log.e(TAG, "Error sending notification", e);
+                return Result.failure();
+            }
+        } else {
+            Log.d(TAG, "Reminder notification is disabled");
             return Result.success();
-        } catch (Exception e) {
-            Log.e(TAG, "Error sending notification", e);
-            return Result.failure();
         }
+    }
+
+    private boolean getReminderNotificationSetting() {
+        final boolean[] reminderNotification = {false};
+        final CountDownLatch latch = new CountDownLatch(1);
+
+        String userId = mAuth.getCurrentUser().getUid();
+        DocumentReference userRef = db.collection("users").document(userId);
+        userRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    Boolean reminderNotif = document.getBoolean("Reminder Notification");
+                    reminderNotification[0] = reminderNotif != null && reminderNotif;
+                }
+            } else {
+                Log.e(TAG, "Error getting document", task.getException());
+            }
+            latch.countDown();
+        });
+
+        try {
+            latch.await(); // Wait for Firestore callback to complete
+        } catch (InterruptedException e) {
+            Log.e(TAG, "Latch interrupted", e);
+        }
+
+        return reminderNotification[0];
     }
 
     private void sendNotification() {
@@ -53,6 +113,12 @@ public class NotificationWorker extends Worker {
             Log.e(TAG, "Notification channel created");
         }
 
+        // Select a random reminder message
+        Random random = new Random();
+        int index = random.nextInt(REMINDERS.length);
+        String title = REMINDERS[index][0];
+        String text = REMINDERS[index][1];
+
         // Create an intent that will be fired when the user clicks the notification
         Intent intent = new Intent(getApplicationContext(), LauncherActivity.class); // Replace MainActivity with the activity you want to open
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -65,8 +131,8 @@ public class NotificationWorker extends Worker {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.autotutoria_logo) // Ensure this icon resource exists and is valid
-                .setContentTitle("Reminder")
-                .setContentText("Angeeeel wash my ass")
+                .setContentTitle(title)
+                .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true); // Automatically removes the notification when clicked
@@ -74,34 +140,4 @@ public class NotificationWorker extends Worker {
         notificationManager.notify(NOTIFICATION_ID, builder.build());
         Log.e(TAG, "Notification sent");
     }
-
-
-//    private void sendNotification() {
-//        NotificationManager notificationManager =
-//                (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-//
-//        if (notificationManager == null) {
-//            Log.e(TAG, "NotificationManager is null");
-//            return;
-//        }
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            CharSequence name = "Reminder Channel";
-//            String description = "Channel for reminders";
-//            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-//            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-//            channel.setDescription(description);
-//            notificationManager.createNotificationChannel(channel);
-//            Log.e(TAG, "Notification channel created");
-//        }
-//
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
-//                .setSmallIcon(R.drawable.autotutoria_logo) // Ensure this icon resource exists and is valid
-//                .setContentTitle("Reminder")
-//                .setContentText("Angeeeel wash my ass")
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-//
-//        notificationManager.notify(NOTIFICATION_ID, builder.build());
-//        Log.e(TAG, "Notification sent");
-//    }
 }

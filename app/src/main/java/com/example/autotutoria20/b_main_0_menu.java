@@ -485,8 +485,8 @@ public class b_main_0_menu extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        String firstName = document.getString("First name");
-                        String lastName = document.getString("Last name");
+                        String firstName = document.getString("First Name");
+                        String lastName = document.getString("Last Name");
                         String email = document.getString("Email Address");
                         String gender = document.getString("Gender");
                         Long age = document.getLong("Age");
@@ -511,11 +511,13 @@ public class b_main_0_menu extends AppCompatActivity {
                         // Check if the user has a custom profile picture
                         Boolean hasCustomProfilePicture = document.getBoolean("hasCustomProfilePicture");
                         if (hasCustomProfilePicture != null && hasCustomProfilePicture) {
+                            Log.e(TAG, "I have my own Profile Picture!");
                             String customProfilePictureUrl = document.getString("profilePictureUrl");
                             if (customProfilePictureUrl != null) {
                                 Picasso.get().load(customProfilePictureUrl).into(profileImageView);
                             }
                         } else {
+                            Log.e(TAG, "I aint got my own Profile Picture!");
                             // User does not have a custom profile picture yet
                             if (gender != null) {
                                 if (gender.equalsIgnoreCase("male")) {

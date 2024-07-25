@@ -15,110 +15,16 @@
     <!-- AUTOTUTORIA LOGO -->
     <ImageView
         android:id="@+id/AutoTutoria_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="322dp"
+        android:layout_width="match_parent"
+        android:layout_height="375dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/autotutoria_logo" />
 
-    <!-- USERNAME FIELD -->
-    <FrameLayout
-        android:layout_width="300dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="75dp"
-        android:background="@drawable/rounded_edit_text_with_border">
-
-        <EditText
-            android:id="@+id/textUsername"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:hint="Username"
-            android:inputType="text"
-            android:paddingStart="50dp"
-            android:textColor="@color/white"
-            android:textColorHint="#ABABAB"
-            android:textSize="16sp" />
-
-        <ImageView
-            android:id="@+id/usernameIcon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="15dp"
-            android:layout_gravity="start|center_vertical"
-            android:background="@drawable/username" />
-
-    </FrameLayout>
-
-    <!-- PASSWORD FIELD -->
-    <FrameLayout
-        android:layout_width="300dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/rounded_edit_text_with_border">
-
-        <EditText
-            android:id="@+id/textPassword"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:textSize="16sp"
-            android:paddingStart="50dp"
-            android:textColorHint="#ABABAB"
-            android:textColor="@color/white" />
-
-        <ImageView
-            android:id="@+id/passwordIcon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="15dp"
-            android:layout_gravity="start|center_vertical"
-            android:background="@drawable/password" />
-
-        <!-- Show/Hide Password Button -->
-        <ImageButton
-            android:id="@+id/btnShowPassword"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="15dp"
-            android:background="@drawable/show_password"
-            />
-
-    </FrameLayout>
-
-    <!-- FORGOT PASSWORD -->
-    <TextView
-        android:id="@+id/forgotPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingEnd="45dp"
-        android:gravity="end"
-        android:layout_marginTop="3dp"
-        android:text="Forgot Password?"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        tools:ignore="OnClick" />
-
-    <!-- SIGN IN BUTTON -->
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginHorizontal="50dp"
-        android:layout_marginTop="50dp"
-        android:text="Sign in"
-        android:textColor="#FFFFFF"
-        android:backgroundTint="#5983FC"
-        tools:ignore="OnClick" />
-
     <!-- SIGNUP LAYER -->
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/btnSignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -127,120 +33,134 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Don't have an account?"
+            android:textSize="16sp"
+            android:fontFamily="@font/roboto_serif"
             android:textColor="@color/white" />
 
         <!-- SIGN UP -->
         <TextView
-            android:id="@+id/btnSignup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="3dp"
-            android:text="Sign up!"
-            android:textColor="#C3E552"
+            android:text=" Sign up!"
+            android:textSize="16sp"
+            android:fontFamily="@font/roboto_serif"
+            android:textColor="#CCEE00"
             android:textStyle="bold" />
 
     </LinearLayout>
 
-<!--    &lt;!&ndash; OR LOGIN WITH &ndash;&gt;-->
-<!--    <LinearLayout-->
-<!--        android:id="@+id/orLoginWithLayout"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="20dp"-->
-<!--        android:layout_marginTop="70dp">-->
+    <!-- CARD VIEW CONTAINING USERNAME, PASSWORD, FORGOT PASSWORD, AND LOGIN BUTTON -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:padding="20dp"
+        android:backgroundTint="#DDD"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="16dp">
 
-<!--        <View-->
-<!--            android:id="@+id/orLoginLeft"-->
-<!--            android:layout_width="145dp"-->
-<!--            android:layout_height="3dp"-->
-<!--            android:layout_gravity="center_vertical"-->
-<!--            android:background="@drawable/white_divider" />-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="or login with"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:layout_margin="8dp" />-->
+            <!-- USERNAME FIELD -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/rounded_edit_text_with_border">
 
-<!--        <View-->
-<!--            android:id="@+id/orLoginRight"-->
-<!--            android:layout_width="145dp"-->
-<!--            android:layout_height="3dp"-->
-<!--            android:layout_gravity="center_vertical"-->
-<!--            android:background="@drawable/white_divider" />-->
+                <EditText
+                    android:id="@+id/textUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/roboto_serif"
+                    android:hint="Username"
+                    android:inputType="text"
+                    android:paddingStart="50dp"
+                    android:textColor="@color/navy_blue"
+                    android:textColorHint="#ABABAB"
+                    android:textSize="16sp" />
 
-<!--    </LinearLayout>-->
+                <ImageView
+                    android:id="@+id/usernameIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginStart="15dp"
+                    android:background="@drawable/username" />
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:layout_marginTop="30dp"-->
-<!--        android:layout_marginHorizontal="30dp">-->
+            </FrameLayout>
 
-<!--        &lt;!&ndash; LOGIN WITH FACEBOOK &ndash;&gt;-->
-<!--        <FrameLayout-->
-<!--            android:id="@+id/facebookButton"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_marginEnd="5dp">-->
+            <!-- PASSWORD FIELD -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/rounded_edit_text_with_border">
 
-<!--            &lt;!&ndash; FACEBOOK BUTTON &ndash;&gt;-->
-<!--            <Button-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:text="Facebook"-->
-<!--                android:paddingStart="50dp"-->
-<!--                android:textColor="@color/white"-->
-<!--                android:backgroundTint="@color/facebook"-->
-<!--                android:clickable="true"-->
-<!--                android:focusable="true"-->
-<!--                android:onClick="onFacebookClicked"-->
-<!--                tools:ignore="OnClick" />-->
+                <EditText
+                    android:id="@+id/textPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/roboto_serif"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:paddingStart="50dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="#ABABAB"
+                    android:textSize="16sp" />
 
-<!--            &lt;!&ndash; Facebook Icon &ndash;&gt;-->
-<!--            <ImageView-->
-<!--                android:layout_width="30dp"-->
-<!--                android:layout_height="30dp"-->
-<!--                android:src="@drawable/facebook"-->
-<!--                android:layout_marginStart="15dp"-->
-<!--                android:layout_gravity="start|center_vertical" />-->
+                <ImageView
+                    android:id="@+id/passwordIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginStart="15dp"
+                    android:background="@drawable/password" />
 
-<!--        </FrameLayout>-->
+                <!-- Show/Hide Password Button -->
+                <ImageButton
+                    android:id="@+id/btnShowPassword"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/show_password" />
 
-<!--        &lt;!&ndash; LOGIN WITH GOOGLE &ndash;&gt;-->
-<!--        <FrameLayout-->
-<!--            android:id="@+id/googleButton"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="50dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_marginStart="5dp">-->
+            </FrameLayout>
 
-<!--            &lt;!&ndash; GOOGLE BUTTON &ndash;&gt;-->
-<!--            <Button-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:text="Google"-->
-<!--                android:paddingStart="35dp"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:backgroundTint="#EEEEEE"-->
-<!--                android:clickable="true"-->
-<!--                android:focusable="true"-->
-<!--                android:onClick="onGoogleClicked"-->
-<!--                tools:ignore="OnClick" />-->
+            <!-- SIGN IN BUTTON -->
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="#1F46B5"
+                android:fontFamily="@font/roboto_serif"
+                android:text="Sign in"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:ignore="OnClick" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-<!--            &lt;!&ndash; Google Icon &ndash;&gt;-->
-<!--            <ImageView-->
-<!--                android:layout_width="30dp"-->
-<!--                android:layout_height="30dp"-->
-<!--                android:src="@drawable/google"-->
-<!--                android:layout_marginStart="15dp"-->
-<!--                android:layout_gravity="start|center_vertical" />-->
-
-<!--        </FrameLayout>-->
-<!--    </LinearLayout>-->
-
+    <!-- FORGOT PASSWORD -->
+    <TextView
+        android:id="@+id/forgotPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Forgot Password?"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/roboto_serif"
+        tools:ignore="OnClick" />
 
 </LinearLayout>

@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Discrete Colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#ABABAB</color>
     <color name="yellow">#FFEB3B</color>
-    <color name="facebook">#1876f3</color>
     <color name="navy_blue">#212e5a</color>
+
+    <!-- Custom Colors -->
+    <color name="facebook">#1876f3</color>
+    <color name="primaryColor">#3F51B5</color>
+    <color name="primaryColorDark">#303F9F</color>
 
     <!-- Other color definitions -->
     <color name="button_background_color">#1b5694</color> <!-- This is the blue color used for the logout button -->

@@ -151,6 +151,7 @@ public class b_main_2_lesson_freeuse extends Fragment {
                                 totalMaxProgress += maxProgressValues[i];
                             }
 
+//                            Log.e("Free Use Mode", "Lesson " + lessonNumber + " | " + "Module " + (i+1) + ": " + moduleProgress);
                             moduleCounter++;
                             final int progress = (int) ((moduleCounter / (float) totalModules) * 100);
                             updateProgress(progress);
