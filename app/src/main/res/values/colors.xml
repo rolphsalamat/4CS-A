@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Primary and Secondary Colors -->
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC6</color>
+    <color name="colorPrimaryDarker">#303F9F</color>
+    <color name="colorAccentDark">#018786</color>
+
     <!-- Discrete Colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
@@ -13,9 +20,25 @@
     <color name="primaryColor">#3F51B5</color>
     <color name="primaryColorDark">#303F9F</color>
 
-    <!-- Other color definitions -->
-    <color name="button_background_color">#1b5694</color> <!-- This is the blue color used for the logout button -->
-    <color name="button_cancel_background_color">#FFFFFF</color> <!-- This is white color used for the cancel button -->
-    <color name="button_pressed_background_color">#dddddd</color> <!-- This is a light grey color used when the button is pressed -->
+    <!-- Button Colors -->
+    <color name="button_background_color">#1b5694</color> <!-- Blue color for logout button -->
+    <color name="button_cancel_background_color">#FFFFFF</color> <!-- White color for cancel button -->
+    <color name="button_pressed_background_color">#dddddd</color> <!-- Light grey color for pressed button -->
+
+    <!-- Background Colors -->
+    <color name="windowBackground">#FFFFFF</color> <!-- Light mode background color -->
+    <color name="windowBackgroundDark">#000000</color> <!-- Dark mode background color -->
+    <color name="backgroundColor">#FFFFFF</color> <!-- Default background color -->
+    <color name="backgroundColorDark">#000000</color> <!-- Dark mode background color -->
+
+    <!-- Text Colors -->
+    <color name="textColorPrimary">#000000</color> <!-- Primary text color for light mode -->
+    <color name="textColorPrimaryDark">#FFFFFF</color> <!-- Primary text color for dark mode -->
+    <color name="textColorSecondary">#757575</color> <!-- Secondary text color for light mode -->
+    <color name="textColorSecondaryDark">#BDBDBD</color> <!-- Secondary text color for dark mode -->
+
+    <!-- Foreground Colors -->
+    <color name="foregroundColor">#000000</color> <!-- Foreground color for light mode -->
+    <color name="foregroundColorDark">#FFFFFF</color> <!-- Foreground color for dark mode -->
 
 </resources>

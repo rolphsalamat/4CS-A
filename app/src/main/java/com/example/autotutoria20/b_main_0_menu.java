@@ -4,14 +4,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -48,6 +51,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -251,33 +256,52 @@ public class b_main_0_menu extends AppCompatActivity {
 
     private void uploadImageToFirebase() {
         if (imageUri != null) {
-            String userId = mAuth.getCurrentUser().getUid();
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference("profile_pictures/" + userId + ".jpg");
-            storageReference.putFile(imageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    String imageUrl = uri.toString();
-                                    saveImageUrlToFirestore(imageUrl);
-                                }
-                            });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(b_main_0_menu.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+                byte[] data = baos.toByteArray();
+
+                String userId = mAuth.getCurrentUser().getUid();
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference("profile_pictures/" + userId + ".jpg");
+
+                Log.d("FirebaseStorage", "Uploading image to: " + storageReference.getPath());
+                Log.d("FirebaseStorage", "Image URI: " + imageUri.toString());
+
+                UploadTask uploadTask = storageReference.putBytes(data);
+                uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                String imageUrl = uri.toString();
+                                Log.d("FirebaseStorage", "Image uploaded successfully. URL: " + imageUrl);
+                                saveImageUrlToFirestore(imageUrl);
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("FirebaseStorage", "Error uploading image", e);
+                        Toast.makeText(b_main_0_menu.this, "Failed to upload image: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e("FirebaseStorage", "Error converting image to bitmap", e);
+            }
+        } else {
+            Log.e("FirebaseStorage", "Image URI is null");
+            Toast.makeText(b_main_0_menu.this, "No image selected", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void saveImageUrlToFirestore(String imageUrl) {
         String userId = mAuth.getCurrentUser().getUid();
         DocumentReference userRef = db.collection("users").document(userId);
+
         userRef.update("profilePictureUrl", imageUrl, "hasCustomProfilePicture", true)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -289,10 +313,12 @@ public class b_main_0_menu extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(b_main_0_menu.this, "Failed to update profile picture", Toast.LENGTH_SHORT).show();
+                        Log.e("Firestore", "Error updating Firestore", e);
+                        Toast.makeText(b_main_0_menu.this, "Failed to update profile picture: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
     }
+
 
     private void showRateUsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -363,12 +389,15 @@ public class b_main_0_menu extends AppCompatActivity {
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                // Convert dp to pixels
-                int width = (int) (400 * getResources().getDisplayMetrics().density);
-                int height = (int) (400 * getResources().getDisplayMetrics().density);
+                // Get the screen width
+                DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+                int screenWidth = displayMetrics.widthPixels;
 
-                // Set the fixed size for the dialog
-                dialog.getWindow().setLayout(width, height);
+                // Calculate 90% of screen width
+                int width = (int) (screenWidth * 1);
+
+                // Set the fixed width and wrap content height for the dialog
+                dialog.getWindow().setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT);
 
                 // Set the dim amount for the background
                 WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
@@ -376,12 +405,13 @@ public class b_main_0_menu extends AppCompatActivity {
                 dialog.getWindow().setAttributes(lp);
                 dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             }
+
         });
 
         dialog.show();
     }
 
-
+    
     private void switchMode() {
         Log.d("switchMode()", "Switching mode...");
         if (isProgressiveMode) {
@@ -399,24 +429,51 @@ public class b_main_0_menu extends AppCompatActivity {
     }
 
     private void showSwitchModeDialog(final String mode) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(b_main_0_menu.this);
-        builder.setMessage("Do you want to switch to " + mode + "?")
-                .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (mode.equals("Progressive Mode")) {
-                            isProgressiveMode = true;
-                        } else if (mode.equals("Free Use Mode")) {
-                            isProgressiveMode = false;
-                        }
-                        switchMode();
-                    }
-                })
-                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-        builder.create().show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Inflate the appropriate layout based on the mode
+        View dialogView = null;
+        if (mode.equals("Progressive Mode")) {
+            dialogView = getLayoutInflater().inflate(R.layout.dialog_switch_to_progressive_mode, null);
+        } else if (mode.equals("Free Use Mode")) {
+            dialogView = getLayoutInflater().inflate(R.layout.dialog_switch_to_freeuse_mode, null);
+        }
+
+        builder.setView(dialogView);
+
+        final AlertDialog dialog = builder.create();
+
+        // Set up the dialog buttons
+        Button positiveButton = dialogView.findViewById(R.id.btn_positive);
+        Button negativeButton = dialogView.findViewById(R.id.btn_negative);
+
+        positiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mode.equals("Progressive Mode")) {
+                    isProgressiveMode = true;
+                } else if (mode.equals("Free Use Mode")) {
+                    isProgressiveMode = false;
+                }
+                switchMode();
+                dialog.dismiss();
+            }
+        });
+
+        negativeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        // Adjust the dialog size
+        dialog.getWindow().setLayout(
+                (int) (getResources().getDisplayMetrics().widthPixels * 0.95),  // width: 90% of the screen width
+                ViewGroup.LayoutParams.WRAP_CONTENT  // height: wrap content
+        );
+
+        dialog.show();
     }
 
     @Override
@@ -436,42 +493,8 @@ public class b_main_0_menu extends AppCompatActivity {
     }
 
     private void openFacebookPage() {
-        String facebookUrl = "https://www.facebook.com/pncofficial";
-        String facebookAppUrl = "fb://page/100070669176471"; // Assuming this is the page ID
-        String facebookLiteUrl = "fb://lite/page/100070669176471"; // Assuming this is the page ID
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-
-        // Try to open the Facebook app
-        if (isAppInstalled("com.facebook.katana")) {
-            intent.setData(Uri.parse(facebookAppUrl));
-        }
-        // Try to open Facebook Lite
-        else if (isAppInstalled("com.facebook.lite")) {
-            intent.setData(Uri.parse(facebookLiteUrl));
-        }
-        // Fallback to web browser
-        else {
-            intent.setData(Uri.parse(facebookUrl));
-        }
-
-        // Check if there's an app that can handle the intent
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "No application can handle this request.", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    // Helper method to check if an app is installed
-    private boolean isAppInstalled(String packageName) {
-        PackageManager pm = getPackageManager();
-        try {
-            pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
+        Uri uri = Uri.parse("https://www.facebook.com/pncofficia99");
+        startActivity(new Intent(Intent.ACTION_VIEW, uri));
     }
 
     private void fetchUserData(String userId) {

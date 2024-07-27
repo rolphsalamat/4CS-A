@@ -33,27 +33,27 @@
             android:src="@drawable/default_male"
             android:scaleType="fitXY"
             app:shapeAppearanceOverlay="@style/ImageViewCircle" />
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:padding="4dp">
-            <!-- Gray circle background for camera icon -->
-            <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginTop="2dp"
-                android:background="@drawable/autotutoria_background_color"
-                app:shapeAppearanceOverlay="@style/ImageViewCircle" />
-            <!-- Camera icon -->
-            <ImageView
-                android:id="@+id/change_profile_icon"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center"
-                android:src="@drawable/camera"
-                app:tint="@color/white" />
-        </FrameLayout>
+<!--        <FrameLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="bottom|end"-->
+<!--            android:padding="4dp">-->
+<!--            &lt;!&ndash; Gray circle background for camera icon &ndash;&gt;-->
+<!--            <com.google.android.material.imageview.ShapeableImageView-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:layout_marginTop="2dp"-->
+<!--                android:background="@drawable/autotutoria_background_color"-->
+<!--                app:shapeAppearanceOverlay="@style/ImageViewCircle" />-->
+<!--            &lt;!&ndash; Camera icon &ndash;&gt;-->
+<!--            <ImageView-->
+<!--                android:id="@+id/change_profile_icon"-->
+<!--                android:layout_width="20dp"-->
+<!--                android:layout_height="20dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:src="@drawable/camera"-->
+<!--                app:tint="@color/white" />-->
+<!--        </FrameLayout>-->
     </FrameLayout>
 
     <!-- Hello, User -->
@@ -63,6 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:letterSpacing="0.085"
+        android:fontFamily="@font/roboto_serif"
         android:text="Hello, "
         android:textColor="#FFF"
         android:textSize="20sp"

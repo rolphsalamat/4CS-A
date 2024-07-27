@@ -28,11 +28,11 @@
 
         <TextView
             android:id="@+id/topic"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp"
-            android:text="Ambiguity and Ambiguity Resolution"
+            android:text="@string/module_4"
             android:textSize="32sp"
             android:textColor="@color/white"
             android:textStyle="bold"
@@ -54,8 +54,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardElevation="20dp"
-                app:cardCornerRadius="15dp">
+                app:cardCornerRadius="30dp">
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
@@ -66,7 +65,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:text="Module 1"
+                        android:text="Lesson 1"
                         android:textColor="@color/white"
                         android:textSize="22sp"/>
                     <TextView
@@ -74,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_gravity="center_vertical"
-                        android:text="Recognizing Ambiguous Grammars"
+                        android:text="@string/module_4_1"
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
                     <TextView
@@ -102,17 +101,18 @@
             app:layout_constraintBottom_toBottomOf="@id/card1"
             android:layout_marginHorizontal="20dp"
             >
-<!--                        &lt;!&ndash; Background for the locked lesson cover &ndash;&gt;-->
-<!--                        <ImageView-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:background="@drawable/locked_lesson_cover" />-->
-<!--                        &lt;!&ndash; Lock icon &ndash;&gt;-->
-<!--                        <ImageView-->
-<!--                            android:layout_width="40dp"-->
-<!--                            android:layout_height="50dp"-->
-<!--                            android:layout_gravity="center"-->
-<!--                            android:src="@drawable/lock"/>-->
+            <!-- Background for the locked lesson cover -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/locked_lesson_cover" />
+            <!-- Lock icon -->
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:src="@drawable/lock"
+                />
         </FrameLayout>
 
         <!-- Card #2 -->
@@ -130,11 +130,10 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardElevation="20dp"
-                app:cardCornerRadius="15dp">
+                app:cardCornerRadius="30dp">
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="90dp"
                     android:orientation="vertical"
                     android:background="@drawable/card_background"
                     android:paddingStart="20dp">
@@ -142,15 +141,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:text="Module 2"
+                        android:text="Lesson 2"
                         android:textColor="@color/white"
                         android:textSize="22sp"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:layout_marginEnd="80dp"
                         android:layout_gravity="center_vertical"
-                        android:text="Ambiguity Resolution Techniques"
+                        android:text="@string/module_4_2"
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
                     <TextView
@@ -171,7 +171,7 @@
         <FrameLayout
             android:id="@+id/card2_locked_overlay"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="90dp"
             app:layout_constraintStart_toStartOf="@id/card2"
             app:layout_constraintTop_toTopOf="@id/card2"
             app:layout_constraintEnd_toEndOf="@id/card2"
@@ -207,8 +207,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardElevation="20dp"
-                app:cardCornerRadius="15dp">
+                app:cardCornerRadius="30dp">
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
@@ -219,7 +218,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:text="Module 3"
+                        android:text="Lesson 3"
                         android:textColor="@color/white"
                         android:textSize="22sp"/>
                     <TextView
@@ -227,7 +226,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:layout_gravity="center_vertical"
-                        android:text="Left Recursion and Common Pitfalls"
+                        android:text="@string/module_4_3"
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
                     <TextView
@@ -274,10 +273,9 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="20dp"
-            app:layout_constraintTop_toBottomOf="@id/card2"
+            app:layout_constraintTop_toBottomOf="@id/card3"
             app:layout_constraintStart_toStartOf="parent"
             />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

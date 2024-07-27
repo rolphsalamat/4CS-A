@@ -1,7 +1,10 @@
 package com.example.autotutoria20;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -38,9 +41,12 @@ import com.example.autotutoria20.CustomLoadingDialog;
 
 public class b_main_1_lesson_progressive extends Fragment {
     private static TextView learningModeText;
-    private FrameLayout lockedOverlayCard1, lockedOverlayCard2, lockedOverlayCard3, lockedOverlayCard4;
-    private ProgressBar progressBarCard1, progressBarCard2, progressBarCard3, progressBarCard4;
-    private TextView progressTextCard1, progressTextCard2, progressTextCard3, progressTextCard4;
+    private FrameLayout lockedOverlayCard1, lockedOverlayCard2, lockedOverlayCard3, lockedOverlayCard4,
+            lockedOverlayCard5, lockedOverlayCard6, lockedOverlayCard7, lockedOverlayCard8;
+    private ProgressBar progressBarCard1, progressBarCard2, progressBarCard3, progressBarCard4,
+            progressBarCard5, progressBarCard6, progressBarCard7, progressBarCard8;
+    private TextView progressTextCard1, progressTextCard2, progressTextCard3, progressTextCard4,
+            progressTextCard5, progressTextCard6, progressTextCard7, progressTextCard8;
     private Button incrementCard1Button;
     private boolean isProgressiveMode = true; // Default mode is progressive mode
     private static View view;
@@ -50,7 +56,7 @@ public class b_main_1_lesson_progressive extends Fragment {
     private int[] cardProgress = new int[z_Lesson_steps.total_module_count]; // refer to the assigned value
 
     // Track completion status of each card
-    private boolean[] cardCompletionStatus = {false, false, false, false}; // Default is false for all cards
+    private boolean[] cardCompletionStatus = {false, false, false, false, false, false, false, false}; // Default is false for all cards
 
     public interface ProgressUpdateListener {
         void onProgressUpdated();
@@ -165,7 +171,8 @@ public class b_main_1_lesson_progressive extends Fragment {
                             double overallProgress = ((double) totalProgress / totalMaxProgress) * 100;
                             int overallProgressInt = (int) Math.round(overallProgress);
 
-                            updateCompletionStatus(lessonNumber);
+                            Log.e("fetchAllProgressData", "updateCompletionStatus(" + lessonNumber + ");");
+
                             incrementCard(lessonNumber, overallProgressInt, new ProgressUpdateListener() {
                                 @Override
                                 public void onProgressUpdated() {
@@ -193,21 +200,33 @@ public class b_main_1_lesson_progressive extends Fragment {
         progressBarCard2 = view.findViewById(R.id.progressBar_card_2);
         progressBarCard3 = view.findViewById(R.id.progressBar_card_3);
         progressBarCard4 = view.findViewById(R.id.progressBar_card_4);
+        progressBarCard5 = view.findViewById(R.id.progressBar_card_5);
+        progressBarCard6 = view.findViewById(R.id.progressBar_card_6);
+        progressBarCard7 = view.findViewById(R.id.progressBar_card_7);
+        progressBarCard8 = view.findViewById(R.id.progressBar_card_8);
 
         // Progress Text
         progressTextCard1 = view.findViewById(R.id.progressText_card_1);
         progressTextCard2 = view.findViewById(R.id.progressText_card_2);
         progressTextCard3 = view.findViewById(R.id.progressText_card_3);
         progressTextCard4 = view.findViewById(R.id.progressText_card_4);
+        progressTextCard5 = view.findViewById(R.id.progressText_card_5);
+        progressTextCard6 = view.findViewById(R.id.progressText_card_6);
+        progressTextCard7 = view.findViewById(R.id.progressText_card_7);
+        progressTextCard8 = view.findViewById(R.id.progressText_card_8);
 
         // Learning Mode? Ewan para san ba to
-        learningModeText = view.findViewById(R.id.learning_mode_text);
+//        learningModeText = view.findViewById(R.id.learning_mode_text);
 
         // Locked Overlay
         lockedOverlayCard1 = view.findViewById(R.id.card1_locked_overlay);
         lockedOverlayCard2 = view.findViewById(R.id.card2_locked_overlay);
         lockedOverlayCard3 = view.findViewById(R.id.card3_locked_overlay);
         lockedOverlayCard4 = view.findViewById(R.id.card4_locked_overlay);
+        lockedOverlayCard5 = view.findViewById(R.id.card5_locked_overlay);
+        lockedOverlayCard6 = view.findViewById(R.id.card6_locked_overlay);
+        lockedOverlayCard7 = view.findViewById(R.id.card7_locked_overlay);
+        lockedOverlayCard8 = view.findViewById(R.id.card8_locked_overlay);
 
         setCardClickListeners();
     }
@@ -245,15 +264,56 @@ public class b_main_1_lesson_progressive extends Fragment {
                 handleCardClick(4);
             }
         });
+
+        // Card 5 click listener
+        view.findViewById(R.id.card5).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleCardClick(5);
+            }
+        });
+
+        // Card 6 click listener
+        view.findViewById(R.id.card6).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleCardClick(6);
+            }
+        });
+
+        // Card 7 click listener
+        view.findViewById(R.id.card7).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleCardClick(7);
+            }
+        });
+
+        // Card 8 click listener
+        view.findViewById(R.id.card8).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleCardClick(8);
+            }
+        });
     }
 
-    // Method to handle click on a card
     private void handleCardClick(int cardId) {
-        if (isPreviousCardCompleted(cardId) || cardId == 1) {
+        if (!isNetworkConnected()) {
+            showToast("Please connect to internet first");
+            return;
+        }
+        if (isPreviousCardCompleted(cardId)) {
             launchLessonActivity(cardId);
         } else {
             showCustomDialog();
         }
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
     }
 
     private void showCustomDialog() {
@@ -289,6 +349,7 @@ public class b_main_1_lesson_progressive extends Fragment {
         }
     }
 
+
     private void launchLessonActivity(int cardId) {
         Intent intent;
         switch (cardId) {
@@ -304,6 +365,18 @@ public class b_main_1_lesson_progressive extends Fragment {
             case 4:
                 intent = new Intent(getActivity(), c_Lesson_progressive_4.class);
                 break;
+            case 5:
+                intent = new Intent(getActivity(), c_Lesson_progressive_5.class);
+                break;
+            case 6:
+                intent = new Intent(getActivity(), c_Lesson_progressive_6.class);
+                break;
+            case 7:
+                intent = new Intent(getActivity(), c_Lesson_progressive_7.class);
+                break;
+            case 8:
+                intent = new Intent(getActivity(), c_Lesson_progressive_8.class);
+                break;
             default:
                 return;
         }
@@ -316,12 +389,19 @@ public class b_main_1_lesson_progressive extends Fragment {
 
     private boolean isPreviousCardCompleted(int cardId) {
         int index = cardId - 1;
+
+        Log.e("Hello", "index: " + index);
         if (index == 0) {
             return true;
         }
+
         boolean isCompleted = cardCompletionStatus[index - 1];
+        Log.d("Sound Check 123",
+    "boolean isCompleted = " + cardCompletionStatus[index - 1]);
+
         Log.d("CardCheck", "Card " + cardId + " previous card completion status: " + isCompleted);
         return isCompleted;
+
     }
 
     private void incrementCard(int cardId, int incrementValue, ProgressUpdateListener listener) {
@@ -331,6 +411,7 @@ public class b_main_1_lesson_progressive extends Fragment {
         cardProgress[cardId] = Math.min(newProgress, 100);
 
         if (cardProgress[cardId] >= 100) {
+            Log.e("cardCompletionStatus[]", "cardProgress[" + cardId + "]: " + cardProgress[cardId] + " >= 100, so TRUE na to");
             cardCompletionStatus[cardId] = true;
             if (cardId < cardCompletionStatus.length) {
                 hideLockedOverlay(cardId + 2);
@@ -353,7 +434,7 @@ public class b_main_1_lesson_progressive extends Fragment {
             incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
                 @Override
                 public void run() {
-                    showToast("This is the end my friend");
+//                    showToast("This is the end my friend");
                     Log.e(TAG, "This is the end my friend");
 
                     double delayInSeconds = 2.5;
@@ -380,6 +461,14 @@ public class b_main_1_lesson_progressive extends Fragment {
                 return R.id.progressive_progressbar_lesson_3;
             case 4:
                 return R.id.progressive_progressbar_lesson_4;
+            case 5:
+                return R.id.progressive_progressbar_lesson_5;
+            case 6:
+                return R.id.progressive_progressbar_lesson_6;
+            case 7:
+                return R.id.progressive_progressbar_lesson_7;
+            case 8:
+                return R.id.progressive_progressbar_lesson_8;
             default:
                 return 0;
         }
@@ -395,6 +484,14 @@ public class b_main_1_lesson_progressive extends Fragment {
                 return R.id.progressive_progresstext_lesson_3;
             case 4:
                 return R.id.progressive_progresstext_lesson_4;
+            case 5:
+                return R.id.progressive_progresstext_lesson_5;
+            case 6:
+                return R.id.progressive_progresstext_lesson_6;
+            case 7:
+                return R.id.progressive_progresstext_lesson_7;
+            case 8:
+                return R.id.progressive_progresstext_lesson_8;
             default:
                 return 0;
         }
@@ -424,6 +521,14 @@ public class b_main_1_lesson_progressive extends Fragment {
                 return R.id.card3_locked_overlay;
             case 4:
                 return R.id.card4_locked_overlay;
+            case 5:
+                return R.id.card5_locked_overlay;
+            case 6:
+                return R.id.card6_locked_overlay;
+            case 7:
+                return R.id.card7_locked_overlay;
+            case 8:
+                return R.id.card8_locked_overlay;
             default:
                 return -1;
         }

@@ -1,15 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-
     <item
-        android:title="Settings">
+        android:title="Settings"
+        android:fontFamily="@font/roboto_serif"
+        android:textColor="#000000"
+        android:textSize="18sp">
 
         <menu>
             <!-- Settings -->
             <item
                 android:id="@+id/settings"
                 android:icon="@drawable/settings"
-                android:title="Settings" />
+                android:title="Settings"
+                android:fontFamily="@font/roboto_serif"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
         </menu>
 
     </item>
@@ -18,52 +23,76 @@
     <item
         android:id="@+id/learning_modes"
         android:icon="@drawable/learning_mode"
-        android:title="Learning Modes">
+        android:title="Learning Modes"
+        android:fontFamily="@font/roboto_serif"
+        android:textColor="#000000"
+        android:textSize="18sp">
 
         <menu>
             <!-- First subitem -->
             <item
                 android:id="@+id/progressive_mode"
                 android:icon="@drawable/progressive_mode"
-                android:title="Progressive Mode" />
+                android:title="Progressive Mode"
+                android:fontFamily="@font/roboto_serif"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
 
             <!-- Second subitem -->
             <item
                 android:id="@+id/free_use_mode"
                 android:icon="@drawable/free_use_mode"
-                android:title="Free Use Mode" />
+                android:title="Free Use Mode"
+                android:fontFamily="@font/roboto_serif"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
         </menu>
 
     </item>
 
     <item
-        android:title="University of Cabuyao Community">
+        android:title="University of Cabuyao Community"
+        android:fontFamily="@font/roboto_serif"
+        android:textColor="#000000"
+        android:textSize="18sp">
 
         <menu>
             <!-- Rate Us -->
             <item
                 android:id="@+id/rate"
                 android:icon="@drawable/rate"
-                android:title="Rate Us" />
+                android:title="Rate Us"
+                android:fontFamily="@font/roboto_serif"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
 
             <!-- Follow Us -->
             <item
                 android:id="@+id/follow"
                 android:icon="@drawable/follow"
-                android:title="Follow Us" />
+                android:title="Follow Us"
+                android:fontFamily="@font/roboto_serif"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
         </menu>
 
     </item>
 
     <item
-        android:title="Account Session">
+        android:title="Account Session"
+        android:fontFamily="@font/roboto_serif"
+        android:textColor="#000000"
+        android:textSize="18sp">
 
         <menu>
             <!-- Log Out -->
             <item
                 android:id="@+id/log_out"
                 android:icon="@drawable/logout"
-                android:title="Log out" />
+                android:title="Log out"
+                android:fontFamily="@font/roboto_serif"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
         </menu>
 
     </item>

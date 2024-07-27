@@ -24,13 +24,14 @@
         android:id="@+id/exitButton"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_margin="20dp"
+        android:layout_margin="30dp"
         android:background="@drawable/exit"
         android:backgroundTint="@color/white"
         app:layout_constraintTop_toBottomOf="@id/gridLayout"
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="20dp"

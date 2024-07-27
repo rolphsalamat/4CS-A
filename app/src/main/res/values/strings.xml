@@ -1,5 +1,4 @@
 <resources>
-
     <string name="default_web_client_id">916777198203-v7t3kk2k4k969h9m4igokdtc3s8645q4.apps.googleusercontent.com</string>
 
     <string-array name="interval_units">
@@ -11,7 +10,68 @@
         <item>month(s)</item>
         <item>year(s)</item>
     </string-array>
-    
+
+    <!-- Module 1 -->
+    <string name="module_1">Introduction to Formal Languages and Automata</string>
+
+    <!-- Module 1 Lessons -->
+    <string name="module_1_1">Alphabets and Strings</string>
+    <string name="module_1_2">Operations on Strings</string>
+    <string name="module_1_3">Definition of a Formal Language</string>
+    <string name="module_1_4">Overview of Automata Theory</string>
+
+    <!-- Module 2 -->
+    <string name="module_2">Regular Languages and Finite Automata</string>
+
+    <!-- Module 2 Lessons -->
+    <string name="module_2_1">Regular Languages and Expressions</string>
+
+    <!-- Module 3 -->
+    <string name="module_3">Limitations of Regular Languages</string>
+
+    <!-- Module 3 Lessons -->
+    <string name="module_3_1">Pumping Lemma for Regular Languages</string>
+    <string name="module_3_2">Examples of Non-Regular Languages</string>
+    <string name="module_3_3">Introduction to Context-Free Languages</string>
+
+    <!-- Module 4 -->
+    <string name="module_4">Introduction to Context-Free Grammars (CFG)</string>
+
+    <!-- Module 4 Lessons -->
+    <string name="module_4_1">Definition of CFG</string>
+    <string name="module_4_2">Components: Terminals, Non-Terminals, Start Symbol, Production Rules</string>
+    <string name="module_4_3">Examples of CFG for Simple Languages</string>
+
+    <!-- Module 5 -->
+    <string name="module_5">Derivation and Parse Trees</string>
+
+    <!-- Module 5 Lessons -->
+    <string name="module_5_1">Parse Trees and Its Construction</string>
+    <string name="module_5_2">Relationship between Derivation and Parse Trees</string>
+    <string name="module_5_3">Leftmost and Rightmost Derivations</string>
+
+    <!-- Module 6 -->
+    <string name="module_6">Ambiguity in Context-Free Grammar</string>
+
+    <!-- Module 6 Lessons -->
+    <string name="module_6_1">Ambiguous Grammar</string>
+    <string name="module_6_2">Unambiguous Grammar</string>
+    <string name="module_6_3">Inherent Ambiguity</string>
+
+    <!-- Module 7 -->
+    <string name="module_7">Normal Forms of CFGs</string>
+
+    <!-- Module 7 Lessons -->
+    <string name="module_7_1">Chomsky Normal Form (CNF)</string>
+
+    <!-- Module 8 -->
+    <string name="module_8">Parsing Algorithms for CFGs</string>
+
+    <!-- Module 8 Lessons -->
+    <string name="module_8_1">Top-down Parsing (Recursive Descent, LL(1) Parsing)</string>
+    <string name="module_8_2">Bottom-up Parsing (Shift-Reduce, LR Parsing)</string>
+    <string name="module_8_3">CYK Algorithm for Parsing in CNF</string>
+
     <string name="app_name">AutoTutoria(2.0)</string>
     <string name="open">Open Navigation Bar</string>
     <string name="close">Close Navigation Bar</string>
@@ -46,5 +106,4 @@
     <string name="requirements_1">Basic understanding of discrete mathematics</string>
     <string name="requirements_2">Familiarity with programming fundamentals (recommended but not mandatory)</string>
     <string name="requirements_3">Access to a computer with internet connection for accessing course materials and completing exercises</string>
-
 </resources>

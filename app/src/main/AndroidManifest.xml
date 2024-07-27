@@ -69,8 +69,13 @@
         <activity android:name=".Lesson_2" android:exported="true"/>
         <activity android:name=".Lesson_3" android:exported="true"/>
         <activity android:name=".Lesson_4" android:exported="true"/>
-        <activity android:name=".module_4_steps" android:exported="true"/>
-        <activity android:name=".module_5_steps" android:exported="true"/>
+
+        <!-- Lesson Iteration -->
+        <activity android:name=".PostTestActivity" android:exported="true"/>
+        <activity android:name=".PreTestActivity" android:exported="true"/>
+        <activity android:name=".TextActivity" android:exported="true"/>
+        <activity android:name=".VideoActivity" android:exported="true"/>
+
 
         <!-- Add more activities here as needed -->
 

@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -56,6 +57,14 @@ public class a_user_2_signup extends AppCompatActivity {
 
         ImageButton showHidePasswordButton = findViewById(R.id.btnShowPassword);
         EditText passwordText = findViewById(R.id.txtPassword);
+
+        ImageView exitSignup = findViewById(R.id.exit_signup);
+        exitSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         showHidePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,14 +125,28 @@ public class a_user_2_signup extends AppCompatActivity {
 
                 // PROGRESSIVE MODE and FREE USE MODE module progress data
                 Map<String, Map<String, Object>> moduleProgressData = new HashMap<>();
-                moduleProgressData.put("Progressive Mode - Lesson 1", createModuleProgress(z_Lesson_steps.lesson_1_steps.length));
-                moduleProgressData.put("Progressive Mode - Lesson 2", createModuleProgress(z_Lesson_steps.lesson_2_steps.length));
-                moduleProgressData.put("Progressive Mode - Lesson 3", createModuleProgress(z_Lesson_steps.lesson_3_steps.length));
-                moduleProgressData.put("Progressive Mode - Lesson 4", createModuleProgress(z_Lesson_steps.lesson_4_steps.length));
-                moduleProgressData.put("Free Use Mode - Lesson 1", createModuleProgress(z_Lesson_steps.lesson_1_steps.length));
-                moduleProgressData.put("Free Use Mode - Lesson 2", createModuleProgress(z_Lesson_steps.lesson_2_steps.length));
-                moduleProgressData.put("Free Use Mode - Lesson 3", createModuleProgress(z_Lesson_steps.lesson_3_steps.length));
-                moduleProgressData.put("Free Use Mode - Lesson 4", createModuleProgress(z_Lesson_steps.lesson_4_steps.length));
+
+                // Arrays to hold the lesson titles and modes
+                String[] modes = {"Progressive Mode", "Free Use Mode"};
+                String[] lessons = {
+                        "Lesson 1",
+                        "Lesson 2",
+                        "Lesson 3",
+                        "Lesson 4",
+                        "Lesson 5",
+                        "Lesson 6",
+                        "Lesson 7",
+                        "Lesson 8"
+                };
+
+                // Loop through each mode and lesson to populate the moduleProgressData map
+                for (String mode : modes) {
+                    for (int i = 0; i < lessons.length; i++) {
+                        String key = mode + " - " + lessons[i];
+                        int stepLength = getLessonStepsLength(i + 1); // Method to get the lesson steps length
+                        moduleProgressData.put(key, createModuleProgress(stepLength));
+                    }
+                }
 
                 // Create a map to store user data
                 Map<String, Object> userData = new HashMap<>();
@@ -287,5 +310,19 @@ public class a_user_2_signup extends AppCompatActivity {
         passwordEditText.setText("");
         datePicker.updateDate(2000, 0, 1);
         genderRadioGroup.clearCheck();
+    }
+
+    private int getLessonStepsLength(int lessonNumber) {
+        switch (lessonNumber) {
+            case 1: return z_Lesson_steps.lesson_1_steps.length;
+            case 2: return z_Lesson_steps.lesson_2_steps.length;
+            case 3: return z_Lesson_steps.lesson_3_steps.length;
+            case 4: return z_Lesson_steps.lesson_4_steps.length;
+            case 5: return z_Lesson_steps.lesson_5_steps.length;
+            case 6: return z_Lesson_steps.lesson_6_steps.length;
+            case 7: return z_Lesson_steps.lesson_7_steps.length;
+            case 8: return z_Lesson_steps.lesson_8_steps.length;
+            default: throw new IllegalArgumentException("Invalid lesson number: " + lessonNumber);
+        }
     }
 }

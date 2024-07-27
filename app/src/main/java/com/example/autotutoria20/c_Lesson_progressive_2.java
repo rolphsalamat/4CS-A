@@ -33,7 +33,8 @@ import java.util.Map;
 public class c_Lesson_progressive_2 extends AppCompatActivity {
 
     private AlertDialog dialog;
-    private boolean[] cardCompletionStatus = {false, false, false}; // Track completion status of each card
+    private boolean[] cardCompletionStatus = {false}; // Track completion status of each card
+    private CustomLoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +42,11 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
         setContentView(R.layout.c_lesson_progressive_2);
 
         FrameLayout card1 = findViewById(R.id.card1);
-        FrameLayout card2 = findViewById(R.id.card2);
-        FrameLayout card3 = findViewById(R.id.card3);
 
         // Assuming numberOfSteps is determined based on your logic
         int numberOfStepsForCard1 = z_Lesson_steps.lesson_2_steps[0];
-        int numberOfStepsForCard2 = z_Lesson_steps.lesson_2_steps[1];;
-        int numberOfStepsForCard3 = z_Lesson_steps.lesson_2_steps[2];;
 
         setCardClickListener(card1, 1, numberOfStepsForCard1);
-        setCardClickListener(card2, 2, numberOfStepsForCard2);
-        setCardClickListener(card3, 3, numberOfStepsForCard3);
 
 //        // Retrieve user session data from SharedPreferences
 //        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
@@ -65,7 +60,8 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showExitConfirmationDialog();
+                finish();
+//                showExitConfirmationDialog();
             }
         });
     }
@@ -81,16 +77,16 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
     }
 
     private void fetchProgressData() {
-        // Assuming you are using Firebase Firestore to store progress data
+        showLoadingDialog(); // Show the loading dialog
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // Reference to the user's progress data
         DocumentReference progressRef =
                 db.collection("users")
                         .document(userId)
                         .collection("Progressive Mode")
-                        .document("Lesson 2"); // pinalitan ko ng CAPITAL L
+                        .document("Lesson 2");
 
         progressRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -99,28 +95,15 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Log.d(TAG, "Document exists fetchProgressData()");
-
-                        // Get all fields and their values
                         Map<String, Object> progressData = document.getData();
-
                         if (progressData != null) {
                             for (Map.Entry<String, Object> entry : progressData.entrySet()) {
                                 String key = entry.getKey();
                                 Object value = entry.getValue();
-
                                 if (value instanceof Long) {
                                     int progress = ((Long) value).intValue();
-                                    Log.d(TAG, key + " Progress: " + progress);
-
-                                    // Extract the second character and convert it to an integer
                                     int moduleNumber = Character.getNumericValue(key.charAt(1));
-
-                                    // Update the UI or process the progress value as needed
                                     updateUI(moduleNumber, progress);
-
-                                } else {
-                                    Log.d(TAG, key + " is not of expected type.");
                                 }
                             }
                         }
@@ -130,8 +113,22 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
+
+                hideLoadingDialog(); // Hide the loading dialog after data is fetched and processed
             }
         });
+    }
+
+    private void showLoadingDialog() {
+        loadingDialog = new CustomLoadingDialog(this);
+        loadingDialog.setCancelable(false); // Prevent closing the dialog
+        loadingDialog.show();
+    }
+
+    private void hideLoadingDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
     }
 
     private void updateUI(int key, int progress) {
@@ -141,19 +138,16 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
 
         // Update progress text views
         TextView module1ProgressText = findViewById(R.id.progressive_lesson_2_module_1);
-        TextView module2ProgressText = findViewById(R.id.progressive_lesson_2_module_2);
-        TextView module3ProgressText = findViewById(R.id.progressive_lesson_2_module_3);
 
         // Update locked overlays visibility
-        FrameLayout card2LockedOverlay = findViewById(R.id.card2_locked_overlay);
-        FrameLayout card3LockedOverlay = findViewById(R.id.card3_locked_overlay);
+        FrameLayout card1LockedOverlay = findViewById(R.id.card1_locked_overlay);
 
         // Verify passed values...
         Log.d("updateUI()", "Module: " + key + " | Progress : " + progress);
 
         String newText;
 
-        setCardCompletionStatus(key, true);
+        card1LockedOverlay.setVisibility(View.GONE);
 
         switch (key) {
             case 1:
@@ -161,27 +155,8 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
                 module1ProgressText.setText(newText);
 
                 if (progress >= z_Lesson_steps.lesson_2_steps[0]) {
-                    card2LockedOverlay.setVisibility(View.GONE);
-                }
-
-                break;
-            case 2:
-                newText = progress + "/" + z_Lesson_steps.lesson_2_steps[1];
-                module2ProgressText.setText(newText);
-
-                if (progress >= z_Lesson_steps.lesson_2_steps[1]) {
-                    card3LockedOverlay.setVisibility(View.GONE);
-                }
-
-
-                break;
-            case 3:
-                newText = progress + "/" + z_Lesson_steps.lesson_2_steps[2];
-                module3ProgressText.setText(newText);
-
-                if (progress >= z_Lesson_steps.lesson_2_steps[2]) {
                     setCardCompletionStatus(key, true);
-                    showToast("Lesson 2 Completed! :D");
+//                    showToast("Lesson 2 Completed! :D");
                     Log.d("Completed Lesson!", "Lesson 2 Completed! :D");
                 }
 
@@ -208,26 +183,15 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
 
     private void navigateToModule(int cardNumber, int numberOfSteps) {
 
-        showToast("navigateToModule()");
+//        showToast("navigateToModule(), Card#" + cardNumber);
+
 
         switch (cardNumber) {
             case 1:
-                showToast("Open Card 1");
                 navigateToModuleActivity(d_Lesson_container.class, numberOfSteps, cardNumber);
-                break;
-            case 2:
-                if (cardCompletionStatus[1] == true)
-                    showToast("Open Card 2");
-                    navigateToModuleActivity(d_Lesson_container.class, numberOfSteps, cardNumber);
-                break;
-            case 3:
-                if (cardCompletionStatus[2] == true)
-                    showToast("Open Card 3");
-                    navigateToModuleActivity(d_Lesson_container.class, numberOfSteps, cardNumber);
                 break;
             default:
                 Log.e("navigateToModule()", "Invalid Card: Card " + cardNumber);
-                showCustomDialog();
                 break;
 
 
@@ -245,7 +209,7 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
         editor.putString("currentModule", "M" + cardNumber);
         editor.apply();
 
-        showToast("Start Card " + cardNumber);
+//        showToast("Start Card " + cardNumber);
 
         Intent intent = new Intent(c_Lesson_progressive_2.this, moduleActivityClass);
         startActivity(intent);
@@ -255,7 +219,6 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
     }
 
     private void setCardClickListener(FrameLayout card, int cardNumber, int numberOfSteps) {
-        showToast("setCardClickListener()");
         card.setOnClickListener(v -> navigateToModule(cardNumber, numberOfSteps));
     }
 

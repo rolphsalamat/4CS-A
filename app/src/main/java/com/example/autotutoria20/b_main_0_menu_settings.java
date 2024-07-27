@@ -1,14 +1,19 @@
 package com.example.autotutoria20;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -69,43 +74,48 @@ public class b_main_0_menu_settings extends AppCompatActivity {
         });
 
         switchReminder.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            showToast("Reminder Notification toggled");
-            updateDatabase("Reminder Notification", isChecked);
-            scheduleNotificationWorker();  // Schedule the worker regardless of the switch state
+            if (!isNotificationsEnabled()) {
+                showNotificationPermissionDialog();
+                // Reset the switch to its previous state since notifications are not enabled
+                switchReminder.setChecked(!isChecked);
+            } else {
+                showToast("Reminder Notification toggled");
+                updateDatabase("Reminder Notification", isChecked);
+                scheduleNotificationWorker();
+            }
         });
 
-//        Switch reminderSwitch = findViewById(R.id.switch_reminder);
-//        LinearLayout reminderIntervalLayout = findViewById(R.id.reminder_interval_layout);
-//        Button confirmIntervalButton = findViewById(R.id.confirm_interval_button);
-//
-//        reminderSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if (isChecked) {
-//                    reminderIntervalLayout.setVisibility(View.VISIBLE);
-//                    confirmIntervalButton.setVisibility(View.VISIBLE);
-//                } else {
-//                    reminderIntervalLayout.setVisibility(View.GONE);
-//                    confirmIntervalButton.setVisibility(View.GONE);
-//                }
-//            }
-//        });
-//
-//        confirmIntervalButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                EditText intervalEditText = findViewById(R.id.edit_text_interval);
-//                Spinner intervalUnitSpinner = findViewById(R.id.spinner_interval_unit);
-//
-//                String interval = intervalEditText.getText().toString();
-//                String intervalUnit = intervalUnitSpinner.getSelectedItem().toString();
-//
-//                // Handle the confirmed interval and unit (e.g., save to preferences, update UI, etc.)
-//                Toast.makeText(MyActivity.this, "Interval: " + interval + " " + intervalUnit, Toast.LENGTH_SHORT).show();
-//            }
-//        });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isNotificationsEnabled() && !switchReminder.isChecked()) {
+            switchReminder.setChecked(true);
+            showToast("Reminder Notification enabled");
+            updateDatabase("Reminder Notification", true);
+            scheduleNotificationWorker();
+        }
+    }
 
+    private boolean isNotificationsEnabled() {
+        return NotificationManagerCompat.from(this).areNotificationsEnabled();
+    }
+
+    private void showNotificationPermissionDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Enable Notifications")
+                .setMessage("Notifications are disabled for this app. Please enable them in the settings to receive reminders.")
+                .setPositiveButton("Go to Settings", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                                .putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
     // Method to show toast

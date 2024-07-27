@@ -13,20 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-<!--        &lt;!&ndash; This is the Text to Change from Main Menu according to Mode of Usage &ndash;&gt;-->
-<!--        <TextView-->
-<!--            android:id="@+id/learning_mode_text"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Free Use Mode"-->
-<!--            android:textSize="36sp"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:layout_marginStart="20dp"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            />-->
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,8 +25,7 @@
             android:id="@+id/card1_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart= "20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +36,7 @@
                 android:id="@+id/card1"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                app:cardCornerRadius="16dp">
+                app:cardCornerRadius="30dp">
 
                 <!-- Card content -->
                 <!-- Background of the Card -->
@@ -73,7 +58,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingEnd="10dp"
-                        android:text="Lesson 1"
+                        android:text="Module 1"
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         android:textStyle="bold"/>
@@ -83,7 +68,7 @@
                         android:layout_width="175dp"
                         android:layout_height="wrap_content"
                         android:paddingEnd="10dp"
-                        android:text="Introduction to Context-Free Grammar"
+                        android:text="@string/module_1"
                         android:letterSpacing="0.15"
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
@@ -126,23 +111,6 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Locked overlay for Card 1 -->
-            <FrameLayout
-                android:id="@+id/card1_locked_overlay"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="#88000000"
-                android:visibility="gone"
-                android:clickable="true"
-                app:layout_constraintTop_toTopOf="@id/card1"
-                app:layout_constraintStart_toStartOf="@id/card1"
-                app:layout_constraintEnd_toEndOf="@id/card1"
-                app:layout_constraintBottom_toBottomOf="@id/card1">
-
-                <!-- Add any additional views for the overlay here -->
-
-            </FrameLayout>
-
         </FrameLayout>
 
         <!-- Card 2 -->
@@ -150,8 +118,7 @@
             android:id="@+id/card2_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@id/card1_container"
             app:layout_constraintStart_toStartOf="parent"
@@ -162,7 +129,7 @@
                 android:id="@+id/card2"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                app:cardCornerRadius="16dp">
+                app:cardCornerRadius="30dp">
                 <!-- Card content -->
                 <!-- Background of the Card -->
                 <ImageView
@@ -182,7 +149,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingEnd="10dp"
-                        android:text="Lesson 2"
+                        android:text="Module 2"
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         android:textStyle="bold"/>
@@ -192,7 +159,7 @@
                         android:layout_width="175dp"
                         android:layout_height="wrap_content"
                         android:paddingEnd="10dp"
-                        android:text="Elements of Context-Free Grammar"
+                        android:text="@string/module_2"
                         android:letterSpacing="0.15"
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
@@ -232,13 +199,13 @@
                 </FrameLayout>
             </androidx.cardview.widget.CardView>
         </FrameLayout>
+
         <!-- Card 3 -->
         <FrameLayout
             android:id="@+id/card3_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@id/card2_container"
             app:layout_constraintStart_toStartOf="parent"
@@ -249,7 +216,7 @@
                 android:id="@+id/card3"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                app:cardCornerRadius="16dp">
+                app:cardCornerRadius="30dp">
 
                 <!-- Card content -->
                 <!-- Background of the Card -->
@@ -271,7 +238,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingEnd="10dp"
-                        android:text="Lesson 3"
+                        android:text="Module 3"
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         android:textStyle="bold"/>
@@ -281,7 +248,7 @@
                         android:layout_width="175dp"
                         android:layout_height="wrap_content"
                         android:paddingEnd="10dp"
-                        android:text="Parsing Techniques"
+                        android:text="@string/module_3"
                         android:letterSpacing="0.15"
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
@@ -324,26 +291,24 @@
 
             </androidx.cardview.widget.CardView>
         </FrameLayout>
+
         <!-- Card 4 -->
         <FrameLayout
             android:id="@+id/card4_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="60dp"
             app:layout_constraintTop_toBottomOf="@id/card3_container"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintEnd_toEndOf="parent">
 
             <!-- Card 4 content -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/card4"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                app:cardCornerRadius="16dp">
+                app:cardCornerRadius="30dp">
 
                 <!-- Card content -->
                 <!-- Background of the Card -->
@@ -365,7 +330,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingEnd="10dp"
-                        android:text="Lesson 4"
+                        android:text="Module 4"
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         android:textStyle="bold"/>
@@ -375,7 +340,7 @@
                         android:layout_width="175dp"
                         android:layout_height="wrap_content"
                         android:paddingEnd="10dp"
-                        android:text="Ambiguity and Ambiguity Resolution"
+                        android:text="@string/module_4"
                         android:letterSpacing="0.15"
                         android:textColor="@color/white"
                         android:textSize="12sp"/>
@@ -417,5 +382,372 @@
                 </FrameLayout>
             </androidx.cardview.widget.CardView>
         </FrameLayout>
+
+        <!-- Card 5 -->
+        <FrameLayout
+            android:id="@+id/card5_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/card4_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Card 5 content -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card5"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:cardCornerRadius="30dp">
+
+                <!-- Card content -->
+                <!-- Background of the Card -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/card_background"/>
+
+                <!-- Lesson Title and Lesson Description -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="top"
+                    android:paddingStart="30dp"
+                    android:paddingTop="60dp">
+                    <!-- Lesson Title -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="10dp"
+                        android:text="Module 5"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+                    <!-- Lesson Description -->
+                    <TextView
+                        android:id="@+id/lesson_description_5"
+                        android:layout_width="175dp"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="10dp"
+                        android:text="@string/module_5"
+                        android:letterSpacing="0.15"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <!-- Image Holder for Lesson Icon -->
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_margin="30dp"
+                    android:background="@drawable/module4"/>
+
+                <!-- Frame Layout for Progress Bar and Text -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom">
+                    <!-- Progress Bar -->
+                    <ProgressBar
+                        android:id="@+id/progressBar_card_5"
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_marginHorizontal="30dp"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/custom_progress_bar"/>
+                    <!-- Progress Text -->
+                    <TextView
+                        android:id="@+id/progressText_card_5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginVertical="10dp"
+                        android:text="% Completed"
+                        android:textSize="12sp"
+                        android:textColor="@color/white"
+                        android:gravity="center"/>
+                </FrameLayout>
+            </androidx.cardview.widget.CardView>
+        </FrameLayout>
+
+        <!-- Card 6 -->
+        <FrameLayout
+            android:id="@+id/card6_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/card5_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Card 6 content -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card6"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:cardCornerRadius="30dp">
+
+                <!-- Card content -->
+                <!-- Background of the Card -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/card_background"/>
+
+                <!-- Lesson Title and Lesson Description -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="top"
+                    android:paddingStart="30dp"
+                    android:paddingTop="60dp">
+                    <!-- Lesson Title -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="10dp"
+                        android:text="Module 6"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+                    <!-- Lesson Description -->
+                    <TextView
+                        android:id="@+id/lesson_description_6"
+                        android:layout_width="175dp"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="10dp"
+                        android:text="@string/module_6"
+                        android:letterSpacing="0.15"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <!-- Image Holder for Lesson Icon -->
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_margin="30dp"
+                    android:background="@drawable/module3"/>
+
+                <!-- Frame Layout for Progress Bar and Text -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom">
+                    <!-- Progress Bar -->
+                    <ProgressBar
+                        android:id="@+id/progressBar_card_6"
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_marginHorizontal="30dp"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/custom_progress_bar"/>
+                    <!-- Progress Text -->
+                    <TextView
+                        android:id="@+id/progressText_card_6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginVertical="10dp"
+                        android:text="% Completed"
+                        android:textSize="12sp"
+                        android:textColor="@color/white"
+                        android:gravity="center"/>
+                </FrameLayout>
+            </androidx.cardview.widget.CardView>
+        </FrameLayout>
+
+        <!-- Card 7 -->
+        <FrameLayout
+            android:id="@+id/card7_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/card6_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Card 7 content -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card7"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:cardCornerRadius="30dp">
+
+                <!-- Card content -->
+                <!-- Background of the Card -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/card_background"/>
+
+                <!-- Lesson Title and Lesson Description -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="top"
+                    android:paddingStart="30dp"
+                    android:paddingTop="60dp">
+                    <!-- Lesson Title -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="10dp"
+                        android:text="Module 7"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+                    <!-- Lesson Description -->
+                    <TextView
+                        android:id="@+id/lesson_description_7"
+                        android:layout_width="175dp"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="10dp"
+                        android:text="@string/module_7"
+                        android:letterSpacing="0.15"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <!-- Image Holder for Lesson Icon -->
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_margin="30dp"
+                    android:background="@drawable/module2"/>
+
+                <!-- Frame Layout for Progress Bar and Text -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom">
+                    <!-- Progress Bar -->
+                    <ProgressBar
+                        android:id="@+id/progressBar_card_7"
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_marginHorizontal="30dp"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/custom_progress_bar"/>
+                    <!-- Progress Text -->
+                    <TextView
+                        android:id="@+id/progressText_card_7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginVertical="10dp"
+                        android:text="% Completed"
+                        android:textSize="12sp"
+                        android:textColor="@color/white"
+                        android:gravity="center"/>
+                </FrameLayout>
+            </androidx.cardview.widget.CardView>
+        </FrameLayout>
+
+        <!-- Card 8 -->
+        <FrameLayout
+            android:id="@+id/card8_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="60dp"
+            app:layout_constraintTop_toBottomOf="@id/card7_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <!-- Card 8 content -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card8"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:cardCornerRadius="30dp">
+
+                <!-- Card content -->
+                <!-- Background of the Card -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/card_background"/>
+
+                <!-- Lesson Title and Lesson Description -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="top"
+                    android:paddingStart="30dp"
+                    android:paddingTop="60dp">
+                    <!-- Lesson Title -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="10dp"
+                        android:text="Module 8"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+                    <!-- Lesson Description -->
+                    <TextView
+                        android:id="@+id/lesson_description_8"
+                        android:layout_width="175dp"
+                        android:layout_height="wrap_content"
+                        android:paddingEnd="10dp"
+                        android:text="@string/module_8"
+                        android:letterSpacing="0.15"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+
+                <!-- Image Holder for Lesson Icon -->
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_margin="30dp"
+                    android:background="@drawable/module1"/>
+
+                <!-- Frame Layout for Progress Bar and Text -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom">
+                    <!-- Progress Bar -->
+                    <ProgressBar
+                        android:id="@+id/progressBar_card_8"
+                        android:layout_width="match_parent"
+                        android:layout_height="6dp"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_marginHorizontal="30dp"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/custom_progress_bar"/>
+                    <!-- Progress Text -->
+                    <TextView
+                        android:id="@+id/progressText_card_8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:layout_marginVertical="10dp"
+                        android:text="% Completed"
+                        android:textSize="12sp"
+                        android:textColor="@color/white"
+                        android:gravity="center"/>
+                </FrameLayout>
+            </androidx.cardview.widget.CardView>
+        </FrameLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

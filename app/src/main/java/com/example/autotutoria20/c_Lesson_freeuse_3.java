@@ -1,26 +1,34 @@
 package com.example.autotutoria20;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class c_Lesson_freeuse_3 extends AppCompatActivity {
 
     private AlertDialog dialog; // Declare the dialog variable outside
+    private CustomLoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,126 +38,175 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
         // Find all card views
         CardView card1 = findViewById(R.id.card1);
         CardView card2 = findViewById(R.id.card2);
-        CardView card3 = findViewById(R.id.card3);
-        CardView card4 = findViewById(R.id.card4);
 
+        // Assuming numberOfSteps is determined based on your logic
+        int numberOfStepsForCard1 = z_Lesson_steps.lesson_3_steps[0];
+        int numberOfStepsForCard2 = z_Lesson_steps.lesson_3_steps[1];
 
         // Set click listeners for each card
-        setCardClickListener(card1, 1);
-        setCardClickListener(card2, 2);
-        setCardClickListener(card3, 3);
-        setCardClickListener(card4, 4);
+        setCardClickListener(card1, 1, numberOfStepsForCard1);
+        setCardClickListener(card2, 2, numberOfStepsForCard2);
 
-        // Retrieve user session data from SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
-
-        // Retrieve lesson data for "Progressive Mode" for Lesson 1 only
-        HashMap<String, Map<String, Object>> progressiveModeData = getLessonDataForLesson(sharedPreferences, "Free Use Mode", "Lesson 3");
-
-        // Log and process Progressive Mode data for Lesson 1 only
-        if (progressiveModeData != null) {
-            List<String> sortedLessonNames = new ArrayList<>(progressiveModeData.keySet());
-            Collections.sort(sortedLessonNames); // Sort lesson names alphabetically
-
-            for (String lessonName : sortedLessonNames) {
-                Map<String, Object> lessonData = progressiveModeData.get(lessonName);
-
-                // Reset iteration for each lessonName
-                int iteration = 0;
-
-                for (Map.Entry<String, Object> lessonEntry : lessonData.entrySet()) {
-                    String moduleName = lessonEntry.getKey();
-                    Object moduleValue = lessonEntry.getValue();
-
-                    // Check if iteration exceeds moduleSteps array length
-                    if (iteration < z_Lesson_steps.lesson_3_steps.length) {
-                        // Example: Updating text values for module progress
-                        updateModuleProgressText("freeuse_lesson_3_module_" + moduleName.charAt(1), moduleValue + "/" + z_Lesson_steps.lesson_3_steps[iteration]);
-
-                        Log.d("LessonData", "Free Use Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
-                        iteration++;
-                    } else {
-                        Log.e("LessonData", "Iteration exceeds moduleSteps array length.");
-                    }
-                }
-            }
-        } else {
-            Toast.makeText(this, "No Free Use Mode data found for Lesson 1", Toast.LENGTH_SHORT).show();
-            Log.d("No Free Use Mode", "No Free Use Mode data found for Lesson 1");
-        }
+        // Fetch progress data from the database
+        fetchProgressData();
 
         // Find exit button
         Button exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showExitConfirmationDialog();
+                finish();
+//                showExitConfirmationDialog();
             }
         });
     }
 
-    private HashMap<String, Map<String, Object>> getLessonDataForLesson(SharedPreferences sharedPreferences, String mode, String lessonName) {
-        HashMap<String, Map<String, Object>> lessonData = new HashMap<>();
-        Map<String, ?> allEntries = sharedPreferences.getAll();
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            String key = entry.getKey();
-            if (key.startsWith(mode + ": " + lessonName)) {
-                String[] keyParts = key.split(", ");
-                if (keyParts.length == 2) {
-                    String fieldName = keyParts[1];
-                    int value = (int) entry.getValue();
+        Log.e("onResume()", "I has returned");
 
-                    if (!lessonData.containsKey(lessonName)) {
-                        lessonData.put(lessonName, new HashMap<String, Object>());
-                    }
-                    lessonData.get(lessonName).put(fieldName, value);
-                }
-            }
-        }
-        return lessonData;
+        // Fetch the latest progress data
+        fetchProgressData();
     }
 
-    private void updateModuleProgressText(String textViewId, String newText) {
-        TextView textView = findViewById(getResources().getIdentifier(textViewId, "id", getPackageName()));
-        if (textView != null) {
-            textView.setText(newText);
-        } else {
-            Log.e("TextView Error", "TextView with id " + textViewId + " not found.");
+    private void fetchProgressData() {
+        showLoadingDialog(); // Show the loading dialog
+
+        // Assuming you are using Firebase Firestore to store progress data
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // Reference to the user's progress data
+        DocumentReference progressRef =
+                db.collection("users")
+                        .document(userId)
+                        .collection("Free Use Mode")
+                        .document("Lesson 3");
+
+        progressRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                String TAG = "fetchProgressData()";
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "Document exists fetchProgressData()");
+
+                        // Get all fields and their values
+                        Map<String, Object> progressData = document.getData();
+
+                        if (progressData != null) {
+                            for (Map.Entry<String, Object> entry : progressData.entrySet()) {
+                                String key = entry.getKey();
+                                Object value = entry.getValue();
+
+                                if (value instanceof Long) {
+                                    int progress = ((Long) value).intValue();
+                                    Log.d(TAG, key + " Progress: " + progress);
+
+                                    // Extract the second character and convert it to an integer
+                                    int moduleNumber = Character.getNumericValue(key.charAt(1));
+
+                                    // Update the UI or process the progress value as needed
+                                    updateUI(moduleNumber, progress);
+
+                                } else {
+                                    Log.d(TAG, key + " is not of expected type.");
+                                }
+                            }
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+
+                hideLoadingDialog(); // Hide the loading dialog after data is fetched and processed
+            }
+        });
+    }
+
+    private void showLoadingDialog() {
+        loadingDialog = new CustomLoadingDialog(this);
+        loadingDialog.setCancelable(false); // Prevent closing the dialog
+        loadingDialog.show();
+    }
+
+    private void hideLoadingDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
         }
     }
 
-    private HashMap<String, Map<String, Object>> getLessonDataFromPreferences(SharedPreferences sharedPreferences, String mode) {
-        HashMap<String, Map<String, Object>> lessonData = new HashMap<>();
-        Map<String, ?> allEntries = sharedPreferences.getAll();
+    private void updateUI(int key, int progress) {
 
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            String key = entry.getKey();
-            if (key.startsWith(mode + ": ")) {
-                String[] keyParts = key.split(", ");
-                if (keyParts.length == 2) {
-                    String lessonName = keyParts[0].substring((mode + ": ").length());
-                    String fieldName = keyParts[1];
-                    int value = (int) entry.getValue();
+        //ETO NA I-A-UPDATE NAAAA!!!
+        Log.d("updateUI()", "ETO NA MAG A-UPDATE NA AKOOOO LEZGOOO");
 
-                    if (!lessonData.containsKey(lessonName)) {
-                        lessonData.put(lessonName, new HashMap<String, Object>());
-                    }
-                    lessonData.get(lessonName).put(fieldName, value);
+        // Update progress text views
+        TextView module1ProgressText = findViewById(R.id.freeuse_lesson_1_module_3);
+        TextView module2ProgressText = findViewById(R.id.freeuse_lesson_2_module_3);
+
+        // Verify passed values...
+        Log.d("updateUI()", "Module: " + key + " | Progress : " + progress);
+
+        String newText;
+
+        switch (key) {
+            case 1:
+                newText = progress + "/" + z_Lesson_steps.lesson_3_steps[0];
+                if (module1ProgressText != null) {
+                    module1ProgressText.setText(newText);
+                } else {
+                    Log.e("updateUI", "TextView for module 1 not found");
                 }
-            }
+                break;
+            case 2:
+                newText = progress + "/" + z_Lesson_steps.lesson_3_steps[1];
+                if (module2ProgressText != null) {
+                    module2ProgressText.setText(newText);
+                } else {
+                    Log.e("updateUI", "TextView for module 2 not found");
+                }
+                break;
+            default:
+                Log.d("updateUI", "Invalid module number: " + key);
+                break;
         }
-        return lessonData;
+
     }
 
     // Method to set click listener for each card
-    private void setCardClickListener(CardView cardView, final int cardNumber) {
+    private void setCardClickListener(CardView cardView, final int cardNumber, int numberOfSteps) {
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("Open Card " + cardNumber);
+                navigateToModuleActivity(d_Lesson_container.class, cardNumber, numberOfSteps);
+//                showToast("Open Card " + cardNumber);
             }
         });
+    }
+
+    private void navigateToModuleActivity(Class<?> moduleActivityClass, int cardNumber, int numberOfSteps) {
+        // Store user information in SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("ModulePreferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("numberOfSteps", numberOfSteps);
+        editor.putString("learningMode", "Free Use Mode");
+        editor.putString("currentLesson", "Lesson 3");
+        editor.putString("currentModule", "M" + cardNumber);
+        editor.apply();
+
+        Intent intent = new Intent(c_Lesson_freeuse_3.this, moduleActivityClass);
+        startActivity(intent);
+
+//        showToast("Start Card " + cardNumber);
+
+        // Optionally finish the current activity
+//        finish();
     }
 
     // Helper method to show toast message

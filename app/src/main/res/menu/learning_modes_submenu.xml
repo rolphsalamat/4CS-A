@@ -2,9 +2,12 @@
     <item
         android:id="@+id/progressive_mode"
         android:icon="@drawable/module"
-        android:title="Progressive Mode" />
+        android:title="Progressive Mode"
+        android:fontFamily="@font/roboto_serif"/>
+
     <item
         android:id="@+id/free_use_mode"
         android:icon="@drawable/free_use_mode"
-        android:title="Free Use Mode" />
+        android:title="Free Use Mode"
+        android:fontFamily="@font/roboto_serif"/>
 </menu>
