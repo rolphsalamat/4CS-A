@@ -27,10 +27,9 @@
                 android:id="@+id/toggle_drawer_button"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginHorizontal="20dp"
                 android:background="@drawable/menu"
-                android:backgroundTint="@android:color/transparent"
+                android:foregroundTint="@color/white"
                 android:gravity="center_horizontal|center_vertical" />
 
             <TextView
@@ -40,7 +39,7 @@
                 android:fontFamily="sans-serif-medium"
                 android:textStyle="bold"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:gravity="center_horizontal|center_vertical" />
 
         </LinearLayout>
@@ -54,23 +53,23 @@
 
             <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp">
+                android:layout_height="wrap_content">
 
                 <Button
                     android:id="@+id/module_button"
-                    android:layout_width="125dp"
+                    android:layout_width="108dp"
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"
                     android:text="Lessons"
                     android:textSize="16sp"
                     android:textColor="@color/white"
-                    android:textStyle="normal"
+                    android:fontFamily="@font/roboto_serif"
+                    android:textAllCaps="false"
                     android:gravity="center_horizontal|center_vertical"/>
 
                 <View
                     android:id="@+id/modulesSelected"
-                    android:layout_width="125dp"
+                    android:layout_width="108dp"
                     android:layout_height="2dp"
                     android:layout_gravity="bottom"
                     android:background="@color/white"
@@ -81,33 +80,29 @@
 
             <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp">
+                android:layout_height="wrap_content">
 
                 <Button
                     android:id="@+id/description_button"
-                    android:layout_width="165dp"
+                    android:layout_width="140dp"
                     android:layout_height="match_parent"
                     android:background="@android:color/transparent"
                     android:text="Description"
                     android:textSize="16sp"
                     android:textColor="@color/white"
-                    android:textStyle="normal"
+                    android:fontFamily="@font/roboto_serif"
+                    android:textAllCaps="false"
                     android:gravity="center_horizontal|center_vertical" />
 
                 <View
                     android:id="@+id/descriptionSelected"
-                    android:layout_width="165dp"
+                    android:layout_width="140dp"
                     android:layout_height="2dp"
-                    android:layout_gravity="bottom"
-                    />
+                    android:layout_gravity="bottom"/>
 
-
-        </FrameLayout>
+            </FrameLayout>
 
         </LinearLayout>
-
-
 
         <!-- This should be at the center in both the top panels and bottom panels, but  each panel can have an excess objects overlaying on top of the viewpager -->
         <androidx.viewpager.widget.ViewPager

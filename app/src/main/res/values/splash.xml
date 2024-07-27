@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MyApp.MySplash" parent="Theme.SplashScreen">
+        <!-- Uncomment and set your splash screen background and icon -->
+        <!-- <item name="WindowSplashScreenBackground">#FFFFFF</item> -->
+        <!-- <item name="WindowSplashScreenAnimatedIcon">@drawable/logo</item> -->
+    </style>
+</resources>

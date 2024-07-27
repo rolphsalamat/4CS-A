@@ -36,6 +36,13 @@ android {
 
 dependencies {
 
+    // Theme
+    implementation("com.google.android.material:material:1.5.0")
+
+    // Splash Screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
+    // Notification
     implementation("androidx.work:work-runtime:2.7.1")
 
     // Firebase dependencies

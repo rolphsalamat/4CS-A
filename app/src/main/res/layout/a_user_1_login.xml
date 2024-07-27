@@ -25,6 +25,7 @@
         android:id="@+id/btnSignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-50dp"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -55,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:padding="20dp"
-        android:backgroundTint="#DDD"
+        android:backgroundTint="#EEE"
         app:cardCornerRadius="16dp"
         app:cardElevation="16dp">
 
@@ -162,5 +163,13 @@
         android:textStyle="bold"
         android:fontFamily="@font/roboto_serif"
         tools:ignore="OnClick" />
+
+    <ImageView
+        android:id="@+id/pnc_goto_page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:src="@drawable/pnc"
+        />
 
 </LinearLayout>

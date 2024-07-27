@@ -33,7 +33,7 @@ import java.util.Map;
 public class c_Lesson_progressive_3 extends AppCompatActivity {
 
     private AlertDialog dialog;
-    private boolean[] cardCompletionStatus = {false, false, false, false}; // Track completion status of each card
+    private boolean[] cardCompletionStatus = {false, false}; // Track completion status of each card
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,20 +42,13 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
 
         FrameLayout card1 = findViewById(R.id.card1);
         FrameLayout card2 = findViewById(R.id.card2);
-        FrameLayout card3 = findViewById(R.id.card3);
-        FrameLayout card4 = findViewById(R.id.card4);
 
         // Assuming numberOfSteps is determined based on your logic
         int numberOfStepsForCard1 = z_Lesson_steps.lesson_3_steps[0];
         int numberOfStepsForCard2 = z_Lesson_steps.lesson_3_steps[1];
-        int numberOfStepsForCard3 = z_Lesson_steps.lesson_3_steps[2];
-        int numberOfStepsForCard4 = z_Lesson_steps.lesson_3_steps[3];
 
         setCardClickListener(card1, 1, numberOfStepsForCard1);
         setCardClickListener(card2, 2, numberOfStepsForCard2);
-        setCardClickListener(card3, 3, numberOfStepsForCard3);
-        setCardClickListener(card4, 4, numberOfStepsForCard4);
-
 //        // Retrieve user session data from SharedPreferences
 //        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
 //
@@ -68,7 +61,8 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showExitConfirmationDialog();
+                finish();
+//                showExitConfirmationDialog();
             }
         });
     }
@@ -145,20 +139,17 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         // Update progress text views
         TextView module1ProgressText = findViewById(R.id.progressive_lesson_3_module_1);
         TextView module2ProgressText = findViewById(R.id.progressive_lesson_3_module_2);
-        TextView module3ProgressText = findViewById(R.id.progressive_lesson_3_module_3);
-        TextView module4ProgressText = findViewById(R.id.progressive_lesson_3_module_4);
 
         // Update locked overlays visibility
+        FrameLayout card1LockedOverlay = findViewById(R.id.card1_locked_overlay);
         FrameLayout card2LockedOverlay = findViewById(R.id.card2_locked_overlay);
-        FrameLayout card3LockedOverlay = findViewById(R.id.card3_locked_overlay);
-        FrameLayout card4LockedOverlay = findViewById(R.id.card4_locked_overlay);
 
         // Verify passed values...
         Log.d("updateUI()", "Module: " + key + " | Progress : " + progress);
 
         String newText;
 
-        setCardCompletionStatus(key, true);
+        card1LockedOverlay.setVisibility(View.GONE);
 
         switch (key) {
             case 1:
@@ -167,6 +158,7 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
 
                 if (progress >= z_Lesson_steps.lesson_3_steps[0]) {
                     card2LockedOverlay.setVisibility(View.GONE);
+                    setCardCompletionStatus(key, true);
                 }
 
                 break;
@@ -175,28 +167,8 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
                 module2ProgressText.setText(newText);
 
                 if (progress >= z_Lesson_steps.lesson_3_steps[1]) {
-                    card3LockedOverlay.setVisibility(View.GONE);
-                }
-
-
-                break;
-            case 3:
-                newText = progress + "/" + z_Lesson_steps.lesson_3_steps[2];
-                module3ProgressText.setText(newText);
-
-                if (progress >= z_Lesson_steps.lesson_3_steps[2]) {
-                    card4LockedOverlay.setVisibility(View.GONE);
-                }
-
-
-                break;
-            case 4:
-                newText = progress + "/" + z_Lesson_steps.lesson_3_steps[3];
-                module4ProgressText.setText(newText);
-
-                if (progress >= z_Lesson_steps.lesson_3_steps[3]) {
                     setCardCompletionStatus(key, true);
-                    showToast("Lesson 3 Completed! :D");
+//                    showToast("Lesson 3 Completed! :D");
                     Log.d("Completed Lesson!", "Lesson 3 Completed! :D");
                 }
 
@@ -223,31 +195,21 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
 
     private void navigateToModule(int cardNumber, int numberOfSteps) {
 
-        showToast("navigateToModule()");
+//        showToast("navigateToModule(), Card#" + cardNumber);
+
 
         switch (cardNumber) {
             case 1:
-                showToast("Open Card 1");
                 navigateToModuleActivity(d_Lesson_container.class, numberOfSteps, cardNumber);
                 break;
             case 2:
-                if (cardCompletionStatus[1] == true)
-                    showToast("Open Card 2");
-                navigateToModuleActivity(d_Lesson_container.class, numberOfSteps, cardNumber);
-                break;
-            case 3:
-                if (cardCompletionStatus[2] == true)
-                    showToast("Open Card 3");
-                navigateToModuleActivity(d_Lesson_container.class, numberOfSteps, cardNumber);
-                break;
-            case 4:
-                if (cardCompletionStatus[3] == true)
-                    showToast("Open Card 4");
-                navigateToModuleActivity(d_Lesson_container.class, numberOfSteps, cardNumber);
+                if (cardCompletionStatus[0])
+                    navigateToModuleActivity(d_Lesson_container.class, numberOfSteps, cardNumber);
+                else
+                    showCustomDialog();
                 break;
             default:
                 Log.e("navigateToModule()", "Invalid Card: Card " + cardNumber);
-                showCustomDialog();
                 break;
 
 
@@ -265,7 +227,7 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         editor.putString("currentModule", "M" + cardNumber);
         editor.apply();
 
-        showToast("Start Card " + cardNumber);
+//        showToast("Start Card " + cardNumber);
 
         Intent intent = new Intent(c_Lesson_progressive_3.this, moduleActivityClass);
         startActivity(intent);
@@ -275,7 +237,6 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
     }
 
     private void setCardClickListener(FrameLayout card, int cardNumber, int numberOfSteps) {
-        showToast("setCardClickListener()");
         card.setOnClickListener(v -> navigateToModule(cardNumber, numberOfSteps));
     }
 
