@@ -3,10 +3,12 @@ package com.example.autotutoria20;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +24,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class c_Lesson_freeuse_4 extends AppCompatActivity {
@@ -59,7 +60,6 @@ public class c_Lesson_freeuse_4 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-//                showExitConfirmationDialog();
             }
         });
     }
@@ -75,7 +75,7 @@ public class c_Lesson_freeuse_4 extends AppCompatActivity {
     }
 
     private void fetchProgressData() {
-        showLoadingDialog(); // Show the loading dialog
+//        showLoadingDialog(); // Show the loading dialog
 
         // Assuming you are using Firebase Firestore to store progress data
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -101,6 +101,9 @@ public class c_Lesson_freeuse_4 extends AppCompatActivity {
                         Map<String, Object> progressData = document.getData();
 
                         if (progressData != null) {
+                            int totalModules = progressData.size();
+                            int moduleCounter = 0;
+
                             for (Map.Entry<String, Object> entry : progressData.entrySet()) {
                                 String key = entry.getKey();
                                 Object value = entry.getValue();
@@ -114,40 +117,85 @@ public class c_Lesson_freeuse_4 extends AppCompatActivity {
 
                                     // Update the UI or process the progress value as needed
                                     updateUI(moduleNumber, progress);
-
                                 } else {
                                     Log.d(TAG, key + " is not of expected type.");
                                 }
+
+                                moduleCounter++;
+                                final int progress = (int) ((moduleCounter / (float) totalModules) * 100);
+//                                updateProgress(progress);
                             }
+                        } else {
+                            Log.d(TAG, "Progress data is null");
                         }
                     } else {
                         Log.d(TAG, "No such document");
                     }
+
+                    // Add delay similar to progressive mode
+//                    incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            hideLoadingDialog();
+//                        }
+//                    });
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
+//                    hideLoadingDialog(); // Hide the dialog in case of failure as well
                 }
-
-                hideLoadingDialog(); // Hide the loading dialog after data is fetched and processed
             }
         });
     }
 
-    private void showLoadingDialog() {
-        loadingDialog = new CustomLoadingDialog(this);
-        loadingDialog.setCancelable(false); // Prevent closing the dialog
-        loadingDialog.show();
+    private void incrementLoadingProgressBar(final ProgressBar progressBar, final int duration, final Runnable onComplete) {
+        final Handler handler = new Handler(Looper.getMainLooper());
+        final long startTime = System.currentTimeMillis();
+        final long endTime = startTime + duration;
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long currentTime = System.currentTimeMillis();
+                float progressFraction = (float) (currentTime - startTime) / duration;
+                int currentProgress = (int) (progressFraction * 100);
+
+                progressBar.setProgress(currentProgress);
+
+                if (currentTime < endTime) {
+                    handler.postDelayed(this, 16); // approximately 60fps
+                } else {
+                    progressBar.setProgress(100); // ensure we end exactly at 100%
+                    onComplete.run();
+                }
+            }
+        });
     }
 
-    private void hideLoadingDialog() {
-        if (loadingDialog != null && loadingDialog.isShowing()) {
-            loadingDialog.dismiss();
-        }
-    }
+//    private void showLoadingDialog() {
+//        if (loadingDialog == null) {
+//            loadingDialog = new CustomLoadingDialog(this);
+//            loadingDialog.setCancelable(false); // Prevent closing the dialog
+//        }
+//
+//        if (!loadingDialog.isShowing()) {
+//            loadingDialog.show();
+//        }
+//    }
+//
+//    private void updateProgress(int progress) {
+//        if (loadingDialog != null) {
+//            loadingDialog.setProgress(progress);
+//        }
+//    }
+//
+//    private void hideLoadingDialog() {
+//        if (loadingDialog != null && loadingDialog.isShowing()) {
+//            loadingDialog.dismiss();
+//        }
+//    }
 
     private void updateUI(int key, int progress) {
-
-        //ETO NA I-A-UPDATE NAAAA!!!
-        Log.d("updateUI()", "ETO NA MAG A-UPDATE NA AKOOOO LEZGOOO");
+        Log.d("updateUI()", "Updating UI for module " + key + " with progress " + progress);
 
         // Update progress text views
         TextView module1ProgressText = findViewById(R.id.freeuse_lesson_1_module_4);
@@ -197,7 +245,6 @@ public class c_Lesson_freeuse_4 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 navigateToModuleActivity(d_Lesson_container.class, cardNumber, numberOfSteps);
-//                showToast("Open Card " + cardNumber);
             }
         });
     }
@@ -214,11 +261,6 @@ public class c_Lesson_freeuse_4 extends AppCompatActivity {
 
         Intent intent = new Intent(c_Lesson_freeuse_4.this, moduleActivityClass);
         startActivity(intent);
-
-//        showToast("Start Card " + cardNumber);
-
-        // Optionally finish the current activity
-//        finish();
     }
 
     // Helper method to show toast message

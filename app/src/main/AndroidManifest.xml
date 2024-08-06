@@ -53,10 +53,19 @@
         <activity android:name=".c_Lesson_freeuse_2" android:exported="true"/>
         <activity android:name=".c_Lesson_freeuse_3" android:exported="true"/>
         <activity android:name=".c_Lesson_freeuse_4" android:exported="true"/>
+        <activity android:name=".c_Lesson_freeuse_5" android:exported="true"/>
+        <activity android:name=".c_Lesson_freeuse_6" android:exported="true"/>
+        <activity android:name=".c_Lesson_freeuse_7" android:exported="true"/>
+        <activity android:name=".c_Lesson_freeuse_8" android:exported="true"/>
+
         <activity android:name=".c_Lesson_progressive_1" android:exported="true"/>
         <activity android:name=".c_Lesson_progressive_2" android:exported="true"/>
         <activity android:name=".c_Lesson_progressive_3" android:exported="true"/>
         <activity android:name=".c_Lesson_progressive_4" android:exported="true"/>
+        <activity android:name=".c_Lesson_progressive_5" android:exported="true"/>
+        <activity android:name=".c_Lesson_progressive_6" android:exported="true"/>
+        <activity android:name=".c_Lesson_progressive_7" android:exported="true"/>
+        <activity android:name=".c_Lesson_progressive_8" android:exported="true"/>
 
         <!-- I dont know these shits -->
         <activity android:name=".CustomLoadingDialog" android:exported="true"/>
@@ -71,10 +80,10 @@
         <activity android:name=".Lesson_4" android:exported="true"/>
 
         <!-- Lesson Iteration -->
-        <activity android:name=".PostTestActivity" android:exported="true"/>
-        <activity android:name=".PreTestActivity" android:exported="true"/>
-        <activity android:name=".TextActivity" android:exported="true"/>
-        <activity android:name=".VideoActivity" android:exported="true"/>
+<!--        <activity android:name=".PostTestActivity" android:exported="true"/>-->
+<!--        <activity android:name=".PreTestActivity" android:exported="true"/>-->
+<!--        <activity android:name=".TextActivity" android:exported="true"/>-->
+<!--        <activity android:name=".VideoActivity" android:exported="true"/>-->
 
 
         <!-- Add more activities here as needed -->

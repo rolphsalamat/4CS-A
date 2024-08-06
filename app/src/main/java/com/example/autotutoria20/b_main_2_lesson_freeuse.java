@@ -1,6 +1,5 @@
 package com.example.autotutoria20;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -12,8 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,11 +18,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.autotutoria20.R;
 import com.example.autotutoria20.c_Lesson_freeuse_1;
 import com.example.autotutoria20.c_Lesson_freeuse_2;
 import com.example.autotutoria20.c_Lesson_freeuse_3;
 import com.example.autotutoria20.c_Lesson_freeuse_4;
+import com.example.autotutoria20.c_Lesson_freeuse_5;
+import com.example.autotutoria20.c_Lesson_freeuse_6;
+import com.example.autotutoria20.c_Lesson_freeuse_7;
+import com.example.autotutoria20.c_Lesson_freeuse_8;
 import com.example.autotutoria20.z_Lesson_steps;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -92,6 +92,30 @@ public class b_main_2_lesson_freeuse extends Fragment {
         }
     }
 
+    private void incrementLoadingProgressBar(final ProgressBar progressBar, final int duration, final Runnable onComplete) {
+        final Handler handler = new Handler(Looper.getMainLooper());
+        final long startTime = System.currentTimeMillis();
+        final long endTime = startTime + duration;
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                long currentTime = System.currentTimeMillis();
+                float progressFraction = (float) (currentTime - startTime) / duration;
+                int currentProgress = (int) (progressFraction * 100);
+
+                progressBar.setProgress(currentProgress);
+
+                if (currentTime < endTime) {
+                    handler.postDelayed(this, 16); // approximately 60fps
+                } else {
+                    progressBar.setProgress(100); // ensure we end exactly at 100%
+                    onComplete.run();
+                }
+            }
+        });
+    }
+
     private void fetchAllProgressData() {
         Log.d("fetchAllProgressData", "Method called");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -113,7 +137,6 @@ public class b_main_2_lesson_freeuse extends Fragment {
                     }
 
                     int moduleCounter = 0;
-                    final Handler handler = new Handler(Looper.getMainLooper());
 
                     for (DocumentSnapshot lessonDoc : task.getResult()) {
                         String lesson = lessonDoc.getId();
@@ -142,8 +165,17 @@ public class b_main_2_lesson_freeuse extends Fragment {
                             updateCardProgress(lessonNumber, overallProgressInt);
                         }
                     }
+
+                    // Add delay similar to progressive mode
+                    incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
+                        @Override
+                        public void run() {
+                            hideLoadingDialog();
+                        }
+                    });
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
+                    hideLoadingDialog(); // Hide the dialog in case of failure as well
                 }
             }
         });

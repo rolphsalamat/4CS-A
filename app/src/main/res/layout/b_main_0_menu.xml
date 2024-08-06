@@ -111,6 +111,32 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:src="@drawable/top_header_background"
+                />
+
+            <TextView
+                android:id="@+id/learning_mode_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="Learning Mode"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:fontFamily="@font/roboto_serif"
+
+                />
+
+
+        </FrameLayout>
+
     </LinearLayout>
 
     <!-- Navigation drawer -->

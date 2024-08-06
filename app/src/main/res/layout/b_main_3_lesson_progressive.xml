@@ -25,7 +25,7 @@
             android:id="@+id/card1_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_marginHorizontal="30dp"
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +34,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/card1"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="175dp"
                 app:cardCornerRadius="30dp">
 
                 <ImageView
@@ -117,7 +117,7 @@
             android:id="@+id/card2_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_marginHorizontal="30dp"
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@id/card1_container"
             app:layout_constraintStart_toStartOf="parent"
@@ -126,7 +126,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/card2"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="175dp"
                 app:cardCornerRadius="30dp">
 
                 <ImageView
@@ -196,8 +196,8 @@
         <FrameLayout
             android:id="@+id/card2_locked_overlay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_height="175dp"
+            android:layout_marginHorizontal="30dp"
             app:layout_constraintTop_toTopOf="@id/card2_container"
             app:layout_constraintStart_toStartOf="@id/card2_container"
             app:layout_constraintEnd_toEndOf="@id/card2_container"
@@ -218,7 +218,7 @@
             android:id="@+id/card3_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_marginHorizontal="30dp"
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@id/card2_container"
             app:layout_constraintStart_toStartOf="parent"
@@ -227,7 +227,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/card3"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="175dp"
                 app:cardCornerRadius="30dp">
 
                 <ImageView
@@ -298,8 +298,8 @@
         <FrameLayout
             android:id="@+id/card3_locked_overlay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_height="175dp"
+            android:layout_marginHorizontal="30dp"
             app:layout_constraintTop_toTopOf="@id/card3_container"
             app:layout_constraintStart_toStartOf="@id/card3_container"
             app:layout_constraintEnd_toEndOf="@id/card3_container"
@@ -320,7 +320,7 @@
             android:id="@+id/card4_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_marginHorizontal="30dp"
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@id/card3_container"
             app:layout_constraintStart_toStartOf="parent"
@@ -329,7 +329,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/card4"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="175dp"
                 app:cardCornerRadius="30dp">
 
                 <ImageView
@@ -399,8 +399,8 @@
         <FrameLayout
             android:id="@+id/card4_locked_overlay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_height="175dp"
+            android:layout_marginHorizontal="30dp"
             app:layout_constraintTop_toTopOf="@id/card4_container"
             app:layout_constraintStart_toStartOf="@id/card4_container"
             app:layout_constraintEnd_toEndOf="@id/card4_container"
@@ -421,7 +421,7 @@
             android:id="@+id/card5_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_marginHorizontal="30dp"
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@id/card4_container"
             app:layout_constraintStart_toStartOf="parent"
@@ -430,7 +430,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/card5"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="175dp"
                 app:cardCornerRadius="30dp">
 
                 <ImageView
@@ -500,8 +500,8 @@
         <FrameLayout
             android:id="@+id/card5_locked_overlay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_height="175dp"
+            android:layout_marginHorizontal="30dp"
             app:layout_constraintTop_toTopOf="@id/card5_container"
             app:layout_constraintStart_toStartOf="@id/card5_container"
             app:layout_constraintEnd_toEndOf="@id/card5_container"
@@ -522,7 +522,7 @@
             android:id="@+id/card6_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_marginHorizontal="30dp"
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@id/card5_container"
             app:layout_constraintStart_toStartOf="parent"
@@ -531,7 +531,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/card6"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="175dp"
                 app:cardCornerRadius="30dp">
 
                 <ImageView
@@ -601,8 +601,8 @@
         <FrameLayout
             android:id="@+id/card6_locked_overlay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_height="175dp"
+            android:layout_marginHorizontal="30dp"
             app:layout_constraintTop_toTopOf="@id/card6_container"
             app:layout_constraintStart_toStartOf="@id/card6_container"
             app:layout_constraintEnd_toEndOf="@id/card6_container"
@@ -623,7 +623,7 @@
             android:id="@+id/card7_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_marginHorizontal="30dp"
             android:layout_marginTop="20dp"
             app:layout_constraintTop_toBottomOf="@id/card6_container"
             app:layout_constraintStart_toStartOf="parent"
@@ -632,7 +632,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/card7"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="175dp"
                 app:cardCornerRadius="30dp">
 
                 <ImageView
@@ -702,8 +702,8 @@
         <FrameLayout
             android:id="@+id/card7_locked_overlay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_height="175dp"
+            android:layout_marginHorizontal="30dp"
             app:layout_constraintTop_toTopOf="@id/card7_container"
             app:layout_constraintStart_toStartOf="@id/card7_container"
             app:layout_constraintEnd_toEndOf="@id/card7_container"
@@ -724,7 +724,7 @@
             android:id="@+id/card8_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_marginHorizontal="30dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="60dp"
             app:layout_constraintTop_toBottomOf="@id/card7_container"
@@ -734,7 +734,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/card8"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="175dp"
                 app:cardCornerRadius="30dp">
 
                 <ImageView
@@ -804,8 +804,8 @@
         <FrameLayout
             android:id="@+id/card8_locked_overlay"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_height="175dp"
+            android:layout_marginHorizontal="30dp"
             app:layout_constraintTop_toTopOf="@id/card8_container"
             app:layout_constraintStart_toStartOf="@id/card8_container"
             app:layout_constraintEnd_toEndOf="@id/card8_container"

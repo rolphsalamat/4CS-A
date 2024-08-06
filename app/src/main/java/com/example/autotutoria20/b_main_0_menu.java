@@ -76,6 +76,7 @@ public class b_main_0_menu extends AppCompatActivity {
     private View module, description;
     private ShapeableImageView profileImageView;
     private FrameLayout profileFrameLayout;
+    private TextView learningModeText;
     private boolean isProgressiveMode = true;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -86,6 +87,12 @@ public class b_main_0_menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.b_main_0_menu);
+
+        // Initialize the TextView
+        learningModeText = findViewById(R.id.learning_mode_text);
+
+        // Set initial mode text
+        updateModeText();
 
         // Create a one-time work request to be triggered every 5 seconds
         OneTimeWorkRequest oneTimeWorkRequest =
@@ -254,6 +261,14 @@ public class b_main_0_menu extends AppCompatActivity {
         }
     }
 
+    private void updateModeText() {
+        if (isProgressiveMode) {
+            learningModeText.setText("Progressive Mode");
+        } else {
+            learningModeText.setText("Free Use Mode");
+        }
+    }
+
     private void uploadImageToFirebase() {
         if (imageUri != null) {
             try {
@@ -411,7 +426,7 @@ public class b_main_0_menu extends AppCompatActivity {
         dialog.show();
     }
 
-    
+
     private void switchMode() {
         Log.d("switchMode()", "Switching mode...");
         if (isProgressiveMode) {
@@ -422,9 +437,11 @@ public class b_main_0_menu extends AppCompatActivity {
             viewPager.setCurrentItem(freeUseFragmentList.indexOf(new b_main_2_lesson_freeuse()));
         }
 
+        // Update the learning mode text
+        updateModeText();
+
         // Close the navigation drawer
         drawerLayout.closeDrawer(GravityCompat.START);
-//        pagerAdapter.notifyDataSetChanged();
         Log.d("switchMode()", "Mode switched.");
     }
 
@@ -466,12 +483,6 @@ public class b_main_0_menu extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
-        // Adjust the dialog size
-        dialog.getWindow().setLayout(
-                (int) (getResources().getDisplayMetrics().widthPixels * 0.95),  // width: 90% of the screen width
-                ViewGroup.LayoutParams.WRAP_CONTENT  // height: wrap content
-        );
 
         dialog.show();
     }

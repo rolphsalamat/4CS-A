@@ -52,14 +52,14 @@ public class z_Lesson_steps
     public static final int[] steps_per_module = {4, 1, 3, 3, 3, 3, 1, 3};
 
     public static final int total_module_count = 8; // Kung ilang cards sa main menu
-    public static final int[] lesson_1_steps = {10, 10, 10, 10}; // Kung ilang cards sa Lesson 1
-    public static final int[] lesson_2_steps = {10}; // Kung ilang cards sa Lesson 2
-    public static final int[] lesson_3_steps = {10, 10, 10}; // Kung ilang cards sa Lesson 3
-    public static final int[] lesson_4_steps = {10, 10, 10}; // Kung ilang cards sa Lesson 4
-    public static final int[] lesson_5_steps = {10, 10, 10}; // Kung ilang cards sa Lesson 5
-    public static final int[] lesson_6_steps = {10, 10, 10}; // Kung ilang cards sa Lesson 6
-    public static final int[] lesson_7_steps = {10}; // Kung ilang cards sa Lesson 7
-    public static final int[] lesson_8_steps = {10, 10, 10}; // Kung ilang cards sa Lesson 8
+    public static final int[] lesson_1_steps = {5, 5, 5, 5}; // Kung ilang cards sa Lesson 1
+    public static final int[] lesson_2_steps = {5}; // Kung ilang cards sa Lesson 2
+    public static final int[] lesson_3_steps = {5, 5, 5}; // Kung ilang cards sa Lesson 3
+    public static final int[] lesson_4_steps = {5, 5, 5}; // Kung ilang cards sa Lesson 4
+    public static final int[] lesson_5_steps = {5, 5, 5}; // Kung ilang cards sa Lesson 5
+    public static final int[] lesson_6_steps = {5, 5, 5}; // Kung ilang cards sa Lesson 6
+    public static final int[] lesson_7_steps = {5}; // Kung ilang cards sa Lesson 7
+    public static final int[] lesson_8_steps = {5, 5, 5}; // Kung ilang cards sa Lesson 8
 
     // Private constructor to prevent instantiation
     private z_Lesson_steps() {

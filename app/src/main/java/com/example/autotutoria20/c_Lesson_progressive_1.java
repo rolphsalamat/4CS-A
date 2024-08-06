@@ -22,12 +22,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class c_Lesson_progressive_1 extends AppCompatActivity {
@@ -57,20 +51,15 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
         setCardClickListener(card3, 3, numberOfStepsForCard3);
         setCardClickListener(card4, 4, numberOfStepsForCard4);
 
-//        // Retrieve user session data from SharedPreferences
-//        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
-//
-//        // Initialize progress based on saved data
-//        refreshProgress(sharedPreferences);
-
         fetchProgressData();
+
+//        showLoadingDialog(); // Show the loading dialog
 
         Button exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
-//                showExitConfirmationDialog();
             }
         });
     }
@@ -78,7 +67,6 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         Log.e("onResume()", "I has returned");
 
         // Fetch the latest progress data
@@ -86,7 +74,6 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
     }
 
     private void fetchProgressData() {
-        showLoadingDialog(); // Show the loading dialog
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -106,6 +93,9 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                     if (document.exists()) {
                         Map<String, Object> progressData = document.getData();
                         if (progressData != null) {
+                            int totalSteps = progressData.size();
+                            int currentStep = 0;
+
                             for (Map.Entry<String, Object> entry : progressData.entrySet()) {
                                 String key = entry.getKey();
                                 Object value = entry.getValue();
@@ -113,6 +103,8 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                                     int progress = ((Long) value).intValue();
                                     int moduleNumber = Character.getNumericValue(key.charAt(1));
                                     updateUI(moduleNumber, progress);
+                                    currentStep++;
+//                                    updateProgress((currentStep * 100) / totalSteps); // Update progress
                                 }
                             }
                         }
@@ -123,26 +115,30 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
 
-                hideLoadingDialog(); // Hide the loading dialog after data is fetched and processed
+//                hideLoadingDialog(); // Hide the loading dialog after data is fetched and processed
             }
         });
     }
 
-    private void showLoadingDialog() {
-        loadingDialog = new CustomLoadingDialog(this);
-        loadingDialog.setCancelable(false); // Prevent closing the dialog
-        loadingDialog.show();
-    }
-
-    private void hideLoadingDialog() {
-        if (loadingDialog != null && loadingDialog.isShowing()) {
-            loadingDialog.dismiss();
-        }
-    }
+//    private void showLoadingDialog() {
+//        loadingDialog = new CustomLoadingDialog(this);
+//        loadingDialog.setCancelable(false); // Prevent closing the dialog
+//        loadingDialog.show();
+//    }
+//
+//    private void updateProgress(int progress) {
+//        if (loadingDialog != null) {
+//            loadingDialog.setProgress(progress);
+//        }
+//    }
+//
+//    private void hideLoadingDialog() {
+//        if (loadingDialog != null && loadingDialog.isShowing()) {
+//            loadingDialog.dismiss();
+//        }
+//    }
 
     private void updateUI(int key, int progress) {
-
-        //ETO NA I-A-UPDATE NAAAA!!!
         Log.d("updateUI()", "ETO NA MAG A-UPDATE NA AKOOOO LEZGOOO");
 
         // Update progress text views
@@ -157,7 +153,6 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
         FrameLayout card3LockedOverlay = findViewById(R.id.card3_locked_overlay);
         FrameLayout card4LockedOverlay = findViewById(R.id.card4_locked_overlay);
 
-        // Verify passed values...
         Log.d("updateUI()", "Module: " + key + " | Progress : " + progress);
 
         String newText;
@@ -173,7 +168,6 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                     card2LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
                 }
-
                 break;
             case 2:
                 newText = progress + "/" + z_Lesson_steps.lesson_1_steps[1];
@@ -183,8 +177,6 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                     card3LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
                 }
-
-
                 break;
             case 3:
                 newText = progress + "/" + z_Lesson_steps.lesson_1_steps[2];
@@ -194,8 +186,6 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                     card4LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
                 }
-
-
                 break;
             case 4:
                 newText = progress + "/" + z_Lesson_steps.lesson_1_steps[3];
@@ -203,36 +193,25 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
 
                 if (progress >= z_Lesson_steps.lesson_1_steps[3]) {
                     setCardCompletionStatus(key, true);
-//                    showToast("Lesson 1 Completed! :D");
                     Log.d("Completed Lesson!", "Lesson 1 Completed! :D");
                 }
-
-
                 break;
             default:
                 Log.d("updateUI", "Invalid module number: " + key);
                 break;
         }
-
     }
 
     private void setCardCompletionStatus(int cardIndex, boolean isCompleted) {
-
         cardIndex -= 1; // Because Card starts at 0 :>
-
         Log.d("setCardStatus", "Card " + cardIndex + " Completed!");
         if (cardIndex >= 0 && cardIndex < cardCompletionStatus.length) {
-
             Log.d("setCardStatus", "Lemme set it");
             cardCompletionStatus[cardIndex] = isCompleted;
         }
     }
 
     private void navigateToModule(int cardNumber, int numberOfSteps) {
-
-//        showToast("navigateToModule(), Card#" + cardNumber);
-
-
         switch (cardNumber) {
             case 1:
                 navigateToModuleActivity(d_Lesson_container.class, numberOfSteps, cardNumber);
@@ -258,14 +237,10 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
             default:
                 Log.e("navigateToModule()", "Invalid Card: Card " + cardNumber);
                 break;
-
-
         }
-
     }
 
     private void navigateToModuleActivity(Class<?> moduleActivityClass, int numberOfSteps, int cardNumber) {
-        // Store user information in SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("ModulePreferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("numberOfSteps", numberOfSteps);
@@ -274,48 +249,12 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
         editor.putString("currentModule", "M" + cardNumber);
         editor.apply();
 
-//        showToast("Start Card " + cardNumber);
-
         Intent intent = new Intent(c_Lesson_progressive_1.this, moduleActivityClass);
         startActivity(intent);
-
-        // bat naka-comment? ewan ko din
-//        finish();
     }
 
     private void setCardClickListener(FrameLayout card, int cardNumber, int numberOfSteps) {
         card.setOnClickListener(v -> navigateToModule(cardNumber, numberOfSteps));
-    }
-
-    private void showExitConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_exit_confirmation, null);
-        builder.setView(dialogView);
-
-        // Find the buttons in the custom layout
-        Button cancelButton = dialogView.findViewById(R.id.cancel_exit_module);
-        Button exitButton = dialogView.findViewById(R.id.exit_module);
-
-        // Create and show the dialog
-        AlertDialog alert = builder.create();
-
-        // Set up the button click listeners
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alert.dismiss();
-            }
-        });
-
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish(); // or other logic to exit the module
-            }
-        });
-
-        alert.show();
     }
 
     private void showCustomDialog() {
@@ -329,7 +268,6 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                // Add any additional actions you want to perform when the button is clicked
             }
         });
 

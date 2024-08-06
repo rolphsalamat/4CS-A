@@ -7,26 +7,29 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class LessonPagerAdapter extends FragmentPagerAdapter {
 
-    private final StepType[] stepSequence;
+    private final LessonSequence.StepType[] stepSequence;
+    private final String currentLesson;
 
-    public LessonPagerAdapter(@NonNull FragmentManager fm, StepType[] stepSequence) {
+    public LessonPagerAdapter(@NonNull FragmentManager fm, LessonSequence.StepType[] stepSequence, String currentLesson) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.stepSequence = stepSequence;
+        this.currentLesson = currentLesson;
     }
 
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        StepType stepType = stepSequence[position];
+        LessonSequence.StepType stepType = stepSequence[position];
         switch (stepType) {
             case PRE_TEST:
-                return new PreTestFragment();
+                return new f_pre_test();
             case POST_TEST:
-                return new PostTestFragment();
+                return new f_post_test();
             case VIDEO:
-                return new VideoFragment();
+                String videoUrl = LessonSequence.getLessonVideoLinks().get(currentLesson);
+                return f_video_lesson.newInstance(videoUrl);
             case TEXT:
-                return new TextFragment();
+                return new f_text_lesson();
             default:
                 throw new IllegalStateException("Unexpected value: " + stepType);
         }

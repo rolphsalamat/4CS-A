@@ -75,7 +75,7 @@ public class c_Lesson_freeuse_8 extends AppCompatActivity {
     }
 
     private void fetchProgressData() {
-        showLoadingDialog(); // Show the loading dialog
+//        showLoadingDialog(); // Show the loading dialog
 
         // Assuming you are using Firebase Firestore to store progress data
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -127,22 +127,22 @@ public class c_Lesson_freeuse_8 extends AppCompatActivity {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
 
-                hideLoadingDialog(); // Hide the loading dialog after data is fetched and processed
+//                hideLoadingDialog(); // Hide the loading dialog after data is fetched and processed
             }
         });
     }
 
-    private void showLoadingDialog() {
-        loadingDialog = new CustomLoadingDialog(this);
-        loadingDialog.setCancelable(false); // Prevent closing the dialog
-        loadingDialog.show();
-    }
-
-    private void hideLoadingDialog() {
-        if (loadingDialog != null && loadingDialog.isShowing()) {
-            loadingDialog.dismiss();
-        }
-    }
+//    private void showLoadingDialog() {
+//        loadingDialog = new CustomLoadingDialog(this);
+//        loadingDialog.setCancelable(false); // Prevent closing the dialog
+//        loadingDialog.show();
+//    }
+//
+//    private void hideLoadingDialog() {
+//        if (loadingDialog != null && loadingDialog.isShowing()) {
+//            loadingDialog.dismiss();
+//        }
+//    }
 
     private void updateUI(int key, int progress) {
 
