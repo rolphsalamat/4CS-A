@@ -2,7 +2,6 @@ package com.example.autotutoria20;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -37,7 +36,7 @@ public class LauncherActivity extends AppCompatActivity {
             CharSequence name = "Channel Name";
             String description = "Channel Description";
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(NotificationWorker.CHANNEL_ID, name, importance);
+            NotificationChannel channel = new NotificationChannel(n_Worker.CHANNEL_ID, name, importance);
             channel.setDescription(description);
 
             NotificationManager notificationManager = getSystemService(NotificationManager.class);

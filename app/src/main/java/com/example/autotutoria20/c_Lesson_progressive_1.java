@@ -28,7 +28,8 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
 
     private AlertDialog dialog;
     private boolean[] cardCompletionStatus = {false, false, false, false}; // Track completion status of each card
-    private CustomLoadingDialog loadingDialog;
+    private CustomLoadingDialog loadingDialog; // Loading dialog instance
+    private int[] moduleProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +52,6 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
         setCardClickListener(card3, 3, numberOfStepsForCard3);
         setCardClickListener(card4, 4, numberOfStepsForCard4);
 
-        fetchProgressData();
-
-//        showLoadingDialog(); // Show the loading dialog
-
         Button exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +59,9 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                 finish();
             }
         });
+
+        // Show the loading dialog
+        showLoadingDialog();
     }
 
     @Override
@@ -74,15 +74,13 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
     }
 
     private void fetchProgressData() {
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        DocumentReference progressRef =
-                db.collection("users")
-                        .document(userId)
-                        .collection("Progressive Mode")
-                        .document("Lesson 1");
+        DocumentReference progressRef = db.collection("users")
+                .document(userId)
+                .collection("Progressive Mode")
+                .document("Lesson 1");
 
         progressRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -93,6 +91,9 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                     if (document.exists()) {
                         Map<String, Object> progressData = document.getData();
                         if (progressData != null) {
+                            // Initialize the array with the length of the lesson steps
+                            moduleProgress = new int[z_Lesson_steps.lesson_1_steps.length];
+
                             int totalSteps = progressData.size();
                             int currentStep = 0;
 
@@ -102,11 +103,22 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                                 if (value instanceof Long) {
                                     int progress = ((Long) value).intValue();
                                     int moduleNumber = Character.getNumericValue(key.charAt(1));
+
+                                    // Store progress in the array
+                                    if (moduleNumber >= 1 && moduleNumber <= moduleProgress.length) {
+                                        moduleProgress[moduleNumber - 1] = progress;
+                                    }
+
+                                    // Log the module number and progress
+                                    Log.d(TAG, "Module: " + moduleNumber + " | Progress: " + progress);
+
                                     updateUI(moduleNumber, progress);
                                     currentStep++;
-//                                    updateProgress((currentStep * 100) / totalSteps); // Update progress
                                 }
                             }
+
+                            // Call method to check progress after retrieving all data
+                            checkProgress();
                         }
                     } else {
                         Log.d(TAG, "No such document");
@@ -115,28 +127,24 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
 
-//                hideLoadingDialog(); // Hide the loading dialog after data is fetched and processed
+                // Hide the loading dialog after data is fetched and processed
+                hideLoadingDialog();
             }
         });
     }
 
-//    private void showLoadingDialog() {
-//        loadingDialog = new CustomLoadingDialog(this);
-//        loadingDialog.setCancelable(false); // Prevent closing the dialog
-//        loadingDialog.show();
-//    }
-//
-//    private void updateProgress(int progress) {
-//        if (loadingDialog != null) {
-//            loadingDialog.setProgress(progress);
-//        }
-//    }
-//
-//    private void hideLoadingDialog() {
-//        if (loadingDialog != null && loadingDialog.isShowing()) {
-//            loadingDialog.dismiss();
-//        }
-//    }
+    private void checkProgress() {
+        for (int i = 0; i < moduleProgress.length; i++) {
+            int progress = moduleProgress[i];
+            int maxSteps = z_Lesson_steps.lesson_1_steps[i];
+            if (progress < maxSteps) {
+                Log.d("checkProgress", "Module " + (i + 1) + " is not completed. Progress: " + progress + "/" + maxSteps);
+            } else {
+                Log.d("checkProgress", "Module " + (i + 1) + " is completed. Progress: " + progress + "/" + maxSteps);
+                setCardCompletionStatus(i + 1, true); // Update the completion status for the card
+            }
+        }
+    }
 
     private void updateUI(int key, int progress) {
         Log.d("updateUI()", "ETO NA MAG A-UPDATE NA AKOOOO LEZGOOO");
@@ -241,16 +249,22 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
     }
 
     private void navigateToModuleActivity(Class<?> moduleActivityClass, int numberOfSteps, int cardNumber) {
-        SharedPreferences sharedPreferences = getSharedPreferences("ModulePreferences", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("numberOfSteps", numberOfSteps);
-        editor.putString("learningMode", "Progressive Mode");
-        editor.putString("currentLesson", "Lesson 1");
-        editor.putString("currentModule", "M" + cardNumber);
-        editor.apply();
+        if (moduleProgress != null && cardNumber - 1 < moduleProgress.length) {
+            SharedPreferences sharedPreferences = getSharedPreferences("ModulePreferences", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("numberOfSteps", numberOfSteps);
+            editor.putString("learningMode", "Progressive Mode");
+            editor.putString("currentLesson", "Lesson 1");
+            editor.putString("currentModule", "M" + cardNumber);
+            editor.putBoolean("isCompleted", cardCompletionStatus[cardNumber - 1]); // Set the actual completion status
+            editor.apply();
 
-        Intent intent = new Intent(c_Lesson_progressive_1.this, moduleActivityClass);
-        startActivity(intent);
+            Intent intent = new Intent(c_Lesson_progressive_1.this, moduleActivityClass);
+            intent.putExtra("currentProgress", moduleProgress[cardNumber - 1]);
+            startActivity(intent);
+        } else {
+            Log.e("navigateToModuleActivity", "moduleProgress is null or cardNumber is out of bounds.");
+        }
     }
 
     private void setCardClickListener(FrameLayout card, int cardNumber, int numberOfSteps) {
@@ -277,5 +291,19 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
 
     private void showToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    // Show the loading dialog
+    private void showLoadingDialog() {
+        loadingDialog = new CustomLoadingDialog(this);
+        loadingDialog.setCancelable(false); // Prevent the dialog from being closed
+        loadingDialog.show();
+    }
+
+    // Hide the loading dialog
+    private void hideLoadingDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
     }
 }

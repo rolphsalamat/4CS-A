@@ -1,30 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:orientation="vertical">
 
+    <!-- ScrollView contains the lesson content -->
     <LinearLayout
+        android:id="@+id/next_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_lesson_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:text="Lesson Content"
+                android:textSize="24sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/text_lesson_content_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your lesson content goes here."
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:id="@+id/text_lesson_content_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your lesson content goes here."
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:id="@+id/text_lesson_content_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your lesson content goes here."
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:layout_marginTop="16dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Next Button at the bottom -->
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:text="Tap to Continue"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:background="@android:color/transparent"
+        android:textSize="20sp"
+        android:layout_marginHorizontal="16dp"/>
 
-        <TextView
-            android:id="@+id/text_lesson_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lesson Content"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:id="@+id/text_lesson_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Your lesson content goes here."
-            android:textSize="18sp"
-            android:layout_marginTop="16dp"/>
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

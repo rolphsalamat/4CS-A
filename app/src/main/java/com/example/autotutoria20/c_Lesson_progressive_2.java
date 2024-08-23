@@ -22,19 +22,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class c_Lesson_progressive_2 extends AppCompatActivity {
 
     private AlertDialog dialog;
     private boolean[] cardCompletionStatus = {false}; // Track completion status of each card
-    private CustomLoadingDialog loadingDialog;
+    private CustomLoadingDialog loadingDialog; // Loading dialog instance
+    private int[] moduleProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,28 +43,16 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
 
         setCardClickListener(card1, 1, numberOfStepsForCard1);
 
-//        // Retrieve user session data from SharedPreferences
-//        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
-//
-//        // Initialize progress based on saved data
-//        refreshProgress(sharedPreferences);
-
-        fetchProgressData();
-
         Button exitButton = findViewById(R.id.exitButton);
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-//                showExitConfirmationDialog();
-            }
-        });
+        exitButton.setOnClickListener(v -> finish());
+
+        // Show the loading dialog
+        showLoadingDialog();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         Log.e("onResume()", "I has returned");
 
         // Fetch the latest progress data
@@ -77,16 +60,13 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
     }
 
     private void fetchProgressData() {
-//        showLoadingDialog(); // Show the loading dialog
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        DocumentReference progressRef =
-                db.collection("users")
-                        .document(userId)
-                        .collection("Progressive Mode")
-                        .document("Lesson 2");
+        DocumentReference progressRef = db.collection("users")
+                .document(userId)
+                .collection("Progressive Mode")
+                .document("Lesson 2");
 
         progressRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -97,15 +77,30 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
                     if (document.exists()) {
                         Map<String, Object> progressData = document.getData();
                         if (progressData != null) {
+                            // Initialize the array with the length of the lesson steps
+                            moduleProgress = new int[z_Lesson_steps.lesson_2_steps.length];
+
                             for (Map.Entry<String, Object> entry : progressData.entrySet()) {
                                 String key = entry.getKey();
                                 Object value = entry.getValue();
                                 if (value instanceof Long) {
                                     int progress = ((Long) value).intValue();
                                     int moduleNumber = Character.getNumericValue(key.charAt(1));
+
+                                    // Store progress in the array
+                                    if (moduleNumber >= 1 && moduleNumber <= moduleProgress.length) {
+                                        moduleProgress[moduleNumber - 1] = progress;
+                                    }
+
+                                    // Log the module number and progress
+                                    Log.d(TAG, "Module: " + moduleNumber + " | Progress: " + progress);
+
                                     updateUI(moduleNumber, progress);
                                 }
                             }
+
+                            // Call method to check progress after retrieving all data
+                            checkProgress();
                         }
                     } else {
                         Log.d(TAG, "No such document");
@@ -114,26 +109,26 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
 
-//                hideLoadingDialog(); // Hide the loading dialog after data is fetched and processed
+                // Hide the loading dialog after data is fetched and processed
+                hideLoadingDialog();
             }
         });
     }
 
-//    private void showLoadingDialog() {
-//        loadingDialog = new CustomLoadingDialog(this);
-//        loadingDialog.setCancelable(false); // Prevent closing the dialog
-//        loadingDialog.show();
-//    }
-//
-//    private void hideLoadingDialog() {
-//        if (loadingDialog != null && loadingDialog.isShowing()) {
-//            loadingDialog.dismiss();
-//        }
-//    }
+    private void checkProgress() {
+        for (int i = 0; i < moduleProgress.length; i++) {
+            int progress = moduleProgress[i];
+            int maxSteps = z_Lesson_steps.lesson_2_steps[i];
+            if (progress < maxSteps) {
+                Log.d("checkProgress", "Module " + (i + 1) + " is not completed. Progress: " + progress + "/" + maxSteps);
+            } else {
+                Log.d("checkProgress", "Module " + (i + 1) + " is completed. Progress: " + progress + "/" + maxSteps);
+                setCardCompletionStatus(i + 1, true); // Update the completion status for the card
+            }
+        }
+    }
 
     private void updateUI(int key, int progress) {
-
-        //ETO NA I-A-UPDATE NAAAA!!!
         Log.d("updateUI()", "ETO NA MAG A-UPDATE NA AKOOOO LEZGOOO");
 
         // Update progress text views
@@ -156,36 +151,25 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
 
                 if (progress >= z_Lesson_steps.lesson_2_steps[0]) {
                     setCardCompletionStatus(key, true);
-//                    showToast("Lesson 2 Completed! :D");
                     Log.d("Completed Lesson!", "Lesson 2 Completed! :D");
                 }
-
-
                 break;
             default:
                 Log.d("updateUI", "Invalid module number: " + key);
                 break;
         }
-
     }
 
     private void setCardCompletionStatus(int cardIndex, boolean isCompleted) {
-
         cardIndex -= 1; // Because Card starts at 0 :>
-
         Log.d("setCardStatus", "Card " + cardIndex + " Completed!");
         if (cardIndex >= 0 && cardIndex < cardCompletionStatus.length) {
-
             Log.d("setCardStatus", "Lemme set it");
             cardCompletionStatus[cardIndex] = isCompleted;
         }
     }
 
     private void navigateToModule(int cardNumber, int numberOfSteps) {
-
-//        showToast("navigateToModule(), Card#" + cardNumber);
-
-
         switch (cardNumber) {
             case 1:
                 navigateToModuleActivity(d_Lesson_container.class, numberOfSteps, cardNumber);
@@ -193,10 +177,7 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
             default:
                 Log.e("navigateToModule()", "Invalid Card: Card " + cardNumber);
                 break;
-
-
         }
-
     }
 
     private void navigateToModuleActivity(Class<?> moduleActivityClass, int numberOfSteps, int cardNumber) {
@@ -207,15 +188,12 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
         editor.putString("learningMode", "Progressive Mode");
         editor.putString("currentLesson", "Lesson 2");
         editor.putString("currentModule", "M" + cardNumber);
+        editor.putBoolean("isCompleted", cardCompletionStatus[cardNumber - 1]); // Set the actual completion status
         editor.apply();
 
-//        showToast("Start Card " + cardNumber);
-
         Intent intent = new Intent(c_Lesson_progressive_2.this, moduleActivityClass);
+        intent.putExtra("currentProgress", moduleProgress[cardNumber - 1]);
         startActivity(intent);
-
-        // bat naka-comment? ewan ko din
-//        finish();
     }
 
     private void setCardClickListener(FrameLayout card, int cardNumber, int numberOfSteps) {
@@ -236,19 +214,9 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
         AlertDialog alert = builder.create();
 
         // Set up the button click listeners
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alert.dismiss();
-            }
-        });
+        cancelButton.setOnClickListener(v -> alert.dismiss());
 
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish(); // or other logic to exit the module
-            }
-        });
+        exitButton.setOnClickListener(v -> finish()); // or other logic to exit the module
 
         alert.show();
     }
@@ -260,13 +228,7 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
         builder.setView(dialogView);
 
         Button okayButton = dialogView.findViewById(R.id.okay_button);
-        okayButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                // Add any additional actions you want to perform when the button is clicked
-            }
-        });
+        okayButton.setOnClickListener(v -> dialog.dismiss());
 
         dialog = builder.create();
         dialog.show();
@@ -274,5 +236,19 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
 
     private void showToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    // Show the loading dialog
+    private void showLoadingDialog() {
+        loadingDialog = new CustomLoadingDialog(this);
+        loadingDialog.setCancelable(false); // Prevent the dialog from being closed
+        loadingDialog.show();
+    }
+
+    // Hide the loading dialog
+    private void hideLoadingDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
     }
 }

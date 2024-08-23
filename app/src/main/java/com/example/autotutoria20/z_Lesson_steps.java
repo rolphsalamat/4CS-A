@@ -89,6 +89,29 @@ public class z_Lesson_steps
         }
     }
 
+    public static int getLessonLength(int lessonNumber) {
+        switch (lessonNumber)    {
+            case 1:
+                return lesson_1_steps.length;
+            case 2:
+                return lesson_2_steps.length;
+            case 3:
+                return lesson_3_steps.length;
+            case 4:
+                return lesson_4_steps.length;
+            case 5:
+                return lesson_5_steps.length;
+            case 6:
+                return lesson_6_steps.length;
+            case 7:
+                return lesson_7_steps.length;
+            case 8:
+                return lesson_8_steps.length;
+            default:
+                return 0;
+        }
+    }
+
     public static int[] getAllLessonSteps() {
         List<Integer> allSteps = new ArrayList<>();
         for (int step : lesson_1_steps) {

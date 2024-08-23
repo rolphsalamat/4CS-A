@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.core.app.NotificationCompat;
 
-public class NotificationReceiver extends BroadcastReceiver {
+public class n_Receiver extends BroadcastReceiver {
 
     private static final String CHANNEL_ID = "your_channel_id";
 

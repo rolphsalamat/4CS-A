@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
@@ -204,7 +204,7 @@ public class b_main_0_menu_settings extends AppCompatActivity {
 
     // Method to schedule notification worker
     private void scheduleNotificationWorker() {
-        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+        OneTimeWorkRequest workRequest = new OneTimeWorkRequest.Builder(n_Worker.class)
                 .addTag("ReminderNotification")
                 .build();
 

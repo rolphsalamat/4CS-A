@@ -24,12 +24,12 @@
         android:textSize="18sp"
         android:layout_marginTop="16dp"/>
 
-    <EditText
-        android:id="@+id/post_test_answer"
+    <RadioGroup
+        android:id="@+id/choices_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Type your answer here"
-        android:layout_marginTop="8dp"/>
+        android:orientation="vertical"
+        android:padding="8dp" />
 
     <Button
         android:id="@+id/submit_post_test"

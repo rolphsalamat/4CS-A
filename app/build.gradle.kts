@@ -36,8 +36,15 @@ android {
 
 dependencies {
 
+    // Lifecycle components
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-process:2.5.1") // For ProcessLifecycleOwner
+
+    // Password Hashing
+    implementation("org.mindrot:jbcrypt:0.4")
+
     // Theme
-    implementation("com.google.android.material:material:1.5.0")
+    implementation("com.google.android.material:material:1.8.0")
 
     // Splash Screen
     implementation("androidx.core:core-splashscreen:1.0.1")
@@ -54,23 +61,22 @@ dependencies {
     implementation("com.google.firebase:firebase-appcheck")
     implementation("com.google.firebase:firebase-appcheck-playintegrity")
 
-
     // Google Play Services dependencies
-    implementation("com.google.android.gms:play-services-auth:19.2.0")
+    implementation("com.google.android.gms:play-services-auth:20.0.0")
 
     // AndroidX dependencies
-    implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("androidx.activity:activity:1.2.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.4")
-
-    // Material Design dependency
-    implementation("com.google.android.material:material:1.5.0")
+    implementation("androidx.appcompat:appcompat:1.5.1")
+    implementation("androidx.activity:activity:1.6.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     // Picasso for image loading
     implementation("com.squareup.picasso:picasso:2.71828")
 
+    // Ucrop for image cropping
+    implementation("com.github.yalantis:ucrop:2.2.6")
+
     // Testing dependencies
-    testImplementation("junit:junit:4.13.1")
-    androidTestImplementation("androidx.test.ext:junit:1.1.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }

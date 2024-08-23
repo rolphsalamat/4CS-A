@@ -8,8 +8,8 @@ public class LessonSequence {
     // Enum for step types
     public enum StepType {
         PRE_TEST,
-        VIDEO,
         TEXT,
+        VIDEO,
         POST_TEST
     }
 
@@ -25,21 +25,21 @@ public class LessonSequence {
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
-        lessonSequences.put("M1_Lesson 2", new StepType[]{
+        lessonSequences.put("M2_Lesson 1", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
-        lessonSequences.put("M1_Lesson 3", new StepType[]{
+        lessonSequences.put("M3_Lesson 1", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
-        lessonSequences.put("M1_Lesson 4", new StepType[]{
+        lessonSequences.put("M4_Lesson 1", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
@@ -48,7 +48,7 @@ public class LessonSequence {
         });
 
         /* ===== Module 2 ===== */
-        lessonSequences.put("M2_Lesson 1", new StepType[]{
+        lessonSequences.put("M1_Lesson 2", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
@@ -57,14 +57,14 @@ public class LessonSequence {
         });
 
         /* ===== Module 3 ===== */
-        lessonSequences.put("M3_Lesson 1", new StepType[]{
+        lessonSequences.put("M1_Lesson 3", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
-        lessonSequences.put("M3_Lesson 2", new StepType[]{
+        lessonSequences.put("M2_Lesson 3", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
@@ -75,108 +75,108 @@ public class LessonSequence {
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
-                StepType.VIDEO,
+//                StepType.VIDEO,
                 StepType.POST_TEST
         });
 
         /* ===== Module 4 ===== */
-        lessonSequences.put("M4_Lesson 1", new StepType[]{
+        lessonSequences.put("M1_Lesson 4", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
-        lessonSequences.put("M4_Lesson 2", new StepType[]{
+        lessonSequences.put("M2_Lesson 4", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
-        lessonSequences.put("M4_Lesson 3", new StepType[]{
+        lessonSequences.put("M3_Lesson 4", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
-                StepType.VIDEO,
+//                StepType.VIDEO,
                 StepType.POST_TEST
         });
 
         /* ===== Module 5 ===== */
-        lessonSequences.put("M5_Lesson 1", new StepType[]{
+        lessonSequences.put("M1_Lesson 5", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
-                StepType.VIDEO,
+//                StepType.VIDEO,
                 StepType.POST_TEST
         });
-        lessonSequences.put("M5_Lesson 2", new StepType[]{
+        lessonSequences.put("M2_Lesson 5", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
-                StepType.VIDEO,
+//                StepType.VIDEO,
                 StepType.POST_TEST
         });
-        lessonSequences.put("M5_Lesson 3", new StepType[]{
+        lessonSequences.put("M3_Lesson 5", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
-                StepType.VIDEO,
+//                StepType.VIDEO,
                 StepType.POST_TEST
         });
 
         /* ===== Module 6 ===== */
-        lessonSequences.put("M6_Lesson 1", new StepType[]{
+        lessonSequences.put("M1_Lesson 6", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
-                StepType.VIDEO,
+//                StepType.VIDEO,
                 StepType.POST_TEST
         });
-        lessonSequences.put("M6_Lesson 2", new StepType[]{
+        lessonSequences.put("M2_Lesson 6", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
-                StepType.VIDEO,
+//                StepType.VIDEO,
                 StepType.POST_TEST
         });
-        lessonSequences.put("M6_Lesson 3", new StepType[]{
+        lessonSequences.put("M3_Lesson 6", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
-                StepType.VIDEO,
+//                StepType.VIDEO,
                 StepType.POST_TEST
         });
 
         /* ===== Module 7 ===== */
-        lessonSequences.put("M7_Lesson 1", new StepType[]{
+        lessonSequences.put("M1_Lesson 7", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
-                StepType.VIDEO,
+//                StepType.VIDEO,
                 StepType.POST_TEST
         });
 
         /* ===== Module 8 ===== */
-        lessonSequences.put("M8_Lesson 1", new StepType[]{
+        lessonSequences.put("M1_Lesson 8", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
-                StepType.VIDEO,
+//                StepType.VIDEO,
                 StepType.POST_TEST
         });
-        lessonSequences.put("M8_Lesson 2", new StepType[]{
+        lessonSequences.put("M2_Lesson 8", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
-                StepType.VIDEO,
+//                StepType.VIDEO,
                 StepType.POST_TEST
         });
-        lessonSequences.put("M8_Lesson 3", new StepType[]{
+        lessonSequences.put("M3_Lesson 8", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
-                StepType.VIDEO,
+//                StepType.VIDEO,
                 StepType.POST_TEST
         });
 
@@ -188,34 +188,40 @@ public class LessonSequence {
         Map<String, String> lessonVideoLinks = new HashMap<>();
 
         // Add YouTube links for each lesson
-        lessonVideoLinks.put("M1_Lesson 1", "https://www.youtube.com/watch?v=06kbuUQlvbw");
-        lessonVideoLinks.put("M1_Lesson 2", "");
-        lessonVideoLinks.put("M1_Lesson 3", "");
-        lessonVideoLinks.put("M1_Lesson 4", "");
+        lessonVideoLinks.put("M1_Lesson 1", "https://www.youtube.com/watch?v=92O_Hc6Yz5M");
+        lessonVideoLinks.put("M2_Lesson 1", "https://www.youtube.com/watch?v=noE3dkfamAU");
+        lessonVideoLinks.put("M3_Lesson 1", "https://www.youtube.com/watch?v=Lw2aVmV6JyM");
+        lessonVideoLinks.put("M4_Lesson 1", "https://www.youtube.com/watch?v=csCFyTz8WiE");
 
-        lessonVideoLinks.put("M2_Lesson 1", "");
+        lessonVideoLinks.put("M1_Lesson 2", "https://www.youtube.com/watch?v=PRDSdzRI3GQ");
 
-        lessonVideoLinks.put("M3_Lesson 1", "");
-        lessonVideoLinks.put("M3_Lesson 2", "");
+        lessonVideoLinks.put("M1_Lesson 3", "https://www.youtube.com/watch?v=2uxZ6ksACGY");
+        lessonVideoLinks.put("M2_Lesson 3", "https://www.youtube.com/watch?v=0qg1jb7HS4E");
         lessonVideoLinks.put("M3_Lesson 3", "");
 
-        lessonVideoLinks.put("M4_Lesson 1", "");
-        lessonVideoLinks.put("M4_Lesson 2", "");
-        lessonVideoLinks.put("M4_Lesson 3", "");
+        lessonVideoLinks.put("M1_Lesson 4", "https://www.youtube.com/watch?v=XyISYpKrNQw");
+        lessonVideoLinks.put("M2_Lesson 4", "https://www.youtube.com/watch?v=IEMrT4SkqwY");
+        lessonVideoLinks.put("M3_Lesson 4", "");
 
-        lessonVideoLinks.put("M5_Lesson 1", "https://www.youtube.com/watch?v=OymdHfzCg0c");
-        lessonVideoLinks.put("M5_Lesson 2", "https://www.youtube.com/watch?v=6Mb11KYTmS0");
-        lessonVideoLinks.put("M5_Lesson 3", "https://www.youtube.com/watch?v=661W0SJl_5Q");
+//        https://www.youtube.com/watch?v=OymdHfzCg0c
+        lessonVideoLinks.put("M1_Lesson 5", "");
+//        https://www.youtube.com/watch?v=6Mb11KYTmS0
+        lessonVideoLinks.put("M2_Lesson 5", "");
+//        https://www.youtube.com/watch?v=661W0SJl_5Q
+        lessonVideoLinks.put("M3_Lesson 5", "");
 
-        lessonVideoLinks.put("M6_Lesson 1", "https://www.youtube.com/watch?v=79cIoa6J3O8");
-        lessonVideoLinks.put("M6_Lesson 2", "https://www.youtube.com/watch?v=GGbYfum8vUM");
-        lessonVideoLinks.put("M6_Lesson 3", "https://www.youtube.com/watch?v=dCVcWztylLs");
+//        https://www.youtube.com/watch?v=79cIoa6J3O8
+        lessonVideoLinks.put("M1_Lesson 6", "");
+//        https://www.youtube.com/watch?v=GGbYfum8vUM
+        lessonVideoLinks.put("M2_Lesson 6", "");
+        https://www.youtube.com/watch?v=dCVcWztylLs
+        lessonVideoLinks.put("M3_Lesson 6", "");
 
-        lessonVideoLinks.put("M7_Lesson 1", "");
+        lessonVideoLinks.put("M1_Lesson 7", "");
 
-        lessonVideoLinks.put("M8_Lesson 1", "");
-        lessonVideoLinks.put("M8_Lesson 2", "");
-        lessonVideoLinks.put("M8_Lesson 3", "");
+        lessonVideoLinks.put("M1_Lesson 8", "");
+        lessonVideoLinks.put("M2_Lesson 8", "");
+        lessonVideoLinks.put("M3_Lesson 8", "");
 
         return lessonVideoLinks;
     }

@@ -22,19 +22,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class c_Lesson_progressive_3 extends AppCompatActivity {
 
     private AlertDialog dialog;
-    private boolean[] cardCompletionStatus = {false, false}; // Track completion status of each card
+    private boolean[] cardCompletionStatus = {false, false, false}; // Track completion status of each card
     private CustomLoadingDialog loadingDialog;
+    private int[] moduleProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,27 +38,22 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
 
         FrameLayout card1 = findViewById(R.id.card1);
         FrameLayout card2 = findViewById(R.id.card2);
+        FrameLayout card3 = findViewById(R.id.card3);
 
         // Assuming numberOfSteps is determined based on your logic
         int numberOfStepsForCard1 = z_Lesson_steps.lesson_3_steps[0];
         int numberOfStepsForCard2 = z_Lesson_steps.lesson_3_steps[1];
+        int numberOfStepsForCard3 = z_Lesson_steps.lesson_3_steps[2];
 
         setCardClickListener(card1, 1, numberOfStepsForCard1);
         setCardClickListener(card2, 2, numberOfStepsForCard2);
-//        // Retrieve user session data from SharedPreferences
-//        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
-//
-//        // Initialize progress based on saved data
-//        refreshProgress(sharedPreferences);
-
-        fetchProgressData();
+        setCardClickListener(card3, 3, numberOfStepsForCard3);
 
         Button exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
-//                showExitConfirmationDialog();
             }
         });
     }
@@ -71,7 +61,6 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         Log.e("onResume()", "I has returned");
 
         // Fetch the latest progress data
@@ -79,16 +68,13 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
     }
 
     private void fetchProgressData() {
-//        showLoadingDialog(); // Show the loading dialog
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        DocumentReference progressRef =
-                db.collection("users")
-                        .document(userId)
-                        .collection("Progressive Mode")
-                        .document("Lesson 3");
+        DocumentReference progressRef = db.collection("users")
+                .document(userId)
+                .collection("Progressive Mode")
+                .document("Lesson 3");
 
         progressRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -99,15 +85,30 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
                     if (document.exists()) {
                         Map<String, Object> progressData = document.getData();
                         if (progressData != null) {
+                            // Initialize the array with the length of the lesson steps
+                            moduleProgress = new int[z_Lesson_steps.lesson_3_steps.length];
+
                             for (Map.Entry<String, Object> entry : progressData.entrySet()) {
                                 String key = entry.getKey();
                                 Object value = entry.getValue();
                                 if (value instanceof Long) {
                                     int progress = ((Long) value).intValue();
                                     int moduleNumber = Character.getNumericValue(key.charAt(1));
+
+                                    // Store progress in the array
+                                    if (moduleNumber >= 1 && moduleNumber <= moduleProgress.length) {
+                                        moduleProgress[moduleNumber - 1] = progress;
+                                    }
+
+                                    // Log the module number and progress
+                                    Log.d(TAG, "Module: " + moduleNumber + " | Progress: " + progress);
+
                                     updateUI(moduleNumber, progress);
                                 }
                             }
+
+                            // Call method to check progress after retrieving all data
+                            checkProgress();
                         }
                     } else {
                         Log.d(TAG, "No such document");
@@ -115,38 +116,36 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
-
-//                hideLoadingDialog(); // Hide the loading dialog after data is fetched and processed
             }
         });
     }
 
-//    private void showLoadingDialog() {
-//        loadingDialog = new CustomLoadingDialog(this);
-//        loadingDialog.setCancelable(false); // Prevent closing the dialog
-//        loadingDialog.show();
-//    }
-//
-//    private void hideLoadingDialog() {
-//        if (loadingDialog != null && loadingDialog.isShowing()) {
-//            loadingDialog.dismiss();
-//        }
-//    }
+    private void checkProgress() {
+        for (int i = 0; i < moduleProgress.length; i++) {
+            int progress = moduleProgress[i];
+            int maxSteps = z_Lesson_steps.lesson_3_steps[i];
+            if (progress < maxSteps) {
+                Log.d("checkProgress", "Module " + (i + 1) + " is not completed. Progress: " + progress + "/" + maxSteps);
+            } else {
+                Log.d("checkProgress", "Module " + (i + 1) + " is completed. Progress: " + progress + "/" + maxSteps);
+                setCardCompletionStatus(i + 1, true); // Update the completion status for the card
+            }
+        }
+    }
 
     private void updateUI(int key, int progress) {
-
-        //ETO NA I-A-UPDATE NAAAA!!!
         Log.d("updateUI()", "ETO NA MAG A-UPDATE NA AKOOOO LEZGOOO");
 
         // Update progress text views
         TextView module1ProgressText = findViewById(R.id.progressive_lesson_3_module_1);
         TextView module2ProgressText = findViewById(R.id.progressive_lesson_3_module_2);
+        TextView module3ProgressText = findViewById(R.id.progressive_lesson_3_module_3);
 
         // Update locked overlays visibility
         FrameLayout card1LockedOverlay = findViewById(R.id.card1_locked_overlay);
         FrameLayout card2LockedOverlay = findViewById(R.id.card2_locked_overlay);
+        FrameLayout card3LockedOverlay = findViewById(R.id.card3_locked_overlay);
 
-        // Verify passed values...
         Log.d("updateUI()", "Module: " + key + " | Progress : " + progress);
 
         String newText;
@@ -162,44 +161,41 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
                     card2LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
                 }
-
                 break;
             case 2:
                 newText = progress + "/" + z_Lesson_steps.lesson_3_steps[1];
                 module2ProgressText.setText(newText);
 
                 if (progress >= z_Lesson_steps.lesson_3_steps[1]) {
+                    card3LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
-//                    showToast("Lesson 3 Completed! :D");
+                }
+                break;
+            case 3:
+                newText = progress + "/" + z_Lesson_steps.lesson_3_steps[2];
+                module3ProgressText.setText(newText);
+
+                if (progress >= z_Lesson_steps.lesson_3_steps[2]) {
+                    setCardCompletionStatus(key, true);
                     Log.d("Completed Lesson!", "Lesson 3 Completed! :D");
                 }
-
-
                 break;
             default:
                 Log.d("updateUI", "Invalid module number: " + key);
                 break;
         }
-
     }
 
     private void setCardCompletionStatus(int cardIndex, boolean isCompleted) {
-
         cardIndex -= 1; // Because Card starts at 0 :>
-
         Log.d("setCardStatus", "Card " + cardIndex + " Completed!");
         if (cardIndex >= 0 && cardIndex < cardCompletionStatus.length) {
-
             Log.d("setCardStatus", "Lemme set it");
             cardCompletionStatus[cardIndex] = isCompleted;
         }
     }
 
     private void navigateToModule(int cardNumber, int numberOfSteps) {
-
-//        showToast("navigateToModule(), Card#" + cardNumber);
-
-
         switch (cardNumber) {
             case 1:
                 navigateToModuleActivity(d_Lesson_container.class, numberOfSteps, cardNumber);
@@ -210,32 +206,31 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
                 else
                     showCustomDialog();
                 break;
+            case 3:
+                if (cardCompletionStatus[1])
+                    navigateToModuleActivity(d_Lesson_container.class, numberOfSteps, cardNumber);
+                else
+                    showCustomDialog();
+                break;
             default:
                 Log.e("navigateToModule()", "Invalid Card: Card " + cardNumber);
                 break;
-
-
         }
-
     }
 
     private void navigateToModuleActivity(Class<?> moduleActivityClass, int numberOfSteps, int cardNumber) {
-        // Store user information in SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("ModulePreferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("numberOfSteps", numberOfSteps);
         editor.putString("learningMode", "Progressive Mode");
         editor.putString("currentLesson", "Lesson 3");
         editor.putString("currentModule", "M" + cardNumber);
+        editor.putBoolean("isCompleted", cardCompletionStatus[cardNumber - 1]); // Set the actual completion status
         editor.apply();
 
-//        showToast("Start Card " + cardNumber);
-
         Intent intent = new Intent(c_Lesson_progressive_3.this, moduleActivityClass);
+        intent.putExtra("currentProgress", moduleProgress[cardNumber - 1]);
         startActivity(intent);
-
-        // bat naka-comment? ewan ko din
-//        finish();
     }
 
     private void setCardClickListener(FrameLayout card, int cardNumber, int numberOfSteps) {
@@ -248,14 +243,11 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         View dialogView = inflater.inflate(R.layout.dialog_exit_confirmation, null);
         builder.setView(dialogView);
 
-        // Find the buttons in the custom layout
         Button cancelButton = dialogView.findViewById(R.id.cancel_exit_module);
         Button exitButton = dialogView.findViewById(R.id.exit_module);
 
-        // Create and show the dialog
         AlertDialog alert = builder.create();
 
-        // Set up the button click listeners
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -266,7 +258,7 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish(); // or other logic to exit the module
+                finish();
             }
         });
 
@@ -284,7 +276,6 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                // Add any additional actions you want to perform when the button is clicked
             }
         });
 

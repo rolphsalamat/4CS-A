@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Module 4 -->
+    <string name="module4_1_title">Definition of CFG</string>
+    <string name="module4_1_content_1">Welcome to Module 4</string>
+    <string name="module4_1_content_2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="module4_1_content_3">Go to res/values to modify the strings</string>
+
+    <string name="module4_2_title">Components: Terminals, Non-Terminals, Start Symbol, Production Rules</string>
+    <string name="module4_2_content_1">Welcome to Module 4</string>
+    <string name="module4_2_content_2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="module4_2_content_3">Go to res/values to modify the strings</string>
+
+    <string name="module4_3_title">Examples of CFG for Simple Languages</string>
+    <string name="module4_3_content_1">Welcome to Module 4</string>
+    <string name="module4_3_content_2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="module4_3_content_3">Go to res/values to modify the strings</string>
+
+</resources>

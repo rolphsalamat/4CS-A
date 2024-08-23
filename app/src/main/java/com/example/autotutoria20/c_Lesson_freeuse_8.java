@@ -29,6 +29,7 @@ public class c_Lesson_freeuse_8 extends AppCompatActivity {
 
     private AlertDialog dialog; // Declare the dialog variable outside
     private CustomLoadingDialog loadingDialog;
+    private boolean[] cardCompletionStatus = {false, false, false}; // Track completion status of each card
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,6 @@ public class c_Lesson_freeuse_8 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-//                showExitConfirmationDialog();
             }
         });
     }
@@ -75,8 +75,6 @@ public class c_Lesson_freeuse_8 extends AppCompatActivity {
     }
 
     private void fetchProgressData() {
-//        showLoadingDialog(); // Show the loading dialog
-
         // Assuming you are using Firebase Firestore to store progress data
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -114,7 +112,6 @@ public class c_Lesson_freeuse_8 extends AppCompatActivity {
 
                                     // Update the UI or process the progress value as needed
                                     updateUI(moduleNumber, progress);
-
                                 } else {
                                     Log.d(TAG, key + " is not of expected type.");
                                 }
@@ -126,28 +123,12 @@ public class c_Lesson_freeuse_8 extends AppCompatActivity {
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
-
-//                hideLoadingDialog(); // Hide the loading dialog after data is fetched and processed
             }
         });
     }
 
-//    private void showLoadingDialog() {
-//        loadingDialog = new CustomLoadingDialog(this);
-//        loadingDialog.setCancelable(false); // Prevent closing the dialog
-//        loadingDialog.show();
-//    }
-//
-//    private void hideLoadingDialog() {
-//        if (loadingDialog != null && loadingDialog.isShowing()) {
-//            loadingDialog.dismiss();
-//        }
-//    }
-
     private void updateUI(int key, int progress) {
-
-        //ETO NA I-A-UPDATE NAAAA!!!
-        Log.d("updateUI()", "ETO NA MAG A-UPDATE NA AKOOOO LEZGOOO");
+        Log.d("updateUI()", "Updating UI for module " + key + " with progress " + progress);
 
         // Update progress text views
         TextView module1ProgressText = findViewById(R.id.freeuse_lesson_1_module_8);
@@ -167,6 +148,9 @@ public class c_Lesson_freeuse_8 extends AppCompatActivity {
                 } else {
                     Log.e("updateUI", "TextView for module 1 not found");
                 }
+                if (progress >= z_Lesson_steps.lesson_8_steps[0]) {
+                    cardCompletionStatus[0] = true; // Mark card 1 as completed
+                }
                 break;
             case 2:
                 newText = progress + "/" + z_Lesson_steps.lesson_8_steps[1];
@@ -174,6 +158,9 @@ public class c_Lesson_freeuse_8 extends AppCompatActivity {
                     module2ProgressText.setText(newText);
                 } else {
                     Log.e("updateUI", "TextView for module 2 not found");
+                }
+                if (progress >= z_Lesson_steps.lesson_8_steps[1]) {
+                    cardCompletionStatus[1] = true; // Mark card 2 as completed
                 }
                 break;
             case 3:
@@ -183,12 +170,14 @@ public class c_Lesson_freeuse_8 extends AppCompatActivity {
                 } else {
                     Log.e("updateUI", "TextView for module 3 not found");
                 }
+                if (progress >= z_Lesson_steps.lesson_8_steps[2]) {
+                    cardCompletionStatus[2] = true; // Mark card 3 as completed
+                }
                 break;
             default:
                 Log.d("updateUI", "Invalid module number: " + key);
                 break;
         }
-
     }
 
     // Method to set click listener for each card
@@ -197,7 +186,6 @@ public class c_Lesson_freeuse_8 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 navigateToModuleActivity(d_Lesson_container.class, cardNumber, numberOfSteps);
-//                showToast("Open Card " + cardNumber);
             }
         });
     }
@@ -210,15 +198,11 @@ public class c_Lesson_freeuse_8 extends AppCompatActivity {
         editor.putString("learningMode", "Free Use Mode");
         editor.putString("currentLesson", "Lesson 8");
         editor.putString("currentModule", "M" + cardNumber);
+        editor.putBoolean("isCompleted", cardCompletionStatus[cardNumber - 1]); // Pass the completion status
         editor.apply();
 
         Intent intent = new Intent(c_Lesson_freeuse_8.this, moduleActivityClass);
         startActivity(intent);
-
-//        showToast("Start Card " + cardNumber);
-
-        // Optionally finish the current activity
-//        finish();
     }
 
     // Helper method to show toast message

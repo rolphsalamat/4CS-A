@@ -3,12 +3,9 @@ package com.example.autotutoria20;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,8 +25,10 @@ import java.util.Map;
 
 public class c_Lesson_freeuse_1 extends AppCompatActivity {
 
-    private AlertDialog dialog; // Declare the dialog variable outside
+    private AlertDialog dialog;
     private CustomLoadingDialog loadingDialog;
+
+    private boolean[] cardCompletionStatus = {false, false, false, false}; // Track completion status of each card
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,15 +77,12 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
     }
 
     private void fetchProgressData() {
-//        showLoadingDialog(); // Show the loading dialog
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String userId;
         try {
             userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         } catch (NullPointerException e) {
             Log.e("fetchProgressData", "User not authenticated", e);
-//            hideLoadingDialog();
             showToast("User not authenticated");
             return;
         }
@@ -109,9 +105,6 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
                         // Get all fields and their values
                         Map<String, Object> progressData = document.getData();
                         if (progressData != null) {
-                            int totalModules = progressData.size();
-                            int moduleCounter = 0;
-
                             for (Map.Entry<String, Object> entry : progressData.entrySet()) {
                                 String key = entry.getKey();
                                 Object value = entry.getValue();
@@ -128,10 +121,6 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
                                 } else {
                                     Log.d(TAG, key + " is not of expected type.");
                                 }
-
-                                moduleCounter++;
-                                final int progress = (int) ((moduleCounter / (float) totalModules) * 100);
-//                                updateProgress(progress);
                             }
                         } else {
                             Log.d(TAG, "Progress data is null");
@@ -139,68 +128,12 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
                     } else {
                         Log.d(TAG, "No such document");
                     }
-
-                    // Add delay similar to progressive mode
-//                    incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
-//                        @Override
-////                        public void run() {
-////                            hideLoadingDialog();
-////                        }
-//                    });
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
-//                    hideLoadingDialog(); // Hide the dialog in case of failure as well
                 }
             }
         });
     }
-
-    private void incrementLoadingProgressBar(final ProgressBar progressBar, final int duration, final Runnable onComplete) {
-        final Handler handler = new Handler(Looper.getMainLooper());
-        final long startTime = System.currentTimeMillis();
-        final long endTime = startTime + duration;
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long currentTime = System.currentTimeMillis();
-                float progressFraction = (float) (currentTime - startTime) / duration;
-                int currentProgress = (int) (progressFraction * 100);
-
-                progressBar.setProgress(currentProgress);
-
-                if (currentTime < endTime) {
-                    handler.postDelayed(this, 16); // approximately 60fps
-                } else {
-                    progressBar.setProgress(100); // ensure we end exactly at 100%
-                    onComplete.run();
-                }
-            }
-        });
-    }
-
-//    private void showLoadingDialog() {
-//        if (loadingDialog == null) {
-//            loadingDialog = new CustomLoadingDialog(this);
-//            loadingDialog.setCancelable(false); // Prevent closing the dialog
-//        }
-//
-//        if (!loadingDialog.isShowing()) {
-//            loadingDialog.show();
-//        }
-//    }
-
-//    private void updateProgress(int progress) {
-//        if (loadingDialog != null) {
-//            loadingDialog.setProgress(progress);
-//        }
-//    }
-
-//    private void hideLoadingDialog() {
-//        if (loadingDialog != null && loadingDialog.isShowing()) {
-//            loadingDialog.dismiss();
-//        }
-//    }
 
     private void updateUI(int key, int progress) {
         Log.d("updateUI()", "Updating UI for module " + key + " with progress " + progress);
@@ -222,6 +155,9 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
                     showToast("TextView for module 1 not found");
                     Log.e("updateUI", "TextView for module 1 not found");
                 }
+                if (progress >= z_Lesson_steps.lesson_1_steps[0]) {
+                    cardCompletionStatus[0] = true; // Mark card 1 as completed
+                }
                 break;
             case 2:
                 newText = progress + "/" + z_Lesson_steps.lesson_1_steps[1];
@@ -230,6 +166,9 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
                 } else {
                     showToast("TextView for module 2 not found");
                     Log.e("updateUI", "TextView for module 2 not found");
+                }
+                if (progress >= z_Lesson_steps.lesson_1_steps[1]) {
+                    cardCompletionStatus[1] = true; // Mark card 2 as completed
                 }
                 break;
             case 3:
@@ -240,6 +179,9 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
                     showToast("TextView for module 3 not found");
                     Log.e("updateUI", "TextView for module 3 not found");
                 }
+                if (progress >= z_Lesson_steps.lesson_1_steps[2]) {
+                    cardCompletionStatus[2] = true; // Mark card 3 as completed
+                }
                 break;
             case 4:
                 newText = progress + "/" + z_Lesson_steps.lesson_1_steps[3];
@@ -248,6 +190,9 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
                 } else {
                     showToast("TextView for module 4 not found");
                     Log.e("updateUI", "TextView for module 4 not found");
+                }
+                if (progress >= z_Lesson_steps.lesson_1_steps[3]) {
+                    cardCompletionStatus[3] = true; // Mark card 4 as completed
                 }
                 break;
             default:
@@ -274,6 +219,7 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
         editor.putString("learningMode", "Free Use Mode");
         editor.putString("currentLesson", "Lesson 1");
         editor.putString("currentModule", "M" + cardNumber);
+        editor.putBoolean("isCompleted", cardCompletionStatus[cardNumber - 1]); // Pass the completion status
         editor.apply();
 
         Intent intent = new Intent(c_Lesson_freeuse_1.this, moduleActivityClass);
@@ -283,40 +229,5 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
     // Helper method to show toast message
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    private void showExitConfirmationDialog() {
-        // Create a dialog builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        // Inflate the custom dialog layout
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_exit_confirmation, null);
-        builder.setView(dialogView);
-
-        // Find "Yes" button in custom layout
-        Button btnYes = dialogView.findViewById(R.id.exit_module);
-        btnYes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle "Yes" button click
-                Toast.makeText(c_Lesson_freeuse_1.this, "Exiting module", Toast.LENGTH_SHORT).show();
-                finish(); // Finish the activity
-            }
-        });
-
-        // Find "No" button in custom layout
-        Button btnCancel = dialogView.findViewById(R.id.cancel_exit_module);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle "No" button click
-                Toast.makeText(c_Lesson_freeuse_1.this, "Cancel Exit", Toast.LENGTH_SHORT).show();
-                dialog.dismiss(); // Dismiss the dialog
-            }
-        });
-
-        // Create and show the dialog
-        dialog = builder.create();
-        dialog.show();
     }
 }

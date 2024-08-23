@@ -1,5 +1,7 @@
 package com.example.autotutoria20;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -18,6 +20,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        Log.e("PagerAdapter", "fragmentList.get(" + position + "): " + fragmentList.get(position));
         return fragmentList.get(position);
     }
 

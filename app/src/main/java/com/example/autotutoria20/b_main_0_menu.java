@@ -3,7 +3,6 @@ package com.example.autotutoria20;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -18,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +42,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -50,8 +51,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -76,11 +79,12 @@ public class b_main_0_menu extends AppCompatActivity {
     private View module, description;
     private ShapeableImageView profileImageView;
     private FrameLayout profileFrameLayout;
-    private TextView learningModeText;
     private boolean isProgressiveMode = true;
+    private TextView learningModeText;
+    private ImageView learningModeIcon;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-//    private static final int PICK_IMAGE_REQUEST = 1;
+    //    private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imageUri;
 
     @Override
@@ -88,15 +92,12 @@ public class b_main_0_menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.b_main_0_menu);
 
-        // Initialize the TextView
         learningModeText = findViewById(R.id.learning_mode_text);
-
-        // Set initial mode text
-        updateModeText();
+        learningModeIcon = findViewById(R.id.learning_mode_icon);
 
         // Create a one-time work request to be triggered every 5 seconds
         OneTimeWorkRequest oneTimeWorkRequest =
-                new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                new OneTimeWorkRequest.Builder(n_Worker.class)
                         .setInitialDelay(5, TimeUnit.SECONDS)
                         .build();
 
@@ -116,14 +117,28 @@ public class b_main_0_menu extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
         boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
 
+//        if (isLoggedIn) {
+//            String userId = mAuth.getCurrentUser().getUid();
+//            fetchUserData(userId);
+//        } else {
+//            // User is not logged in, redirect to login screen
+//            Intent loginIntent = new Intent(this, a_user_1_login.class);
+//            startActivity(loginIntent);
+//            finish();
+//        }
+
         if (isLoggedIn) {
-            String userId = mAuth.getCurrentUser().getUid();
-            fetchUserData(userId);
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            if (currentUser != null) {
+                String userId = currentUser.getUid();
+                fetchUserData(userId);
+            } else {
+                // Handle the case where the user is not logged in
+                redirectToLogin();
+            }
         } else {
             // User is not logged in, redirect to login screen
-            Intent loginIntent = new Intent(this, a_user_1_login.class);
-            startActivity(loginIntent);
-            finish();
+            redirectToLogin();
         }
 
         // Initialize ViewPager
@@ -252,20 +267,34 @@ public class b_main_0_menu extends AppCompatActivity {
         });
     }
 
+    private void redirectToLogin() {
+        Intent loginIntent = new Intent(this, a_user_1_login.class);
+        startActivity(loginIntent);
+        finish();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            uploadImageToFirebase();
-        }
-    }
 
-    private void updateModeText() {
-        if (isProgressiveMode) {
-            learningModeText.setText("Progressive Mode");
-        } else {
-            learningModeText.setText("Free Use Mode");
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri sourceUri = data.getData();
+            Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "cropped_image.jpg"));
+
+            // Start uCrop activity
+            UCrop.of(sourceUri, destinationUri)
+                    .withAspectRatio(1, 1)
+                    .withMaxResultSize(512, 512)
+                    .start(this);
+        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
+            final Uri resultUri = UCrop.getOutput(data);
+            if (resultUri != null) {
+                imageUri = resultUri;
+                uploadImageToFirebase();  // Upload the cropped image
+            }
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            final Throwable cropError = UCrop.getError(data);
+            Toast.makeText(this, "Crop error: " + cropError, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -312,6 +341,7 @@ public class b_main_0_menu extends AppCompatActivity {
             Toast.makeText(b_main_0_menu.this, "No image selected", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void saveImageUrlToFirestore(String imageUrl) {
         String userId = mAuth.getCurrentUser().getUid();
@@ -429,19 +459,22 @@ public class b_main_0_menu extends AppCompatActivity {
 
     private void switchMode() {
         Log.d("switchMode()", "Switching mode...");
+
         if (isProgressiveMode) {
+            learningModeText.setText("Progressive Mode");
+            learningModeIcon.setImageResource(R.drawable.progressive_mode);
             pagerAdapter.setFragmentList(progressiveFragmentList);
             viewPager.setCurrentItem(progressiveFragmentList.indexOf(new b_main_1_lesson_progressive()));
         } else {
+            learningModeText.setText("Free Use Mode");
+            learningModeIcon.setImageResource(R.drawable.free_use_mode);
             pagerAdapter.setFragmentList(freeUseFragmentList);
             viewPager.setCurrentItem(freeUseFragmentList.indexOf(new b_main_2_lesson_freeuse()));
         }
 
-        // Update the learning mode text
-        updateModeText();
-
         // Close the navigation drawer
         drawerLayout.closeDrawer(GravityCompat.START);
+//        pagerAdapter.notifyDataSetChanged();
         Log.d("switchMode()", "Mode switched.");
     }
 
@@ -484,6 +517,12 @@ public class b_main_0_menu extends AppCompatActivity {
             }
         });
 
+        // Adjust the dialog size
+        dialog.getWindow().setLayout(
+                (int) (getResources().getDisplayMetrics().widthPixels * 0.95),  // width: 90% of the screen width
+                ViewGroup.LayoutParams.WRAP_CONTENT  // height: wrap content
+        );
+
         dialog.show();
     }
 
@@ -504,7 +543,7 @@ public class b_main_0_menu extends AppCompatActivity {
     }
 
     private void openFacebookPage() {
-        Uri uri = Uri.parse("https://www.facebook.com/pncofficia99");
+        Uri uri = Uri.parse("https://www.facebook.com/ucpncofficial");
         startActivity(new Intent(Intent.ACTION_VIEW, uri));
     }
 

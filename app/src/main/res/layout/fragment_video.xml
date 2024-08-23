@@ -3,14 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    >
+
+<!--    <TextView-->
+<!--        android:id="@+id/video_title"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Video Lesson"-->
+<!--        android:textSize="24sp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:layout_gravity="center"/>-->
 
     <TextView
         android:id="@+id/video_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Video Lesson"
-        android:textSize="24sp"
+        android:text="Please watch this video for a clearer understanding of the lesson."
+        android:paddingHorizontal="20dp"
+        android:layout_marginVertical="20dp"
+        android:textSize="22sp"
+        android:textColor="@color/white"
         android:textStyle="bold"
         android:layout_gravity="center"/>
 
@@ -18,5 +30,13 @@
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="16dp"/>
+        />
+
+<!--    <Button-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="NEXT"-->
+<!--        android:textSize="24sp"-->
+<!--        />-->
+
 </LinearLayout>

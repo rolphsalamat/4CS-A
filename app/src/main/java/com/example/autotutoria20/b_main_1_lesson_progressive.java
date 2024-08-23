@@ -22,13 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.example.autotutoria20.CustomLoadingDialog;
-import com.example.autotutoria20.R;
-import com.example.autotutoria20.c_Lesson_progressive_1;
-import com.example.autotutoria20.c_Lesson_progressive_2;
-import com.example.autotutoria20.c_Lesson_progressive_3;
-import com.example.autotutoria20.c_Lesson_progressive_4;
-import com.example.autotutoria20.z_Lesson_steps;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,17 +30,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import com.example.autotutoria20.CustomLoadingDialog;
-
 public class b_main_1_lesson_progressive extends Fragment {
-    private static TextView learningModeText;
+
     private FrameLayout lockedOverlayCard1, lockedOverlayCard2, lockedOverlayCard3, lockedOverlayCard4,
             lockedOverlayCard5, lockedOverlayCard6, lockedOverlayCard7, lockedOverlayCard8;
     private ProgressBar progressBarCard1, progressBarCard2, progressBarCard3, progressBarCard4,
             progressBarCard5, progressBarCard6, progressBarCard7, progressBarCard8;
     private TextView progressTextCard1, progressTextCard2, progressTextCard3, progressTextCard4,
             progressTextCard5, progressTextCard6, progressTextCard7, progressTextCard8;
-    private Button incrementCard1Button;
+
     private boolean isProgressiveMode = true; // Default mode is progressive mode
     private static View view;
     private CustomLoadingDialog loadingDialog;
@@ -138,6 +129,9 @@ public class b_main_1_lesson_progressive extends Fragment {
                 if (task.isSuccessful()) {
                     int totalModules = 0;
 
+                    // Reset card progress before updating
+                    resetCardProgress();
+
                     for (DocumentSnapshot lessonDoc : task.getResult()) {
                         int lessonNumber = Integer.parseInt(lessonDoc.getId().substring(7).trim());
                         int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
@@ -145,7 +139,6 @@ public class b_main_1_lesson_progressive extends Fragment {
                     }
 
                     int moduleCounter = 0;
-                    final Handler handler = new Handler(Looper.getMainLooper());
 
                     for (DocumentSnapshot lessonDoc : task.getResult()) {
                         String lesson = lessonDoc.getId();
@@ -163,8 +156,6 @@ public class b_main_1_lesson_progressive extends Fragment {
                             }
 
                             moduleCounter++;
-                            final int progress = (int) ((moduleCounter / (float) totalModules) * 100);
-                            updateProgress(progress);
                         }
 
                         if (totalMaxProgress > 0) {
@@ -173,19 +164,12 @@ public class b_main_1_lesson_progressive extends Fragment {
 
                             Log.e("fetchAllProgressData", "updateCompletionStatus(" + lessonNumber + ");");
 
-                            incrementCard(lessonNumber, overallProgressInt, new ProgressUpdateListener() {
-                                @Override
-                                public void onProgressUpdated() {
-                                    incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            hideLoadingDialog();
-                                        }
-                                    });
-                                }
-                            });
+                            // Update UI without incrementing beyond actual progress
+                            updateCardProgress(lessonNumber, overallProgressInt);
                         }
                     }
+
+                    hideLoadingDialog(); // Ensure the loading dialog is dismissed
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
@@ -193,6 +177,33 @@ public class b_main_1_lesson_progressive extends Fragment {
         });
     }
 
+    private void resetCardProgress() {
+        for (int i = 0; i < cardProgress.length; i++) {
+            cardProgress[i] = 0; // Reset all progress to 0
+        }
+    }
+
+    private void updateCardProgress(int cardId, int progress) {
+        cardId -= 1;
+        String TAG = "updateCardProgress()";
+        cardProgress[cardId] = Math.min(progress, 100);
+
+        if (cardProgress[cardId] >= 100) {
+            Log.e("cardCompletionStatus[]", "cardProgress[" + cardId + "]: " + cardProgress[cardId] + " >= 100, so TRUE na to");
+            cardCompletionStatus[cardId] = true;
+            if (cardId < cardCompletionStatus.length) {
+                hideLockedOverlay(cardId + 2);
+            }
+        }
+
+        cardId += 1;
+        ProgressBar progressBar = view.findViewById(getProgressBarId(cardId));
+        TextView progressText = view.findViewById(getProgressTextId(cardId));
+        cardId -= 1;
+
+        progressBar.setProgress(cardProgress[cardId]);
+        progressText.setText(cardProgress[cardId] + "% Completed");
+    }
 
     private void initializeViews() {
         // Progress Bar
@@ -215,9 +226,6 @@ public class b_main_1_lesson_progressive extends Fragment {
         progressTextCard7 = view.findViewById(R.id.progressText_card_7);
         progressTextCard8 = view.findViewById(R.id.progressText_card_8);
 
-        // Learning Mode? Ewan para san ba to
-//        learningModeText = view.findViewById(R.id.learning_mode_text);
-
         // Locked Overlay
         lockedOverlayCard1 = view.findViewById(R.id.card1_locked_overlay);
         lockedOverlayCard2 = view.findViewById(R.id.card2_locked_overlay);
@@ -233,69 +241,14 @@ public class b_main_1_lesson_progressive extends Fragment {
 
     // Method to set click listeners for the cards
     private void setCardClickListeners() {
-        // Card 1 click listener
-        view.findViewById(R.id.card1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleCardClick(1);
-            }
-        });
-
-        // Card 2 click listener
-        view.findViewById(R.id.card2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleCardClick(2);
-            }
-        });
-
-        // Card 3 click listener
-        view.findViewById(R.id.card3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleCardClick(3);
-            }
-        });
-
-        // Card 4 click listener
-        view.findViewById(R.id.card4).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleCardClick(4);
-            }
-        });
-
-        // Card 5 click listener
-        view.findViewById(R.id.card5).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleCardClick(5);
-            }
-        });
-
-        // Card 6 click listener
-        view.findViewById(R.id.card6).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleCardClick(6);
-            }
-        });
-
-        // Card 7 click listener
-        view.findViewById(R.id.card7).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleCardClick(7);
-            }
-        });
-
-        // Card 8 click listener
-        view.findViewById(R.id.card8).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleCardClick(8);
-            }
-        });
+        view.findViewById(R.id.card1).setOnClickListener(v -> handleCardClick(1));
+        view.findViewById(R.id.card2).setOnClickListener(v -> handleCardClick(2));
+        view.findViewById(R.id.card3).setOnClickListener(v -> handleCardClick(3));
+        view.findViewById(R.id.card4).setOnClickListener(v -> handleCardClick(4));
+        view.findViewById(R.id.card5).setOnClickListener(v -> handleCardClick(5));
+        view.findViewById(R.id.card6).setOnClickListener(v -> handleCardClick(6));
+        view.findViewById(R.id.card7).setOnClickListener(v -> handleCardClick(7));
+        view.findViewById(R.id.card8).setOnClickListener(v -> handleCardClick(8));
     }
 
     private void handleCardClick(int cardId) {
@@ -324,20 +277,12 @@ public class b_main_1_lesson_progressive extends Fragment {
         AlertDialog dialog = builder.create();
 
         Button exitButton = dialogView.findViewById(R.id.okay_button);
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        exitButton.setOnClickListener(v -> dialog.dismiss());
 
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                int width = (int) (350 * getResources().getDisplayMetrics().density);
-                int height = (int) (350 * getResources().getDisplayMetrics().density);
-                dialog.getWindow().setLayout(width, height);
-            }
+        dialog.setOnShowListener(dialogInterface -> {
+            int width = (int) (350 * getResources().getDisplayMetrics().density);
+            int height = (int) (350 * getResources().getDisplayMetrics().density);
+            dialog.getWindow().setLayout(width, height);
         });
 
         dialog.show();
@@ -348,7 +293,6 @@ public class b_main_1_lesson_progressive extends Fragment {
             cardCompletionStatus[cardId - 2] = true;
         }
     }
-
 
     private void launchLessonActivity(int cardId) {
         Intent intent;
@@ -390,65 +334,13 @@ public class b_main_1_lesson_progressive extends Fragment {
     private boolean isPreviousCardCompleted(int cardId) {
         int index = cardId - 1;
 
-        Log.e("Hello", "index: " + index);
         if (index == 0) {
             return true;
         }
 
         boolean isCompleted = cardCompletionStatus[index - 1];
-        Log.d("Sound Check 123",
-    "boolean isCompleted = " + cardCompletionStatus[index - 1]);
-
         Log.d("CardCheck", "Card " + cardId + " previous card completion status: " + isCompleted);
         return isCompleted;
-
-    }
-
-    private void incrementCard(int cardId, int incrementValue, ProgressUpdateListener listener) {
-        cardId -= 1;
-        String TAG = "incrementCard()";
-        int newProgress = cardProgress[cardId] + incrementValue;
-        cardProgress[cardId] = Math.min(newProgress, 100);
-
-        if (cardProgress[cardId] >= 100) {
-            Log.e("cardCompletionStatus[]", "cardProgress[" + cardId + "]: " + cardProgress[cardId] + " >= 100, so TRUE na to");
-            cardCompletionStatus[cardId] = true;
-            if (cardId < cardCompletionStatus.length) {
-                hideLockedOverlay(cardId + 2);
-            }
-        }
-
-        cardId += 1;
-        ProgressBar progressBar = view.findViewById(getProgressBarId(cardId));
-        TextView progressText = view.findViewById(getProgressTextId(cardId));
-        cardId -= 1;
-
-        progressBar.setProgress(cardProgress[cardId]);
-        progressText.setText(cardProgress[cardId] + "% Completed");
-
-        if (listener != null) {
-            listener.onProgressUpdated();
-        }
-
-        if (cardId == 3) {
-            incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
-                @Override
-                public void run() {
-//                    showToast("This is the end my friend");
-                    Log.e(TAG, "This is the end my friend");
-
-                    double delayInSeconds = 2.5;
-                    int delayMillis = (int) (delayInSeconds * 1000);
-
-                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            hideLoadingDialog();
-                        }
-                    }, delayMillis);
-                }
-            });
-        }
     }
 
     private int getProgressBarId(int index) {

@@ -30,6 +30,7 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
 
     private AlertDialog dialog; // Declare the dialog variable outside
     private CustomLoadingDialog loadingDialog;
+    private boolean[] cardCompletionStatus = {false, false}; // Track completion status of each card
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +73,6 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
     }
 
     private void fetchProgressData() {
-//        showLoadingDialog(); // Show the loading dialog
-
         // Assuming you are using Firebase Firestore to store progress data
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -98,9 +97,6 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
                         Map<String, Object> progressData = document.getData();
 
                         if (progressData != null) {
-                            int totalModules = progressData.size();
-                            int moduleCounter = 0;
-
                             for (Map.Entry<String, Object> entry : progressData.entrySet()) {
                                 String key = entry.getKey();
                                 Object value = entry.getValue();
@@ -117,10 +113,6 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
                                 } else {
                                     Log.d(TAG, key + " is not of expected type.");
                                 }
-
-                                moduleCounter++;
-                                final int progress = (int) ((moduleCounter / (float) totalModules) * 100);
-//                                updateProgress(progress);
                             }
                         } else {
                             Log.d(TAG, "Progress data is null");
@@ -128,68 +120,12 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
                     } else {
                         Log.d(TAG, "No such document");
                     }
-
-                    // Add delay similar to progressive mode
-//                    incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
-//                        @Override
-////                        public void run() {
-////                            hideLoadingDialog();
-////                        }
-//                    });
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
-//                    hideLoadingDialog(); // Hide the dialog in case of failure as well
                 }
             }
         });
     }
-
-    private void incrementLoadingProgressBar(final ProgressBar progressBar, final int duration, final Runnable onComplete) {
-        final Handler handler = new Handler(Looper.getMainLooper());
-        final long startTime = System.currentTimeMillis();
-        final long endTime = startTime + duration;
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long currentTime = System.currentTimeMillis();
-                float progressFraction = (float) (currentTime - startTime) / duration;
-                int currentProgress = (int) (progressFraction * 100);
-
-                progressBar.setProgress(currentProgress);
-
-                if (currentTime < endTime) {
-                    handler.postDelayed(this, 16); // approximately 60fps
-                } else {
-                    progressBar.setProgress(100); // ensure we end exactly at 100%
-                    onComplete.run();
-                }
-            }
-        });
-    }
-
-//    private void showLoadingDialog() {
-//        if (loadingDialog == null) {
-//            loadingDialog = new CustomLoadingDialog(this);
-//            loadingDialog.setCancelable(false); // Prevent closing the dialog
-//        }
-//
-//        if (!loadingDialog.isShowing()) {
-//            loadingDialog.show();
-//        }
-//    }
-//
-//    private void updateProgress(int progress) {
-//        if (loadingDialog != null) {
-//            loadingDialog.setProgress(progress);
-//        }
-//    }
-//
-//    private void hideLoadingDialog() {
-//        if (loadingDialog != null && loadingDialog.isShowing()) {
-//            loadingDialog.dismiss();
-//        }
-//    }
 
     private void updateUI(int key, int progress) {
         Log.d("updateUI()", "Updating UI for module " + key + " with progress " + progress);
@@ -211,6 +147,9 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
                 } else {
                     Log.e("updateUI", "TextView for module 1 not found");
                 }
+                if (progress >= z_Lesson_steps.lesson_3_steps[0]) {
+                    cardCompletionStatus[0] = true; // Mark card 1 as completed
+                }
                 break;
             case 2:
                 newText = progress + "/" + z_Lesson_steps.lesson_3_steps[1];
@@ -219,12 +158,14 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
                 } else {
                     Log.e("updateUI", "TextView for module 2 not found");
                 }
+                if (progress >= z_Lesson_steps.lesson_3_steps[1]) {
+                    cardCompletionStatus[1] = true; // Mark card 2 as completed
+                }
                 break;
             default:
                 Log.d("updateUI", "Invalid module number: " + key);
                 break;
         }
-
     }
 
     // Method to set click listener for each card
@@ -245,6 +186,7 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
         editor.putString("learningMode", "Free Use Mode");
         editor.putString("currentLesson", "Lesson 3");
         editor.putString("currentModule", "M" + cardNumber);
+        editor.putBoolean("isCompleted", cardCompletionStatus[cardNumber - 1]); // Pass the completion status
         editor.apply();
 
         Intent intent = new Intent(c_Lesson_freeuse_3.this, moduleActivityClass);

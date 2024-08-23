@@ -9,6 +9,8 @@ import android.os.Build;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,8 +19,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.concurrent.CountDownLatch;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
-public class NotificationWorker extends Worker {
+public class n_Worker extends Worker {
 
     private static final String TAG = "NotificationWorker";
     public static final String CHANNEL_ID = "reminder_channel";
@@ -39,7 +42,7 @@ public class NotificationWorker extends Worker {
             {"Continue Learning!", "Your Context Free Grammar lessons are waiting."}
     };
 
-    public NotificationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+    public n_Worker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -48,23 +51,41 @@ public class NotificationWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        // Retrieve the reminder notification setting from Firestore
-        boolean reminderNotification = getReminderNotificationSetting();
+        Log.d(TAG, "doWork: Worker is executing");
 
-        if (reminderNotification) {
-            Log.e(TAG, "Reminder Notification is ON");
-            try {
-                sendNotification();
+        if (!MyApplication.isAppInForeground()) {
+            boolean reminderNotification = getReminderNotificationSetting();
+
+            if (reminderNotification) {
+                Log.e(TAG, "Reminder Notification is ON");
+                try {
+                    sendNotification();
+                    scheduleNextNotification(8);
+                    return Result.success();
+                } catch (Exception e) {
+                    Log.e(TAG, "Error sending notification", e);
+                    return Result.failure();
+                }
+            } else {
+                Log.d(TAG, "Reminder notification is disabled");
                 return Result.success();
-            } catch (Exception e) {
-                Log.e(TAG, "Error sending notification", e);
-                return Result.failure();
             }
         } else {
-            Log.d(TAG, "Reminder notification is disabled");
+            Log.d(TAG, "App is in foreground; skipping notification.");
             return Result.success();
         }
     }
+
+    private void scheduleNextNotification(int delayTime) {
+        OneTimeWorkRequest oneTimeWorkRequest =
+                new OneTimeWorkRequest.Builder(n_Worker.class)
+                        .setInitialDelay(delayTime, TimeUnit.HOURS)
+                        .build();
+
+        WorkManager.getInstance(getApplicationContext()).enqueue(oneTimeWorkRequest);
+        Log.e(TAG, "Scheduled next notification in " + delayTime + " hours");
+    }
+
 
     private boolean getReminderNotificationSetting() {
         final boolean[] reminderNotification = {false};
