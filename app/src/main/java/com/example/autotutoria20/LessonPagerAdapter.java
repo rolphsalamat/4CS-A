@@ -75,6 +75,14 @@ public class LessonPagerAdapter extends FragmentStatePagerAdapter {
                 }
             case TEXT:
                 Log.e(TAG, "Text Lesson");
+
+                // lagyan ng int na accessible all around the world, para mailagay as 2nd parameter dito
+                // kapag nailagay yon, made-detect na yugn page number
+                // then sa text lesson class nalang sya i-increment
+                // so pag nadetect ni d_lesson_container class na eto na yung page number nya, then ire-
+                // relaunch nya si text lesson class, updated na yung page number base don sa value..
+
+                // so dapat base dito sa logic na to, gagana na yung part na yon??
                 return f_text_lesson.newInstance(currentLesson);
             default:
                 throw new IllegalStateException("Unexpected value: " + stepType);

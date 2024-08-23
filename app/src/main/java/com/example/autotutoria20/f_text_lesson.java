@@ -30,13 +30,16 @@ public class f_text_lesson extends Fragment {
     private int pageNumber = 1; // will be incremented after page is done :)
 
     // Initialize arrays for step counts
+    // nagtataka ako dito eh, bakit hindi nalang gamitin yung LessonSequence Class
+    // para mai-store dito yung length nung sequence per individual na module??
+    // tapos pano maii-store kung ilang page ba sa isang module lesson??
     private int[] module1Steps = {3, 2, 2, 2};
     private int[] module2Steps = {2};
     private int[] module3Steps = {2, 2, 2};
     private int[] module4Steps = {2, 2, 2};
     private int[] module5Steps = {2, 2, 2};
     private int[] module6Steps = {2, 2, 2};
-    private int[] module7Steps = {5};
+    private int[] module7Steps = {3};
     private int[] module8Steps = {2, 2, 2};
 
     private OnNextButtonClickListener callback;
@@ -69,12 +72,41 @@ public class f_text_lesson extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Initialize TextView objects
+        titleTextView = view.findViewById(R.id.text_lesson_title);
+        contentTextView_1 = view.findViewById(R.id.text_lesson_content_1);
+        contentTextView_2 = view.findViewById(R.id.text_lesson_content_2);
+        contentTextView_3 = view.findViewById(R.id.text_lesson_content_3);
+        nextButton = view.findViewById(R.id.next_button);
+
+        // Ensure TextViews and Button are not null
+        if (titleTextView == null || contentTextView_1 == null || contentTextView_2 == null || contentTextView_3 == null || nextButton == null) {
+            Log.e("f_text_lesson", "One or more views are null. Check your layout file.");
+            return;  // Early return to prevent further crashes
+        }
+
+        contentTextView_2.setVisibility(View.GONE);
+        contentTextView_3.setVisibility(View.GONE);
+
+        // Proceed with your logic
         if (getArguments() != null) {
             key = getArguments().getString(ARG_KEY);
             pageNumber = getArguments().getInt(ARG_PAGE_NUMBER, 1); // Retrieve page number
             setTotalStepsForKey(key);
             loadTextContentForKey(key);
+
+            Log.e("AWJDNLAWJKDN", "key: " + key);
         }
+
+        // Set OnClickListener for the nextButton
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleNextButtonClick(key);
+            }
+        });
+
+
     }
 
     @Override
@@ -182,12 +214,12 @@ public class f_text_lesson extends Fragment {
         }
     }
 
-    private void handleNextButtonClick() {
+    private void handleNextButtonClick(String key) {
         Log.d("handleNextButtonClick()", "currentStep(" + currentStep + ") < totalSteps(" + totalSteps + ")");
 
-        if (currentStep < totalSteps) {
+
+        if (currentStep < (totalSteps-1)) {
             showNextStep(currentStep);
-            currentStep++;
         } else {
             // Reset currentStep for the next page
             currentStep = 0;
@@ -204,6 +236,7 @@ public class f_text_lesson extends Fragment {
                 callback.onNextButtonClicked();
             }
         }
+        currentStep++;
     }
 
     private void showNextStep(int step) {
@@ -370,48 +403,33 @@ public class f_text_lesson extends Fragment {
                 String M7 = "M1_Lesson 7";
 
                 Log.e(M7, "Page Number: " + pageNumber);
-//                pageNumber++;
 
-                Log.e("M1_Lesson 7", "Page Number: " + pageNumber);
-
-                // Determine the resource names dynamically
-                String titleName = "module7_1_" + pageNumber + "_title";
-                String text1Name = "module7_1_" + pageNumber + "_content_1";
-                String text2Name = "module7_1_" + pageNumber + "_content_2";
-                String text3Name = "module7_1_" + pageNumber + "_content_3";
-
-                Log.e(M7, titleName);
-                Log.e(M7, text1Name);
-                Log.e(M7, text2Name);
-                Log.e(M7, text3Name);
 
                 // Retrieve the resource IDs
-                int titleResId = getResources().getIdentifier(titleName, "string", getContext().getPackageName());
-                int text1ResId = getResources().getIdentifier(text1Name, "string", getContext().getPackageName());
-                int text2ResId = getResources().getIdentifier(text2Name, "string", getContext().getPackageName());
-                int text3ResId = getResources().getIdentifier(text3Name, "string", getContext().getPackageName());
+                int titleResId = getResources().getIdentifier("module7_1_" + pageNumber + "_title", "string", getContext().getPackageName());
+                int text1ResId = getResources().getIdentifier("module7_1_" + pageNumber + "_content_1", "string", getContext().getPackageName());
+                int text2ResId = getResources().getIdentifier("module7_1_" + pageNumber + "_content_2", "string", getContext().getPackageName());
+                int text3ResId = getResources().getIdentifier("module7_1_" + pageNumber + "_content_3", "string", getContext().getPackageName());
 
-                if (pageNumber == 1) {
-                    Log.e(M7, "Page Number 1");
-                    titleTextView.setText(R.string.module7_1_1_title);
-                    contentTextView_1.setText(R.string.module7_1_1_content_1);
-                    contentTextView_2.setText(R.string.module7_1_1_content_2);
-                    contentTextView_3.setText(R.string.module7_1_1_content_3);
-                }
-                if (pageNumber == 2) {
-                    Log.e(M7, "Page Number 2");
-                    titleTextView.setText(R.string.module7_1_2_title);
-                    contentTextView_1.setText(R.string.module7_1_2_content_1);
-                    contentTextView_2.setText(R.string.module7_1_2_content_2);
-                    contentTextView_3.setText(R.string.module7_1_2_content_3);
+                // Log the resource IDs
+                Log.e(M7, "titleResId: " + getString(titleResId));
+                Log.e(M7, "text1ResId: " + getString(text1ResId));
+                Log.e(M7, "text2ResId: " + getString(text2ResId));
+                Log.e(M7, "text3ResId: " + getString(text3ResId));
+
+                // Check if any of the resource IDs are 0 (not found)
+                if (titleResId == 0 || text1ResId == 0 || text2ResId == 0 || text3ResId == 0) {
+                    Log.e(M7, "One or more resource IDs were not found. Check the resource names.");
+                } else {
+                    // Set the text content using the resolved resource values
+                    titleTextView.setText(getString(titleResId));
+                    contentTextView_1.setText(getString(text1ResId));
+                    contentTextView_2.setText(getString(text2ResId));
+                    contentTextView_3.setText(getString(text3ResId));
                 }
 
-//                // Set the text content
-//                titleTextView.setText(titleResId);
-//                contentTextView_1.setText(text1ResId);
-//                contentTextView_2.setText(text2ResId);
-//                contentTextView_3.setText(text3ResId);
                 break;
+
 
             // Module 8
             case "M1_Lesson 8":
