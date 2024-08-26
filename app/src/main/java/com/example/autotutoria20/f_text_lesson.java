@@ -1,27 +1,30 @@
 package com.example.autotutoria20;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.autotutoria20.R;
-
 public class f_text_lesson extends Fragment {
+
     private static final String ARG_KEY = "key";
     private static final String ARG_PAGE_NUMBER = "pageNumber"; // New argument
-    private String key;
+    private static final String ARG_MODULE = "currentModule"; // New argument
+    private static final String ARG_LESSON = "currentLesson"; // New argument
 
+    private String key;
+    private String currentModule; // Variable to store currentModule
+    private String currentLesson; // Variable to store currentLesson
 
     private TextView titleTextView;
     private TextView contentTextView_1, contentTextView_2, contentTextView_3;
@@ -41,17 +44,20 @@ public class f_text_lesson extends Fragment {
     private int[] module6Steps = {2, 2, 2};
     private int[] module7Steps = {3};
     private int[] module8Steps = {2, 2, 2};
-
+    private TextLessonCompleteListener TextLessonCompleteListener;
     private OnNextButtonClickListener callback;
     private int totalSteps = 2; // Default total steps
 
     public static f_text_lesson newInstance(String key, int pageNumber) {
+
+        Log.e("IM HERE", "IM HERE, nasa newInstance nako...");
         f_text_lesson fragment = new f_text_lesson();
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
         args.putInt(ARG_PAGE_NUMBER, pageNumber); // Pass the page number
         fragment.setArguments(args);
         return fragment;
+
     }
 
     public static f_text_lesson newInstance(String key) {
@@ -62,10 +68,32 @@ public class f_text_lesson extends Fragment {
         return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_text, container, false);
+    public void onResume() {
+        super.onResume();
+        Log.d("f_text_lesson", "onResume called");
+        Log.e("f_text_lesson", "loadTextContentForKey(" + key + ");");
+        loadTextContentForKey(key, pageNumber);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_text, container, false);
+
+        // Retrieve the key from the arguments
+        if (getArguments() != null) {
+            key = getArguments().getString(ARG_KEY);
+            pageNumber = getArguments().getInt(ARG_PAGE_NUMBER, 1); // Retrieve page number
+        } else {
+            Log.e("f_text_lesson", "Arguments bundle is null. Key and page number are not set.");
+        }
+
+        if (key == null) {
+            Log.e("f_text_lesson", "Key is null in onCreateView");
+        }
+
+        // Initialize views and other logic
+        return view;
     }
 
     @Override
@@ -93,8 +121,7 @@ public class f_text_lesson extends Fragment {
             key = getArguments().getString(ARG_KEY);
             pageNumber = getArguments().getInt(ARG_PAGE_NUMBER, 1); // Retrieve page number
             setTotalStepsForKey(key);
-            loadTextContentForKey(key);
-
+//            loadTextContentForKey(key);
             Log.e("AWJDNLAWJKDN", "key: " + key);
         }
 
@@ -105,9 +132,8 @@ public class f_text_lesson extends Fragment {
                 handleNextButtonClick(key);
             }
         });
-
-
     }
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -119,11 +145,31 @@ public class f_text_lesson extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnNextButtonClickListener");
         }
+        if (context instanceof f_text_lesson.TextLessonCompleteListener) {
+            TextLessonCompleteListener = (f_text_lesson.TextLessonCompleteListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement TextLessonCompleteListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        // Avoid memory leaks
+        callback = null;
+        TextLessonCompleteListener = null;
+    }
+
+    // Interface to notify the container activity when pre-test is complete
+    public interface TextLessonCompleteListener {
+        void onTextLessonComplete(boolean isCorrect);
     }
 
     // Define an interface to communicate with the container activity
     public interface OnNextButtonClickListener {
         void onNextButtonClicked();
+
     }
 
     private void setTotalStepsForKey(String key) {
@@ -223,13 +269,17 @@ public class f_text_lesson extends Fragment {
         } else {
             // Reset currentStep for the next page
             currentStep = 0;
-            pageNumber++;
+//            pageNumber++;
 
             // Increment the pageNumber for the next set of content
-            loadTextContentForKey(key);
+//            loadTextContentForKey(key);
 
 ////             Load the first step of the new content
 //            showNextStep(currentStep);
+
+            if (TextLessonCompleteListener != null) {
+                TextLessonCompleteListener.onTextLessonComplete(true);
+            }
 
             // Notify the parent activity that the button was clicked
             if (callback != null) {
@@ -242,6 +292,7 @@ public class f_text_lesson extends Fragment {
     private void showNextStep(int step) {
         step++;
         String TAG = "showNextStep(" + step + ")";
+
         switch (step) {
             case 1:
                 Log.e(TAG, "Step: " + step);
@@ -271,10 +322,11 @@ public class f_text_lesson extends Fragment {
 //        nextButton.setAllCaps(true);
 //    }
 
-    private void loadTextContentForKey(String key) {
+    public void loadTextContentForKey(String key, int pageNumber) {
         String TAG = "LOAD TEXT LESSON TEXTS";
         Log.d(TAG, "Page Number: " + pageNumber);
 
+        Log.e(TAG, "key: " + key);
 
         // Set the text content
         titleTextView.setText("");
@@ -411,12 +463,6 @@ public class f_text_lesson extends Fragment {
                 int text2ResId = getResources().getIdentifier("module7_1_" + pageNumber + "_content_2", "string", getContext().getPackageName());
                 int text3ResId = getResources().getIdentifier("module7_1_" + pageNumber + "_content_3", "string", getContext().getPackageName());
 
-                // Log the resource IDs
-                Log.e(M7, "titleResId: " + getString(titleResId));
-                Log.e(M7, "text1ResId: " + getString(text1ResId));
-                Log.e(M7, "text2ResId: " + getString(text2ResId));
-                Log.e(M7, "text3ResId: " + getString(text3ResId));
-
                 // Check if any of the resource IDs are 0 (not found)
                 if (titleResId == 0 || text1ResId == 0 || text2ResId == 0 || text3ResId == 0) {
                     Log.e(M7, "One or more resource IDs were not found. Check the resource names.");
@@ -426,6 +472,12 @@ public class f_text_lesson extends Fragment {
                     contentTextView_1.setText(getString(text1ResId));
                     contentTextView_2.setText(getString(text2ResId));
                     contentTextView_3.setText(getString(text3ResId));
+
+                    // Log the resource IDs
+                    Log.e(M7, "titleResId: " + getString(titleResId));
+                    Log.e(M7, "text1ResId: " + getString(text1ResId));
+                    Log.e(M7, "text2ResId: " + getString(text2ResId));
+                    Log.e(M7, "text3ResId: " + getString(text3ResId));
                 }
 
                 break;

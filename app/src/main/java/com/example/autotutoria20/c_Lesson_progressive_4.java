@@ -147,25 +147,25 @@ public class c_Lesson_progressive_4 extends AppCompatActivity {
 
         switch (key) {
             case 1:
-                newText = progress + "/" + z_Lesson_steps.lesson_4_steps[0];
+                newText = progress + "/" + LessonSequence.getNumberOfSteps("M1_Lesson 4");
                 module1ProgressText.setText(newText);
-                if (progress >= z_Lesson_steps.lesson_4_steps[0]) {
+                if (progress >= LessonSequence.getNumberOfSteps("M1_Lesson 4")) {
                     card2LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
                 }
                 break;
             case 2:
-                newText = progress + "/" + z_Lesson_steps.lesson_4_steps[1];
+                newText = progress + "/" + LessonSequence.getNumberOfSteps("M2_Lesson 4");
                 module2ProgressText.setText(newText);
-                if (progress >= z_Lesson_steps.lesson_4_steps[1]) {
+                if (progress >= LessonSequence.getNumberOfSteps("M2_Lesson 4")) {
                     card3LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
                 }
                 break;
             case 3:
-                newText = progress + "/" + z_Lesson_steps.lesson_4_steps[2];
+                newText = progress + "/" + LessonSequence.getNumberOfSteps("M3_Lesson 4");
                 module3ProgressText.setText(newText);
-                if (progress >= z_Lesson_steps.lesson_4_steps[2]) {
+                if (progress >= LessonSequence.getNumberOfSteps("M3_Lesson 4")) {
                     setCardCompletionStatus(key, true);
                     Log.d("Completed Lesson!", "Lesson 4 Completed! :D");
                 }

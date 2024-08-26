@@ -13,6 +13,15 @@ public class LessonSequence {
         POST_TEST
     }
 
+    // Method to get the number of steps for a given lesson and module
+    public static int getNumberOfSteps(String lessonModule) {
+        Map<String, StepType[]> lessonSequences = getLessonSequences();
+        if (lessonSequences.containsKey(lessonModule)) {
+            return lessonSequences.get(lessonModule).length;
+        }
+        return 0; // Return 0 if the lessonModule is not found
+    }
+
     // Map to store lesson sequences
     public static Map<String, StepType[]> getLessonSequences() {
         Map<String, StepType[]> lessonSequences = new HashMap<>();
@@ -151,6 +160,8 @@ public class LessonSequence {
         /* ===== Module 7 ===== */
         lessonSequences.put("M1_Lesson 7", new StepType[]{
                 StepType.PRE_TEST,
+                StepType.TEXT,
+                StepType.TEXT,
                 StepType.TEXT,
                 StepType.TEXT,
 //                StepType.VIDEO,

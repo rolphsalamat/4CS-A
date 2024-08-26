@@ -252,8 +252,16 @@ public class f_pre_test extends Fragment {
 
         choicesGroup.removeAllViews();
         String[] choices = currentQuestion.getChoices();
+
+        // Validate context before creating RadioButton instances
+        Context context = getContext();
+        if (context == null) {
+            Log.e("f_pre_test", "Context is null, cannot create RadioButtons");
+            return;  // Exit early if context is null to prevent a crash
+        }
+
         for (int i = 0; i < choices.length; i++) {
-            RadioButton choiceButton = new RadioButton(getContext());
+            RadioButton choiceButton = new RadioButton(context);
             choiceButton.setId(i);
             choiceButton.setText(choices[i]);
             choicesGroup.addView(choiceButton);

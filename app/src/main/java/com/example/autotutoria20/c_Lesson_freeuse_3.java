@@ -30,7 +30,7 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
 
     private AlertDialog dialog; // Declare the dialog variable outside
     private CustomLoadingDialog loadingDialog;
-    private boolean[] cardCompletionStatus = {false, false}; // Track completion status of each card
+    private boolean[] cardCompletionStatus = {false, false, false}; // Track completion status of each card
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +133,7 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
         // Update progress text views
         TextView module1ProgressText = findViewById(R.id.freeuse_lesson_1_module_3);
         TextView module2ProgressText = findViewById(R.id.freeuse_lesson_2_module_3);
+        TextView module3ProgressText = findViewById(R.id.freeuse_lesson_3_module_3);
 
         // Verify passed values...
         Log.d("updateUI()", "Module: " + key + " | Progress : " + progress);
@@ -141,25 +142,36 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
 
         switch (key) {
             case 1:
-                newText = progress + "/" + z_Lesson_steps.lesson_3_steps[0];
+                newText = progress + "/" + LessonSequence.getNumberOfSteps("M1_Lesson 3");
                 if (module1ProgressText != null) {
                     module1ProgressText.setText(newText);
                 } else {
                     Log.e("updateUI", "TextView for module 1 not found");
                 }
-                if (progress >= z_Lesson_steps.lesson_3_steps[0]) {
+                if (progress >= LessonSequence.getNumberOfSteps("M1_Lesson 3")) {
                     cardCompletionStatus[0] = true; // Mark card 1 as completed
                 }
                 break;
             case 2:
-                newText = progress + "/" + z_Lesson_steps.lesson_3_steps[1];
+                newText = progress + "/" + LessonSequence.getNumberOfSteps("M2_Lesson 3");
                 if (module2ProgressText != null) {
                     module2ProgressText.setText(newText);
                 } else {
                     Log.e("updateUI", "TextView for module 2 not found");
                 }
-                if (progress >= z_Lesson_steps.lesson_3_steps[1]) {
+                if (progress >= LessonSequence.getNumberOfSteps("M2_Lesson 3")) {
                     cardCompletionStatus[1] = true; // Mark card 2 as completed
+                }
+                break;
+            case 3:
+                newText = progress + "/" + LessonSequence.getNumberOfSteps("M3_Lesson 3");
+                if (module3ProgressText != null) {
+                    module3ProgressText.setText(newText);
+                } else {
+                    Log.e("updateUI", "TextView for module 3 not found");
+                }
+                if (progress >= LessonSequence.getNumberOfSteps("M3_Lesson 3")) {
+                    cardCompletionStatus[2] = true; // Mark card 2 as completed
                 }
                 break;
             default:

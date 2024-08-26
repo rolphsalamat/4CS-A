@@ -25,9 +25,10 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.Arrays;
 
-public class d_Lesson_container extends AppCompatActivity implements f_pre_test.PreTestCompleteListener, f_text_lesson.OnNextButtonClickListener, f_post_test.PostTestCompleteListener {
+public class d_Lesson_container extends AppCompatActivity implements f_pre_test.PreTestCompleteListener, f_text_lesson.OnNextButtonClickListener, f_text_lesson.TextLessonCompleteListener  , f_post_test.PostTestCompleteListener {
 
     private static final String TAG = "Module3Steps";
+    public int pageNumber = 1;
     private GridLayout gridLayout;
     private AlertDialog dialog;
     private int currentStep = 0;
@@ -79,8 +80,9 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
         Log.d(TAG, "isCompleted: " + isCompleted);
 
         Log.e("pagerAdapter", "LessonPagerAdapter(" + getSupportFragmentManager() + ", " + stepSequence + ", " + currentModule + "_" + currentLesson + ");");
-        pagerAdapter = new LessonPagerAdapter(getSupportFragmentManager(), stepSequence, currentModule + "_" + currentLesson, learningMode);
+        pagerAdapter = new LessonPagerAdapter(getSupportFragmentManager(), stepSequence, currentModule + "_" + currentLesson, learningMode, pageNumber);
         viewPager.setAdapter(pagerAdapter);
+
 
         // ANG WINO-WORK OUT MO IS BAKIT NAGLO-LOAD AGAD SI TEXT LESSON KAHIT NASA PRE-TEST PALANG
         // AND BAKIT DI NAG A-ADJUST LAYOUT PAG NASA VIDEO LESSON NA
@@ -97,32 +99,28 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
 
                 // Handle automatic progress by calling onNextButtonClicked()
                 if (position > currentStep) {
-                    onNextButtonClicked();  // Automatically update progresss
+                    onNextButtonClicked();  // Automatically update progress
                 }
 
-                // Get the current fragment directly from the ViewPager adapter
-                Fragment currentFragment = (Fragment) pagerAdapter.instantiateItem(viewPager, position);
+                // Use helper method to get the current fragment
+                Fragment currentFragment = getCurrentFragment();
 
                 // Handle logic based on the fragment type
-                if (currentFragment instanceof f_pre_test) {
-//                    f_pre_test.newInstance(currentModule, currentLesson, learningMode);
-//                    showToast("Pre-test detected");
-                } else if (currentFragment instanceof f_text_lesson) {
-//                    showToast("Text lesson detected");
-                } else if (currentFragment instanceof f_video_lesson) {
-//                    showToast("Video lesson detected");
+                // Handle logic based on the fragment type
+                if (currentFragment instanceof f_text_lesson) {
+                    f_text_lesson textLessonFragment = (f_text_lesson) currentFragment;
+                    Log.e("instanceof f_text_lesson", "loadTextContentForKey(" + currentModule + "_" + currentLesson + ");");
+                    textLessonFragment.loadTextContentForKey(currentModule + "_" + currentLesson, pageNumber);
 
+                } else if (currentFragment instanceof f_video_lesson) {
                     // Adjust the bottom margin of the ViewPager for video lessons
                     ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) viewPager.getLayoutParams();
-//                    params.topMargin = 800;
                     params.bottomMargin = 200;  // Adjust this value as needed
                     viewPager.setLayoutParams(params);
 
                     // Make the nextButton visible
                     nextButton.setVisibility(View.VISIBLE);
                 } else if (currentFragment instanceof f_post_test) {
-//                    showToast("Post-test detected");
-
                     // Adjust the bottom margin of the ViewPager for post-test
                     ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) viewPager.getLayoutParams();
                     params.bottomMargin = 0;  // Reset margin
@@ -130,8 +128,9 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
 
                     nextButton.setVisibility(View.GONE);
                 }
-            }
 
+                pagerAdapter.notifyDataSetChanged();
+            }
 
             @Override
             public void onPageScrollStateChanged(int state) {
@@ -295,14 +294,43 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
     public void onNextButtonClicked() {
         Log.e("onNextButtonClicked()", "currentStep: " + currentStep);
 
+        // Update the progress and move to the next step
         updateProgressAndMoveToNextStep();
 
         if (currentStep >= numberOfSteps) {
             finish();
         } else {
+            // Use the updated helper method to get the current fragment
+            Fragment currentFragment = getCurrentFragment();
+
+            // Log the current fragment's class name to see what fragment was retrieved
+            if (currentFragment != null) {
+                Log.d("onNextButtonClicked()", "Current Fragment: " + currentFragment.getClass().getSimpleName());
+            } else {
+                Log.d("onNextButtonClicked()", "Current Fragment: null");
+            }
+
+//            Log.d("onNextButtonClicked()", "Checking if the current fragment is f_text_lesson");
+//
+//            // Increment pageNumber only if the current fragment is an instance of f_text_lesson
+//            if (currentFragment instanceof f_text_lesson) {
+//                Log.d("onNextButtonClicked()", "Current fragment is f_text_lesson; incrementing pageNumber");
+//                pageNumber++;
+//            }
+
+            // Move to the next step
             viewPager.setCurrentItem(currentStep);
         }
     }
+
+
+
+    private Fragment getCurrentFragment() {
+        int position = viewPager.getCurrentItem();
+        String fragmentTag = "android:switcher:" + R.id.viewPager + ":" + position;
+        return getSupportFragmentManager().findFragmentByTag(fragmentTag);
+    }
+
 
     @Override
     public void onPreTestComplete(boolean isCorrect) {
@@ -312,6 +340,18 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
             onNextButtonClicked(); // Proceed to the next step if the test is passed
         } else {
             Toast.makeText(this, "Please complete the pre-test before proceeding.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onTextLessonComplete(boolean isCorrect) {
+        Log.d("onTextLessonComplete", "isCorrect: " + isCorrect);
+
+        if (isCorrect) {
+            pageNumber++;
+//            onNextButtonClicked(); // Proceed to the next step if the test is passed
+        } else {
+            Toast.makeText(this, "Please complete the lesson text before proceeding.", Toast.LENGTH_SHORT).show();
         }
     }
 
