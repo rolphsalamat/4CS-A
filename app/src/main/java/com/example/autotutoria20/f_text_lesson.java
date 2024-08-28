@@ -323,10 +323,53 @@ public class f_text_lesson extends Fragment {
 //    }
 
     public void loadTextContentForKey(String key, int pageNumber) {
+
         String TAG = "LOAD TEXT LESSON TEXTS";
         Log.d(TAG, "Page Number: " + pageNumber);
 
         Log.e(TAG, "key: " + key);
+
+        // Please note that ids should be:
+        // for ex:
+
+        // Page 1
+        // module7_1_1_title
+        // module7_1_1_content_1
+        // module7_1_1_content_2
+        // module7_1_1_content_3
+
+        //           |
+        // Page 2    v
+        // module7_1_2_title
+        // module7_1_2_content_1
+        // module7_1_2_content_2
+        // module7_1_2_content_3
+        //           ^
+        //           |
+
+        String title = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_title";
+        String context1 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_1";
+        String context2 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_2";
+        String context3 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_3";
+
+        // Retrieve the resource IDs
+        int titleResId = getResources().getIdentifier(title, "string", getContext().getPackageName());
+        int text1ResId = getResources().getIdentifier(context1, "string", getContext().getPackageName());
+        int text2ResId = getResources().getIdentifier(context2, "string", getContext().getPackageName());
+        int text3ResId = getResources().getIdentifier(context3, "string", getContext().getPackageName());
+
+        String TEG = "auto resource ID generator";
+
+        // pang check lang, ewan baka kasi may mali sa strings resource ko
+        if (titleResId == 0)
+            Log.e(TEG, "Title is  wrong: " + title);
+        if (text1ResId == 0)
+            Log.e(TEG, "Text 1 is wrong: " + context1);
+        if (text2ResId == 0)
+            Log.e(TEG, "Text 2 is wrong: " + context2);
+        if (text3ResId == 0)
+            Log.e(TEG, "Text 3 is wrong: " + context3);
+
 
         // Set the text content
         titleTextView.setText("");
@@ -334,183 +377,189 @@ public class f_text_lesson extends Fragment {
         contentTextView_2.setText("");
         contentTextView_3.setText("");
 
-        switch (key) {
-            // Module 1
-            case "M1_Lesson 1":
-                titleTextView.setText(R.string.module1_1_title);
-                contentTextView_1.setText(R.string.module1_1_content_1);
-                contentTextView_2.setText(R.string.module1_1_content_2);
-                contentTextView_3.setText(R.string.module1_1_content_3);
-                break;
-            case "M2_Lesson 1":
-                titleTextView.setText(R.string.module1_2_title);
-                contentTextView_1.setText(R.string.module1_2_content_1);
-                contentTextView_2.setText(R.string.module1_2_content_2);
-                contentTextView_3.setText(R.string.module1_2_content_3);
-                break;
-            case "M3_Lesson 1":
-                titleTextView.setText(R.string.module1_3_title);
-                contentTextView_1.setText(R.string.module1_3_content_1);
-                contentTextView_2.setText(R.string.module1_3_content_2);
-                contentTextView_3.setText(R.string.module1_3_content_3);
-                break;
-            case "M4_Lesson 1":
-                titleTextView.setText(R.string.module1_4_title);
-                contentTextView_1.setText(R.string.module1_4_content_1);
-                contentTextView_2.setText(R.string.module1_4_content_2);
-                contentTextView_3.setText(R.string.module1_4_content_3);
-                break;
+        // Set the text content
+        titleTextView.setText(titleResId);
+        contentTextView_1.setText(text1ResId);
+        contentTextView_2.setText(text2ResId);
+        contentTextView_3.setText(text3ResId);
 
-            // Module 2
-            case "M1_Lesson 2":
-                titleTextView.setText(R.string.module2_1_title);
-                contentTextView_1.setText(R.string.module2_1_content_1);
-                contentTextView_2.setText(R.string.module2_1_content_2);
-                contentTextView_3.setText(R.string.module2_1_content_3);
-                break;
-
-            // Module 3
-            case "M1_Lesson 3":
-                titleTextView.setText(R.string.module3_1_title);
-                contentTextView_1.setText(R.string.module3_1_content_1);
-                contentTextView_2.setText(R.string.module3_1_content_2);
-                contentTextView_3.setText(R.string.module3_1_content_3);
-                break;
-            case "M2_Lesson 3":
-                titleTextView.setText(R.string.module3_2_title);
-                contentTextView_1.setText(R.string.module3_2_content_1);
-                contentTextView_2.setText(R.string.module3_2_content_2);
-                contentTextView_3.setText(R.string.module3_2_content_3);
-                break;
-            case "M3_Lesson 3":
-                titleTextView.setText(R.string.module3_3_title);
-                contentTextView_1.setText(R.string.module3_3_content_1);
-                contentTextView_2.setText(R.string.module3_3_content_2);
-                contentTextView_3.setText(R.string.module3_3_content_3);
-                break;
-
-            // Module 4
-            case "M1_Lesson 4":
-                titleTextView.setText(R.string.module4_1_title);
-                contentTextView_1.setText(R.string.module4_1_content_1);
-                contentTextView_2.setText(R.string.module4_1_content_2);
-                contentTextView_3.setText(R.string.module4_1_content_3);
-                break;
-            case "M2_Lesson 4":
-                titleTextView.setText(R.string.module4_2_title);
-                contentTextView_1.setText(R.string.module4_2_content_1);
-                contentTextView_2.setText(R.string.module4_2_content_2);
-                contentTextView_3.setText(R.string.module4_2_content_3);
-                break;
-            case "M3_Lesson 4":
-                titleTextView.setText(R.string.module4_3_title);
-                contentTextView_1.setText(R.string.module4_3_content_1);
-                contentTextView_2.setText(R.string.module4_3_content_2);
-                contentTextView_3.setText(R.string.module4_3_content_3);
-                break;
-
-            // Module 5
-            case "M1_Lesson 5":
-                titleTextView.setText(R.string.module5_1_title);
-                contentTextView_1.setText(R.string.module5_1_content_1);
-                contentTextView_2.setText(R.string.module5_1_content_2);
-                contentTextView_3.setText(R.string.module5_1_content_3);
-                break;
-            case "M2_Lesson 5":
-                titleTextView.setText(R.string.module5_2_title);
-                contentTextView_1.setText(R.string.module5_2_content_1);
-                contentTextView_2.setText(R.string.module5_2_content_2);
-                contentTextView_3.setText(R.string.module5_2_content_3);
-                break;
-            case "M3_Lesson 5":
-                titleTextView.setText(R.string.module5_3_title);
-                contentTextView_1.setText(R.string.module5_3_content_1);
-                contentTextView_2.setText(R.string.module5_3_content_2);
-                contentTextView_3.setText(R.string.module5_3_content_3);
-                break;
-
-            // Module 6
-            case "M1_Lesson 6":
-                titleTextView.setText(R.string.module6_1_title);
-                contentTextView_1.setText(R.string.module6_1_content_1);
-                contentTextView_2.setText(R.string.module6_1_content_2);
-                contentTextView_3.setText(R.string.module6_1_content_3);
-                break;
-            case "M2_Lesson 6":
-                titleTextView.setText(R.string.module6_2_title);
-                contentTextView_1.setText(R.string.module6_2_content_1);
-                contentTextView_2.setText(R.string.module6_2_content_2);
-                contentTextView_3.setText(R.string.module6_2_content_3);
-                break;
-            case "M3_Lesson 6":
-                titleTextView.setText(R.string.module6_3_title);
-                contentTextView_1.setText(R.string.module6_3_content_1);
-                contentTextView_2.setText(R.string.module6_3_content_2);
-                contentTextView_3.setText(R.string.module6_3_content_3);
-                break;
-
-            // Module 7
-            case "M1_Lesson 7":
-
-                String M7 = "M1_Lesson 7";
-
-                Log.e(M7, "Page Number: " + pageNumber);
-
-
-                // Retrieve the resource IDs
-                int titleResId = getResources().getIdentifier("module7_1_" + pageNumber + "_title", "string", getContext().getPackageName());
-                int text1ResId = getResources().getIdentifier("module7_1_" + pageNumber + "_content_1", "string", getContext().getPackageName());
-                int text2ResId = getResources().getIdentifier("module7_1_" + pageNumber + "_content_2", "string", getContext().getPackageName());
-                int text3ResId = getResources().getIdentifier("module7_1_" + pageNumber + "_content_3", "string", getContext().getPackageName());
-
-                // Check if any of the resource IDs are 0 (not found)
-                if (titleResId == 0 || text1ResId == 0 || text2ResId == 0 || text3ResId == 0) {
-                    Log.e(M7, "One or more resource IDs were not found. Check the resource names.");
-                } else {
-                    // Set the text content using the resolved resource values
-                    titleTextView.setText(getString(titleResId));
-                    contentTextView_1.setText(getString(text1ResId));
-                    contentTextView_2.setText(getString(text2ResId));
-                    contentTextView_3.setText(getString(text3ResId));
-
-                    // Log the resource IDs
-                    Log.e(M7, "titleResId: " + getString(titleResId));
-                    Log.e(M7, "text1ResId: " + getString(text1ResId));
-                    Log.e(M7, "text2ResId: " + getString(text2ResId));
-                    Log.e(M7, "text3ResId: " + getString(text3ResId));
-                }
-
-                break;
-
-
-            // Module 8
-            case "M1_Lesson 8":
-                titleTextView.setText(R.string.module8_1_title);
-                contentTextView_1.setText(R.string.module8_1_content_1);
-                contentTextView_2.setText(R.string.module8_1_content_2);
-                contentTextView_3.setText(R.string.module8_1_content_3);
-                break;
-            case "M2_Lesson 8":
-                titleTextView.setText(R.string.module8_2_title);
-                contentTextView_1.setText(R.string.module8_2_content_1);
-                contentTextView_2.setText(R.string.module8_2_content_2);
-                contentTextView_3.setText(R.string.module8_2_content_3);
-                break;
-            case "M3_Lesson 8":
-                titleTextView.setText(R.string.module8_3_title);
-                contentTextView_1.setText(R.string.module8_3_content_1);
-                contentTextView_2.setText(R.string.module8_3_content_2);
-                contentTextView_3.setText(R.string.module8_3_content_3);
-                break;
-
-            // Fallback case
-            default:
-                titleTextView.setText("Default Title");
-                contentTextView_1.setText("Default Text 1");
-                contentTextView_2.setText("Default Text 2");
-                contentTextView_3.setText("Default Text 3");
-                break;
-        }
+//        switch (key) {
+//            // Module 1
+//            case "M1_Lesson 1":
+//                titleTextView.setText(R.string.module1_1_title);
+//                contentTextView_1.setText(R.string.module1_1_content_1);
+//                contentTextView_2.setText(R.string.module1_1_content_2);
+//                contentTextView_3.setText(R.string.module1_1_content_3);
+//                break;
+//            case "M2_Lesson 1":
+//                titleTextView.setText(R.string.module1_2_title);
+//                contentTextView_1.setText(R.string.module1_2_content_1);
+//                contentTextView_2.setText(R.string.module1_2_content_2);
+//                contentTextView_3.setText(R.string.module1_2_content_3);
+//                break;
+//            case "M3_Lesson 1":
+//                titleTextView.setText(R.string.module1_3_title);
+//                contentTextView_1.setText(R.string.module1_3_content_1);
+//                contentTextView_2.setText(R.string.module1_3_content_2);
+//                contentTextView_3.setText(R.string.module1_3_content_3);
+//                break;
+//            case "M4_Lesson 1":
+//                titleTextView.setText(R.string.module1_4_title);
+//                contentTextView_1.setText(R.string.module1_4_content_1);
+//                contentTextView_2.setText(R.string.module1_4_content_2);
+//                contentTextView_3.setText(R.string.module1_4_content_3);
+//                break;
+//
+//            // Module 2
+//            case "M1_Lesson 2":
+//                titleTextView.setText(R.string.module2_1_title);
+//                contentTextView_1.setText(R.string.module2_1_content_1);
+//                contentTextView_2.setText(R.string.module2_1_content_2);
+//                contentTextView_3.setText(R.string.module2_1_content_3);
+//                break;
+//
+//            // Module 3
+//            case "M1_Lesson 3":
+//                titleTextView.setText(R.string.module3_1_title);
+//                contentTextView_1.setText(R.string.module3_1_content_1);
+//                contentTextView_2.setText(R.string.module3_1_content_2);
+//                contentTextView_3.setText(R.string.module3_1_content_3);
+//                break;
+//            case "M2_Lesson 3":
+//                titleTextView.setText(R.string.module3_2_title);
+//                contentTextView_1.setText(R.string.module3_2_content_1);
+//                contentTextView_2.setText(R.string.module3_2_content_2);
+//                contentTextView_3.setText(R.string.module3_2_content_3);
+//                break;
+//            case "M3_Lesson 3":
+//                titleTextView.setText(R.string.module3_3_title);
+//                contentTextView_1.setText(R.string.module3_3_content_1);
+//                contentTextView_2.setText(R.string.module3_3_content_2);
+//                contentTextView_3.setText(R.string.module3_3_content_3);
+//                break;
+//
+//            // Module 4
+//            case "M1_Lesson 4":
+//                titleTextView.setText(R.string.module4_1_title);
+//                contentTextView_1.setText(R.string.module4_1_content_1);
+//                contentTextView_2.setText(R.string.module4_1_content_2);
+//                contentTextView_3.setText(R.string.module4_1_content_3);
+//                break;
+//            case "M2_Lesson 4":
+//                titleTextView.setText(R.string.module4_2_title);
+//                contentTextView_1.setText(R.string.module4_2_content_1);
+//                contentTextView_2.setText(R.string.module4_2_content_2);
+//                contentTextView_3.setText(R.string.module4_2_content_3);
+//                break;
+//            case "M3_Lesson 4":
+//                titleTextView.setText(R.string.module4_3_title);
+//                contentTextView_1.setText(R.string.module4_3_content_1);
+//                contentTextView_2.setText(R.string.module4_3_content_2);
+//                contentTextView_3.setText(R.string.module4_3_content_3);
+//                break;
+//
+//            // Module 5
+//            case "M1_Lesson 5":
+//                titleTextView.setText(R.string.module5_1_title);
+//                contentTextView_1.setText(R.string.module5_1_content_1);
+//                contentTextView_2.setText(R.string.module5_1_content_2);
+//                contentTextView_3.setText(R.string.module5_1_content_3);
+//                break;
+//            case "M2_Lesson 5":
+//                titleTextView.setText(R.string.module5_2_title);
+//                contentTextView_1.setText(R.string.module5_2_content_1);
+//                contentTextView_2.setText(R.string.module5_2_content_2);
+//                contentTextView_3.setText(R.string.module5_2_content_3);
+//                break;
+//            case "M3_Lesson 5":
+//                titleTextView.setText(R.string.module5_3_title);
+//                contentTextView_1.setText(R.string.module5_3_content_1);
+//                contentTextView_2.setText(R.string.module5_3_content_2);
+//                contentTextView_3.setText(R.string.module5_3_content_3);
+//                break;
+//
+//            // Module 6
+//            case "M1_Lesson 6":
+//                titleTextView.setText(R.string.module6_1_title);
+//                contentTextView_1.setText(R.string.module6_1_content_1);
+//                contentTextView_2.setText(R.string.module6_1_content_2);
+//                contentTextView_3.setText(R.string.module6_1_content_3);
+//                break;
+//            case "M2_Lesson 6":
+//                titleTextView.setText(R.string.module6_2_title);
+//                contentTextView_1.setText(R.string.module6_2_content_1);
+//                contentTextView_2.setText(R.string.module6_2_content_2);
+//                contentTextView_3.setText(R.string.module6_2_content_3);
+//                break;
+//            case "M3_Lesson 6":
+//                titleTextView.setText(R.string.module6_3_title);
+//                contentTextView_1.setText(R.string.module6_3_content_1);
+//                contentTextView_2.setText(R.string.module6_3_content_2);
+//                contentTextView_3.setText(R.string.module6_3_content_3);
+//                break;
+//
+//            // Module 7
+//            case "M1_Lesson 7":
+//
+//                String M7 = "M1_Lesson 7";
+//
+//                Log.e(M7, "Page Number: " + pageNumber);
+//
+//
+//                // Retrieve the resource IDs
+//                int titleResId = getResources().getIdentifier("module7_1_" + pageNumber + "_title", "string", getContext().getPackageName());
+//                int text1ResId = getResources().getIdentifier("module7_1_" + pageNumber + "_content_1", "string", getContext().getPackageName());
+//                int text2ResId = getResources().getIdentifier("module7_1_" + pageNumber + "_content_2", "string", getContext().getPackageName());
+//                int text3ResId = getResources().getIdentifier("module7_1_" + pageNumber + "_content_3", "string", getContext().getPackageName());
+//
+//                // Check if any of the resource IDs are 0 (not found)
+//                if (titleResId == 0 || text1ResId == 0 || text2ResId == 0 || text3ResId == 0) {
+//                    Log.e(M7, "One or more resource IDs were not found. Check the resource names.");
+//                } else {
+//                    // Set the text content using the resolved resource values
+//                    titleTextView.setText(getString(titleResId));
+//                    contentTextView_1.setText(getString(text1ResId));
+//                    contentTextView_2.setText(getString(text2ResId));
+//                    contentTextView_3.setText(getString(text3ResId));
+//
+//                    // Log the resource IDs
+//                    Log.e(M7, "titleResId: " + getString(titleResId));
+//                    Log.e(M7, "text1ResId: " + getString(text1ResId));
+//                    Log.e(M7, "text2ResId: " + getString(text2ResId));
+//                    Log.e(M7, "text3ResId: " + getString(text3ResId));
+//                }
+//
+//                break;
+//
+//
+//            // Module 8
+//            case "M1_Lesson 8":
+//                titleTextView.setText(R.string.module8_1_title);
+//                contentTextView_1.setText(R.string.module8_1_content_1);
+//                contentTextView_2.setText(R.string.module8_1_content_2);
+//                contentTextView_3.setText(R.string.module8_1_content_3);
+//                break;
+//            case "M2_Lesson 8":
+//                titleTextView.setText(R.string.module8_2_title);
+//                contentTextView_1.setText(R.string.module8_2_content_1);
+//                contentTextView_2.setText(R.string.module8_2_content_2);
+//                contentTextView_3.setText(R.string.module8_2_content_3);
+//                break;
+//            case "M3_Lesson 8":
+//                titleTextView.setText(R.string.module8_3_title);
+//                contentTextView_1.setText(R.string.module8_3_content_1);
+//                contentTextView_2.setText(R.string.module8_3_content_2);
+//                contentTextView_3.setText(R.string.module8_3_content_3);
+//                break;
+//
+//            // Fallback case
+//            default:
+//                titleTextView.setText("Default Title");
+//                contentTextView_1.setText("Default Text 1");
+//                contentTextView_2.setText("Default Text 2");
+//                contentTextView_3.setText("Default Text 3");
+//                break;
+//        }
     }
 
 }

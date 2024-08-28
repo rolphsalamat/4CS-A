@@ -30,6 +30,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Arrays;
+
 public class b_main_1_lesson_progressive extends Fragment {
 
     private FrameLayout lockedOverlayCard1, lockedOverlayCard2, lockedOverlayCard3, lockedOverlayCard4,
@@ -127,16 +129,24 @@ public class b_main_1_lesson_progressive extends Fragment {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
+
+
                     int totalModules = 0;
 
                     // Reset card progress before updating
                     resetCardProgress();
 
                     for (DocumentSnapshot lessonDoc : task.getResult()) {
+
+//                        int i
                         int lessonNumber = Integer.parseInt(lessonDoc.getId().substring(7).trim());
+                        Log.e(TAG, "lessonNumber: " + lessonNumber);
                         int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
+                        Log.e(TAG, "maxProgressValues: " + Arrays.toString(maxProgressValues));
                         totalModules += maxProgressValues.length;
+                        Log.e(TAG, "totalModules: " + totalModules);
                     }
+
 
                     int moduleCounter = 0;
 
@@ -145,11 +155,14 @@ public class b_main_1_lesson_progressive extends Fragment {
                         int totalProgress = 0;
                         int totalMaxProgress = 0;
                         int lessonNumber = Integer.parseInt(lesson.substring(7).trim());
+                        Log.e(TAG, "lessonNumber: " + lessonNumber);
                         int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
+                        Log.e(TAG, "maxProgressValues: " + Arrays.toString(maxProgressValues));
 
                         for (int i = 0; i < maxProgressValues.length; i++) {
                             String key = "M" + (i + 1);
                             Long moduleProgress = lessonDoc.getLong(key);
+                            Log.e(TAG, "moduleProgress: " + moduleProgress);
                             if (moduleProgress != null) {
                                 totalProgress += moduleProgress;
                                 totalMaxProgress += maxProgressValues[i];

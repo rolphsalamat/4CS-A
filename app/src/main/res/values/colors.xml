@@ -15,6 +15,11 @@
     <color name="yellow">#FFEB3B</color>
     <color name="navy_blue">#212e5a</color>
 
+    <!-- Populate Grid Layout -->
+    <color name="current_step">#66212e5a</color>
+    <color name="completed_step">#FF212e5a</color>
+    <color name="upcoming_step">#FFFFFFFF</color>
+
     <!-- Custom Colors -->
     <color name="facebook">#1876f3</color>
     <color name="primaryColor">#3F51B5</color>

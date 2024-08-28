@@ -1,5 +1,9 @@
 package com.example.autotutoria20;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class e_Module_3 {
     // Pre-test questions, choices, and answers for Lesson 1
     public static final String[] pre_test_lesson_1_questions = {
@@ -151,10 +155,15 @@ public class e_Module_3 {
 
     // Method to convert string arrays to e_Question objects
     private static e_Question[] getQuestions(String[] questions, String[][] choices, int[] answers) {
-        e_Question[] questionArray = new e_Question[questions.length];
+        List<e_Question> questionList = new ArrayList<>();
         for (int i = 0; i < questions.length; i++) {
-            questionArray[i] = new e_Question(questions[i], choices[i], answers[i], e_Question.Difficulty.EASY); // Adjust difficulty if needed
+            questionList.add(new e_Question(questions[i], choices[i], answers[i], e_Question.Difficulty.EASY)); // Adjust difficulty if needed
         }
-        return questionArray;
+
+        // Shuffle the list to randomize the order of the questions
+        Collections.shuffle(questionList);
+
+        // Convert the list back to an array
+        return questionList.toArray(new e_Question[0]);
     }
 }

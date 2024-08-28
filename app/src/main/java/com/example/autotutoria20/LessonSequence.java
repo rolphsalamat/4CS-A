@@ -22,171 +22,181 @@ public class LessonSequence {
         return 0; // Return 0 if the lessonModule is not found
     }
 
+    // Method to get the number of text lessons in the lessonSequence
+    public static int countTextLessons(LessonSequence.StepType[] stepSequence) {
+        int textLessonCount = 0;
+        for (LessonSequence.StepType step : stepSequence) {
+            if (step == StepType.TEXT) {
+                textLessonCount++;
+            }
+        }
+        return textLessonCount;
+    }
+
+
     // Map to store lesson sequences
     public static Map<String, StepType[]> getLessonSequences() {
         Map<String, StepType[]> lessonSequences = new HashMap<>();
 
-        /* ===== Module 1 ===== */
+        /* =============== Module 1 =============== */
         lessonSequences.put("M1_Lesson 1", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M2_Lesson 1", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M3_Lesson 1", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M4_Lesson 1", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
 
-        /* ===== Module 2 ===== */
+        /* =============== Module 2 =============== */
         lessonSequences.put("M1_Lesson 2", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
 
-        /* ===== Module 3 ===== */
+        /* =============== Module 3 =============== */
         lessonSequences.put("M1_Lesson 3", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M2_Lesson 3", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M3_Lesson 3", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
 //                StepType.VIDEO,
                 StepType.POST_TEST
         });
 
-        /* ===== Module 4 ===== */
+        /* =============== Module 4 =============== */
         lessonSequences.put("M1_Lesson 4", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M2_Lesson 4", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M3_Lesson 4", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
 //                StepType.VIDEO,
                 StepType.POST_TEST
         });
 
-        /* ===== Module 5 ===== */
+        /* =============== Module 5 =============== */
         lessonSequences.put("M1_Lesson 5", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
 //                StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M2_Lesson 5", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
 //                StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M3_Lesson 5", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
 //                StepType.VIDEO,
                 StepType.POST_TEST
         });
 
-        /* ===== Module 6 ===== */
+        /* =============== Module 6 =============== */
         lessonSequences.put("M1_Lesson 6", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
 //                StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M2_Lesson 6", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
 //                StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M3_Lesson 6", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
 //                StepType.VIDEO,
                 StepType.POST_TEST
         });
 
-        /* ===== Module 7 ===== */
+        /* =============== Module 7 =============== */
         lessonSequences.put("M1_Lesson 7", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
                 StepType.TEXT,
-                StepType.TEXT,
-                StepType.TEXT,
 //                StepType.VIDEO,
                 StepType.POST_TEST
         });
 
-        /* ===== Module 8 ===== */
+        /* =============== Module 8 =============== */
         lessonSequences.put("M1_Lesson 8", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
 //                StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M2_Lesson 8", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
 //                StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M3_Lesson 8", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-                StepType.TEXT,
+//                StepType.TEXT,
 //                StepType.VIDEO,
                 StepType.POST_TEST
         });
@@ -236,4 +246,15 @@ public class LessonSequence {
 
         return lessonVideoLinks;
     }
+
+    public static int getRemainingTextLessons(LessonSequence.StepType[] stepSequence, int currentStep) {
+        int textLessonCount = 0;
+        for (int i = currentStep + 1; i < stepSequence.length; i++) {
+            if (stepSequence[i] == StepType.TEXT) {
+                textLessonCount++;
+            }
+        }
+        return textLessonCount;
+    }
+
 }

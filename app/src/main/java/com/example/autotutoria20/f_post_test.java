@@ -125,53 +125,59 @@ public class f_post_test extends Fragment {
         }
 
         submitButton.setOnClickListener(v -> {
+
+
             if (choicesGroup.getCheckedRadioButtonId() == -1) {
                 Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
                 return;
-            }
-
-            boolean correctAnswer = checkAnswer();
-            Log.e("submitButton.onClick", "correctAnswer: " + correctAnswer);
-
-            // Update BKT model with the result of the answer
-            bktModel.updateKnowledge(correctAnswer);
-
-            // Log the updated knowledge probability
-            double knowledgeProb = bktModel.getKnowledgeProbability();
-            Log.e("submitButton.onClick", "Updated Knowledge Probability: " + knowledgeProb);
-
-            // Ensure valid indices are used
-            int moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
-            int lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
-
-            if (moduleIndex < 0 || lessonIndex < 0) {
-                Log.e("submitButton.onClick", "Invalid module or lesson index");
-                return;
-            }
-
-            // Update the score
-            bktModel.updateScore(moduleIndex, lessonIndex, knowledgeProb, isProgressiveMode);
-
-            // Notify the listener
-            if (postTestCompleteListener != null) {
-                postTestCompleteListener.onPostTestComplete(correctAnswer);
-            }
-
-            // If the answer is correct, finish the post-test
-            if (correctAnswer) {
-                Toast.makeText(getContext(), "Post-test completed with correct answer!", Toast.LENGTH_SHORT).show();
-                bktModel.logScores();
-                return;
-            }
-
-            // Move to the next question if the answer was incorrect
-            if (currentQuestionIndex < questions.length - 1) {
-                currentQuestionIndex++;
-                loadQuestion();
             } else {
-                Toast.makeText(getContext(), "Post-test completed!", Toast.LENGTH_SHORT).show();
-                bktModel.logScores();
+                boolean correctAnswer = checkAnswer();
+                Log.e("submitButton.onClick", "correctAnswer: " + correctAnswer);
+
+                // Update BKT model with the result of the answer
+                bktModel.updateKnowledge(correctAnswer);
+
+                // Log the updated knowledge probability
+                double knowledgeProb = bktModel.getKnowledgeProbability();
+                Log.e("submitButton.onClick", "Updated Knowledge Probability: " + knowledgeProb);
+
+                // Ensure valid indices are used
+                int moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
+                int lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
+
+                if (moduleIndex < 0 || lessonIndex < 0) {
+                    Log.e("submitButton.onClick", "Invalid module or lesson index");
+                    return;
+                }
+
+                // Update the score
+                bktModel.updateScore(moduleIndex, lessonIndex, knowledgeProb, isProgressiveMode);
+
+                // Notify the listener
+                if (postTestCompleteListener != null) {
+                    // If the answer is correct, finish the post-test
+                    if (correctAnswer) {
+                    Toast.makeText(getContext(), "Post-test completed with correct answer!", Toast.LENGTH_SHORT).show();
+                        bktModel.logScores();
+                        postTestCompleteListener.onPostTestComplete(correctAnswer);
+                        return;
+                    }
+                }
+
+
+
+                // Move to the next question if the answer was incorrect
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                    loadQuestion();
+                }
+//                else {
+//                    Toast.makeText(getContext(), "Post-test completed!", Toast.LENGTH_SHORT).show();
+//                    bktModel.logScores();
+//                }
             }
+
+
         });
     }
 
@@ -247,6 +253,9 @@ public class f_post_test extends Fragment {
         // Reset isCorrect before loading a new question
         isCorrect = false;
 
+        // Clear previous selection
+        choicesGroup.clearCheck();
+
         e_Question currentQuestion = questions[currentQuestionIndex];
         questionText.setText(currentQuestion.getQuestion());
 
@@ -281,9 +290,9 @@ public class f_post_test extends Fragment {
             e_Question currentQuestion = questions[currentQuestionIndex];
             if (selectedId == currentQuestion.getCorrectAnswer()) {
                 Context context = getContext();
-                if (context != null) {
-                    Toast.makeText(context, "Correct!", Toast.LENGTH_SHORT).show();
-                }
+//                if (context != null) {
+//                    Toast.makeText(context, "Correct!", Toast.LENGTH_SHORT).show();
+//                }
                 isCorrect = true;
                 Log.e(TAG, "Answer is Correct! | isCorrect: " + isCorrect);
                 return true;  // Correct answer

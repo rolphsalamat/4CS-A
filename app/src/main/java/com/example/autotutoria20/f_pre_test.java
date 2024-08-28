@@ -26,6 +26,7 @@ public class f_pre_test extends Fragment {
     private e_Question[] questions;
     private TextView questionText;
     private RadioGroup choicesGroup;
+    private int answerAttempt = 0;
     private Button submitButton;
     private boolean isCorrect = false;
     private boolean isProgressiveMode = true; // Default to Progressive Mode
@@ -84,15 +85,9 @@ public class f_pre_test extends Fragment {
             isProgressiveMode = getArguments().getString(ARG_MODE).equals("Progressive Mode");
         }
 
-        int lessonNumber = getLessonIndex(getArguments().getString(ARG_LESSON));
-
-        // In f_pre_test fragment, ensure you're passing correct lesson
+        // Initialize BKT Scores
         String collectionPath = isProgressiveMode ? "Progressive Mode" : "Free Use Mode";
-        String documentName = "Lesson " + (lessonNumber + 1);
-
-//        // Initialize BKT Scores
-//        String collectionPath = isProgressiveMode ? "Progressive Mode" : "Free Use Mode";
-//        String documentName = "Lesson " + getLessonIndex(getArguments().getString(ARG_LESSON));
+        String documentName = "Lesson " + (getLessonIndex(getArguments().getString(ARG_LESSON)) + 1);
         bktModel.initializeBKTScores(collectionPath, documentName, bktScores -> {
             if (bktScores != null) {
                 Log.d("f_pre_test", "BKT Scores initialized: " + bktScores);
@@ -134,46 +129,63 @@ public class f_pre_test extends Fragment {
         }
 
         submitButton.setOnClickListener(v -> {
+
+            answerAttempt++;
+
+            // add validator if no selected answer??
+            // it should ask the user to select an answer otherwise this onClickListener will not do anything
+
+            if (choicesGroup.isSelected()) {
+//                Toast.makeText(getContext(), "Meron kang selected: " + choicesGroup.getCheckedRadioButtonId(), Toast.LENGTH_SHORT).show();
+            }
             if (choicesGroup.getCheckedRadioButtonId() == -1) {
-                Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
                 return;
-            }
-
-            boolean correctAnswer = checkAnswer();
-            Log.e("submitButton.onClick", "correctAnswer: " + correctAnswer);
-
-            // Update BKT model with the result of the answer
-            bktModel.updateKnowledge(correctAnswer);
-
-            // Log the updated knowledge probability
-            double knowledgeProb = bktModel.getKnowledgeProbability();
-            Log.e("submitButton.onClick", "Updated Knowledge Probability: " + knowledgeProb);
-
-            // Ensure valid indices are used
-            int moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
-            int lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
-
-            if (moduleIndex < 0 || lessonIndex < 0) {
-                Log.e("submitButton.onClick", "Invalid module or lesson index");
-                return;
-            }
-
-            // Update the score
-            bktModel.updateScore(moduleIndex, lessonIndex, knowledgeProb, isProgressiveMode);
-
-            // Notify the listener
-            if (preTestCompleteListener != null) {
-                preTestCompleteListener.onPreTestComplete(correctAnswer);
-            }
-
-            // Move to the next question or finish
-            if (currentQuestionIndex < questions.length - 1) {
-                currentQuestionIndex++;
-                loadQuestion();
             } else {
-                Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
-                bktModel.logScores();
+                boolean correctAnswer = checkAnswer();
+                Log.e("submitButton.onClick", "correctAnswer: " + correctAnswer);
+
+                // Update BKT model with the result of the answer
+                bktModel.updateKnowledge(correctAnswer);
+
+                // Log the updated knowledge probability
+                double knowledgeProb = bktModel.getKnowledgeProbability();
+                Log.e("submitButton.onClick", "Updated Knowledge Probability: " + knowledgeProb);
+
+                // Ensure valid indices are used
+                int moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
+                int lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
+
+                if (moduleIndex < 0 || lessonIndex < 0) {
+                    Log.e("submitButton.onClick", "Invalid module or lesson index");
+                    return;
+                }
+
+                // Update the score
+                bktModel.updateScore(moduleIndex, lessonIndex, knowledgeProb, isProgressiveMode);
+
+                // Notify the listener
+                if (preTestCompleteListener != null) {
+                    preTestCompleteListener.onPreTestComplete(correctAnswer);
+                }
+
+                // Move to the next question
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                } else {
+                    currentQuestionIndex = 0; // Reset to the first question if all are answered
+//                    Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
+                    bktModel.logScores();
+                }
+
+                // to give student chance to get correct answer before loading another question
+                if (answerAttempt >= 2) {
+                    loadQuestion(); // Load the next question
+                    answerAttempt = 0;
+                }
             }
+
+
         });
     }
 
@@ -247,6 +259,9 @@ public class f_pre_test extends Fragment {
     private void loadQuestion() {
         isCorrect = false;
 
+        // Clear previous selection
+        choicesGroup.clearCheck();
+
         e_Question currentQuestion = questions[currentQuestionIndex];
         questionText.setText(currentQuestion.getQuestion());
 
@@ -268,11 +283,16 @@ public class f_pre_test extends Fragment {
         }
     }
 
+
     public boolean checkAnswer() {
         int selectedId = choicesGroup.getCheckedRadioButtonId();
         if (selectedId != -1) {
             e_Question currentQuestion = questions[currentQuestionIndex];
             isCorrect = (selectedId == currentQuestion.getCorrectAnswer());
+
+            if (!isCorrect) {
+                Toast.makeText(getContext(), "Incorrect answer.", Toast.LENGTH_SHORT).show();
+            }
             return isCorrect;  // Return if the answer is correct
         } else {
             Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
@@ -287,10 +307,7 @@ public class f_pre_test extends Fragment {
             case "M2": return 1;
             case "M3": return 2;
             case "M4": return 3;
-            case "M5": return 4;
-            case "M6": return 5;
-            case "M7": return 6;
-            case "M8": return 7;
+            // Add more cases as needed
             default: throw new IllegalArgumentException("Invalid module: " + module);
         }
     }
@@ -301,14 +318,14 @@ public class f_pre_test extends Fragment {
             case "Lesson 2": return 1;
             case "Lesson 3": return 2;
             case "Lesson 4": return 3;
-            case "Lesson 5": return 4; // Add more lessons as needed
+            case "Lesson 5": return 4;
             case "Lesson 6": return 5;
             case "Lesson 7": return 6;
             case "Lesson 8": return 7;
+            // Add more cases as needed
             default:
                 Log.e("getLessonIndex", "Invalid lesson: " + lesson);
                 throw new IllegalArgumentException("Invalid lesson: " + lesson);
         }
     }
-
 }

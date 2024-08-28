@@ -2,27 +2,27 @@
 <resources>
 
     <!-- Module 1 -->
-    <string name="module1_1_title">Alphabets and Strings</string>
-    <string name="module1_1_content_1">Welcome to Module 1</string>
-    <string name="module1_1_content_2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
-    <string name="module1_1_content_3">Go to res/values to modify the strings</string>
+    <string name="module1_1_1_title">Alphabets and Strings</string>
+    <string name="module1_1_1_content_1">Welcome to Module 1</string>
+    <string name="module1_1_1_content_2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="module1_1_1_content_3">Go to res/values to modify the strings</string>
 
     <!-- Module 2 -->
-    <string name="module1_2_title">Operations on Strings</string>
-    <string name="module1_2_content_1">Welcome to Module 2</string>
-    <string name="module1_2_content_2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
-    <string name="module1_2_content_3">Go to res/values to modify the strings</string>
+    <string name="module1_2_1_title">Operations on Strings</string>
+    <string name="module1_2_1_content_1">Welcome to Module 2</string>
+    <string name="module1_2_1_content_2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="module1_2_1_content_3">Go to res/values to modify the strings</string>
 
     <!-- Module 3 -->
-    <string name="module1_3_title">Definition of a Formal Language</string>
-    <string name="module1_3_content_1">Welcome to Module 3</string>
-    <string name="module1_3_content_2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
-    <string name="module1_3_content_3">Go to res/values to modify the strings</string>
+    <string name="module1_3_1_title">Definition of a Formal Language</string>
+    <string name="module1_3_1_content_1">Welcome to Module 3</string>
+    <string name="module1_3_1_content_2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="module1_3_1_content_3">Go to res/values to modify the strings</string>
 
     <!-- Module 4 -->
-    <string name="module1_4_title">Overview of Automata Theory</string>
-    <string name="module1_4_content_1">Welcome to Module 4</string>
-    <string name="module1_4_content_2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
-    <string name="module1_4_content_3">Go to res/values to modify the strings</string>
+    <string name="module1_4_1_title">Overview of Automata Theory</string>
+    <string name="module1_4_1_content_1">Welcome to Module 4</string>
+    <string name="module1_4_1_content_2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="module1_4_1_content_3">Go to res/values to modify the strings</string>
 
 </resources>

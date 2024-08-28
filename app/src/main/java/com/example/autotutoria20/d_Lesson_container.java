@@ -31,6 +31,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
     public int pageNumber = 1;
     private GridLayout gridLayout;
     private AlertDialog dialog;
+    private int numberOfTextLessons = 0; // Declare here
     private int currentStep = 0;
     private int numberOfSteps = 0;
     private FirebaseFirestore db;
@@ -42,6 +43,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
     private LessonSequence.StepType[] stepSequence;
     private ViewPager viewPager;
     private LessonPagerAdapter pagerAdapter;
+    private boolean isLessonFinished = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +69,16 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
         if (stepSequence != null) {
             Log.d(TAG, "Step sequence: " + Arrays.toString(stepSequence));
             numberOfSteps = stepSequence.length;
+
+            // Count the number of TEXT lessons in the sequence
+            numberOfTextLessons = LessonSequence.countTextLessons(stepSequence);
+            Log.d(TAG, "Number of TEXT lessons in " + currentModule + "_" + currentLesson + ": " + numberOfTextLessons);
         } else {
             Log.d(TAG, "Step sequence is null for key: " + currentModule + "_" + currentLesson);
             stepSequence = new LessonSequence.StepType[0]; // Assign an empty array to avoid null
-            Toast.makeText(this, "No steps found for this module and lesson.", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this, "No steps found for this module and lesson.", Toast.LENGTH_SHORT).show();
         }
+
 
         Log.d(TAG, "Number of steps: " + numberOfSteps);
         Log.d(TAG, "Learning Mode: " + learningMode);
@@ -171,11 +178,30 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
             params.columnSpec = GridLayout.spec(i * 2, 1, 1f);
             stepView.setLayoutParams(params);
 
-            if (i < currentStep) {
+            String TAG = "populateGridLayout()";
+            Log.d(TAG, "currentStep: " + currentStep);
+            Log.d(TAG, "numberOfSteps: " + numberOfSteps);
+
+
+//            <!-- Populate Grid Layout -->
+//            <color name="current_step">#80212e5a</color>
+//            <color name="completed_step">#212e5a</color>
+//            <color name="upcoming_step">#FFFFFFFF</color>
+
+            Log.e(TAG, "ROP DITO");
+
+            Log.e(TAG, "i: " + i);
+            Log.e(TAG, "currentStep: " + currentStep);
+
+            // Determine the background based on the step's position relative to the selected step
+            if (i < (currentStep)) {
+                Log.e(TAG, i + " < " + (currentStep) + ", so setting to completed (transparent) background");
                 stepView.setBackgroundResource(R.drawable.rounded_corners_completed);
-            } else if (i == currentStep) {
-                stepView.setBackgroundResource(R.drawable.rounded_corners);
+            } else if (i == (currentStep)) {
+                Log.e(TAG, i + " == " + (currentStep) + ", so setting to current step (highlighted) background");
+                stepView.setBackgroundResource(R.drawable.rounded_corners_current_step); // Highlight the current step
             } else {
+                Log.e(TAG, i + " > " + (currentStep - 1) + ", so setting to transparent background");
                 stepView.setBackgroundResource(R.drawable.rounded_corners);
             }
 
@@ -187,19 +213,56 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
                 public void onClick(View v) {
                     int stepIndex = (int) v.getTag();  // Get the step index from the tag
                     Log.d(TAG, "Step clicked: " + stepIndex);
+//                    showToast("Step Clicked: " + stepIndex);
 
-                    // Only allow navigation to steps that are <= the currentStep
+                    // Only allow navigation to steps that are <= currentStep
                     if (stepIndex <= currentStep) {
-                        // Move to the clicked step
                         viewPager.setCurrentItem(stepIndex);
-                        populateGridLayout();  // Update the grid layout to reflect the current step
-                    } else {
-                        // Optionally, show a message indicating that the user cannot access this step yet
-                        Toast.makeText(d_Lesson_container.this, "You can't access this step yet!", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
 
+//                        stepIndex++;
+
+                        Log.e(TAG, "let's call updateStepViewBackgrounds(" + stepIndex + ");");
+                        // Call the method to update the backgrounds from clicked step to current step
+//                        updateStepViewBackgrounds(stepIndex);
+
+                        for (int i = 0; i < numberOfSteps; i++) {
+                            View stepView = gridLayout.getChildAt(i * 2); // Get the step view at index i (multiply by 2 because of spaces)
+
+                            String TOG = "PALIT MUNA NG MUKA MGA IDOL";
+
+                            if (i < stepIndex) {
+                                Log.e(TOG, i + " < " + stepIndex + " so completed");
+                                stepView.setBackgroundResource(R.drawable.rounded_corners_completed);
+                            }
+
+                            if (i == stepIndex) {
+                                Log.e(TOG, i + " == " + stepIndex + " so transparent");
+                                stepView.setBackgroundResource(R.drawable.rounded_corners_current_step);
+                            }
+
+//                            if (i < stepIndex) {
+//                                Log.e(TOG, i + " < " + stepIndex + " so completed");
+//                                stepView.setBackgroundResource(R.drawable.rounded_corners_completed);
+//                            }
+//
+//                            else if (i > stepIndex && i < currentStep) {
+//                                Log.e(TOG, i + " >= " + stepIndex + "&& " + i + " < " + (currentStep - 1) + " so transparent");
+//                                stepView.setBackgroundResource(R.drawable.rounded_corners_current_step);
+//                            }
+//
+//                            else {
+//                                Log.e(TOG, i + " > " + stepIndex + ", or nasa else to?? so white");
+//                                stepView.setBackgroundResource(R.drawable.rounded_corners);
+//                            }
+                        }
+
+                    } else {
+//                        Toast.makeText(d_Lesson_container.this, "You can't access this step yet!", Toast.LENGTH_SHORT).show();
+                    }
+                    currentStep = stepIndex;
+                }
+
+            });
 
             gridLayout.addView(stepView);
 
@@ -215,6 +278,34 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
 
         gridLayout.setColumnCount(numberOfSteps * 2 - 1);
     }
+
+//    private void updateStepViewBackgrounds(int clickedStep) {
+//        for (int i = 0; i < numberOfSteps; i++) {
+//            View stepView = gridLayout.getChildAt(i * 2); // Get the step view at index i (multiply by 2 because of spaces)
+//
+//            String TOG = "updateStepViewBackgrounds";
+//
+//
+//            Log.e(TOG, "clickedStep: " + i);
+//
+//            if (i < clickedStep) {
+//                stepView.setBackgroundResource(R.drawable.rounded_corners_completed);
+//            } else if (i >= clickedStep && i < currentStep) {
+//                stepView.setBackgroundResource(R.drawable.rounded_corners_current_step);
+//            } else {
+//                stepView.setBackgroundResource(R.drawable.rounded_corners);
+//            }
+//
+////            if (i >= clickedStep && i <= currentStep) {
+////                stepView.setBackgroundResource(R.drawable.rounded_corners);
+////            } else if (i < clickedStep) {
+////                stepView.setBackgroundResource(R.drawable.rounded_corners_completed); // Set completed background
+////            } else {
+////                stepView.setBackgroundResource(R.drawable.rounded_corners); // Default background
+////            }
+//        }
+//    }
+
 
 
 //    public void onNextButtonClicked() {
@@ -282,6 +373,12 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
 //    }
 
     private void updateProgressAndMoveToNextStep() {
+        String TAG = "updateProgressAndMoveToNextStep";
+
+        Log.e(TAG, "updateProgressAndMoveToNextStep()");
+
+
+
         currentStep++;
 
         if (!isCompleted) {
@@ -289,6 +386,10 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
         }
 
         populateGridLayout();  // Update the progress indicators
+
+        if (isLessonFinished) {
+            finish();
+        }
     }
 
     public void onNextButtonClicked() {
@@ -298,7 +399,10 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
         updateProgressAndMoveToNextStep();
 
         if (currentStep >= numberOfSteps) {
-            finish();
+            // ahmmm wag ilagay dito yung finish??
+//                finish();
+            Log.e("onNextBUttonClicked()", "tapos na dapat, pero dapat sa post-test to i-call");
+            showToast("tapos na dapat, pero dapat sa post-test to i-call");
         } else {
             // Use the updated helper method to get the current fragment
             Fragment currentFragment = getCurrentFragment();
@@ -339,30 +443,51 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
         if (isCorrect) {
             onNextButtonClicked(); // Proceed to the next step if the test is passed
         } else {
-            Toast.makeText(this, "Please complete the pre-test before proceeding.", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Please complete the pre-test before proceeding.", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
-    public void onTextLessonComplete(boolean isCorrect) {
-        Log.d("onTextLessonComplete", "isCorrect: " + isCorrect);
+    public void onTextLessonComplete(boolean isDone) {
 
-        if (isCorrect) {
-            pageNumber++;
-//            onNextButtonClicked(); // Proceed to the next step if the test is passed
+        String TEG = "onTextLessonComplete";
+
+        Log.d(TEG, "isCorrect: " + isDone);
+
+        Log.e(TEG, "pageNumber: " + pageNumber);
+        Log.e(TEG, "numberOfTextLessons: " + numberOfTextLessons);
+
+
+        // M3_Lesson 3
+        // kapag bumalik ako sa text lesson, tapos nag next ako pabalik "ULIT" sa post test
+        // di na sya napunta post test rekta natatapos na sya kasi nga mag i-increment nanaman
+        // hayss ewan
+
+        if (isDone && pageNumber <= numberOfTextLessons) {
+            // Check if there are any remaining text lessons
+            int remainingTextLessons = LessonSequence.getRemainingTextLessons(stepSequence, currentStep);
+
+            Log.d("onTextLessonComplete()", remainingTextLessons + " > 0");
+            if (remainingTextLessons > 0) {
+                pageNumber++; // Increment only if there are more text lessons
+            }
         } else {
-            Toast.makeText(this, "Please complete the lesson text before proceeding.", Toast.LENGTH_SHORT).show();
+            // Handle the case where the lesson is not done or no more text lessons
+            Log.d("onTextLessonComplete", "No more text lessons or lesson not completed.");
         }
     }
+
 
     @Override
     public void onPostTestComplete(boolean isCorrect) {
         Log.d("onPostTestComplete", "isCorrect: " + isCorrect);
 
         if (isCorrect) {
-            onNextButtonClicked(); // Proceed to the next step if the test is passed
+            isLessonFinished = true;
+            updateProgressAndMoveToNextStep();
+//            onNextButtonClicked(); // Proceed to the next step if the test is passed
         } else {
-            Toast.makeText(this, "Please complete the post-test before proceeding.", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Please complete the post-test before proceeding.", Toast.LENGTH_SHORT).show();
         }
     }
 
