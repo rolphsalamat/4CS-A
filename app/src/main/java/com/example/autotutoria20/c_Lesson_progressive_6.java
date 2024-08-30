@@ -58,6 +58,8 @@ public class c_Lesson_progressive_6 extends AppCompatActivity {
                 finish();
             }
         });
+
+        showLoadingDialog();
     }
 
     @Override
@@ -111,6 +113,8 @@ public class c_Lesson_progressive_6 extends AppCompatActivity {
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
+
+                hideLoadingDialog();
             }
         });
     }
@@ -223,7 +227,9 @@ public class c_Lesson_progressive_6 extends AppCompatActivity {
     }
 
     private void setCardClickListener(FrameLayout card, int cardNumber, int numberOfSteps) {
-        card.setOnClickListener(v -> navigateToModule(cardNumber, numberOfSteps));
+        if (n_Network.isNetworkAvailable(getBaseContext())) {
+            card.setOnClickListener(v -> navigateToModule(cardNumber, numberOfSteps));
+        }
     }
 
     private void showExitConfirmationDialog() {
@@ -275,4 +281,20 @@ public class c_Lesson_progressive_6 extends AppCompatActivity {
     private void showToast(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
+
+
+    // Show the loading dialog
+    private void showLoadingDialog() {
+        loadingDialog = new CustomLoadingDialog(this);
+        loadingDialog.setCancelable(false); // Prevent the dialog from being closed
+        loadingDialog.show();
+    }
+
+    // Hide the loading dialog
+    private void hideLoadingDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
+    }
+
 }

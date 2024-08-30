@@ -18,9 +18,18 @@ public class LauncherActivity extends AppCompatActivity {
         boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
 
         if (isLoggedIn) {
-            // User is logged in, redirect to main menu
-            Intent mainMenuIntent = new Intent(this, b_main_0_menu.class);
-            startActivity(mainMenuIntent);
+            // User is logged in, check if they have completed the tutorial
+            boolean isTutorialCompleted = sharedPreferences.getBoolean("isTutorialCompleted", false);
+
+            if (isTutorialCompleted) {
+                // User has completed the tutorial, redirect to main menu
+                Intent mainMenuIntent = new Intent(this, b_main_0_menu.class);
+                startActivity(mainMenuIntent);
+            } else {
+                // User is logged in but has not completed the tutorial, redirect to tutorial
+                Intent tutorialIntent = new Intent(this, b_main_0_menu_tutorial.class);
+                startActivity(tutorialIntent);
+            }
         } else {
             // User is not logged in, redirect to login screen
             Intent loginIntent = new Intent(this, a_user_1_login.class);

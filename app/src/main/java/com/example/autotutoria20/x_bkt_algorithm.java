@@ -18,6 +18,7 @@ public class x_bkt_algorithm {
     private double knowledgeProbability;
     private double learnRate;
     private double forgetRate;
+    private double slipRate;
 
     // Singleton instance (if you need it to be a singleton)
     private static x_bkt_algorithm instance;
@@ -28,8 +29,17 @@ public class x_bkt_algorithm {
         this.knowledgeProbability = pInit;
         this.learnRate = learnRate;
         this.forgetRate = forgetRate;
+        this.slipRate = slip;
     }
 
+    // add computation per module kung ano yung progress per module.
+    public static void getModuleProgress () {
+
+        // return Module progress per probability
+    }
+
+
+    // store individual probabilities sa database??
 
 //    Gamitin nalang to kapag napag usapan na yung grading system???
 
@@ -70,7 +80,43 @@ public class x_bkt_algorithm {
         return instance;
     }
 
+    // basta iretrieve dito yung score...
+    // gagamitin to for Post-Test difficulty..
+    public static void getBKTScore(String collectionPath) {
+    }
+
     // Initialize BKT Scores method
+    // ORIGINAL CODE
+//    public void initializeBKTScores(String collectionPath, String documentName, BKTCallback callback) {
+//        Log.d(TAG, "Attempting to retrieve document from path: " + collectionPath + "/" + documentName);
+//
+//        db.collection("users").document(userId).collection(collectionPath).document(documentName)
+//                .get()
+//                .addOnSuccessListener(documentSnapshot -> {
+//                    if (documentSnapshot.exists()) {
+//                        // Retrieve the BKT Scores as a Map
+//                        Map<String, Double> bktScoresMap = (Map<String, Double>) documentSnapshot.get("BKT Scores");
+//
+//                        if (bktScoresMap != null) {
+//                            // Convert the map to a list
+//                            bktScores = new ArrayList<>(bktScoresMap.values());
+//                        } else {
+//                            bktScores = new ArrayList<>();  // Initialize an empty list if null
+//                        }
+//
+//                        callback.onBKTRetrieved(bktScores);
+//                    } else {
+//                        Log.e(TAG, "Document does not exist at path: " + collectionPath + "/" + documentName);
+//                        callback.onBKTRetrieved(null);
+//                    }
+//                })
+//                .addOnFailureListener(e -> {
+//                    Log.e(TAG, "Error retrieving BKT Scores", e);
+//                    callback.onBKTRetrieved(null);
+//                });
+//    }
+
+    // RECOMMENDED BY ChatGPT 4o Plus
     public void initializeBKTScores(String collectionPath, String documentName, BKTCallback callback) {
         Log.d(TAG, "Attempting to retrieve document from path: " + collectionPath + "/" + documentName);
 
@@ -100,25 +146,6 @@ public class x_bkt_algorithm {
                 });
     }
 
-//    public void initializeBKTScores(String collectionPath, String documentName, BKTCallback callback) {
-//        Log.d(TAG, "Attempting to retrieve document from path: " + collectionPath + "/" + documentName);
-//
-//        db.collection("users").document(userId).collection(collectionPath).document(documentName)
-//                .get()
-//                .addOnSuccessListener(documentSnapshot -> {
-//                    if (documentSnapshot.exists()) {
-//                        bktScores = (List<Double>) documentSnapshot.get("BKT Scores");
-//                        callback.onBKTRetrieved(bktScores);
-//                    } else {
-//                        Log.e(TAG, "Document does not exist at path: " + collectionPath + "/" + documentName);
-//                        callback.onBKTRetrieved(null);
-//                    }
-//                })
-//                .addOnFailureListener(e -> {
-//                    Log.e(TAG, "Error retrieving BKT Scores", e);
-//                    callback.onBKTRetrieved(null);
-//                });
-//    }
 
     // Update BKT Scores after computation
     public void updateScore(int moduleIndex, int lessonIndex, double newScore, boolean isProgressiveMode) {
@@ -136,6 +163,7 @@ public class x_bkt_algorithm {
 
         // Fetch the relevant Firestore document directly and update the corresponding score
         db.collection("users").document(userId).collection(collectionPath).document(documentName)
+                // may tuldok (.) talaga sa dulo ng "BKT Scores." ????
                 .update("BKT Scores." + moduleIndex, newScore)  // Directly updates the score at the correct index
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "BKT Scores successfully updated in Firestore"))
                 .addOnFailureListener(e -> Log.e(TAG, "Error updating BKT Scores in Firestore", e));
@@ -143,13 +171,24 @@ public class x_bkt_algorithm {
 
 
     // Example BKT algorithm logic for updating knowledge
+    // ETO YUNG ORIGINAL CODE
+//    public void updateKnowledge(boolean correct) {
+//        if (correct) {
+//            knowledgeProbability = knowledgeProbability * (1 - forgetRate) + (1 - knowledgeProbability) * learnRate;
+//        } else {
+//            knowledgeProbability = knowledgeProbability * forgetRate;
+//        }
+//    }
+
+    // NEW CODE *suggested by ChatGPT 4o Plus
     public void updateKnowledge(boolean correct) {
         if (correct) {
-            knowledgeProbability = knowledgeProbability * (1 - forgetRate) + (1 - knowledgeProbability) * learnRate;
+            knowledgeProbability = (knowledgeProbability * (1 - forgetRate)) + ((1 - knowledgeProbability) * learnRate);
         } else {
-            knowledgeProbability = knowledgeProbability * forgetRate;
+            knowledgeProbability = (knowledgeProbability * forgetRate * slipRate);
         }
     }
+
 
     public double getKnowledgeProbability() {
         return knowledgeProbability;

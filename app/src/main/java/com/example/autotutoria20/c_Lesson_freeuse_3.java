@@ -60,6 +60,7 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
                 finish();
             }
         });
+        showLoadingDialog();
     }
 
     @Override
@@ -123,6 +124,7 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
+                hideLoadingDialog();
             }
         });
     }
@@ -185,7 +187,11 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateToModuleActivity(d_Lesson_container.class, cardNumber, numberOfSteps);
+                if (n_Network.isNetworkAvailable(getBaseContext())) {
+                    showToast("Please connect to a network.");
+                } else {
+                    navigateToModuleActivity(d_Lesson_container.class, cardNumber, numberOfSteps);
+                }
             }
         });
     }
@@ -243,5 +249,19 @@ public class c_Lesson_freeuse_3 extends AppCompatActivity {
         // Create and show the dialog
         dialog = builder.create();
         dialog.show();
+    }
+
+    // Show the loading dialog
+    private void showLoadingDialog() {
+        loadingDialog = new CustomLoadingDialog(this);
+        loadingDialog.setCancelable(false); // Prevent the dialog from being closed
+        loadingDialog.show();
+    }
+
+    // Hide the loading dialog
+    private void hideLoadingDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
     }
 }

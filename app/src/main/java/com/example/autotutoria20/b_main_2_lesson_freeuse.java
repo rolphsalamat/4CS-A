@@ -255,20 +255,14 @@ public class b_main_2_lesson_freeuse extends Fragment {
         setCardClickListeners();
     }
 
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnected();
-    }
-
     // Method to set click listeners for the cards
     private void setCardClickListeners() {
         // Card 1 click listener
         view.findViewById(R.id.card1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isNetworkConnected()) {
-                    showToast("Please connect to internet first");
+                if (!n_Network.isNetworkAvailable(getContext())) {
+                    showToast("Please connect to a network.");
                     return;
                 } else {
                     Intent intent = new Intent(getActivity(), c_Lesson_freeuse_1.class);
@@ -281,7 +275,7 @@ public class b_main_2_lesson_freeuse extends Fragment {
         view.findViewById(R.id.card2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isNetworkConnected()) {
+                if (!n_Network.isNetworkAvailable(getContext())) {
                     showToast("Please connect to internet first");
                     return;
                 } else {
@@ -295,7 +289,7 @@ public class b_main_2_lesson_freeuse extends Fragment {
         view.findViewById(R.id.card3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isNetworkConnected()) {
+                if (!n_Network.isNetworkAvailable(getContext())) {
                     showToast("Please connect to internet first");
                     return;
                 } else {
@@ -309,7 +303,7 @@ public class b_main_2_lesson_freeuse extends Fragment {
         view.findViewById(R.id.card4).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isNetworkConnected()) {
+                if (!n_Network.isNetworkAvailable(getContext())) {
                     showToast("Please connect to internet first");
                     return;
                 } else {
@@ -323,7 +317,7 @@ public class b_main_2_lesson_freeuse extends Fragment {
         view.findViewById(R.id.card5).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isNetworkConnected()) {
+                if (!n_Network.isNetworkAvailable(getContext())) {
                     showToast("Please connect to internet first");
                     return;
                 } else {
@@ -337,7 +331,7 @@ public class b_main_2_lesson_freeuse extends Fragment {
         view.findViewById(R.id.card6).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isNetworkConnected()) {
+                if (!n_Network.isNetworkAvailable(getContext())) {
                     showToast("Please connect to internet first");
                     return;
                 } else {
@@ -351,7 +345,7 @@ public class b_main_2_lesson_freeuse extends Fragment {
         view.findViewById(R.id.card7).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isNetworkConnected()) {
+                if (!n_Network.isNetworkAvailable(getContext())) {
                     showToast("Please connect to internet first");
                     return;
                 } else {
@@ -365,7 +359,7 @@ public class b_main_2_lesson_freeuse extends Fragment {
         view.findViewById(R.id.card8).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isNetworkConnected()) {
+                if (!n_Network.isNetworkAvailable(getContext())) {
                     showToast("Please connect to internet first");
                     return;
                 } else {

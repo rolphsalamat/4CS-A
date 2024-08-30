@@ -27,6 +27,7 @@ public class f_pre_test extends Fragment {
     private TextView questionText;
     private RadioGroup choicesGroup;
     private int answerAttempt = 0;
+    private int attemptChances = 2;
     private Button submitButton;
     private boolean isCorrect = false;
     private boolean isProgressiveMode = true; // Default to Progressive Mode
@@ -179,7 +180,7 @@ public class f_pre_test extends Fragment {
                 }
 
                 // to give student chance to get correct answer before loading another question
-                if (answerAttempt >= 2) {
+                if (answerAttempt >= attemptChances) {
                     loadQuestion(); // Load the next question
                     answerAttempt = 0;
                 }

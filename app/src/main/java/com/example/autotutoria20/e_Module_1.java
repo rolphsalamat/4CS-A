@@ -18,7 +18,11 @@ public class e_Module_1 {
             {"λ (lambda)", "ε (epsilon)", "0", "1"}
     };
 
-    public static final int[] pre_test_lesson_1_answers = {0, 0, 1};
+    public static final int[] pre_test_lesson_1_answers = {
+            0,
+            0,
+            1
+    };
 
     // Post-test questions, choices, and answers for Lesson 1
     public static final String[] post_test_lesson_1_questions = {
@@ -34,6 +38,30 @@ public class e_Module_1 {
     };
 
     public static final int[] post_test_lesson_1_answers = {0, 1, 1};
+
+    public static final String[] post_test_lesson_1_questions_easy = {
+            "Pogi ba ako",
+            "What does a string represent in formal language?",
+            "How do you denote the empty string?"
+    };
+
+    public static final String[][] post_test_lesson_1_choices_easy = {
+            {"True", "False"},
+            {"True", "False"},
+            {"True", "False"},
+    };
+
+    public static final int[] post_test_lesson_1_answers_easy = {
+            0,
+            1,
+            1
+    };
+
+    public static final String[] post_test_lesson_1_answers_hard = {
+            "dalton",
+            "allyzza",
+            "jeffrey"
+    };
 
     // Pre-test questions, choices, and answers for Lesson 2
     public static final String[] pre_test_lesson_2_questions = {
@@ -159,7 +187,12 @@ public class e_Module_1 {
 
     // Methods for specific lessons (these were missing before)
     public static e_Question[] getPreTestLesson1Questions() {
+        // working code:
         return getQuestions(pre_test_lesson_1_questions, pre_test_lesson_1_choices, pre_test_lesson_1_answers);
+
+        // testing code (with difficulty):
+//        return getQuestions(pre_test_lesson_1_questions, pre_test_lesson_1_choices, pre_test_lesson_1_answers, difficulty);
+
     }
 
 //    public static e_Question getPreTestLesson1Questions() {
@@ -227,6 +260,19 @@ public class e_Module_1 {
         List<e_Question> questionList = new ArrayList<>();
         for (int i = 0; i < questions.length; i++) {
             questionList.add(new e_Question(questions[i], choices[i], answers[i], e_Question.Difficulty.EASY)); // Adjust difficulty if needed
+        }
+
+        // Shuffle the list to randomize the order of the questions
+        Collections.shuffle(questionList);
+
+        // Convert the list back to an array
+        return questionList.toArray(new e_Question[0]);
+    }
+
+    private static e_Question[] getQuestions(String[] questions, String[][] choices, int[] answers, e_Question.Difficulty level) {
+        List<e_Question> questionList = new ArrayList<>();
+        for (int i = 0; i < questions.length; i++) {
+            questionList.add(new e_Question(questions[i], choices[i], answers[i], level)); // Adjust difficulty if needed
         }
 
         // Shuffle the list to randomize the order of the questions

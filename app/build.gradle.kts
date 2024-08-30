@@ -14,6 +14,7 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -35,6 +36,12 @@ android {
 }
 
 dependencies {
+
+    // Remove the deprecated YouTube Player API dependency
+    // implementation("com.google.android.youtube:youtube-android-player-api:1.2.2")
+
+    // MultiDex support
+    implementation("com.android.support:multidex:1.0.3")
 
     // Lifecycle components
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")

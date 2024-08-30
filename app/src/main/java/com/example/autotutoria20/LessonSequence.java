@@ -208,34 +208,38 @@ public class LessonSequence {
     public static Map<String, String> getLessonVideoLinks() {
         Map<String, String> lessonVideoLinks = new HashMap<>();
 
+        // lock yt controls
+        // 6.3GB Total
+
         // Add YouTube links for each lesson
-        lessonVideoLinks.put("M1_Lesson 1", "https://www.youtube.com/watch?v=92O_Hc6Yz5M");
-        lessonVideoLinks.put("M2_Lesson 1", "https://www.youtube.com/watch?v=noE3dkfamAU");
-        lessonVideoLinks.put("M3_Lesson 1", "https://www.youtube.com/watch?v=Lw2aVmV6JyM");
-        lessonVideoLinks.put("M4_Lesson 1", "https://www.youtube.com/watch?v=csCFyTz8WiE");
+        lessonVideoLinks.put("M1_Lesson 1", "https://drive.google.com/file/d/18ADhbNgghnGEam9lQTq84dUiRBIF8faO/preview?usp=sharing");
+//        lessonVideoLinks.put("M1_Lesson 1", "92O_Hc6Yz5M");
+        lessonVideoLinks.put("M2_Lesson 1", "noE3dkfamAU");
+        lessonVideoLinks.put("M3_Lesson 1", "Lw2aVmV6JyM");
+        lessonVideoLinks.put("M4_Lesson 1", "csCFyTz8WiE");
 
-        lessonVideoLinks.put("M1_Lesson 2", "https://www.youtube.com/watch?v=PRDSdzRI3GQ");
+        lessonVideoLinks.put("M1_Lesson 2", "PRDSdzRI3GQ");
 
-        lessonVideoLinks.put("M1_Lesson 3", "https://www.youtube.com/watch?v=2uxZ6ksACGY");
-        lessonVideoLinks.put("M2_Lesson 3", "https://www.youtube.com/watch?v=0qg1jb7HS4E");
+        lessonVideoLinks.put("M1_Lesson 3", "2uxZ6ksACGY");
+        lessonVideoLinks.put("M2_Lesson 3", "0qg1jb7HS4E");
         lessonVideoLinks.put("M3_Lesson 3", "");
 
-        lessonVideoLinks.put("M1_Lesson 4", "https://www.youtube.com/watch?v=XyISYpKrNQw");
-        lessonVideoLinks.put("M2_Lesson 4", "https://www.youtube.com/watch?v=IEMrT4SkqwY");
+        lessonVideoLinks.put("M1_Lesson 4", "XyISYpKrNQw");
+        lessonVideoLinks.put("M2_Lesson 4", "IEMrT4SkqwY");
         lessonVideoLinks.put("M3_Lesson 4", "");
 
-//        https://www.youtube.com/watch?v=OymdHfzCg0c
+//        OymdHfzCg0c
         lessonVideoLinks.put("M1_Lesson 5", "");
-//        https://www.youtube.com/watch?v=6Mb11KYTmS0
+//        6Mb11KYTmS0
         lessonVideoLinks.put("M2_Lesson 5", "");
-//        https://www.youtube.com/watch?v=661W0SJl_5Q
+//        661W0SJl_5Q
         lessonVideoLinks.put("M3_Lesson 5", "");
 
-//        https://www.youtube.com/watch?v=79cIoa6J3O8
+//        79cIoa6J3O8
         lessonVideoLinks.put("M1_Lesson 6", "");
-//        https://www.youtube.com/watch?v=GGbYfum8vUM
+//        GGbYfum8vUM
         lessonVideoLinks.put("M2_Lesson 6", "");
-        https://www.youtube.com/watch?v=dCVcWztylLs
+//        dCVcWztylLs
         lessonVideoLinks.put("M3_Lesson 6", "");
 
         lessonVideoLinks.put("M1_Lesson 7", "");

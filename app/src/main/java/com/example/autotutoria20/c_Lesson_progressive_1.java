@@ -268,7 +268,9 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
     }
 
     private void setCardClickListener(FrameLayout card, int cardNumber, int numberOfSteps) {
-        card.setOnClickListener(v -> navigateToModule(cardNumber, numberOfSteps));
+        if (n_Network.isNetworkAvailable(getBaseContext())) {
+            card.setOnClickListener(v -> navigateToModule(cardNumber, numberOfSteps));
+        }
     }
 
     private void showCustomDialog() {

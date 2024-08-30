@@ -47,6 +47,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -87,23 +88,60 @@ public class b_main_0_menu extends AppCompatActivity {
     //    private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imageUri;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("hello", "word");
         setContentView(R.layout.b_main_0_menu);
+
+        Log.d("hello", "allyzza");
+//        adjustObjects();
+
+//        FirebaseUser user = mAuth.getCurrentUser();
+
+        // ang goal ko kasi sana dito, i-retrieve kung gaano karami na yung loginAttempts ni user,
+        // 0 = showTutorial();
+        // 1 = continue as usual..
+
+        // ang options ko kasi ay sa intent, since pinass ko naman sya from login, since syempre..
+        // kung first login ni user edi manggagaling sya sa login..
+        // otherwise edi previously logged in na sya..
+
+        // kaso pano kung pagka start ng tutorial umalis sya??
+        // then ni-restart yung app?? So dederecho na sya sa usual kasi wala nang intent na maipapasa??
+
+        // mag shared preference ba??
+//        if (user != null) {
+//            String userId = user.getUid();
+//            Task<DocumentSnapshot> loginAttempts = db.collection("users").document(userId).get(Source.valueOf("Login Attempts"));
+//
+//
+//            Toast.makeText(this, "loginAttempts: " + loginAttempts, Toast.LENGTH_SHORT).show();
+//        }
+//        Intent intent = getIntent();
+//        int loginAttempts = intent.getIntExtra("loginAttempts", -1);
+
+//        Toast.makeText(this, "loginAttempts: " + loginAttempts, Toast.LENGTH_SHORT).show();
+//        if (intent.get)
+
+        // Fetch the relevant Firestore document directly and update the corresponding score
+//        db.collection("users").document(userId)
 
         learningModeText = findViewById(R.id.learning_mode_text);
         learningModeIcon = findViewById(R.id.learning_mode_icon);
 
-        // Create a one-time work request to be triggered every 5 seconds
-        OneTimeWorkRequest oneTimeWorkRequest =
-                new OneTimeWorkRequest.Builder(n_Worker.class)
-                        .setInitialDelay(5, TimeUnit.SECONDS)
-                        .build();
-
-        // Enqueue the work request
-        WorkManager.getInstance(this).enqueue(oneTimeWorkRequest);
-        Log.e("b_main_0_menu", "One-time work request for notifications enqueued");
+//        // Create a one-time work request to be triggered every 5 seconds
+//        OneTimeWorkRequest oneTimeWorkRequest =
+//                new OneTimeWorkRequest.Builder(n_Worker.class)
+//                        .setInitialDelay(5, TimeUnit.SECONDS)
+//                        .build();
+//
+//        // Enqueue the work request
+//        WorkManager.getInstance(this).enqueue(oneTimeWorkRequest);
+//        Log.e("b_main_0_menu", "One-time work request for notifications enqueued");
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -133,7 +171,7 @@ public class b_main_0_menu extends AppCompatActivity {
                 String userId = currentUser.getUid();
                 fetchUserData(userId);
             } else {
-                // Handle the case where the user is not logged in
+                // Handle the case where the user is not loggced in
                 redirectToLogin();
             }
         } else {
@@ -617,6 +655,7 @@ public class b_main_0_menu extends AppCompatActivity {
                 }
             }
         });
+//        userRef.update("Login Attempts", )
     }
 
     private void fetchLessonData(String userId) {

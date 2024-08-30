@@ -191,6 +191,7 @@ public class a_user_1_login extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
+                        int loginAttempts = document.getLong("Login Attempts").intValue();
                         String firstName = document.getString("First Name");
                         String lastName = document.getString("Last Name");
                         String email = document.getString("Email Address");
@@ -210,7 +211,7 @@ public class a_user_1_login extends AppCompatActivity {
                         editor.apply();
 
                         // Fetch lesson data and move to the main menu
-                        fetchLessonData(userId, firstName, lastName, email, gender, age);
+                        fetchLessonData(userId, firstName, lastName, email, gender, age, loginAttempts);
                     } else {
                         Log.d("Firestore", "User document does not exist");
                     }
@@ -222,7 +223,7 @@ public class a_user_1_login extends AppCompatActivity {
         });
     }
 
-    private void fetchLessonData(String userId, String firstName, String lastName, String email, String gender, int age) {
+    private void fetchLessonData(String userId, String firstName, String lastName, String email, String gender, int age, int loginAttempts) {
         fetchModeData(userId, "Progressive Mode", new OnDataFetchedCallback() {
             @Override
             public void onDataFetched() {
@@ -230,7 +231,7 @@ public class a_user_1_login extends AppCompatActivity {
                     @Override
                     public void onDataFetched() {
                         Log.d("Firestore", "All lesson data retrieved");
-                        moveToMainMenu(firstName, lastName, email, gender, age);
+                        moveToMainMenu(firstName, lastName, email, gender, age, loginAttempts);
                     }
                 });
             }
@@ -279,13 +280,14 @@ public class a_user_1_login extends AppCompatActivity {
         editor.apply();
     }
 
-    private void moveToMainMenu(String firstName, String lastName, String email, String gender, int age) {
+    private void moveToMainMenu(String firstName, String lastName, String email, String gender, int age, int loginAttempts) {
         Intent intent = new Intent(a_user_1_login.this, b_main_0_menu.class);
         intent.putExtra("firstName", firstName);
         intent.putExtra("lastName", lastName);
         intent.putExtra("email", email);
         intent.putExtra("gender", gender);
         intent.putExtra("age", age);
+        intent.putExtra("loginAttempts", loginAttempts);
         startActivity(intent);
         finish(); // Finish the login activity
     }

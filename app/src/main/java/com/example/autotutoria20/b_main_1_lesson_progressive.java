@@ -1,5 +1,7 @@
 package com.example.autotutoria20;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -51,6 +53,7 @@ public class b_main_1_lesson_progressive extends Fragment {
     // Track completion status of each card
     private boolean[] cardCompletionStatus = {false, false, false, false, false, false, false, false}; // Default is false for all cards
 
+    private n_Network network;
     public interface ProgressUpdateListener {
         void onProgressUpdated();
     }
@@ -265,21 +268,20 @@ public class b_main_1_lesson_progressive extends Fragment {
     }
 
     private void handleCardClick(int cardId) {
-        if (!isNetworkConnected()) {
-            showToast("Please connect to internet first");
-            return;
-        }
-        if (isPreviousCardCompleted(cardId)) {
-            launchLessonActivity(cardId);
+//        if (network.isNetworkConnected(getActivity())) {
+//            showToast("Please connect to internet first");
+//            return;
+//        }
+        if (!n_Network.isNetworkAvailable(getContext())) {
+            showToast("Please connect to a network.");
         } else {
-            showCustomDialog();
+            if (isPreviousCardCompleted(cardId)) {
+                launchLessonActivity(cardId);
+            } else {
+                showCustomDialog();
+            }
         }
-    }
 
-    private boolean isNetworkConnected() {
-        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnected();
     }
 
     private void showCustomDialog() {

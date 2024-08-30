@@ -27,6 +27,8 @@ public class f_post_test extends Fragment {
     private TextView questionText;
     private RadioGroup choicesGroup;
     private Button submitButton;
+    private int answerAttempt = 0;
+    private int attemptChances = 2;
     private boolean isCorrect = false;
     private boolean isProgressiveMode = true; // Default to Progressive Mode
 
@@ -126,9 +128,10 @@ public class f_post_test extends Fragment {
 
         submitButton.setOnClickListener(v -> {
 
+            answerAttempt++;
 
             if (choicesGroup.getCheckedRadioButtonId() == -1) {
-                Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
                 return;
             } else {
                 boolean correctAnswer = checkAnswer();
@@ -155,26 +158,23 @@ public class f_post_test extends Fragment {
 
                 // Notify the listener
                 if (postTestCompleteListener != null) {
-                    // If the answer is correct, finish the post-test
-                    if (correctAnswer) {
-                    Toast.makeText(getContext(), "Post-test completed with correct answer!", Toast.LENGTH_SHORT).show();
-                        bktModel.logScores();
-                        postTestCompleteListener.onPostTestComplete(correctAnswer);
-                        return;
-                    }
+                    postTestCompleteListener.onPostTestComplete(correctAnswer);
                 }
 
-
-
-                // Move to the next question if the answer was incorrect
+                // Move to the next question
                 if (currentQuestionIndex < questions.length - 1) {
                     currentQuestionIndex++;
-                    loadQuestion();
-                }
-//                else {
+                } else {
+                    currentQuestionIndex = 0; // Reset to the first question if all are answered
 //                    Toast.makeText(getContext(), "Post-test completed!", Toast.LENGTH_SHORT).show();
-//                    bktModel.logScores();
-//                }
+                    bktModel.logScores();
+                }
+
+                // to give student chance to get correct answer before loading another question
+                if (answerAttempt >= attemptChances) {
+                    loadQuestion(); // Load the next question
+                    answerAttempt = 0;
+                }
             }
 
 

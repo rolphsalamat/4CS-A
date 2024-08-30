@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal"
+    android:background="@drawable/autotutoria_background_color">
+
+    <!-- Tutorial Title -->
+    <TextView
+        android:id="@+id/tvTutorialTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to the Tutorial"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Tutorial Content -->
+    <TextView
+        android:id="@+id/tvTutorialContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is where you will find the tutorial content, guiding you through the features of the app."
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:layout_marginBottom="24dp" />
+
+    <!-- FrameLayout to hold the WebView and cover the top and bottom areas -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="16dp">
+
+        <!-- WebView to capture remaining space -->
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <!-- Transparent view to cover the top area -->
+        <View
+            android:id="@+id/pop_out_button"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="top"
+            android:background="@android:color/transparent"
+            android:clickable="true"/>
+
+        <!-- Transparent view to cover the bottom area -->
+        <View
+            android:id="@+id/youtube_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:background="@android:color/transparent"
+            android:clickable="true"/>
+
+        <!-- Transparent view to cover the bottom area -->
+        <!-- Ang purpose neto para kapag tumaas yung logo, hindi clickable yung YT Logo -->
+        <View
+            android:id="@+id/youtube_logo_button"
+            android:layout_width="65dp"
+            android:layout_height="100dp"
+            android:layout_gravity="bottom|end"
+            android:background="@color/current_step"
+            android:clickable="true"/>
+
+    </FrameLayout>
+
+    <!-- Finish Tutorial Button fixed at bottom -->
+    <Button
+        android:id="@+id/btnFinishTutorial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Finish Tutorial"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:backgroundTint="@color/navy_blue"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>

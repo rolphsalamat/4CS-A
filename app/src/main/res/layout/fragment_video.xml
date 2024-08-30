@@ -2,17 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-
-<!--    <TextView-->
-<!--        android:id="@+id/video_title"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Video Lesson"-->
-<!--        android:textSize="24sp"-->
-<!--        android:textStyle="bold"-->
-<!--        android:layout_gravity="center"/>-->
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/video_title"
@@ -26,17 +16,37 @@
         android:textStyle="bold"
         android:layout_gravity="center"/>
 
-    <WebView
-        android:id="@+id/webView"
+    <FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent">
 
-<!--    <Button-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="NEXT"-->
-<!--        android:textSize="24sp"-->
-<!--        />-->
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <!-- Transparent view to cover the pop-out button -->
+        <View
+            android:id="@+id/pop_out_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="top|end"
+            android:background="@android:color/transparent"
+            android:clickable="true"/>
+
+        <!-- Transparent view to cover the pop-out button -->
+        <View
+            android:id="@+id/youtube_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:backgroundTint="@color/current_step"
+            android:background="@android:color/transparent"
+            android:clickable="true"/>
+
+
+    </FrameLayout>
+
 
 </LinearLayout>
