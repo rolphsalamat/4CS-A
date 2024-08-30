@@ -141,9 +141,9 @@ public class c_Lesson_progressive_7 extends AppCompatActivity {
 
         switch (key) {
             case 1:
-                newText = progress + "/" + LessonSequence.getNumberOfSteps("M1_Lesson 7");
+                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M1_Lesson 7");
                 module1ProgressText.setText(newText);
-                if (progress >= LessonSequence.getNumberOfSteps("M1_Lesson 7")) {
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 7")) {
                     setCardCompletionStatus(key, true);
                     Log.d("Completed Lesson!", "Lesson 7 Completed! :D");
                 }

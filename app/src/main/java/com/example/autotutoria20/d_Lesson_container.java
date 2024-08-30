@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -25,7 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.Arrays;
 
-public class d_Lesson_container extends AppCompatActivity implements f_pre_test.PreTestCompleteListener, f_text_lesson.OnNextButtonClickListener, f_text_lesson.TextLessonCompleteListener  , f_post_test.PostTestCompleteListener {
+public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_pre_test.PreTestCompleteListener, f_1_lesson_text.OnNextButtonClickListener, f_1_lesson_text.TextLessonCompleteListener  , f_3_lesson_post_test.PostTestCompleteListener {
 
     private static final String TAG = "Module3Steps";
     public int pageNumber = 1;
@@ -38,20 +39,26 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
     private String learningMode;
     private String currentLesson;
     private String currentModule;
+    private int furthestStep = 0; // Track the furthest step reached
+
     private Boolean isCompleted;
     private Button nextButton;
-    private LessonSequence.StepType[] stepSequence;
+    private f_2_lesson_video videoLesson;
+    private L_lesson_sequence.StepType[] stepSequence;
     private ViewPager viewPager;
-    private LessonPagerAdapter pagerAdapter;
+    private L_lesson_handler pagerAdapter;
     private boolean isLessonFinished = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.d_lesson_container);
 
         gridLayout = findViewById(R.id.gridLayout);
         viewPager = findViewById(R.id.viewPager);
+        viewPager.setOffscreenPageLimit(1);  // Adjust the offscreen page limit
+
         db = FirebaseFirestore.getInstance();
 
         SharedPreferences sharedPreferences = getSharedPreferences("ModulePreferences", MODE_PRIVATE);
@@ -63,7 +70,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
         Log.e("onCreate", "currentModule: " + currentModule + " | currentLesson: " + currentLesson);
 
         // Retrieve the lesson sequence
-        stepSequence = LessonSequence.getLessonSequences().get(currentModule + "_" + currentLesson);
+        stepSequence = L_lesson_sequence.getLessonSequences().get(currentModule + "_" + currentLesson);
 
         // Log the step sequence
         if (stepSequence != null) {
@@ -71,14 +78,12 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
             numberOfSteps = stepSequence.length;
 
             // Count the number of TEXT lessons in the sequence
-            numberOfTextLessons = LessonSequence.countTextLessons(stepSequence);
+            numberOfTextLessons = L_lesson_sequence.countTextLessons(stepSequence);
             Log.d(TAG, "Number of TEXT lessons in " + currentModule + "_" + currentLesson + ": " + numberOfTextLessons);
         } else {
             Log.d(TAG, "Step sequence is null for key: " + currentModule + "_" + currentLesson);
-            stepSequence = new LessonSequence.StepType[0]; // Assign an empty array to avoid null
-            // Toast.makeText(this, "No steps found for this module and lesson.", Toast.LENGTH_SHORT).show();
+            stepSequence = new L_lesson_sequence.StepType[0]; // Assign an empty array to avoid null
         }
-
 
         Log.d(TAG, "Number of steps: " + numberOfSteps);
         Log.d(TAG, "Learning Mode: " + learningMode);
@@ -87,7 +92,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
         Log.d(TAG, "isCompleted: " + isCompleted);
 
         Log.e("pagerAdapter", "LessonPagerAdapter(" + getSupportFragmentManager() + ", " + stepSequence + ", " + currentModule + "_" + currentLesson + ");");
-        pagerAdapter = new LessonPagerAdapter(getSupportFragmentManager(), stepSequence, currentModule + "_" + currentLesson, learningMode, pageNumber);
+        pagerAdapter = new L_lesson_handler(getSupportFragmentManager(), stepSequence, currentModule + "_" + currentLesson, learningMode, pageNumber);
         viewPager.setAdapter(pagerAdapter);
 
 
@@ -104,31 +109,36 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
             public void onPageSelected(int position) {
                 Log.e(TAG, "Displayed fragment position: " + position);
 
-                // Handle automatic progress by calling onNextButtonClicked()
-                if (position > currentStep) {
-                    onNextButtonClicked();  // Automatically update progress
-                }
-
-                // Use helper method to get the current fragment
+                // Get the current fragment
                 Fragment currentFragment = getCurrentFragment();
 
-                // Handle logic based on the fragment type
-                // Handle logic based on the fragment type
-                if (currentFragment instanceof f_text_lesson) {
-                    f_text_lesson textLessonFragment = (f_text_lesson) currentFragment;
-                    Log.e("instanceof f_text_lesson", "loadTextContentForKey(" + currentModule + "_" + currentLesson + ");");
-                    textLessonFragment.loadTextContentForKey(currentModule + "_" + currentLesson, pageNumber);
+                // Check if the last fragment was the video lesson and stop the video
+                if (videoLesson != null && !(currentFragment instanceof f_2_lesson_video)) {
+                    Log.d(TAG, "Stopping video playback as we're leaving the video lesson.");
+                    videoLesson.stopVideoPlayback();
+                    videoLesson = null;  // Clear reference after stopping the video
+                }
 
-                } else if (currentFragment instanceof f_video_lesson) {
+                // Update the reference if we're now on a video lesson
+                if (currentFragment instanceof f_2_lesson_video) {
+                    videoLesson = (f_2_lesson_video) currentFragment;
+
                     // Adjust the bottom margin of the ViewPager for video lessons
                     ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) viewPager.getLayoutParams();
                     params.bottomMargin = 200;  // Adjust this value as needed
                     viewPager.setLayoutParams(params);
 
-                    // Make the nextButton visible
                     nextButton.setVisibility(View.VISIBLE);
-                } else if (currentFragment instanceof f_post_test) {
-                    // Adjust the bottom margin of the ViewPager for post-test
+                } else {
+                    videoLesson = null; // Clear the videoLesson reference when not on a video lesson
+                }
+
+                // Handle other fragment-specific logic
+                if (currentFragment instanceof f_1_lesson_text) {
+                    f_1_lesson_text textLessonFragment = (f_1_lesson_text) currentFragment;
+                    textLessonFragment.loadTextContentForKey(currentModule + "_" + currentLesson, pageNumber);
+
+                } else if (currentFragment instanceof f_3_lesson_post_test) {
                     ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) viewPager.getLayoutParams();
                     params.bottomMargin = 0;  // Reset margin
                     viewPager.setLayoutParams(params);
@@ -178,30 +188,15 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
             params.columnSpec = GridLayout.spec(i * 2, 1, 1f);
             stepView.setLayoutParams(params);
 
-            String TAG = "populateGridLayout()";
-            Log.d(TAG, "currentStep: " + currentStep);
-            Log.d(TAG, "numberOfSteps: " + numberOfSteps);
-
-
-//            <!-- Populate Grid Layout -->
-//            <color name="current_step">#80212e5a</color>
-//            <color name="completed_step">#212e5a</color>
-//            <color name="upcoming_step">#FFFFFFFF</color>
-
-            Log.e(TAG, "ROP DITO");
-
-            Log.e(TAG, "i: " + i);
-            Log.e(TAG, "currentStep: " + currentStep);
-
             // Determine the background based on the step's position relative to the selected step
             if (i < (currentStep)) {
-                Log.e(TAG, i + " < " + (currentStep) + ", so setting to completed (transparent) background");
+//                Log.e(TAG, i + " < " + (currentStep) + ", so setting to completed (transparent) background");
                 stepView.setBackgroundResource(R.drawable.rounded_corners_completed);
             } else if (i == (currentStep)) {
-                Log.e(TAG, i + " == " + (currentStep) + ", so setting to current step (highlighted) background");
+//                Log.e(TAG, i + " == " + (currentStep) + ", so setting to current step (highlighted) background");
                 stepView.setBackgroundResource(R.drawable.rounded_corners_current_step); // Highlight the current step
             } else {
-                Log.e(TAG, i + " > " + (currentStep - 1) + ", so setting to transparent background");
+//                Log.e(TAG, i + " > " + (currentStep - 1) + ", so setting to transparent background");
                 stepView.setBackgroundResource(R.drawable.rounded_corners);
             }
 
@@ -213,56 +208,32 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
                 public void onClick(View v) {
                     int stepIndex = (int) v.getTag();  // Get the step index from the tag
                     Log.d(TAG, "Step clicked: " + stepIndex);
-//                    showToast("Step Clicked: " + stepIndex);
 
-                    // Only allow navigation to steps that are <= currentStep
-                    if (stepIndex <= currentStep) {
+                    // Only allow navigation to steps that are <= furthestStep
+                    if (stepIndex <= furthestStep) {
                         viewPager.setCurrentItem(stepIndex);
 
-//                        stepIndex++;
-
                         Log.e(TAG, "let's call updateStepViewBackgrounds(" + stepIndex + ");");
-                        // Call the method to update the backgrounds from clicked step to current step
-//                        updateStepViewBackgrounds(stepIndex);
 
                         for (int i = 0; i < numberOfSteps; i++) {
                             View stepView = gridLayout.getChildAt(i * 2); // Get the step view at index i (multiply by 2 because of spaces)
 
-                            String TOG = "PALIT MUNA NG MUKA MGA IDOL";
-
                             if (i < stepIndex) {
-                                Log.e(TOG, i + " < " + stepIndex + " so completed");
                                 stepView.setBackgroundResource(R.drawable.rounded_corners_completed);
                             }
 
                             if (i == stepIndex) {
-                                Log.e(TOG, i + " == " + stepIndex + " so transparent");
                                 stepView.setBackgroundResource(R.drawable.rounded_corners_current_step);
                             }
-
-//                            if (i < stepIndex) {
-//                                Log.e(TOG, i + " < " + stepIndex + " so completed");
-//                                stepView.setBackgroundResource(R.drawable.rounded_corners_completed);
-//                            }
-//
-//                            else if (i > stepIndex && i < currentStep) {
-//                                Log.e(TOG, i + " >= " + stepIndex + "&& " + i + " < " + (currentStep - 1) + " so transparent");
-//                                stepView.setBackgroundResource(R.drawable.rounded_corners_current_step);
-//                            }
-//
-//                            else {
-//                                Log.e(TOG, i + " > " + stepIndex + ", or nasa else to?? so white");
-//                                stepView.setBackgroundResource(R.drawable.rounded_corners);
-//                            }
                         }
 
                     } else {
-//                        Toast.makeText(d_Lesson_container.this, "You can't access this step yet!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(d_Lesson_container.this, "You can't access this step yet!", Toast.LENGTH_SHORT).show();
                     }
                     currentStep = stepIndex;
                 }
-
             });
+
 
             gridLayout.addView(stepView);
 
@@ -372,14 +343,17 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
 //        }
 //    }
 
+
     private void updateProgressAndMoveToNextStep() {
         String TAG = "updateProgressAndMoveToNextStep";
 
         Log.e(TAG, "updateProgressAndMoveToNextStep()");
 
-
-
         currentStep++;
+
+        if (currentStep > furthestStep) {
+            furthestStep = currentStep;
+        }
 
         if (!isCompleted) {
             updateCurrentModuleInDatabase();  // Update database with the new progress
@@ -388,9 +362,12 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
         populateGridLayout();  // Update the progress indicators
 
         if (isLessonFinished) {
+            // Clear the video preferences once the lesson is completed
+            f_2_lesson_video.clearVideoPreferences(this);
             finish();
         }
     }
+
 
     public void onNextButtonClicked() {
         Log.e("onNextButtonClicked()", "currentStep: " + currentStep);
@@ -465,7 +442,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
 
         if (isDone && pageNumber <= numberOfTextLessons) {
             // Check if there are any remaining text lessons
-            int remainingTextLessons = LessonSequence.getRemainingTextLessons(stepSequence, currentStep);
+            int remainingTextLessons = L_lesson_sequence.getRemainingTextLessons(stepSequence, currentStep);
 
             Log.d("onTextLessonComplete()", remainingTextLessons + " > 0");
             if (remainingTextLessons > 0) {
@@ -551,4 +528,28 @@ public class d_Lesson_container extends AppCompatActivity implements f_pre_test.
     public void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
+
+    private void simulateClicksInCenter() {
+        // Get the center coordinates of the screen
+        int x = viewPager.getWidth() / 2;
+        int y = viewPager.getHeight() / 2;
+
+        // Simulate two clicks
+        simulateClick(x, y);
+        simulateClick(x, y);
+    }
+
+    private void simulateClick(int x, int y) {
+        long downTime = System.currentTimeMillis();
+        long eventTime = System.currentTimeMillis() + 10; // Delay between down and up events
+
+        // Simulate touch down event
+        MotionEvent motionEventDown = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, x, y, 0);
+        viewPager.dispatchTouchEvent(motionEventDown);
+
+        // Simulate touch up event
+        MotionEvent motionEventUp = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_UP, x, y, 0);
+        viewPager.dispatchTouchEvent(motionEventUp);
+    }
+
 }

@@ -169,37 +169,37 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
 
         switch (key) {
             case 1:
-                newText = progress + "/" + LessonSequence.getNumberOfSteps("M1_Lesson 1");
+                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M1_Lesson 1");
                 module1ProgressText.setText(newText);
 
-                if (progress >= LessonSequence.getNumberOfSteps("M1_Lesson 1")) {
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 1")) {
                     card2LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
                 }
                 break;
             case 2:
-                newText = progress + "/" + LessonSequence.getNumberOfSteps("M2_Lesson 1");
+                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M2_Lesson 1");
                 module2ProgressText.setText(newText);
 
-                if (progress >= LessonSequence.getNumberOfSteps("M2_Lesson 1")) {
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M2_Lesson 1")) {
                     card3LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
                 }
                 break;
             case 3:
-                newText = progress + "/" + LessonSequence.getNumberOfSteps("M3_Lesson 1");
+                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M3_Lesson 1");
                 module3ProgressText.setText(newText);
 
-                if (progress >= LessonSequence.getNumberOfSteps("M3_Lesson 1")) {
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M3_Lesson 1")) {
                     card4LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
                 }
                 break;
             case 4:
-                newText = progress + "/" + LessonSequence.getNumberOfSteps("M4_Lesson 1");
+                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M4_Lesson 1");
                 module4ProgressText.setText(newText);
 
-                if (progress >= LessonSequence.getNumberOfSteps("M4_Lesson 1")) {
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M4_Lesson 1")) {
                     setCardCompletionStatus(key, true);
                     Log.d("Completed Lesson!", "Lesson 1 Completed! :D");
                 }

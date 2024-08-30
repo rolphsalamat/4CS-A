@@ -3,12 +3,9 @@ package com.example.autotutoria20;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -145,13 +142,13 @@ public class c_Lesson_freeuse_2 extends AppCompatActivity {
 
         switch (key) {
             case 1:
-                newText = progress + "/" + LessonSequence.getNumberOfSteps("M1_Lesson 2");
+                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M1_Lesson 2");
                 if (module1ProgressText != null) {
                     module1ProgressText.setText(newText);
                 } else {
                     Log.e("updateUI", "TextView for module 1 not found");
                 }
-                if (progress >= LessonSequence.getNumberOfSteps("M1_Lesson 2")) {
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 2")) {
                     cardCompletionStatus[0] = true; // Mark card 1 as completed
                 }
                 break;

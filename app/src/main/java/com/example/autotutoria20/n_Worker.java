@@ -53,7 +53,7 @@ public class n_Worker extends Worker {
     public Result doWork() {
         Log.d(TAG, "doWork: Worker is executing");
 
-        if (!MyApplication.isAppInForeground()) {
+        if (!n_AppGround.isAppInForeground()) {
             boolean reminderNotification = getReminderNotificationSetting();
 
             if (reminderNotification) {
@@ -141,7 +141,7 @@ public class n_Worker extends Worker {
         String text = REMINDERS[index][1];
 
         // Create an intent that will be fired when the user clicks the notification
-        Intent intent = new Intent(getApplicationContext(), LauncherActivity.class); // Replace MainActivity with the activity you want to open
+        Intent intent = new Intent(getApplicationContext(), a_user_1_login_handler.class); // Replace MainActivity with the activity you want to open
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 getApplicationContext(),

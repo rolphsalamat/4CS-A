@@ -6,22 +6,32 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-public class LauncherActivity extends AppCompatActivity {
+public class a_user_1_login_handler extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        String TAG = "a_user_1_login_handler";
 
         // Check if user is logged in
         SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
         boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
 
+        Log.e(TAG, "retrieve isLoggedIn: " + isLoggedIn);
+
         if (isLoggedIn) {
+            Log.e(TAG, "You are already logged in!");
+
             // User is logged in, check if they have completed the tutorial
             boolean isTutorialCompleted = sharedPreferences.getBoolean("isTutorialCompleted", false);
+            Log.e(TAG, "retrieve isTutorialCompleted: " + isTutorialCompleted);
 
             if (isTutorialCompleted) {
+                Log.e(TAG, "isTutorialCompleted: " + isTutorialCompleted);
                 // User has completed the tutorial, redirect to main menu
                 Intent mainMenuIntent = new Intent(this, b_main_0_menu.class);
                 startActivity(mainMenuIntent);

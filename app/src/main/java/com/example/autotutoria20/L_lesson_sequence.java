@@ -3,7 +3,7 @@ package com.example.autotutoria20;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LessonSequence {
+public class L_lesson_sequence {
 
     // Enum for step types
     public enum StepType {
@@ -23,9 +23,9 @@ public class LessonSequence {
     }
 
     // Method to get the number of text lessons in the lessonSequence
-    public static int countTextLessons(LessonSequence.StepType[] stepSequence) {
+    public static int countTextLessons(L_lesson_sequence.StepType[] stepSequence) {
         int textLessonCount = 0;
-        for (LessonSequence.StepType step : stepSequence) {
+        for (L_lesson_sequence.StepType step : stepSequence) {
             if (step == StepType.TEXT) {
                 textLessonCount++;
             }
@@ -212,8 +212,7 @@ public class LessonSequence {
         // 6.3GB Total
 
         // Add YouTube links for each lesson
-        lessonVideoLinks.put("M1_Lesson 1", "https://drive.google.com/file/d/18ADhbNgghnGEam9lQTq84dUiRBIF8faO/preview?usp=sharing");
-//        lessonVideoLinks.put("M1_Lesson 1", "92O_Hc6Yz5M");
+        lessonVideoLinks.put("M1_Lesson 1", "92O_Hc6Yz5M");
         lessonVideoLinks.put("M2_Lesson 1", "noE3dkfamAU");
         lessonVideoLinks.put("M3_Lesson 1", "Lw2aVmV6JyM");
         lessonVideoLinks.put("M4_Lesson 1", "csCFyTz8WiE");
@@ -251,7 +250,7 @@ public class LessonSequence {
         return lessonVideoLinks;
     }
 
-    public static int getRemainingTextLessons(LessonSequence.StepType[] stepSequence, int currentStep) {
+    public static int getRemainingTextLessons(L_lesson_sequence.StepType[] stepSequence, int currentStep) {
         int textLessonCount = 0;
         for (int i = currentStep + 1; i < stepSequence.length; i++) {
             if (stepSequence[i] == StepType.TEXT) {

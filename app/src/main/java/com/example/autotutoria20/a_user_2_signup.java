@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -21,8 +20,6 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -157,11 +154,10 @@ public class a_user_2_signup extends AppCompatActivity {
             Log.d(TAG, "Module progress data populated");
 
             // Hash the password before storing it
-            String hashedPassword = PasswordUtil.hashPassword(password);
+            String hashedPassword = a_user_3_password_encryption.hashPassword(password);
 
             // Create a map to store user data
             userData = new HashMap<>();
-            userData.put("Login Attempts", 0);
             userData.put("First Name", firstName);
             userData.put("Last Name", lastName);
             userData.put("Email Address", email);

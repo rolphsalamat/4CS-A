@@ -4,7 +4,7 @@ import android.util.Log;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-public class PasswordUtil {
+public class a_user_3_password_encryption {
 
     // Hash a password using BCrypt
     public static String hashPassword(String plainTextPassword) {

@@ -1,7 +1,5 @@
 package com.example.autotutoria20;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class f_text_lesson extends Fragment {
+public class f_1_lesson_text extends Fragment {
 
     private static final String ARG_KEY = "key";
     private static final String ARG_PAGE_NUMBER = "pageNumber"; // New argument
@@ -48,10 +46,10 @@ public class f_text_lesson extends Fragment {
     private OnNextButtonClickListener callback;
     private int totalSteps = 2; // Default total steps
 
-    public static f_text_lesson newInstance(String key, int pageNumber) {
+    public static f_1_lesson_text newInstance(String key, int pageNumber) {
 
         Log.e("IM HERE", "IM HERE, nasa newInstance nako...");
-        f_text_lesson fragment = new f_text_lesson();
+        f_1_lesson_text fragment = new f_1_lesson_text();
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
         args.putInt(ARG_PAGE_NUMBER, pageNumber); // Pass the page number
@@ -60,8 +58,8 @@ public class f_text_lesson extends Fragment {
 
     }
 
-    public static f_text_lesson newInstance(String key) {
-        f_text_lesson fragment = new f_text_lesson();
+    public static f_1_lesson_text newInstance(String key) {
+        f_1_lesson_text fragment = new f_1_lesson_text();
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
         fragment.setArguments(args);
@@ -78,7 +76,7 @@ public class f_text_lesson extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_text, container, false);
+        View view = inflater.inflate(R.layout.f_1_lesson_text, container, false);
 
         // Retrieve the key from the arguments
         if (getArguments() != null) {
@@ -121,8 +119,6 @@ public class f_text_lesson extends Fragment {
             key = getArguments().getString(ARG_KEY);
             pageNumber = getArguments().getInt(ARG_PAGE_NUMBER, 1); // Retrieve page number
             setTotalStepsForKey(key);
-//            loadTextContentForKey(key);
-            Log.e("AWJDNLAWJKDN", "key: " + key);
         }
 
         // Set OnClickListener for the nextButton
@@ -134,7 +130,6 @@ public class f_text_lesson extends Fragment {
         });
     }
 
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -145,8 +140,8 @@ public class f_text_lesson extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnNextButtonClickListener");
         }
-        if (context instanceof f_text_lesson.TextLessonCompleteListener) {
-            TextLessonCompleteListener = (f_text_lesson.TextLessonCompleteListener) context;
+        if (context instanceof f_1_lesson_text.TextLessonCompleteListener) {
+            TextLessonCompleteListener = (f_1_lesson_text.TextLessonCompleteListener) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement TextLessonCompleteListener");
         }
@@ -173,92 +168,36 @@ public class f_text_lesson extends Fragment {
     }
 
     private void setTotalStepsForKey(String key) {
-        switch (key) {
-            // Module 1
-            case "M1_Lesson 1":
-                totalSteps = module1Steps[0];
-                break;
-            case "M2_Lesson 1":
-                totalSteps = module1Steps[1];
-                break;
-            case "M3_Lesson 1":
-                totalSteps = module1Steps[2];
-                break;
-            case "M4_Lesson 1":
-                totalSteps = module1Steps[3];
-                break;
+        totalSteps = 0;  // Reset total steps
 
-            // Module 2
-            case "M1_Lesson 2":
-                totalSteps = module2Steps[0];
-                break;
+        // Generate resource names dynamically
+        String baseName = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber;
 
-            // Module 3
-            case "M1_Lesson 3":
-                totalSteps = module3Steps[0];
-                break;
-            case "M2_Lesson 3":
-                totalSteps = module3Steps[1];
-                break;
-            case "M3_Lesson 3":
-                totalSteps = module3Steps[2];
-                break;
+        Log.e("setTotalStepsForKey", "baseName: " + baseName);
 
-            // Module 4
-            case "M1_Lesson 4":
-                totalSteps = module4Steps[0];
-                break;
-            case "M2_Lesson 4":
-                totalSteps = module4Steps[1];
-                break;
-            case "M3_Lesson 4":
-                totalSteps = module4Steps[2];
-                break;
+        // Check if title and content resources exist and have values, increment totalSteps accordingly
+        if (resourceHasValue(baseName + "_title")) totalSteps++;
+        if (resourceHasValue(baseName + "_content_1")) totalSteps++;
+        if (resourceHasValue(baseName + "_content_2")) totalSteps++;
+        if (resourceHasValue(baseName + "_content_3")) totalSteps++;
 
-            // Module 5
-            case "M1_Lesson 5":
-                totalSteps = module5Steps[0];
-                break;
-            case "M2_Lesson 5":
-                totalSteps = module5Steps[1];
-                break;
-            case "M3_Lesson 5":
-                totalSteps = module5Steps[2];
-                break;
-
-            // Module 6
-            case "M1_Lesson 6":
-                totalSteps = module6Steps[0];
-                break;
-            case "M2_Lesson 6":
-                totalSteps = module6Steps[1];
-                break;
-            case "M3_Lesson 6":
-                totalSteps = module6Steps[2];
-                break;
-
-            // Module 7
-            case "M1_Lesson 7":
-                totalSteps = module7Steps[0];
-                break;
-
-            // Module 8
-            case "M1_Lesson 8":
-                totalSteps = module8Steps[0];
-                break;
-            case "M2_Lesson 8":
-                totalSteps = module8Steps[1];
-                break;
-            case "M3_Lesson 8":
-                totalSteps = module8Steps[2];
-                break;
-
-            // Fallback/default
-            default:
-                totalSteps = 2; // Fallback default steps
-                break;
-        }
+        Log.e("setTotalStepsForKey", "totalSteps: " + totalSteps);
     }
+
+
+    private boolean resourceHasValue(String resourceName) {
+        int resId = getResources().getIdentifier(resourceName, "string", getContext().getPackageName());
+        if (resId != 0) {  // Check if the resource ID is valid
+            String value = getString(resId);
+            Log.d("resourceHasValue", "Resource: " + resourceName + " Value: " + value); // Log the value
+            return value != null && !value.trim().isEmpty();  // Check if the resource has a non-empty value
+        }
+        Log.d("resourceHasValue", "Resource: " + resourceName + " not found or empty.");
+        return false;  // Return false if the resource does not exist or is empty
+    }
+
+
+
 
     private void handleNextButtonClick(String key) {
         Log.d("handleNextButtonClick()", "currentStep(" + currentStep + ") < totalSteps(" + totalSteps + ")");
@@ -290,30 +229,75 @@ public class f_text_lesson extends Fragment {
     }
 
     private void showNextStep(int step) {
-        step++;
-        String TAG = "showNextStep(" + step + ")";
+        String TAG = "showNextStep";
+        int actualStep = 0;
 
-        switch (step) {
-            case 1:
-                Log.e(TAG, "Step: " + step);
-                contentTextView_2.setVisibility(View.VISIBLE);
-                break;
-            case 2:
-                Log.e(TAG, "Step: " + step);
-                contentTextView_3.setVisibility(View.VISIBLE);
-                break;
-            case 3:
-                Log.e(TAG, "NOTHING TO SHOW, STEP: " + step);
-                break;
-            case 4:
-                Log.e(TAG, "NOTHING TO SHOW, STEP: " + step);
-                break;
-            case 5:
-                Log.e(TAG, "NOTHING TO SHOW, STEP: " + step);
-                break;
-
+        // Title is shown by default, so we'll start checking content blocks
+        // Step 1: Check if content_1 exists and has a value
+        if (resourceHasValue("module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_1")) {
+            actualStep++;
+            if (actualStep == step + 1) {
+                Log.e(TAG, "Step: " + actualStep + " - Showing content_1");
+                contentTextView_1.setVisibility(View.VISIBLE);
+                return;
+            }
+        } else {
+            contentTextView_1.setVisibility(View.GONE); // Hide if no value
         }
+
+        // Step 2: Check if content_2 exists and has a value
+        if (resourceHasValue("module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_2")) {
+            actualStep++;
+            if (actualStep == step + 1) {
+                Log.e(TAG, "Step: " + actualStep + " - Showing content_2");
+                contentTextView_2.setVisibility(View.VISIBLE);
+                return;
+            }
+        } else {
+            contentTextView_2.setVisibility(View.GONE); // Hide if no value
+        }
+
+        // Step 3: Check if content_3 exists and has a value
+        if (resourceHasValue("module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_3")) {
+            actualStep++;
+            if (actualStep == step + 1) {
+                Log.e(TAG, "Step: " + actualStep + " - Showing content_3");
+                contentTextView_3.setVisibility(View.VISIBLE);
+                return;
+            }
+        } else {
+            contentTextView_3.setVisibility(View.GONE); // Hide if no value
+        }
+
+        // If no more steps are available to show
+        Log.e(TAG, "No more steps to show, STEP: " + (step + 1));
     }
+
+//    private void showNextStep(int step) {
+//        step++;
+//        String TAG = "showNextStep(" + step + ")";
+//
+//        switch (step) {
+//            case 1:
+//                Log.e(TAG, "Step: " + step);
+//                contentTextView_2.setVisibility(View.VISIBLE);
+//                break;
+//            case 2:
+//                Log.e(TAG, "Step: " + step);
+//                contentTextView_3.setVisibility(View.VISIBLE);
+//                break;
+//            case 3:
+//                Log.e(TAG, "NOTHING TO SHOW, STEP: " + step);
+//                break;
+//            case 4:
+//                Log.e(TAG, "NOTHING TO SHOW, STEP: " + step);
+//                break;
+//            case 5:
+//                Log.e(TAG, "NOTHING TO SHOW, STEP: " + step);
+//                break;
+//
+//        }
+//    }
 
 //    private void updateNextButtonForFinalAction() {
 //        nextButton.setText("Next");

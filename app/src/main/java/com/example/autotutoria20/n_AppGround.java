@@ -11,7 +11,7 @@ import androidx.work.WorkManager;
 
 import java.util.concurrent.TimeUnit;
 
-public class MyApplication extends Application implements LifecycleObserver {
+public class n_AppGround extends Application implements LifecycleObserver {
 
     private static boolean isAppInForeground;
 

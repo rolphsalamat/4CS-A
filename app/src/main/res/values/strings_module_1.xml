@@ -3,9 +3,10 @@
 
     <!-- Module 1 -->
     <string name="module1_1_1_title">Alphabets and Strings</string>
-    <string name="module1_1_1_content_1">Welcome to Module 1</string>
-    <string name="module1_1_1_content_2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
-    <string name="module1_1_1_content_3">Go to res/values to modify the strings</string>
+<!--    Introduction to Formal Languages and Automata-->
+    <string name="module1_1_1_content_1"></string>
+    <string name="module1_1_1_content_2">In this lesson, we\'ll dive into the foundational concepts of alphabets and strings, essential building blocks in the study of formal languages and computational theory. An alphabet is a set of symbols, and a string is a sequence of these symbols. Understanding these basics is crucial as they form the basis for more complex topics such as languages, grammars, and automata that will be covered in future lessons.</string>
+    <string name="module1_1_1_content_3"></string>
 
     <!-- Module 2 -->
     <string name="module1_2_1_title">Operations on Strings</string>

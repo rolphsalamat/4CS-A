@@ -37,6 +37,9 @@ android {
 
 dependencies {
 
+    // for Text Lesson
+    implementation ("com.codesgood:justifiedtextview:1.1.0")
+
     // Remove the deprecated YouTube Player API dependency
     // implementation("com.google.android.youtube:youtube-android-player-api:1.2.2")
 

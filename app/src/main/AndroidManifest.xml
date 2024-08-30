@@ -9,7 +9,7 @@
 
     <application
 
-        android:name=".MyApplication"
+        android:name=".n_AppGround"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -31,7 +31,7 @@
         </receiver>
 
         <activity
-            android:name=".LauncherActivity"
+            android:name=".a_user_1_login_handler"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

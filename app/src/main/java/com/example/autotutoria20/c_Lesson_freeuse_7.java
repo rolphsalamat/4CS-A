@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +21,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class c_Lesson_freeuse_7 extends AppCompatActivity {
@@ -136,13 +134,13 @@ public class c_Lesson_freeuse_7 extends AppCompatActivity {
 
         switch (key) {
             case 1:
-                newText = progress + "/" + LessonSequence.getNumberOfSteps("M1_Lesson 7");
+                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M1_Lesson 7");
                 if (module1ProgressText != null) {
                     module1ProgressText.setText(newText);
                 } else {
                     Log.e("updateUI", "TextView for module 1 not found");
                 }
-                if (progress >= LessonSequence.getNumberOfSteps("M1_Lesson 7")) {
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 7")) {
                     cardCompletionStatus[0] = true; // Mark card 1 as completed
                 }
                 break;

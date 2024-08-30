@@ -151,25 +151,25 @@ public class c_Lesson_progressive_8 extends AppCompatActivity {
 
         switch (key) {
             case 1:
-                newText = progress + "/" + LessonSequence.getNumberOfSteps("M1_Lesson 8");
+                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M1_Lesson 8");
                 module1ProgressText.setText(newText);
-                if (progress >= LessonSequence.getNumberOfSteps("M1_Lesson 8")) {
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 8")) {
                     card2LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
                 }
                 break;
             case 2:
-                newText = progress + "/" + LessonSequence.getNumberOfSteps("M2_Lesson 8");
+                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M2_Lesson 8");
                 module2ProgressText.setText(newText);
-                if (progress >= LessonSequence.getNumberOfSteps("M2_Lesson 8")) {
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M2_Lesson 8")) {
                     card3LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
                 }
                 break;
             case 3:
-                newText = progress + "/" + LessonSequence.getNumberOfSteps("M3_Lesson 8");
+                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M3_Lesson 8");
                 module3ProgressText.setText(newText);
-                if (progress >= LessonSequence.getNumberOfSteps("M3_Lesson 8")) {
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M3_Lesson 8")) {
                     setCardCompletionStatus(key, true);
                     Log.d("Completed Lesson!", "Lesson 8 Completed! :D");
                 }

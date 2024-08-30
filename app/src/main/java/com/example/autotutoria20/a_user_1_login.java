@@ -31,7 +31,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class a_user_1_login extends AppCompatActivity {
@@ -143,7 +142,7 @@ public class a_user_1_login extends AppCompatActivity {
                                 }
 
                                 // Verify the entered password against the stored hash
-                                if (PasswordUtil.checkPassword(enteredPassword, storedHashedPassword)) {
+                                if (a_user_3_password_encryption.checkPassword(enteredPassword, storedHashedPassword)) {
                                     // Password matches, proceed with Firebase authentication
                                     mAuth.signInWithEmailAndPassword(email, enteredPassword)
                                             .addOnCompleteListener(a_user_1_login.this, new OnCompleteListener<AuthResult>() {
