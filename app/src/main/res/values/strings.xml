@@ -11,6 +11,12 @@
         <item>year(s)</item>
     </string-array>
 
+    <!-- Tutorial Title for First Login Attempt -->
+    <string name="tutorial">What should we put here???</string>
+
+    <!-- Video Lesson Title -->
+    <string name="video_lesson">What should we put here??</string>
+
     <!-- Module 1 -->
     <string name="module_1">Introduction to Formal Languages and Automata</string>
 

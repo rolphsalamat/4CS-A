@@ -23,10 +23,13 @@
         android:id="@+id/tvTutorialContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This is where you will find the tutorial content, guiding you through the features of the app."
+        android:text="@string/tutorial"
+        android:justificationMode="inter_word"
         android:textSize="16sp"
         android:textColor="@color/white"
         android:layout_marginBottom="24dp" />
+
+    <!-- WebView ba or ViewPager?? tapos parang TextLesson yung iteration?? -->
 
     <!-- FrameLayout to hold the WebView and cover the top and bottom areas -->
     <FrameLayout

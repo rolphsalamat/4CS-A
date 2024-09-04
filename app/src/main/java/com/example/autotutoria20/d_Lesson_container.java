@@ -2,6 +2,8 @@ package com.example.autotutoria20;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -48,6 +50,8 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
     private ViewPager viewPager;
     private L_lesson_handler pagerAdapter;
     private boolean isLessonFinished = false;
+    private long backPressedTime; // Variable to track back press time
+    private Toast backToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +113,15 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
             public void onPageSelected(int position) {
                 Log.e(TAG, "Displayed fragment position: " + position);
 
+
+                // Adjust the bottom margin of the ViewPager
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) viewPager.getLayoutParams();
+
+                // Default behavior of the 3 except video lesson..
+                params.bottomMargin = 0;  // Adjust this value as needed
+                viewPager.setLayoutParams(params);
+                nextButton.setVisibility(View.GONE);
+
                 // Get the current fragment
                 Fragment currentFragment = getCurrentFragment();
 
@@ -123,13 +136,19 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
                 if (currentFragment instanceof f_2_lesson_video) {
                     videoLesson = (f_2_lesson_video) currentFragment;
 
-                    // Adjust the bottom margin of the ViewPager for video lessons
-                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) viewPager.getLayoutParams();
                     params.bottomMargin = 200;  // Adjust this value as needed
                     viewPager.setLayoutParams(params);
 
-                    nextButton.setVisibility(View.VISIBLE);
-                } else {
+                    // kung ilang seconds ang delay bago ipakita yung next button
+                    int delayInSeconds = 5;
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            nextButton.setVisibility(View.VISIBLE);
+                        }
+                    }, delayInSeconds * 1000);
+                }
+                else {
                     videoLesson = null; // Clear the videoLesson reference when not on a video lesson
                 }
 
@@ -139,11 +158,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
                     textLessonFragment.loadTextContentForKey(currentModule + "_" + currentLesson, pageNumber);
 
                 } else if (currentFragment instanceof f_3_lesson_post_test) {
-                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) viewPager.getLayoutParams();
-                    params.bottomMargin = 0;  // Reset margin
-                    viewPager.setLayoutParams(params);
-
-                    nextButton.setVisibility(View.GONE);
+                    // wala na, naka declare na globally eh..
                 }
 
                 pagerAdapter.notifyDataSetChanged();
@@ -349,7 +364,9 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
 
         Log.e(TAG, "updateProgressAndMoveToNextStep()");
 
-        currentStep++;
+        // check para di na mag increment anymores :D
+        if (currentStep < numberOfSteps)
+            currentStep++;
 
         if (currentStep > furthestStep) {
             furthestStep = currentStep;
@@ -377,7 +394,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
 
         if (currentStep >= numberOfSteps) {
             // ahmmm wag ilagay dito yung finish??
-//                finish();
+                finish();
             Log.e("onNextBUttonClicked()", "tapos na dapat, pero dapat sa post-test to i-call");
             showToast("tapos na dapat, pero dapat sa post-test to i-call");
         } else {
@@ -434,11 +451,18 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
         Log.e(TEG, "pageNumber: " + pageNumber);
         Log.e(TEG, "numberOfTextLessons: " + numberOfTextLessons);
 
+        // Disable the button initially
+        nextButton.setEnabled(false);
+        nextButton.setVisibility(View.GONE);
 
-        // M3_Lesson 3
-        // kapag bumalik ako sa text lesson, tapos nag next ako pabalik "ULIT" sa post test
-        // di na sya napunta post test rekta natatapos na sya kasi nga mag i-increment nanaman
-        // hayss ewan
+        // Enable and show the button after the delay
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                nextButton.setEnabled(true);
+                nextButton.setVisibility(View.VISIBLE);
+            }
+        }, 3000);  // Convert seconds to milliseconds
 
         if (isDone && pageNumber <= numberOfTextLessons) {
             // Check if there are any remaining text lessons
@@ -454,7 +478,6 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
         }
     }
 
-
     @Override
     public void onPostTestComplete(boolean isCorrect) {
         Log.d("onPostTestComplete", "isCorrect: " + isCorrect);
@@ -463,6 +486,8 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
             isLessonFinished = true;
             updateProgressAndMoveToNextStep();
 //            onNextButtonClicked(); // Proceed to the next step if the test is passed
+
+            showToast("Post Test Complete!");
         } else {
 //            Toast.makeText(this, "Please complete the post-test before proceeding.", Toast.LENGTH_SHORT).show();
         }
@@ -550,6 +575,20 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
         // Simulate touch up event
         MotionEvent motionEventUp = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_UP, x, y, 0);
         viewPager.dispatchTouchEvent(motionEventUp);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            if (backToast != null) {
+                backToast.cancel();
+            }
+            showExitConfirmationDialog(); // Show the exit dialog on second back press
+        } else {
+            backToast = Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+        backPressedTime = System.currentTimeMillis(); // Update the back press time
     }
 
 }

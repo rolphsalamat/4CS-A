@@ -87,8 +87,7 @@ public class b_main_0_menu extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     //    private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imageUri;
-
-
+    private String TAG = "Main Menu";
 
 
     @Override
@@ -97,87 +96,53 @@ public class b_main_0_menu extends AppCompatActivity {
         Log.d("hello", "word");
         setContentView(R.layout.b_main_0_menu);
 
+        // Initialize FirebaseAuth
+        mAuth = FirebaseAuth.getInstance();
+
+        // Retrieve user session data from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
+
+        if (isLoggedIn) {
+            Log.e(TAG, "isLoggedIn: " + isLoggedIn);
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            // Check if the tutorial is completed
+            a_user_1_login_handler.checkTutorialCompletion(new a_user_1_login_handler.TutorialCompletionCallback() {
+                @Override
+                public void onTutorialChecked(boolean isComplete) {
+                    Log.e(TAG, "checkTutorialCompletion(): " + isComplete);
+                    if (isComplete) {
+                        // The tutorial has been completed, proceed with fetching user data or whatever comes next
+                        FirebaseUser currentUser = mAuth.getCurrentUser();
+                        if (currentUser != null) {
+                            String userId = currentUser.getUid();
+                            fetchUserData(userId);
+                        }
+                    } else {
+                        // The tutorial has not been completed, show the tutorial
+                        showTutorial();
+                    }
+                }
+            });
+
+
+        } else {
+            // User is not logged in, redirect to login screen
+            redirectToLogin();
+        }
+
+
+
         Log.d("hello", "allyzza");
-//        adjustObjects();
-
-//        FirebaseUser user = mAuth.getCurrentUser();
-
-        // ang goal ko kasi sana dito, i-retrieve kung gaano karami na yung loginAttempts ni user,
-        // 0 = showTutorial();
-        // 1 = continue as usual..
-
-        // ang options ko kasi ay sa intent, since pinass ko naman sya from login, since syempre..
-        // kung first login ni user edi manggagaling sya sa login..
-        // otherwise edi previously logged in na sya..
-
-        // kaso pano kung pagka start ng tutorial umalis sya??
-        // then ni-restart yung app?? So dederecho na sya sa usual kasi wala nang intent na maipapasa??
-
-        // mag shared preference ba??
-//        if (user != null) {
-//            String userId = user.getUid();
-//            Task<DocumentSnapshot> loginAttempts = db.collection("users").document(userId).get(Source.valueOf("Login Attempts"));
-//
-//
-//            Toast.makeText(this, "loginAttempts: " + loginAttempts, Toast.LENGTH_SHORT).show();
-//        }
-//        Intent intent = getIntent();
-//        int loginAttempts = intent.getIntExtra("loginAttempts", -1);
-
-//        Toast.makeText(this, "loginAttempts: " + loginAttempts, Toast.LENGTH_SHORT).show();
-//        if (intent.get)
-
-        // Fetch the relevant Firestore document directly and update the corresponding score
-//        db.collection("users").document(userId)
 
         learningModeText = findViewById(R.id.learning_mode_text);
         learningModeIcon = findViewById(R.id.learning_mode_icon);
-
-//        // Create a one-time work request to be triggered every 5 seconds
-//        OneTimeWorkRequest oneTimeWorkRequest =
-//                new OneTimeWorkRequest.Builder(n_Worker.class)
-//                        .setInitialDelay(5, TimeUnit.SECONDS)
-//                        .build();
-//
-//        // Enqueue the work request
-//        WorkManager.getInstance(this).enqueue(oneTimeWorkRequest);
-//        Log.e("b_main_0_menu", "One-time work request for notifications enqueued");
-
-        mAuth = FirebaseAuth.getInstance();
 
         // Initialize the NavigationView and its header view
         navigationView = findViewById(R.id.navigation_view);
         View headerView = navigationView.getHeaderView(0);
         greetUserName = headerView.findViewById(R.id.user_firstName);
         profileImageView = headerView.findViewById(R.id.user_profile_picture); // Initialize profileImageView here
-
-        // Retrieve user session data from SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
-        boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
-
-//        if (isLoggedIn) {
-//            String userId = mAuth.getCurrentUser().getUid();
-//            fetchUserData(userId);
-//        } else {
-//            // User is not logged in, redirect to login screen
-//            Intent loginIntent = new Intent(this, a_user_1_login.class);
-//            startActivity(loginIntent);
-//            finish();
-//        }
-
-        if (isLoggedIn) {
-            FirebaseUser currentUser = mAuth.getCurrentUser();
-            if (currentUser != null) {
-                String userId = currentUser.getUid();
-                fetchUserData(userId);
-            } else {
-                // Handle the case where the user is not loggced in
-                redirectToLogin();
-            }
-        } else {
-            // User is not logged in, redirect to login screen
-            redirectToLogin();
-        }
 
         // Initialize ViewPager
         viewPager = findViewById(R.id.view_pager);
@@ -242,7 +207,6 @@ public class b_main_0_menu extends AppCompatActivity {
                 } else if (id == R.id.log_out) {
                     showLogoutDialog();
                 }
-                // Handle other options if necessary
                 return false;
             }
         });
@@ -305,11 +269,37 @@ public class b_main_0_menu extends AppCompatActivity {
         });
     }
 
+
+    private void showTutorial() {
+        Log.d("b_main_0_menu", "Showing tutorial because loginAttempts is 0");
+        Intent tutorialIntent = new Intent(this, b_main_0_menu_tutorial.class);
+        startActivity(tutorialIntent);
+        finish();
+    }
+
+//    private void moveToMainMenu(String firstName, String lastName, String email, String gender, int age, int loginAttempts) {
+//        Intent intent = new Intent(this, b_main_0_menu.class);
+//        intent.putExtra("firstName", firstName);
+//        intent.putExtra("lastName", lastName);
+//        intent.putExtra("email", email);
+//        intent.putExtra("gender", gender);
+//        intent.putExtra("age", age);
+//        intent.putExtra("loginAttempts", loginAttempts);
+//        startActivity(intent);
+//        finish(); // Finish the login activity
+//    }
+
     private void redirectToLogin() {
         Intent loginIntent = new Intent(this, a_user_1_login.class);
         startActivity(loginIntent);
         finish();
     }
+
+//    private void redirectToLogin() {
+//        Intent loginIntent = new Intent(this, a_user_1_login.class);
+//        startActivity(loginIntent);
+//        finish();
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -585,6 +575,34 @@ public class b_main_0_menu extends AppCompatActivity {
         startActivity(new Intent(Intent.ACTION_VIEW, uri));
     }
 
+//    private void fetchUserData(String userId) {
+//        DocumentReference userRef = db.collection("users").document(userId);
+//        userRef.get().addOnCompleteListener(task -> {
+//            if (task.isSuccessful()) {
+//                DocumentSnapshot document = task.getResult();
+//                if (document.exists()) {
+//                    Boolean tutorial = document.getBoolean("Tutorial");
+//                    String firstName = document.getString("First Name");
+//                    String lastName = document.getString("Last Name");
+//                    String email = document.getString("Email Address");
+//                    String gender = document.getString("Gender");
+//                    int age = document.getLong("Age").intValue();
+//
+//                    Log.e("fetchUserData", "First Login?: " + tutorial);
+//
+//                    // Check login attempts and show tutorial if it's 0
+//                    if (!tutorial) {
+//                        showTutorial();
+//                    }
+//                } else {
+//                    Toast.makeText(b_main_0_menu.this, "No user data found", Toast.LENGTH_SHORT).show();
+//                }
+//            } else {
+//                Toast.makeText(b_main_0_menu.this, "Error fetching user data", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
+
     private void fetchUserData(String userId) {
 
         String TAG = "fetchUserData";
@@ -593,9 +611,10 @@ public class b_main_0_menu extends AppCompatActivity {
         userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
+                        Boolean tutorial = document.getBoolean("Tutorial");
                         String firstName = document.getString("First Name");
                         String lastName = document.getString("Last Name");
                         String email = document.getString("Email Address");
@@ -607,6 +626,7 @@ public class b_main_0_menu extends AppCompatActivity {
                         Boolean newCourse = document.getBoolean("New Course Available Notification");
                         Boolean reminderNotif = document.getBoolean("Reminder Notification");
 
+                        Log.e(TAG, "First Login: " + tutorial);
                         Log.e(TAG, "First Name: " + firstName);
                         Log.e(TAG, "Last Name: " + lastName);
                         Log.e(TAG, "Email Address: " + email);
@@ -655,7 +675,6 @@ public class b_main_0_menu extends AppCompatActivity {
                 }
             }
         });
-//        userRef.update("Login Attempts", )
     }
 
     private void fetchLessonData(String userId) {

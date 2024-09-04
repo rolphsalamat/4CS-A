@@ -20,8 +20,9 @@
                 android:id="@+id/text_lesson_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
-                android:text="Lesson Content"
+                android:text="Lesson Title"
                 android:textSize="24sp"
                 android:textColor="@color/white"
                 android:textStyle="bold"
@@ -32,45 +33,46 @@
                 android:id="@+id/text_lesson_content_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="In this lesson, we'll dive into the foundational concepts of alphabets and strings, essential building blocks in the study of formal languages and computational theory. An alphabet is a set of symbols, and a string is a sequence of these symbols. Understanding these basics is crucial as they form the basis for more complex topics such as languages, grammars, and automata that will be covered in future lessons."
+                android:text="Lesson Content 1"
                 android:textSize="20sp"
                 android:textColor="@color/white"
                 android:layout_marginTop="16dp"
                 android:justificationMode="inter_word"
-                android:letterSpacing="0.05"
-                android:lineSpacingExtra="4dp"
+                android:letterSpacing="0.0025"
+                android:lineSpacingExtra="2dp"
                 android:lineSpacingMultiplier="1.2"/>
 
             <TextView
                 android:id="@+id/text_lesson_content_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Another section of your lesson content."
+                android:text="Lesson Content 2"
                 android:textSize="18sp"
                 android:textColor="@color/white"
                 android:layout_marginTop="16dp"
                 android:justificationMode="inter_word"
-                android:letterSpacing="0.05"
-                android:lineSpacingExtra="4dp"
+                android:letterSpacing="0.0025"
+                android:lineSpacingExtra="2dp"
                 android:lineSpacingMultiplier="1.2"/>
 
             <TextView
                 android:id="@+id/text_lesson_content_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Yet another section of your lesson content."
+                android:text="Lesson Content 3"
                 android:textSize="18sp"
                 android:textColor="@color/white"
                 android:layout_marginTop="16dp"
                 android:justificationMode="inter_word"
-                android:letterSpacing="0.05"
-                android:lineSpacingExtra="4dp"
+                android:letterSpacing="0.0025"
+                android:lineSpacingExtra="2dp"
                 android:lineSpacingMultiplier="1.2"/>
         </LinearLayout>
     </LinearLayout>
 
     <!-- Next Button at the bottom -->
     <Button
+        android:id="@+id/tap_to_continue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"

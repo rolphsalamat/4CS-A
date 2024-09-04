@@ -39,29 +39,6 @@ public class e_Module_1 {
 
     public static final int[] post_test_lesson_1_answers = {0, 1, 1};
 
-    public static final String[] post_test_lesson_1_questions_easy = {
-            "Pogi ba ako",
-            "What does a string represent in formal language?",
-            "How do you denote the empty string?"
-    };
-
-    public static final String[][] post_test_lesson_1_choices_easy = {
-            {"True", "False"},
-            {"True", "False"},
-            {"True", "False"},
-    };
-
-    public static final int[] post_test_lesson_1_answers_easy = {
-            0,
-            1,
-            1
-    };
-
-    public static final String[] post_test_lesson_1_answers_hard = {
-            "dalton",
-            "allyzza",
-            "jeffrey"
-    };
 
     // Pre-test questions, choices, and answers for Lesson 2
     public static final String[] pre_test_lesson_2_questions = {

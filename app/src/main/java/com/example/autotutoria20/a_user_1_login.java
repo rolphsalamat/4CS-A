@@ -190,7 +190,7 @@ public class a_user_1_login extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        int loginAttempts = document.getLong("Login Attempts").intValue();
+                        Boolean tutorial = document.getBoolean("Tutorial");
                         String firstName = document.getString("First Name");
                         String lastName = document.getString("Last Name");
                         String email = document.getString("Email Address");
@@ -200,6 +200,7 @@ public class a_user_1_login extends AppCompatActivity {
                         // Store user information in SharedPreferences
                         SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("tutorial", tutorial);
                         editor.putString("userId", userId);
                         editor.putString("firstName", firstName);
                         editor.putString("lastName", lastName);
@@ -210,7 +211,7 @@ public class a_user_1_login extends AppCompatActivity {
                         editor.apply();
 
                         // Fetch lesson data and move to the main menu
-                        fetchLessonData(userId, firstName, lastName, email, gender, age, loginAttempts);
+                        fetchLessonData(userId, firstName, lastName, email, gender, age, tutorial);
                     } else {
                         Log.d("Firestore", "User document does not exist");
                     }
@@ -222,7 +223,7 @@ public class a_user_1_login extends AppCompatActivity {
         });
     }
 
-    private void fetchLessonData(String userId, String firstName, String lastName, String email, String gender, int age, int loginAttempts) {
+    private void fetchLessonData(String userId, String firstName, String lastName, String email, String gender, int age, boolean tutorial) {
         fetchModeData(userId, "Progressive Mode", new OnDataFetchedCallback() {
             @Override
             public void onDataFetched() {
@@ -230,7 +231,7 @@ public class a_user_1_login extends AppCompatActivity {
                     @Override
                     public void onDataFetched() {
                         Log.d("Firestore", "All lesson data retrieved");
-                        moveToMainMenu(firstName, lastName, email, gender, age, loginAttempts);
+                        moveToMainMenu(firstName, lastName, email, gender, age, tutorial);
                     }
                 });
             }
@@ -279,14 +280,14 @@ public class a_user_1_login extends AppCompatActivity {
         editor.apply();
     }
 
-    private void moveToMainMenu(String firstName, String lastName, String email, String gender, int age, int loginAttempts) {
+    private void moveToMainMenu(String firstName, String lastName, String email, String gender, int age, boolean Tutorial) {
         Intent intent = new Intent(a_user_1_login.this, b_main_0_menu.class);
         intent.putExtra("firstName", firstName);
         intent.putExtra("lastName", lastName);
         intent.putExtra("email", email);
         intent.putExtra("gender", gender);
         intent.putExtra("age", age);
-        intent.putExtra("loginAttempts", loginAttempts);
+        intent.putExtra("tutorial", Tutorial);
         startActivity(intent);
         finish(); // Finish the login activity
     }

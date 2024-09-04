@@ -2,10 +2,13 @@ package com.example.autotutoria20;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,8 +28,13 @@ public class f_1_lesson_text extends Fragment {
     private String currentLesson; // Variable to store currentLesson
 
     private TextView titleTextView;
-    private TextView contentTextView_1, contentTextView_2, contentTextView_3;
+    private TextView
+            contentTextView_1,
+            contentTextView_2,
+            contentTextView_3;
     private LinearLayout nextButton;
+    private Boolean isTextLessonDone = false;
+    private Button tapToContinueButton;
     private int currentStep = 0; // Track which content is currently shown
     private int pageNumber = 1; // will be incremented after page is done :)
 
@@ -34,14 +42,16 @@ public class f_1_lesson_text extends Fragment {
     // nagtataka ako dito eh, bakit hindi nalang gamitin yung LessonSequence Class
     // para mai-store dito yung length nung sequence per individual na module??
     // tapos pano maii-store kung ilang page ba sa isang module lesson??
-    private int[] module1Steps = {3, 2, 2, 2};
-    private int[] module2Steps = {2};
-    private int[] module3Steps = {2, 2, 2};
-    private int[] module4Steps = {2, 2, 2};
-    private int[] module5Steps = {2, 2, 2};
-    private int[] module6Steps = {2, 2, 2};
-    private int[] module7Steps = {3};
-    private int[] module8Steps = {2, 2, 2};
+//    private int[] module1Steps = {3, 2, 2, 2};
+//    private int[] module2Steps = {2};
+//    private int[] module3Steps = {2, 2, 2};
+//    private int[] module4Steps = {2, 2, 2};
+//    private int[] module5Steps = {2, 2, 2};
+//    private int[] module6Steps = {2, 2, 2};
+//    private int[] module7Steps = {3};
+//    private int[] module8Steps = {2, 2, 2};
+
+    // Gaano katagal bago mag show yung buttons and others??
     private TextLessonCompleteListener TextLessonCompleteListener;
     private OnNextButtonClickListener callback;
     private int totalSteps = 2; // Default total steps
@@ -78,6 +88,9 @@ public class f_1_lesson_text extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.f_1_lesson_text, container, false);
 
+        // Reset??
+        currentStep = 0;
+
         // Retrieve the key from the arguments
         if (getArguments() != null) {
             key = getArguments().getString(ARG_KEY);
@@ -104,6 +117,23 @@ public class f_1_lesson_text extends Fragment {
         contentTextView_2 = view.findViewById(R.id.text_lesson_content_2);
         contentTextView_3 = view.findViewById(R.id.text_lesson_content_3);
         nextButton = view.findViewById(R.id.next_button);
+        tapToContinueButton = view.findViewById(R.id.tap_to_continue);
+
+//        // Disable nextButton temporarily and set tapToContinueButton to GONE
+//        nextButton.setEnabled(false);
+//        tapToContinueButton.setVisibility(View.GONE);
+//
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                // Enable nextButton and make tapToContinueButton visible after n seconds
+//                nextButton.setEnabled(true);
+//                tapToContinueButton.setVisibility(View.VISIBLE);
+//            }
+//        }, delayInSeconds * 750);  // 5000 milliseconds = 5 seconds
+
+        nextButton.setEnabled(true);
+        tapToContinueButton.setVisibility(View.VISIBLE);
 
         // Ensure TextViews and Button are not null
         if (titleTextView == null || contentTextView_1 == null || contentTextView_2 == null || contentTextView_3 == null || nextButton == null) {
@@ -111,6 +141,7 @@ public class f_1_lesson_text extends Fragment {
             return;  // Early return to prevent further crashes
         }
 
+        contentTextView_1.setVisibility(View.GONE);
         contentTextView_2.setVisibility(View.GONE);
         contentTextView_3.setVisibility(View.GONE);
 
@@ -125,9 +156,30 @@ public class f_1_lesson_text extends Fragment {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleNextButtonClick(key);
+
+                // Disable the button immediately
+                nextButton.setEnabled(false);
+
+                // Disable and Hide "Tap to Continue"
+                tapToContinueButton.setEnabled(false);
+                tapToContinueButton.setVisibility(View.GONE);
+
+                handleNextButtonClick();
+
+//                // Use a Handler to re-enable the button after 5 seconds and make it visible again
+//                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        nextButton.setEnabled(true); // Re-enable the button
+//                        // Make the buttons visible again
+//                        nextButton.setVisibility(View.VISIBLE);
+//                        if (!isTextLessonDone)
+//                            tapToContinueButton.setVisibility(View.VISIBLE);
+//                    }
+//                }, delayInSeconds * 1000); // 5000 milliseconds = 5 seconds
             }
         });
+
     }
 
     @Override
@@ -168,6 +220,7 @@ public class f_1_lesson_text extends Fragment {
     }
 
     private void setTotalStepsForKey(String key) {
+
         totalSteps = 0;  // Reset total steps
 
         // Generate resource names dynamically
@@ -184,7 +237,6 @@ public class f_1_lesson_text extends Fragment {
         Log.e("setTotalStepsForKey", "totalSteps: " + totalSteps);
     }
 
-
     private boolean resourceHasValue(String resourceName) {
         int resId = getResources().getIdentifier(resourceName, "string", getContext().getPackageName());
         if (resId != 0) {  // Check if the resource ID is valid
@@ -197,48 +249,93 @@ public class f_1_lesson_text extends Fragment {
     }
 
 
-
-
-    private void handleNextButtonClick(String key) {
+    private void handleNextButtonClick() {
         Log.d("handleNextButtonClick()", "currentStep(" + currentStep + ") < totalSteps(" + totalSteps + ")");
 
-
-        if (currentStep < (totalSteps-1)) {
-            showNextStep(currentStep);
-        } else {
-            // Reset currentStep for the next page
-            currentStep = 0;
-//            pageNumber++;
-
-            // Increment the pageNumber for the next set of content
-//            loadTextContentForKey(key);
-
-////             Load the first step of the new content
-//            showNextStep(currentStep);
-
+        // after (n-2)th step, the Text Lesson should display Next Button
+        if (currentStep == (totalSteps-2)) {
             if (TextLessonCompleteListener != null) {
                 TextLessonCompleteListener.onTextLessonComplete(true);
             }
+        }
+
+        // (n-1) step, dapat di na mag show yung "Tap to Continue"
+        // dapat yung Next Button nalang from d_Lesson_container ang mag-show
+        if (currentStep == (totalSteps-1)) {
+            isTextLessonDone = true;
+
+            nextButton.setVisibility(View.GONE);
+            nextButton.setEnabled(false);
+
+            tapToContinueButton.setVisibility(View.GONE);
+            tapToContinueButton.setEnabled(false);
+        }
+
+        if (currentStep < (totalSteps-1)) {
+            showNextStep(currentStep);
+
+            currentStep++;
+        }
+        else {
 
             // Notify the parent activity that the button was clicked
             if (callback != null) {
                 callback.onNextButtonClicked();
+//                // Reset currentStep for the next page
+//                currentStep = 0;
             }
+
         }
-        currentStep++;
     }
 
     private void showNextStep(int step) {
         String TAG = "showNextStep";
         int actualStep = 0;
 
+//        nextButton.setVisibility(View.GONE);
+        nextButton.setEnabled(false);
+
+        tapToContinueButton.setVisibility(View.GONE);
+        tapToContinueButton.setEnabled(false);
+
+//        if ((step+2) == totalSteps) {
+//            tapToContinueButton.setVisibility(View.GONE);
+//            tapToContinueButton.setEnabled(false);
+//
+//            nextButton.setVisibility(View.VISIBLE);
+//            nextButton.setEnabled(true);
+//
+////            currentStep++;
+//        }
+
         // Title is shown by default, so we'll start checking content blocks
         // Step 1: Check if content_1 exists and has a value
-        if (resourceHasValue("module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_1")) {
+        String content1Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_1";
+        if (resourceHasValue(content1Key)) {
             actualStep++;
             if (actualStep == step + 1) {
                 Log.e(TAG, "Step: " + actualStep + " - Showing content_1");
+
+                // Get the content string to determine delay
+                int resId = getResources().getIdentifier(content1Key, "string", getContext().getPackageName());
+                String content = getString(resId);
+                int delayInSeconds = calculateDelayBasedOnLength(content.length());
+
                 contentTextView_1.setVisibility(View.VISIBLE);
+                // Delay showing the nextButton based on the content length
+
+                Log.e(TAG, "show context 1 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
+
+                if (currentStep < (totalSteps-2)) {
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            nextButton.setEnabled(true); // Enable the button
+                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
+                        }
+                    }, delayInSeconds * 1000);
+                }
+
                 return;
             }
         } else {
@@ -246,11 +343,32 @@ public class f_1_lesson_text extends Fragment {
         }
 
         // Step 2: Check if content_2 exists and has a value
-        if (resourceHasValue("module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_2")) {
+        String content2Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_2";
+        if (resourceHasValue(content2Key)) {
             actualStep++;
             if (actualStep == step + 1) {
                 Log.e(TAG, "Step: " + actualStep + " - Showing content_2");
+
+                // Get the content string to determine delay
+                int resId = getResources().getIdentifier(content2Key, "string", getContext().getPackageName());
+                String content = getString(resId);
+                int delayInSeconds = calculateDelayBasedOnLength(content.length());
+
                 contentTextView_2.setVisibility(View.VISIBLE);
+                // Delay showing the nextButton based on the content length
+
+                Log.e(TAG, "show context 2 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
+
+                if (currentStep < (totalSteps-2)) {
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            nextButton.setEnabled(true); // Enable the button
+                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
+                        }
+                    }, delayInSeconds * 1000);
+                }
+
                 return;
             }
         } else {
@@ -258,11 +376,32 @@ public class f_1_lesson_text extends Fragment {
         }
 
         // Step 3: Check if content_3 exists and has a value
-        if (resourceHasValue("module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_3")) {
+        String content3Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_3";
+        if (resourceHasValue(content3Key)) {
             actualStep++;
             if (actualStep == step + 1) {
                 Log.e(TAG, "Step: " + actualStep + " - Showing content_3");
+
+                // Get the content string to determine delay
+                int resId = getResources().getIdentifier(content3Key, "string", getContext().getPackageName());
+                String content = getString(resId);
+                int delayInSeconds = calculateDelayBasedOnLength(content.length());
+
                 contentTextView_3.setVisibility(View.VISIBLE);
+                // Delay showing the nextButton based on the content length
+
+                Log.e(TAG, "show context 3 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
+
+                if (currentStep < (totalSteps-2)) {
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            nextButton.setEnabled(true); // Enable the button
+                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
+                        }
+                    }, delayInSeconds * 1000);
+                }
+
                 return;
             }
         } else {
@@ -272,6 +411,73 @@ public class f_1_lesson_text extends Fragment {
         // If no more steps are available to show
         Log.e(TAG, "No more steps to show, STEP: " + (step + 1));
     }
+
+    private int calculateDelayBasedOnLength(int length) {
+
+        /**
+         * This method calculates the delay based on the length of the string and the reading speed of the target audience.
+         *
+         * Reference Table for Multiplier:
+         * +--------------------------------+-----------------+------------------------------+---------------------------+
+         * | Educational Level              |   Average WPM   |  Characters Per Second (CPS) |  Multiplier (sec/char)    |
+         * +--------------------------------+-----------------+------------------------------+---------------------------+
+         * | 1. Elementary Student          |  100 - 150 WPM  |  8.33 - 12.50 CPS            |  0.0800 - 0.1200 sec/char |
+         * | 2. High School Student         |  200 - 300 WPM  |  16.67 - 25.00 CPS           |  0.0400 - 0.0600 sec/char |
+         * | 3. Senior High School Student  |  250 - 350 WPM  |  20.83 - 29.17 CPS           |  0.0343 - 0.0480 sec/char |
+         * | 4. College Student             |  250 - 350 WPM  |  20.83 - 29.17 CPS           |  0.0343 - 0.0480 sec/char |
+         * | 5. Graduate (Bachelor's)       |  300 - 400 WPM  |  25.00 - 33.33 CPS           |  0.0300 - 0.0400 sec/char |
+         * | 6. Master's Student            |  350 - 450 WPM  |  29.17 - 37.50 CPS           |  0.0267 - 0.0343 sec/char |
+         * | 7. Doctorate (PhD)             |  400 - 500 WPM  |  33.33 - 41.67 CPS           |  0.0240 - 0.0300 sec/char |
+         * +--------------------------------+-----------------+------------------------------+---------------------------+
+         */
+
+        int level = 2; // Default to High School Student
+
+        // Adjust the multiplier based on the educational level
+        double multiplier;
+        switch (level) {
+            case 0: // User-Friendly
+                multiplier = 0.15; // No Average Data, just for user-friendliness
+                break;
+            case 1: // Elementary Student
+                multiplier = 0.10; // Average of 0.0800 - 0.1200
+                break;
+            case 2: // High School Student
+                multiplier = 0.05; // Average of 0.0400 - 0.0600
+                break;
+            case 3: // Senior High School Student
+                multiplier = 0.0412; // Average of 0.0343 - 0.0480
+                break;
+            case 4: // College Student
+                multiplier = 0.0412; // Average of 0.0343 - 0.0480
+                break;
+            case 5: // Graduate (Bachelor's)
+                multiplier = 0.035; // Average of 0.0300 - 0.0400
+                break;
+            case 6: // Master's Student
+                multiplier = 0.0305; // Average of 0.0267 - 0.0343
+                break;
+            case 7: // Doctorate (PhD)
+                multiplier = 0.027; // Average of 0.0240 - 0.0300
+                break;
+            default:
+                multiplier = 0.05; // Default value if no valid level is provided
+                break;
+        }
+
+        return (int) (length * multiplier);
+    }
+
+
+//    private int calculateDelayBasedOnLength(int length) {
+//        // Adjust the multiplier according to your target audience.
+//        // For example, using 0.05 seconds per character (which corresponds to 20 characters per second).
+//        double multiplier = 0.06; // Adjust this value based on your target audience
+//
+//        return (int) (length * multiplier);
+//    }
+
+
 
 //    private void showNextStep(int step) {
 //        step++;

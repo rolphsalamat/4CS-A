@@ -14,12 +14,17 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class b_main_0_menu_tutorial extends AppCompatActivity {
 
     private WebView webView;
     private static final String TAG = "TutorialActivity";
     private View youtubeButton;
     private View googleDriveButton;
+    private FirebaseAuth mAuth;
 
     // Known publicly available YouTube video
     String videoUrl = "0MJAYH7o5fs";
@@ -28,6 +33,8 @@ public class b_main_0_menu_tutorial extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.b_main_0_menu_tutorial);
+
+        mAuth = FirebaseAuth.getInstance();
 
         Log.d(TAG, "onCreate: Tutorial Activity started");
 
@@ -121,12 +128,41 @@ public class b_main_0_menu_tutorial extends AppCompatActivity {
     }
 
     private void markTutorialAsCompleted() {
-        Log.d(TAG, "Marking tutorial as completed");
-        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("isTutorialCompleted", true);
-        editor.apply();
-        Log.d(TAG, "Tutorial completion status saved");
+        FirebaseAuth mAuth = FirebaseAuth.getInstance(); // Ensure FirebaseAuth is initialized
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+            // Update Firestore
+            db.collection("users").document(userId)
+                    .update("Tutorial", true)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d("Tutorial", "Tutorial completion updated in Firestore");
+
+                        // Update SharedPreferences
+                        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("isTutorialCompleted", true);
+                        editor.apply();
+
+                        // Move to the main menu or next activity
+//                        moveToMainMenu();
+                        finish();
+                    })
+                    .addOnFailureListener(e -> Log.e("Tutorial", "Error updating tutorial completion", e));
+        } else {
+            Log.e("Tutorial", "No authenticated user found");
+            // Handle the case where the user is not authenticated, e.g., redirect to login
+            redirectToLogin();
+        }
+    }
+
+    private void redirectToLogin() {
+        Intent loginIntent = new Intent(this, a_user_1_login.class);
+        startActivity(loginIntent);
+        finish();
     }
 
     @Override

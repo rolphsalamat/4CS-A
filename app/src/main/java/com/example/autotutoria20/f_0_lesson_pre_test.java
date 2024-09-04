@@ -113,7 +113,7 @@ public class f_0_lesson_pre_test extends Fragment {
 
         questionText = view.findViewById(R.id.question_text);
         choicesGroup = view.findViewById(R.id.choices_group);
-        submitButton = view.findViewById(R.id.submit_button);
+        submitButton = view.findViewById(R.id.submit_pre_test);
 
         if (getArguments() != null) {
             String module = getArguments().getString(ARG_MODULE);
@@ -280,6 +280,18 @@ public class f_0_lesson_pre_test extends Fragment {
             RadioButton choiceButton = new RadioButton(context);
             choiceButton.setId(i);
             choiceButton.setText(choices[i]);
+            choiceButton.setTextColor(getResources().getColor(R.color.white));  // Set text color to white
+            choiceButton.setTextSize(18);  // Set text size to 18sp (you can adjust this size)
+
+            // Create LayoutParams for margin settings
+            RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
+                    RadioGroup.LayoutParams.WRAP_CONTENT,
+                    RadioGroup.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(0, 8, 0, 8);  // Set margins (left, top, right, bottom) in pixels
+
+            choiceButton.setLayoutParams(params);  // Apply the margins to the RadioButton
+
             choicesGroup.addView(choiceButton);
         }
     }

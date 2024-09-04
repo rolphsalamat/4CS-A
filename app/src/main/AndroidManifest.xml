@@ -86,9 +86,9 @@
         <activity android:name=".d_Lesson_container" android:exported="true"/>
 
         <!-- Di ko alam, pero most likely di na gagamitin tong mga to -->
-        <activity android:name=".Lesson_2" android:exported="true"/>
-        <activity android:name=".Lesson_3" android:exported="true"/>
-        <activity android:name=".Lesson_4" android:exported="true"/>
+<!--        <activity android:name=".Lesson_2" android:exported="true"/>-->
+<!--        <activity android:name=".Lesson_3" android:exported="true"/>-->
+<!--        <activity android:name=".Lesson_4" android:exported="true"/>-->
 
         <!-- Lesson Iteration -->
 <!--        <activity android:name=".PostTestActivity" android:exported="true"/>-->

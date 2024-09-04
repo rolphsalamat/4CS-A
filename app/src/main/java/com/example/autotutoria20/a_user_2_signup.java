@@ -158,6 +158,7 @@ public class a_user_2_signup extends AppCompatActivity {
 
             // Create a map to store user data
             userData = new HashMap<>();
+            userData.put("Tutorial", false);
             userData.put("First Name", firstName);
             userData.put("Last Name", lastName);
             userData.put("Email Address", email);

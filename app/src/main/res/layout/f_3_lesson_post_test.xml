@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Post Test"
+        android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_gravity="center"/>
@@ -21,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="What did you learn from this lesson?"
+        android:textColor="@color/white"
         android:textSize="18sp"
         android:layout_marginTop="16dp"/>
 
@@ -28,15 +30,36 @@
         android:id="@+id/choices_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
         android:orientation="vertical"
         android:padding="8dp" />
 
+    <!-- Spacer view to push the button to the bottom -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+<!--    <Button-->
+<!--        android:id="@+id/submit_post_test"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="SUBMIT"-->
+<!--        android:background="@drawable/rounded_button"-->
+<!--        android:textColor="@android:color/white"-->
+<!--        android:textSize="18sp"-->
+<!--        android:padding="12dp"-->
+<!--        android:elevation="4dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        />-->
+
     <Button
         android:id="@+id/submit_post_test"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Submit"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"/>
+        android:text="Next"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="10dp"/>
 
 </LinearLayout>

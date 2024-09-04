@@ -128,12 +128,13 @@ public class f_3_lesson_post_test extends Fragment {
 
         submitButton.setOnClickListener(v -> {
 
-            answerAttempt++;
-
             if (choicesGroup.getCheckedRadioButtonId() == -1) {
-//                Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
                 return;
             } else {
+
+                answerAttempt++;
+
                 boolean correctAnswer = checkAnswer();
                 Log.e("submitButton.onClick", "correctAnswer: " + correctAnswer);
 
@@ -171,9 +172,11 @@ public class f_3_lesson_post_test extends Fragment {
                 }
 
                 // to give student chance to get correct answer before loading another question
-                if (answerAttempt >= attemptChances) {
-                    loadQuestion(); // Load the next question
-                    answerAttempt = 0;
+                if (answerAttempt == attemptChances) {
+                    if (!correctAnswer) {
+                        loadQuestion(); // Load the next question
+                        answerAttempt = 0;
+                    }
                 }
             }
 
@@ -265,6 +268,18 @@ public class f_3_lesson_post_test extends Fragment {
             RadioButton choiceButton = new RadioButton(getContext());
             choiceButton.setId(i);
             choiceButton.setText(choices[i]);
+            choiceButton.setTextColor(getResources().getColor(R.color.white));  // Set text color to white
+            choiceButton.setTextSize(18);  // Set text size to 18sp (you can adjust this size)
+
+            // Create LayoutParams for margin settings
+            RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
+                    RadioGroup.LayoutParams.WRAP_CONTENT,
+                    RadioGroup.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(0, 8, 0, 8);  // Set margins (left, top, right, bottom) in pixels
+
+            choiceButton.setLayoutParams(params);  // Apply the margins to the RadioButton
+
             choicesGroup.addView(choiceButton);
         }
     }

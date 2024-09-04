@@ -1,30 +1,51 @@
-<!-- fragment_pre_test.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/question_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Question will appear here"
+        android:textColor="@color/white"
         android:textSize="24sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
 
     <RadioGroup
         android:id="@+id/choices_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
         android:orientation="vertical"
-        android:padding="8dp" />
+        android:padding="8dp"
+        android:layout_below="@id/question_text"
+        android:layout_marginTop="20dp" />
+
+<!--    <Button-->
+<!--        android:id="@+id/submit_pre_test"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="SUBMIT"-->
+<!--        android:background="@drawable/rounded_button"-->
+<!--        android:textColor="@android:color/white"-->
+<!--        android:textSize="18sp"-->
+<!--        android:padding="12dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:elevation="4dp"-->
+<!--        />-->
 
     <Button
-        android:id="@+id/submit_button"
-        android:layout_width="wrap_content"
+        android:id="@+id/submit_pre_test"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Submit"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp" />
+        android:text="Next"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="10dp"/>
 
-</LinearLayout>
+</RelativeLayout>
