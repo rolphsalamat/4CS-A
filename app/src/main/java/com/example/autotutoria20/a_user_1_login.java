@@ -112,7 +112,6 @@ public class a_user_1_login extends AppCompatActivity {
         });
     }
 
-    // Method to authenticate user using username and password
     private void loginUser(String username, String enteredPassword) {
         db.collection("users")
                 .whereEqualTo("Username", username)
@@ -151,9 +150,15 @@ public class a_user_1_login extends AppCompatActivity {
                                                     if (task.isSuccessful()) {
                                                         FirebaseUser user = mAuth.getCurrentUser();
                                                         if (user != null) {
-                                                            String userId = user.getUid();
-                                                            Log.d("LoginProcess", "Login successful. User ID: " + userId);
-                                                            fetchUserInfo(userId);
+                                                            if (user.isEmailVerified()) {  // Check if the email is verified
+                                                                String userId = user.getUid();
+                                                                Log.d("LoginProcess", "Login successful. User ID: " + userId);
+                                                                fetchUserInfo(userId);
+                                                            } else {
+                                                                Log.d("LoginProcess", "Email not verified");
+                                                                Toast.makeText(a_user_1_login.this, "Please verify your email before logging in.", Toast.LENGTH_SHORT).show();
+                                                                user.sendEmailVerification();  // Optionally resend the verification email
+                                                            }
                                                         } else {
                                                             Log.d("LoginProcess", "User login failed: User object is null");
                                                             Toast.makeText(a_user_1_login.this, "Account does not exist", Toast.LENGTH_SHORT).show();
@@ -180,6 +185,76 @@ public class a_user_1_login extends AppCompatActivity {
                     }
                 });
     }
+
+
+    // Method to authenticate user using username and password
+//    private void loginUser(String username, String enteredPassword) {
+//        db.collection("users")
+//                .whereEqualTo("Username", username)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            QuerySnapshot querySnapshot = task.getResult();
+//                            if (!querySnapshot.isEmpty()) {
+//                                DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+//                                Log.d("LoginProcess", "Document retrieved: " + document.getData());
+//
+//                                String email = document.getString("Email Address");
+//                                String storedHashedPassword = document.getString("Password");
+//
+//                                if (email == null || email.isEmpty()) {
+//                                    Log.e("LoginProcess", "Email is null or empty for username: " + username);
+//                                    Toast.makeText(a_user_1_login.this, "Email is missing for this username", Toast.LENGTH_SHORT).show();
+//                                    return;
+//                                }
+//
+//                                if (storedHashedPassword == null || storedHashedPassword.isEmpty()) {
+//                                    Log.e("LoginProcess", "Password is missing for this username: " + username);
+//                                    Toast.makeText(a_user_1_login.this, "Password is missing for this username", Toast.LENGTH_SHORT).show();
+//                                    return;
+//                                }
+//
+//                                // Verify the entered password against the stored hash
+//                                if (a_user_3_password_encryption.checkPassword(enteredPassword, storedHashedPassword)) {
+//                                    // Password matches, proceed with Firebase authentication
+//                                    mAuth.signInWithEmailAndPassword(email, enteredPassword)
+//                                            .addOnCompleteListener(a_user_1_login.this, new OnCompleteListener<AuthResult>() {
+//                                                @Override
+//                                                public void onComplete(@NonNull Task<AuthResult> task) {
+//                                                    if (task.isSuccessful()) {
+//                                                        FirebaseUser user = mAuth.getCurrentUser();
+//                                                        if (user != null) {
+//                                                            String userId = user.getUid();
+//                                                            Log.d("LoginProcess", "Login successful. User ID: " + userId);
+//                                                            fetchUserInfo(userId);
+//                                                        } else {
+//                                                            Log.d("LoginProcess", "User login failed: User object is null");
+//                                                            Toast.makeText(a_user_1_login.this, "Account does not exist", Toast.LENGTH_SHORT).show();
+//                                                        }
+//                                                    } else {
+//                                                        Log.e("Firebase Authentication", "Authentication failed: " + task.getException().getMessage());
+//                                                        Toast.makeText(a_user_1_login.this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                                                    }
+//                                                }
+//                                            });
+//                                } else {
+//                                    Log.e("LoginProcess", "Password does not match for username: " + username);
+//                                    Toast.makeText(a_user_1_login.this, "Incorrect password", Toast.LENGTH_SHORT).show();
+//                                }
+//                            } else {
+//                                Log.d("LoginProcess", "Username does not exist: " + username);
+//                                Toast.makeText(a_user_1_login.this, "Username does not exist", Toast.LENGTH_SHORT).show();
+//                            }
+//                        } else {
+//                            String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
+//                            Log.e("Firestore", "Failed to retrieve username: " + errorMessage);
+//                            Toast.makeText(a_user_1_login.this, "Error retrieving username", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+//    }
 
     private void fetchUserInfo(String userId) {
         DocumentReference userRef = db.collection("users").document(userId);

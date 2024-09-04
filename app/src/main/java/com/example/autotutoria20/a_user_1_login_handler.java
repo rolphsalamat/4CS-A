@@ -70,6 +70,47 @@ public class a_user_1_login_handler extends AppCompatActivity {
         void onTutorialChecked(boolean isComplete);
     }
 
+    // may kasama daw tong email verifier?? what for??
+
+//    static void checkTutorialCompletion(TutorialCompletionCallback callback) {
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        if (currentUser != null) {
+//            if (currentUser.isEmailVerified()) {  // Check if email is verified
+//                String userId = currentUser.getUid();
+//                DocumentReference userRef = db.collection("users").document(userId);
+//
+//                userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            DocumentSnapshot document = task.getResult();
+//                            if (document.exists()) {
+//                                Boolean isComplete = document.getBoolean("Tutorial");
+//                                if (isComplete != null) {
+//                                    callback.onTutorialChecked(isComplete);
+//                                } else {
+//                                    callback.onTutorialChecked(false);
+//                                }
+//                            } else {
+//                                Log.e(TAG, "No user data found");
+//                                callback.onTutorialChecked(false);
+//                            }
+//                        } else {
+//                            Log.e(TAG, "Error fetching user data", task.getException());
+//                            callback.onTutorialChecked(false);
+//                        }
+//                    }
+//                });
+//            } else {
+//                Log.e(TAG, "Email not verified");
+//                Toast.makeText(a_user_1_login_handler.this, "Please verify your email to continue.", Toast.LENGTH_SHORT).show();
+//            }
+//        } else {
+//            callback.onTutorialChecked(false);
+//        }
+//    }
+
+
     static void checkTutorialCompletion(TutorialCompletionCallback callback) {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {

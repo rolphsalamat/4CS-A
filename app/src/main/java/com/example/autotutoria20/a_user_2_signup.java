@@ -54,8 +54,14 @@ public class a_user_2_signup extends AppCompatActivity {
         emailEditText = findViewById(R.id.txtEmail);
         usernameEditText = findViewById(R.id.txtUsername);
         passwordEditText = findViewById(R.id.txtPassword);
-        datePicker = findViewById(R.id.datePicker);
         genderRadioGroup = findViewById(R.id.rdoGender);
+
+        datePicker = findViewById(R.id.datePicker);
+
+        // Set the maximum date to today
+        Calendar calendar = Calendar.getInstance();
+        datePicker.setMaxDate(calendar.getTimeInMillis());
+
 
         Log.d(TAG, "Views initialized");
 
@@ -197,21 +203,43 @@ public class a_user_2_signup extends AppCompatActivity {
                                 .addOnCompleteListener(createUserTask -> {
                                     if (createUserTask.isSuccessful()) {
                                         FirebaseUser user = mAuth.getCurrentUser();
-                                        String userId = user.getUid();
-                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                        db.collection("users").document(userId).set(userData)
-                                                .addOnSuccessListener(aVoid -> {
-                                                    Log.d(TAG, "User details saved to Firestore");
-                                                    Toast.makeText(getApplicationContext(), "User details saved to Firestore", Toast.LENGTH_SHORT).show();
-                                                    saveUserModuleProgress(db, userId, moduleProgressData);
-                                                    finish();
-                                                    showUserDetails();
-                                                })
-                                                .addOnFailureListener(e -> {
-                                                    Log.e(TAG, "Error saving user details to Firestore", e);
-                                                    Toast.makeText(getApplicationContext(), "Error saving user details to Firestore", Toast.LENGTH_SHORT).show();
-                                                    clearAllFields();
-                                                });
+                                        if (user != null) {
+                                            // Send verification email
+                                            user.sendEmailVerification()
+                                                    .addOnCompleteListener(verificationTask -> {
+                                                        if (verificationTask.isSuccessful()) {
+                                                            // Notify user that a verification email was sent
+                                                            Toast.makeText(getApplicationContext(),
+                                                                    "Verification email sent to " + user.getEmail(),
+                                                                    Toast.LENGTH_SHORT).show();
+
+                                                            // Save user data to Firestore
+                                                            String userId = user.getUid();
+                                                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                                            db.collection("users").document(userId).set(userData)
+                                                                    .addOnSuccessListener(aVoid -> {
+                                                                        Log.d(TAG, "User details saved to Firestore");
+                                                                        Toast.makeText(getApplicationContext(),
+                                                                                "User details saved to Firestore",
+                                                                                Toast.LENGTH_SHORT).show();
+                                                                        saveUserModuleProgress(db, userId, moduleProgressData);
+                                                                        // Clear fields and prevent further action until email is verified
+                                                                        clearAllFields();
+                                                                    })
+                                                                    .addOnFailureListener(e -> {
+                                                                        Log.e(TAG, "Error saving user details to Firestore", e);
+                                                                        Toast.makeText(getApplicationContext(),
+                                                                                "Error saving user details to Firestore",
+                                                                                Toast.LENGTH_SHORT).show();
+                                                                    });
+                                                        } else {
+                                                            Log.e(TAG, "Failed to send verification email", verificationTask.getException());
+                                                            Toast.makeText(getApplicationContext(),
+                                                                    "Failed to send verification email.",
+                                                                    Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                        }
                                     } else {
                                         Log.w(TAG, "createUserWithEmail:failure", createUserTask.getException());
                                         if (createUserTask.getException() instanceof FirebaseAuthUserCollisionException) {
@@ -221,6 +249,47 @@ public class a_user_2_signup extends AppCompatActivity {
                                         }
                                     }
                                 });
+
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        Map<String, Object> usernameData = new HashMap<>();
+                        usernameData.put("Username", username);
+
+                        db.collection("usernames").document(username).set(usernameData)
+                                .addOnSuccessListener(aVoid -> Log.d(TAG, "Username saved to usernames collection"))
+                                .addOnFailureListener(e -> Log.e(TAG, "Error saving username", e));
+
+
+                        // Original working code
+                        // pero wala itong email verification...
+
+//                        mAuth.createUserWithEmailAndPassword(email, password)
+//                                .addOnCompleteListener(createUserTask -> {
+//                                    if (createUserTask.isSuccessful()) {
+//                                        FirebaseUser user = mAuth.getCurrentUser();
+//                                        String userId = user.getUid();
+//                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//                                        db.collection("users").document(userId).set(userData)
+//                                                .addOnSuccessListener(aVoid -> {
+//                                                    Log.d(TAG, "User details saved to Firestore");
+//                                                    Toast.makeText(getApplicationContext(), "User details saved to Firestore", Toast.LENGTH_SHORT).show();
+//                                                    saveUserModuleProgress(db, userId, moduleProgressData);
+//                                                    finish();
+//                                                    showUserDetails();
+//                                                })
+//                                                .addOnFailureListener(e -> {
+//                                                    Log.e(TAG, "Error saving user details to Firestore", e);
+//                                                    Toast.makeText(getApplicationContext(), "Error saving user details to Firestore", Toast.LENGTH_SHORT).show();
+//                                                    clearAllFields();
+//                                                });
+//                                    } else {
+//                                        Log.w(TAG, "createUserWithEmail:failure", createUserTask.getException());
+//                                        if (createUserTask.getException() instanceof FirebaseAuthUserCollisionException) {
+//                                            Toast.makeText(getApplicationContext(), "The email is already taken.", Toast.LENGTH_SHORT).show();
+//                                        } else {
+//                                            Toast.makeText(getApplicationContext(), "Authentication failed: " + createUserTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                                        }
+//                                    }
+//                                });
                     } else {
                         Log.d(TAG, "Validation failed. ValidCounter: " + validCounter);
                         validCounter = 0;
@@ -307,27 +376,74 @@ public class a_user_2_signup extends AppCompatActivity {
         } else {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-            db.collection("users")
+            Log.d("validateUsername", "Starting Firestore query for username: " + username);
+
+            db.collection("usernames")
                     .whereEqualTo("Username", username)
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            if (!task.getResult().isEmpty()) {
+                            if (task.getResult().isEmpty()) {
+                                Log.e("validateUsername", username + " is a valid username");
+                                callback.onValidationComplete(true);  // Username is valid since it's not taken
+                            } else {
                                 Toast.makeText(a_user_2_signup.this, "The username is already taken.", Toast.LENGTH_SHORT).show();
                                 Log.e("validateUsername", "The username is already taken.");
-                                callback.onValidationComplete(false);
-                            } else {
-                                Log.e("validateUsername", username + " is a valid username");
-                                callback.onValidationComplete(true);
+                                callback.onValidationComplete(false);  // Username is taken
                             }
                         } else {
-                            Log.e("SignupActivity", "Error checking username availability", task.getException());
+                            Log.e("validateUsername", "Firestore query failed: " + task.getException().getMessage());
                             Toast.makeText(a_user_2_signup.this, "Error checking username. Please try again.", Toast.LENGTH_SHORT).show();
                             callback.onValidationComplete(false);
                         }
                     });
+
         }
     }
+
+
+    // Original Code : WORKING
+    // Pero walang catching for error handling kapag empty ang database
+
+//    private void validateUsername(String username, UsernameValidationCallback callback) {
+//        if (username.isEmpty()) {
+//            Toast.makeText(a_user_2_signup.this, "Please enter your username", Toast.LENGTH_SHORT).show();
+//            Log.e("validateUsername", "Please enter your username.");
+//            callback.onValidationComplete(false);
+//        } else if (!username.matches("[a-zA-Z0-9_]+")) {
+//            Toast.makeText(a_user_2_signup.this, "Username can only contain letters, numbers, and underscores", Toast.LENGTH_SHORT).show();
+//            Log.e("validateUsername", "Username can only contain letters, numbers, and underscores");
+//            callback.onValidationComplete(false);
+//        } else if (username.length() < 3) {
+//            Toast.makeText(a_user_2_signup.this, "Username must be at least 3 characters long", Toast.LENGTH_SHORT).show();
+//            Log.e("validateUsername", "Username must be at least 3 characters long");
+//            callback.onValidationComplete(false);
+//        } else {
+//            FirebaseFirestore db = FirebaseFirestore.getInstance();
+//
+//            db.collection("users")
+//                    .whereEqualTo("Username", username)
+//                    .get()
+//                    .addOnCompleteListener(task -> {
+//                        if (task.isSuccessful()) {
+//                            if (!task.getResult().isEmpty()) {
+//                                Toast.makeText(a_user_2_signup.this, "The username is already taken.", Toast.LENGTH_SHORT).show();
+//                                Log.e("validateUsername", "The username is already taken.");
+//                                callback.onValidationComplete(false);
+//                            } else {
+//                                Log.e("validateUsername", username + " is a valid username");
+//                                callback.onValidationComplete(true);
+//                            }
+//                        } else {
+//                            Log.e("SignupActivity", "Error checking username availability", task.getException());
+//                            Toast.makeText(a_user_2_signup.this, "Error checking username. Please try again.", Toast.LENGTH_SHORT).show();
+//                            callback.onValidationComplete(false);
+//                        }
+//                    });
+//
+//        }
+//
+//    }
 
     private int validatePassword(String password) {
         if (password.isEmpty()) {
