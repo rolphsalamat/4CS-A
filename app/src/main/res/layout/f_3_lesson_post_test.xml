@@ -14,17 +14,16 @@
         android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
 
-    <!-- Example of post-test question -->
     <TextView
         android:id="@+id/post_test_question"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="What did you learn from this lesson?"
         android:textColor="@color/white"
         android:textSize="18sp"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp" />
 
     <RadioGroup
         android:id="@+id/choices_group"
@@ -34,24 +33,24 @@
         android:orientation="vertical"
         android:padding="8dp" />
 
+    <!-- EditText for Identification type question, collapsed by default -->
+    <EditText
+        android:id="@+id/identification_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Type your answer here"
+        android:layout_marginTop="10dp"
+        android:padding="12dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:visibility="gone"
+        />
+
     <!-- Spacer view to push the button to the bottom -->
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
-<!--    <Button-->
-<!--        android:id="@+id/submit_post_test"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="SUBMIT"-->
-<!--        android:background="@drawable/rounded_button"-->
-<!--        android:textColor="@android:color/white"-->
-<!--        android:textSize="18sp"-->
-<!--        android:padding="12dp"-->
-<!--        android:elevation="4dp"-->
-<!--        android:layout_gravity="center"-->
-<!--        />-->
 
     <Button
         android:id="@+id/submit_post_test"
@@ -60,6 +59,6 @@
         android:text="Next"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginHorizontal="10dp"/>
+        android:layout_marginHorizontal="10dp" />
 
 </LinearLayout>

@@ -196,61 +196,77 @@ public class f_0_lesson_pre_test extends Fragment {
         switch (key) {
             /* ===== Module 1 ===== */
             case "M1_Lesson 1":
-                return e_Module_1.getPreTestLesson1Questions();
+                return e_Module_1_1.get_PreTest_Lesson1_Questions();
             case "M2_Lesson 1":
-                return e_Module_1.getPreTestLesson2Questions();
+                return e_Module_1_2.get_PreTest_Lesson2_Questions();
             case "M3_Lesson 1":
-                return e_Module_1.getPreTestLesson3Questions();
+                return e_Module_1_3.get_PreTest_Lesson3_Questions();
             case "M4_Lesson 1":
-                return e_Module_1.getPreTestLesson4Questions();
+                return e_Module_1_4.get_PreTest_Lesson4_Questions();
 
             /* ===== Module 2 ===== */
             case "M1_Lesson 2":
-                return e_Module_2.getPreTestLesson1Questions();
+                return e_Module_2_1.get_PreTest_Lesson2_Questions();
 
             /* ===== Module 3 ===== */
             case "M1_Lesson 3":
-                return e_Module_3.getPreTestLesson1Questions();
+                return e_Module_3.getPreTestLesson1Questions(); // NOT YET OK
+//                return e_Module_3_1.get_PreTest_Lesson2_Questions();
             case "M2_Lesson 3":
-                return e_Module_3.getPreTestLesson2Questions();
+                return e_Module_3.getPreTestLesson2Questions(); // NOT YET OK
+//                return e_Module_3_2.get_PreTest_Lesson2_Questions();
             case "M3_Lesson 3":
-                return e_Module_3.getPreTestLesson3Questions();
+                return e_Module_3.getPreTestLesson3Questions(); // NOT YET OK
+//                return e_Module_3_3.get_PreTest_Lesson2_Questions();
 
             /* ===== Module 4 ===== */
             case "M1_Lesson 4":
-                return e_Module_4.getPreTestLesson1Questions();
+                return e_Module_4.getPreTestLesson1Questions(); // NOT YET OK
+//                return e_Module_4_1.get_PreTest_Lesson2_Questions();
             case "M2_Lesson 4":
-                return e_Module_4.getPreTestLesson2Questions();
+                return e_Module_4.getPreTestLesson2Questions(); // NOT YET OK
+//                return e_Module_4_2.get_PreTest_Lesson2_Questions();
             case "M3_Lesson 4":
-                return e_Module_4.getPreTestLesson3Questions();
+                return e_Module_4.getPreTestLesson3Questions(); // NOT YET OK
+//                return e_Module_4_3.get_PreTest_Lesson2_Questions();
 
             /* ===== Module 5 ===== */
             case "M1_Lesson 5":
-                return e_Module_5.getPreTestLesson1Questions();
+                return e_Module_5.getPreTestLesson1Questions(); // NOT YET OK
+//                return e_Module_5_1.get_PreTest_Lesson2_Questions();
             case "M2_Lesson 5":
-                return e_Module_5.getPreTestLesson2Questions();
+                return e_Module_5.getPreTestLesson2Questions(); // NOT YET OK
+//                return e_Module_5_2.get_PreTest_Lesson2_Questions();
             case "M3_Lesson 5":
-                return e_Module_5.getPreTestLesson3Questions();
+                return e_Module_5.getPreTestLesson3Questions(); // NOT YET OK
+//                return e_Module_5_3.get_PreTest_Lesson2_Questions();
 
             /* ===== Module 6 ===== */
             case "M1_Lesson 6":
-                return e_Module_6.getPreTestLesson1Questions();
+                return e_Module_6.getPreTestLesson1Questions(); // NOT YET OK
+//                return e_Module_6_1.get_PreTest_Lesson2_Questions();
             case "M2_Lesson 6":
-                return e_Module_6.getPreTestLesson2Questions();
+                return e_Module_6.getPreTestLesson2Questions(); // NOT YET OK
+//                return e_Module_6_2.get_PreTest_Lesson2_Questions();
             case "M3_Lesson 6":
-                return e_Module_6.getPreTestLesson3Questions();
+                return e_Module_6.getPreTestLesson3Questions(); // NOT YET OK
+//                return e_Module_6_3.get_PreTest_Lesson2_Questions();
 
             /* ===== Module 7 ===== */
             case "M1_Lesson 7":
-                return e_Module_7.getPreTestLesson1Questions();
+                return e_Module_7.getPreTestLesson1Questions(); // NOT YET OK
+//                return e_Module_7_1.get_PreTest_Lesson2_Questions();
 
             /* ===== Module 8 ===== */
             case "M1_Lesson 8":
-                return e_Module_8.getPreTestLesson1Questions();
+                return e_Module_8.getPreTestLesson1Questions(); // NOT YET OK
+//                return e_Module_8_1.get_PreTest_Lesson2_Questions();
             case "M2_Lesson 8":
-                return e_Module_8.getPreTestLesson2Questions();
+                return e_Module_8.getPreTestLesson2Questions(); // NOT YET OK
+//                return e_Module_8_2.get_PreTest_Lesson2_Questions();
             case "M3_Lesson 8":
-                return e_Module_8.getPreTestLesson3Questions();
+                return e_Module_8.getPreTestLesson3Questions(); // NOT YET OK
+//                return e_Module_8_3.get_PreTest_Lesson2_Questions();
 
             default:
                 throw new IllegalArgumentException("Invalid module or lesson: " + key);
@@ -301,7 +317,7 @@ public class f_0_lesson_pre_test extends Fragment {
         int selectedId = choicesGroup.getCheckedRadioButtonId();
         if (selectedId != -1) {
             e_Question currentQuestion = questions[currentQuestionIndex];
-            isCorrect = (selectedId == currentQuestion.getCorrectAnswer());
+            isCorrect = (selectedId == currentQuestion.getCorrectAnswer_preTest());
 
             if (!isCorrect) {
                 Toast.makeText(getContext(), "Incorrect answer.", Toast.LENGTH_SHORT).show();
