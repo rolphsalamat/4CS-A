@@ -29,44 +29,242 @@
                 android:textAllCaps="true"
                 android:layout_gravity="center"/>
 
-            <TextView
-                android:id="@+id/text_lesson_content_1"
-                android:layout_width="wrap_content"
+            <!-- Repeatable layout for each lesson content -->
+            <!-- Horizontal layout for image and text side by side -->
+            <LinearLayout
+                android:id="@+id/content_1"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Lesson Content 1"
-                android:textSize="20sp"
-                android:textColor="@color/white"
-                android:layout_marginTop="16dp"
-                android:justificationMode="inter_word"
-                android:letterSpacing="0.0025"
-                android:lineSpacingExtra="2dp"
-                android:lineSpacingMultiplier="1.2"/>
+                android:orientation="horizontal"
+                android:padding="8dp">
 
-            <TextView
-                android:id="@+id/text_lesson_content_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Lesson Content 2"
-                android:textSize="18sp"
-                android:textColor="@color/white"
-                android:layout_marginTop="16dp"
-                android:justificationMode="inter_word"
-                android:letterSpacing="0.0025"
-                android:lineSpacingExtra="2dp"
-                android:lineSpacingMultiplier="1.2"/>
+                <!-- ImageView for the bullet or sample image -->
+                <ImageView
+                    android:id="@+id/image_lesson_content_1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="top"
+                    android:layout_marginEnd="8dp"/>
 
-            <TextView
-                android:id="@+id/text_lesson_content_3"
-                android:layout_width="wrap_content"
+                <!-- TextView for the text next to the image -->
+                <TextView
+                    android:id="@+id/text_lesson_content_1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lesson Content 1"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"
+                    android:justificationMode="inter_word"
+                    android:letterSpacing="0.0025"
+                    android:lineSpacingExtra="2dp"
+                    android:lineSpacingMultiplier="1.2" />
+            </LinearLayout>
+
+            <!-- Repeat similar blocks for other contents, only changing the id -->
+            <LinearLayout
+                android:id="@+id/content_2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Lesson Content 3"
-                android:textSize="18sp"
-                android:textColor="@color/white"
-                android:layout_marginTop="16dp"
-                android:justificationMode="inter_word"
-                android:letterSpacing="0.0025"
-                android:lineSpacingExtra="2dp"
-                android:lineSpacingMultiplier="1.2"/>
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/image_lesson_content_2"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+
+                    android:layout_gravity="top"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_lesson_content_2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lesson Content 2"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"
+                    android:justificationMode="inter_word"
+                    android:letterSpacing="0.0025"
+                    android:lineSpacingExtra="2dp"
+                    android:lineSpacingMultiplier="1.2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/content_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/image_lesson_content_3"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+
+                    android:layout_gravity="top"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_lesson_content_3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lesson Content 3"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"
+                    android:justificationMode="inter_word"
+                    android:letterSpacing="0.0025"
+                    android:lineSpacingExtra="2dp"
+                    android:lineSpacingMultiplier="1.2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/content_4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/image_lesson_content_4"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+
+                    android:layout_gravity="top"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_lesson_content_4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lesson Content 4"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"
+                    android:justificationMode="inter_word"
+                    android:letterSpacing="0.0025"
+                    android:lineSpacingExtra="2dp"
+                    android:lineSpacingMultiplier="1.2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/content_5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/image_lesson_content_5"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+
+                    android:layout_gravity="top"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_lesson_content_5"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lesson Content 5"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"
+                    android:justificationMode="inter_word"
+                    android:letterSpacing="0.0025"
+                    android:lineSpacingExtra="2dp"
+                    android:lineSpacingMultiplier="1.2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/content_6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/image_lesson_content_6"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+
+                    android:layout_gravity="top"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_lesson_content_6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lesson Content 6"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"
+                    android:justificationMode="inter_word"
+                    android:letterSpacing="0.0025"
+                    android:lineSpacingExtra="2dp"
+                    android:lineSpacingMultiplier="1.2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/content_7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/image_lesson_content_7"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+
+                    android:layout_gravity="top"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_lesson_content_7"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lesson Content 7"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"
+                    android:justificationMode="inter_word"
+                    android:letterSpacing="0.0025"
+                    android:lineSpacingExtra="2dp"
+                    android:lineSpacingMultiplier="1.2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/content_8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/image_lesson_content_8"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+
+                    android:layout_gravity="top"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_lesson_content_8"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lesson Content 8"
+                    android:textSize="18sp"
+                    android:textColor="@color/white"
+                    android:justificationMode="inter_word"
+                    android:letterSpacing="0.0025"
+                    android:lineSpacingExtra="2dp"
+                    android:lineSpacingMultiplier="1.2" />
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 

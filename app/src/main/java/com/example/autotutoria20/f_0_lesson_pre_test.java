@@ -131,8 +131,6 @@ public class f_0_lesson_pre_test extends Fragment {
 
         submitButton.setOnClickListener(v -> {
 
-            answerAttempt++;
-
             // add validator if no selected answer??
             // it should ask the user to select an answer otherwise this onClickListener will not do anything
 
@@ -143,8 +141,15 @@ public class f_0_lesson_pre_test extends Fragment {
 //                Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
                 return;
             } else {
+
+                answerAttempt++;
+                Log.e("answerAttempt", "Answer Attempt: " + answerAttempt);
+
                 boolean correctAnswer = checkAnswer();
                 Log.e("submitButton.onClick", "correctAnswer: " + correctAnswer);
+
+                if (!correctAnswer)
+                    choicesGroup.clearCheck();
 
                 // Update BKT model with the result of the answer
                 bktModel.updateKnowledge(correctAnswer);
@@ -210,47 +215,35 @@ public class f_0_lesson_pre_test extends Fragment {
 
             /* ===== Module 3 ===== */
             case "M1_Lesson 3":
-                return e_Module_3.getPreTestLesson1Questions(); // NOT YET OK
-//                return e_Module_3_1.get_PreTest_Lesson2_Questions();
+                return e_Module_3_1.get_PreTest_Lesson1_Questions();
             case "M2_Lesson 3":
-                return e_Module_3.getPreTestLesson2Questions(); // NOT YET OK
-//                return e_Module_3_2.get_PreTest_Lesson2_Questions();
+                return e_Module_3_2.get_PreTest_Lesson2_Questions();
             case "M3_Lesson 3":
-                return e_Module_3.getPreTestLesson3Questions(); // NOT YET OK
 //                return e_Module_3_3.get_PreTest_Lesson2_Questions();
 
             /* ===== Module 4 ===== */
             case "M1_Lesson 4":
-                return e_Module_4.getPreTestLesson1Questions(); // NOT YET OK
-//                return e_Module_4_1.get_PreTest_Lesson2_Questions();
+                return e_Module_4_1.get_PreTest_Lesson1_Questions();
             case "M2_Lesson 4":
-                return e_Module_4.getPreTestLesson2Questions(); // NOT YET OK
-//                return e_Module_4_2.get_PreTest_Lesson2_Questions();
+                return e_Module_4_2.get_PreTest_Lesson2_Questions();
             case "M3_Lesson 4":
-                return e_Module_4.getPreTestLesson3Questions(); // NOT YET OK
-//                return e_Module_4_3.get_PreTest_Lesson2_Questions();
+//                return e_Module_4_3.get_PreTest_Lesson3_Questions();
 
             /* ===== Module 5 ===== */
             case "M1_Lesson 5":
-                return e_Module_5.getPreTestLesson1Questions(); // NOT YET OK
-//                return e_Module_5_1.get_PreTest_Lesson2_Questions();
+                return e_Module_5_1.get_PreTest_Lesson1_Questions();
             case "M2_Lesson 5":
-                return e_Module_5.getPreTestLesson2Questions(); // NOT YET OK
-//                return e_Module_5_2.get_PreTest_Lesson2_Questions();
+                return e_Module_5_2.get_PreTest_Lesson2_Questions();
             case "M3_Lesson 5":
-                return e_Module_5.getPreTestLesson3Questions(); // NOT YET OK
-//                return e_Module_5_3.get_PreTest_Lesson2_Questions();
+                return e_Module_5_3.get_PreTest_Lesson3_Questions();
 
             /* ===== Module 6 ===== */
             case "M1_Lesson 6":
-                return e_Module_6.getPreTestLesson1Questions(); // NOT YET OK
-//                return e_Module_6_1.get_PreTest_Lesson2_Questions();
+                return e_Module_6_1.get_PreTest_Lesson1_Questions();
             case "M2_Lesson 6":
-                return e_Module_6.getPreTestLesson2Questions(); // NOT YET OK
-//                return e_Module_6_2.get_PreTest_Lesson2_Questions();
+                return e_Module_6_2.get_PreTest_Lesson2_Questions();
             case "M3_Lesson 6":
-                return e_Module_6.getPreTestLesson3Questions(); // NOT YET OK
-//                return e_Module_6_3.get_PreTest_Lesson2_Questions();
+                return e_Module_6_3.get_PreTest_Lesson3_Questions();
 
             /* ===== Module 7 ===== */
             case "M1_Lesson 7":

@@ -34,6 +34,7 @@ public class L_lesson_sequence {
     }
 
 
+    // How to make this dynamic?!?!??!
     // Map to store lesson sequences
     public static Map<String, StepType[]> getLessonSequences() {
         Map<String, StepType[]> lessonSequences = new HashMap<>();
@@ -42,14 +43,21 @@ public class L_lesson_sequence {
         lessonSequences.put("M1_Lesson 1", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-//                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M2_Lesson 1", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-//                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });

@@ -96,6 +96,8 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
         Log.d(TAG, "isCompleted: " + isCompleted);
 
         Log.e("pagerAdapter", "LessonPagerAdapter(" + getSupportFragmentManager() + ", " + stepSequence + ", " + currentModule + "_" + currentLesson + ");");
+
+        // dapat kasi eto may nag c-call din dito somewhere, kasi pag ganto lagi talaga syang Page 1
         pagerAdapter = new L_lesson_handler(getSupportFragmentManager(), stepSequence, currentModule + "_" + currentLesson, learningMode, pageNumber);
         viewPager.setAdapter(pagerAdapter);
 
@@ -155,7 +157,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
                 // Handle other fragment-specific logic
                 if (currentFragment instanceof f_1_lesson_text) {
                     f_1_lesson_text textLessonFragment = (f_1_lesson_text) currentFragment;
-                    textLessonFragment.loadTextContentForKey(currentModule + "_" + currentLesson, pageNumber);
+//                    textLessonFragment.loadTextContentForKey(currentModule + "_" + currentLesson, pageNumber);
 
                 } else if (currentFragment instanceof f_3_lesson_post_test) {
                     // wala na, naka declare na globally eh..
@@ -416,6 +418,15 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
 //                pageNumber++;
 //            }
 
+            Log.e(TAG, "Before increment | Page Number: " + pageNumber);
+            // ETO LATEST TESTING
+//            pageNumber++;
+
+            // yung sa mismong L_lesson_handler ang i-increment, kasi sya yung nag ha-handle..
+            L_lesson_handler.pageNumber++;
+            Log.e(TAG, "After increment | Page Number: " + pageNumber);
+
+
             // Move to the next step
             viewPager.setCurrentItem(currentStep);
         }
@@ -470,12 +481,14 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
 
             Log.d("onTextLessonComplete()", remainingTextLessons + " > 0");
             if (remainingTextLessons > 0) {
-                pageNumber++; // Increment only if there are more text lessons
+//                pageNumber++; // Increment only if there are more text lessons
+                Log.d("onTextLessonComplete()", "pageNumber++; | " + pageNumber );
             }
         } else {
             // Handle the case where the lesson is not done or no more text lessons
             Log.d("onTextLessonComplete", "No more text lessons or lesson not completed.");
         }
+//        pageNumber++;
     }
 
     @Override

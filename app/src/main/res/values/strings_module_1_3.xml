@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Module 3 | Page 1 -->
+    <!-- int[] module1_3_1 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module1_3_1_title"></string>
+    <string name="module1_3_1_content_1">In this lesson, we will uncover the essential building blocks of formal languages, which are fundamental to the fields of computer science, automata theory, and linguistics. You\'ll learn how a formal language is a set of strings defined by specific grammatical rules and how these rules play a crucial role in defining programming languages, compilers, and even natural language processing systems. This lesson will equip you with the knowledge to understand the syntax and semantics that drive modern computing and language analysis.</string>
+    <string name="module1_3_1_content_2"></string>
+    <string name="module1_3_1_content_3"></string>
+    <string name="module1_3_1_content_4"></string>
+    <string name="module1_3_1_content_5"></string>
+    <string name="module1_3_1_content_6"></string>
+    <string name="module1_3_1_content_7"></string>
+    <string name="module1_3_1_content_8"></string>
+
+    <!-- Module 3 | Page 2 -->
+    <!-- int[] module1_3_2 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module1_3_2_title"></string>
+    <string name="module1_3_2_content_1">A formal language is a set of strings composed of symbols that follow specific grammatical rules. These languages are crucial in computer science, automata theory, and linguistics, as they define the syntax and semantics of programming languages, assist in building compilers, and aid in natural language processing. Formal languages consist of an alphabet (a set of symbols) and grammar (rules for combining symbols into strings).</string>
+    <string name="module1_3_2_content_2"></string>
+    <string name="module1_3_2_content_3"></string>
+    <string name="module1_3_2_content_4"></string>
+    <string name="module1_3_2_content_5"></string>
+    <string name="module1_3_2_content_6"></string>
+    <string name="module1_3_2_content_7"></string>
+    <string name="module1_3_2_content_8"></string>
+
+    <!-- Module 3 | Page 3 -->
+    <!-- int[] module1_3_3 = {0, 1, 1, 1, 0, 1, 1, 1}; -->
+    <string name="module1_3_3_title">Basic Examples:</string>
+    <string name="module1_3_3_content_1">Binary Language:</string>
+    <string name="module1_3_3_content_2">Alphabet: Σ = {0, 1}</string>
+    <string name="module1_3_3_content_3">Language: The set of all strings consisting of 0s and 1s.</string>
+    <string name="module1_3_3_content_4">Examples of strings in this language: "0", "1", "01", "1010"</string>
+    <string name="module1_3_3_content_5">Language of Balanced Parentheses:</string>
+    <string name="module1_3_3_content_6">Alphabet: Σ = { ( , ) }</string>
+    <string name="module1_3_3_content_7">Language: The set of all strings with balanced parentheses.</string>
+    <string name="module1_3_3_content_8">Examples of strings in this language: "", "()", "(())", "()()"</string>
+
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Module 4 | Page 1 -->
+    <!-- int[] module1_4_1 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module1_4_1_title">sf</string>
+    <string name="module1_4_1_content_1">Automata Theory is a fundamental area of theoretical computer science that explores abstract machines and their problem-solving capabilities. This lesson provides a concise overview of key concepts, including Finite Automata, Pushdown Automata, and Turing Machines, which form the basis for understanding computational processes. Automata theory is crucial for various applications, from compiler design and algorithm development to natural language processing and formal verification, offering deep insights into how languages are generated and recognized, and how computational tasks are performed and analyzed.</string>
+    <string name="module1_4_1_content_2"></string>
+    <string name="module1_4_1_content_3"></string>
+    <string name="module1_4_1_content_4"></string>
+    <string name="module1_4_1_content_5"></string>
+    <string name="module1_4_1_content_6"></string>
+    <string name="module1_4_1_content_7"></string>
+    <string name="module1_4_1_content_8"></string>
+
+    <!-- Module 4 | Page 2 -->
+    <!-- int[] module1_4_2 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module1_4_2_title"></string>
+    <string name="module1_4_2_content_1">Automata Theory, as covered in this lesson, focuses on the study of abstract machines and the computational problems they can solve. It introduces key types of automata, including Finite Automata (FA), Pushdown Automata (PDA), and Turing Machines (TM), each with different levels of computational power. The lesson highlights how these automata are used to recognize patterns within input strings, parse languages, and perform complex computational tasks, making them essential tools in computer science.</string>
+    <string name="module1_4_2_content_2"></string>
+    <string name="module1_4_2_content_3"></string>
+    <string name="module1_4_2_content_4"></string>
+    <string name="module1_4_2_content_5"></string>
+    <string name="module1_4_2_content_6"></string>
+    <string name="module1_4_2_content_7"></string>
+    <string name="module1_4_2_content_8"></string>
+
+    <!-- Module 4 | Page 3 -->
+    <!-- int[] module1_4_3 = {1, 1, 1, 0, 0, 0, 0, 0}; -->
+    <string name="module1_4_3_title">Basic Examples:</string>
+    <string name="module1_4_3_content_1">Deterministic Finite Automaton (DFA): A DFA can be used to recognize binary strings that end with "01."</string>
+    <string name="module1_4_3_content_2">Pushdown Automaton (PDA): A PDA can recognize strings with balanced parentheses, such as "()" and "(())".</string>
+    <string name="module1_4_3_content_3">Turing Machine (TM): A Turing Machine can be designed to recognize palindromes, such as "abba" or "racecar," over a given alphabet.</string>
+    <string name="module1_4_3_content_4"></string>
+    <string name="module1_4_3_content_5"></string>
+    <string name="module1_4_3_content_6"></string>
+    <string name="module1_4_3_content_7"></string>
+    <string name="module1_4_3_content_8"></string>
+
+</resources>

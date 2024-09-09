@@ -12,7 +12,7 @@ public class L_lesson_handler extends FragmentPagerAdapter {
     private final L_lesson_sequence.StepType[] stepSequence;
     private final String currentLesson;
     private final String learningMode;
-    private final int pageNumber;
+    static int pageNumber;
 
     public L_lesson_handler(@NonNull FragmentManager fm, L_lesson_sequence.StepType[] stepSequence, String currentLesson, String learningMode, int pageNumber) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
@@ -31,6 +31,8 @@ public class L_lesson_handler extends FragmentPagerAdapter {
         String[] parts = currentLesson.split("_");
 
         Log.e(TAG, "currentLesson: " + currentLesson);
+        Log.e(TAG, "Inside L_Lesson_handler.java | Page Number: " + pageNumber);
+
         String module = parts[0];
         String lesson = parts[1];
 

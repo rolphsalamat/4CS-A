@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Module 3 | Page 1 -->
+    <!-- int[] module1_3_1 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module3_1_1_title"></string>
+    <string name="module3_1_1_content_1">In this lesson, we will explore the inherent limitations of regular languages and the significance of the Pumping Lemma in identifying these constraints. Regular languages, while powerful for certain tasks, have limitations that prevent them from expressing certain patterns. By the end of this session, you will be able to understand and apply the Pumping Lemma to determine if a language is regular or not, broadening your understanding of formal language theory and its computational applications.</string>
+    <string name="module3_1_1_content_2"></string>
+    <string name="module3_1_1_content_3"></string>
+    <string name="module3_1_1_content_4"></string>
+    <string name="module3_1_1_content_5"></string>
+    <string name="module3_1_1_content_6"></string>
+    <string name="module3_1_1_content_7"></string>
+    <string name="module3_1_1_content_8"></string>
+
+    <!-- Module 3 | Page 2 -->
+    <!-- int[] module1_3_2 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module3_1_2_title"></string>
+    <string name="module3_1_2_content_1">This lesson introduces the Pumping Lemma as a tool to prove the limitations of regular languages. It emphasizes that while regular languages are useful, they cannot express more complex patterns, such as nested structures. The Pumping Lemma helps demonstrate that if a language does not meet certain properties, it cannot be recognized by finite automata and is therefore not regular.</string>
+    <string name="module3_1_2_content_2"></string>
+    <string name="module3_1_2_content_3"></string>
+    <string name="module3_1_2_content_4"></string>
+    <string name="module3_1_2_content_5"></string>
+    <string name="module3_1_2_content_6"></string>
+    <string name="module3_1_2_content_7"></string>
+    <string name="module3_1_2_content_8"></string>
+
+    <!-- Module 3 | Page 3 -->
+    <!-- int[] module1_3_3 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module3_1_3_title"></string>
+    <string name="module3_1_3_content_1">Basic Examples:</string>
+    <string name="module3_1_3_content_2">Consider the language consisting of balanced parentheses. This language is not regular because it requires counting the number of open and close parentheses.</string>
+    <string name="module3_1_3_content_3">The language consisting of strings with equal numbers of a’s and b’s (e.g., “aabb”) cannot be expressed as a regular language.</string>
+    <string name="module3_1_3_content_4">For any sufficiently long string in a regular language, you can divide the string into three parts (xyz), and "pump" or repeat the middle section to form a new string that still belongs to the language.</string>
+    <string name="module3_1_3_content_5"></string>
+    <string name="module3_1_3_content_6"></string>
+    <string name="module3_1_3_content_7"></string>
+    <string name="module3_1_3_content_8"></string>
+
+</resources>

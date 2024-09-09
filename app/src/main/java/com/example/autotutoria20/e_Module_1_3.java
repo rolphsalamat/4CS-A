@@ -15,7 +15,11 @@ public class e_Module_1_3 {
     */
 
     public static e_Question[] get_PreTest_Lesson3_Questions() {
-        return getPreTestQuestions(pre_test_lesson_3_questions, pre_test_lesson_3_choices, pre_test_lesson_3_answers);
+        return e_Module_1.getPreTestQuestions(
+                pre_test_lesson_3_questions,
+                pre_test_lesson_3_choices,
+                pre_test_lesson_3_answers
+        );
     }
 
     public static final String[] pre_test_lesson_3_questions = {
@@ -80,7 +84,7 @@ public class e_Module_1_3 {
     */
 
     public static e_Question[] get_PostTest_Lesson3_Easy_Questions() {
-        return getPostTestQuestions(
+        return e_Module_1.get_PostTest_EasyMedium_Questions(
                 post_test_lesson_3_questions_easy,
                 post_test_lesson_3_choices_easy,
                 post_test_lesson_3_answers_easy,
@@ -151,7 +155,7 @@ public class e_Module_1_3 {
     */
 
     public static e_Question[] get_PostTest_Lesson3_Medium_Questions() {
-        return getPostTestQuestions(
+        return e_Module_1.get_PostTest_EasyMedium_Questions(
                 post_test_lesson_3_questions_medium,
                 post_test_lesson_3_choices_medium,
                 post_test_lesson_3_answers_medium,
@@ -221,9 +225,10 @@ public class e_Module_1_3 {
     */
 
     public static e_Question[] get_PostTest_Lesson3_Hard_Questions() {
-        return getPostTestHardQuestions(
+        return e_Module_1.get_PostTest_Hard_Questions(
                 post_test_lesson_3_questions_hard,
-                post_test_lesson_3_answers_hard
+                post_test_lesson_3_answers_hard,
+                e_Question.Difficulty.HARD
         );
     }
 
@@ -262,43 +267,4 @@ public class e_Module_1_3 {
             /*14*/   "formal grammar",
             /*15*/   "code compilation"
     };
-
-    /*
-    +----------------------+
-    |     Utility Methods  |
-    +----------------------+
-    */
-
-    private static e_Question[] getPreTestQuestions(String[] questions, String[][] choices, int[] answers) {
-        List<e_Question> questionList = new ArrayList<>();
-        for (int i = 0; i < questions.length; i++) {
-            questionList.add(new e_Question(questions[i], choices[i], answers[i])); // Pre-test is always multiple choice
-        }
-
-        Collections.shuffle(questionList);
-
-        return questionList.toArray(new e_Question[0]);
-    }
-
-    private static e_Question[] getPostTestQuestions(String[] questions, String[][] choices, int[] answers, e_Question.Difficulty difficulty) {
-        List<e_Question> questionList = new ArrayList<>();
-        for (int i = 0; i < questions.length; i++) {
-            questionList.add(new e_Question(questions[i], choices[i], answers[i], difficulty)); // Post-test can have difficulty levels
-        }
-
-        Collections.shuffle(questionList);
-
-        return questionList.toArray(new e_Question[0]);
-    }
-
-    private static e_Question[] getPostTestHardQuestions(String[] questions, String[] answers) {
-        List<e_Question> questionList = new ArrayList<>();
-        for (int i = 0; i < questions.length; i++) {
-            questionList.add(new e_Question(questions[i], answers[i], e_Question.Difficulty.HARD)); // Hard post-test has textual answers
-        }
-
-        Collections.shuffle(questionList);
-
-        return questionList.toArray(new e_Question[0]);
-    }
 }

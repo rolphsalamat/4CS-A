@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Module 1 | Page 1 -->
+    <!-- int[] module2_1_1 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module2_1_1_title">WELCOMING INTRODUCTION</string>
+    <string name="module2_1_1_content_1">In this lesson, we will explore foundational concepts in theoretical computer science, focusing on regular languages and regular expressions. These concepts form the building blocks for various applications in computing, such as text processing, compiler design, and data validation. By the end of this lesson, you will understand how regular languages are expressed, how regular expressions work, and how finite automata play a critical role in recognizing these languages.</string>
+    <string name="module2_1_1_content_2"></string>
+    <string name="module2_1_1_content_3"></string>
+    <string name="module2_1_1_content_4"></string>
+    <string name="module2_1_1_content_5"></string>
+    <string name="module2_1_1_content_6"></string>
+    <string name="module2_1_1_content_7"></string>
+    <string name="module2_1_1_content_8"></string>
+
+    <!-- Module 1 | Page 2 -->
+    <!-- int[] module2_1_2 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module2_1_2_title">REGULAR LANGUAGES AND EXPRESSIONS</string>
+    <string name="module2_1_2_content_1">This lesson introduces regular languages, a class of formal languages that can be expressed using regular expressions and recognized by finite automata (both deterministic and non-deterministic). A regular language is a collection of strings formed from a specific set of symbols (an alphabet). These languages are essential for solving computational problems requiring minimal memory. You will also learn about the closure properties of regular languages, which allow them to be combined using operations like union, concatenation, and the Kleene star.</string>
+    <string name="module2_1_2_content_2"></string>
+    <string name="module2_1_2_content_3"></string>
+    <string name="module2_1_2_content_4"></string>
+    <string name="module2_1_2_content_5"></string>
+    <string name="module2_1_2_content_6"></string>
+    <string name="module2_1_2_content_7"></string>
+    <string name="module2_1_2_content_8"></string>
+
+    <!-- Module 1 | Page 3 -->
+    <!-- int[] module2_1_3 = {0, 1, 0, 1, 0, 0, 0, 0}; -->
+    <string name="module2_1_3_title">REGULAR EXPRESSION EXAMPLES</string>
+    <string name="module2_1_3_content_1">Simple Regular Expression Example:</string>
+    <string name="module2_1_3_content_2">A regular expression like a*b matches strings containing zero or more occurrences of \'a\' followed by a \'b\' (e.g., "b", "ab", "aaab").</string>
+    <string name="module2_1_3_content_3">Complex Regular Expression Example:</string>
+    <string name="module2_1_3_content_4">(ab|cd)* matches any combination of "ab" and "cd", repeated any number of times (e.g., "ab", "cd", "abab", "abcd").</string>
+    <string name="module2_1_3_content_5"></string>
+    <string name="module2_1_3_content_6"></string>
+    <string name="module2_1_3_content_7"></string>
+    <string name="module2_1_3_content_8"></string>
+
+</resources>

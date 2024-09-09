@@ -14,7 +14,11 @@ public class e_Module_2_1 {
     */
 
     public static e_Question[] get_PreTest_Lesson2_Questions() {
-        return getPreTestQuestions(pre_test_lesson_2_questions, pre_test_lesson_2_choices, pre_test_lesson_2_answers);
+        return e_Module_2.getPreTestQuestions(
+                pre_test_lesson_2_questions,
+                pre_test_lesson_2_choices,
+                pre_test_lesson_2_answers
+        );
     }
 
     public static final String[] pre_test_lesson_2_questions = {
@@ -79,7 +83,12 @@ public class e_Module_2_1 {
     */
 
     public static e_Question[] get_PostTest_Lesson2_Easy_Questions() {
-        return getPostTestQuestions(post_test_lesson_2_questions_easy, post_test_lesson_2_choices_easy, post_test_lesson_2_answers_easy);
+        return e_Module_2.get_PostTest_EasyMedium_Questions(
+                post_test_lesson_2_questions_easy,
+                post_test_lesson_2_choices_easy,
+                post_test_lesson_2_answers_easy,
+                e_Question.Difficulty.EASY
+        );
     }
 
     public static final String[] post_test_lesson_2_questions_easy = {
@@ -144,7 +153,12 @@ public class e_Module_2_1 {
     */
 
     public static e_Question[] get_PostTest_Lesson2_Medium_Questions() {
-        return getPostTestQuestions(post_test_lesson_2_questions_medium, post_test_lesson_2_choices_medium, post_test_lesson_2_answers_medium);
+        return e_Module_2.get_PostTest_EasyMedium_Questions(
+                post_test_lesson_2_questions_medium,
+                post_test_lesson_2_choices_medium,
+                post_test_lesson_2_answers_medium,
+                e_Question.Difficulty.MEDIUM
+        );
     }
 
     public static final String[] post_test_lesson_2_questions_medium = {
@@ -209,9 +223,10 @@ public class e_Module_2_1 {
     */
 
     public static e_Question[] get_PostTest_Lesson2_Hard_Questions() {
-        return getPostTestHardQuestions(
+        return e_Module_2.get_PostTest_Hard_Questions(
                 post_test_lesson_2_questions_hard,
-                post_test_lesson_2_answers_hard
+                post_test_lesson_2_answers_hard,
+                e_Question.Difficulty.HARD
         );
     }
 
@@ -251,32 +266,4 @@ public class e_Module_2_1 {
             /*15*/   "kleene star"
     };
 
-    private static e_Question[] getPreTestQuestions(String[] questions, String[][] choices, int[] answers) {
-        List<e_Question> questionList = new ArrayList<>();
-        for (int i = 0; i < questions.length; i++) {
-            questionList.add(new e_Question(questions[i], choices[i], answers[i]));
-        }
-        Collections.shuffle(questionList);
-        return questionList.toArray(new e_Question[0]);
-    }
-
-    private static e_Question[] getPostTestQuestions(String[] questions, String[][] choices, int[] answers) {
-        List<e_Question> questionList = new ArrayList<>();
-        for (int i = 0; i < questions.length; i++) {
-            questionList.add(new e_Question(questions[i], choices[i], answers[i]));
-        }
-        Collections.shuffle(questionList);
-        return questionList.toArray(new e_Question[0]);
-    }
-
-    private static e_Question[] getPostTestHardQuestions(String[] questions, String[] answers) {
-        List<e_Question> questionList = new ArrayList<>();
-        for (int i = 0; i < questions.length; i++) {
-            questionList.add(new e_Question(questions[i], answers[i], e_Question.Difficulty.HARD)); // Hard post-test has textual answers
-        }
-
-        Collections.shuffle(questionList);
-
-        return questionList.toArray(new e_Question[0]);
-    }
 }

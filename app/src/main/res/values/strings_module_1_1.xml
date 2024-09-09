@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Module 1 | Page 1 -->
+    <!-- int[] module1_1_1 = {0, 0, 0, 0, 0}; -->
+    <string name="module1_1_1_title">WELCOMING INTRODUCTION</string>
+    <string name="module1_1_1_content_1">In this lesson, we\'ll dive into the foundational concepts of alphabets and strings, essential building blocks in the study of formal languages and computational theory. An alphabet is a set of symbols, and a string is a sequence of these symbols. Understanding these basics is crucial as they form the basis for more complex topics such as languages, grammars, and automata that will be covered in future lessons.</string>
+    <string name="module1_1_1_content_2"></string>
+    <string name="module1_1_1_content_3"></string>
+    <string name="module1_1_1_content_4"></string>
+    <string name="module1_1_1_content_5"></string>
+    <string name="module1_1_1_content_6"></string>
+    <string name="module1_1_1_content_7"></string>
+    <string name="module1_1_1_content_8"></string>
+
+    <!-- Module 1 | Page 2 -->
+    <!-- int[] module1_1_2 = {1, 1, 2, 2, 2}; -->
+    <string name="module1_1_2_title">Alphabets: </string>
+    <string name="module1_1_2_content_1">An alphabet is a finite, non-empty set of symbols, often represented by the Greek letter Σ.</string>
+    <string name="module1_1_2_content_2">Examples:</string>
+    <string name="module1_1_2_content_3">Binary alphabet: Σ = {0, 1}</string>
+    <string name="module1_1_2_content_4">DNA alphabet: Σ = {A, C, G, T}</string>
+    <string name="module1_1_2_content_5">English alphabet: Σ = {A...Z, a...z}</string>
+    <string name="module1_1_2_content_6"></string>
+    <string name="module1_1_2_content_7"></string>
+    <string name="module1_1_2_content_8"></string>
+
+    <!-- Module 1 | Page 3 -->
+    <!-- int[] module1_1_3 = {1, 1, 1, 2, 0}; -->
+    <string name="module1_1_3_title">Strings: </string>
+    <string name="module1_1_3_content_1">A string is a finite sequence of symbols from an alphabet.</string>
+    <string name="module1_1_3_content_2">Strings can have zero or more symbols. An empty string is denoted by ε.</string>
+    <string name="module1_1_3_content_3">Examples of strings over the alphabet Σ = {a, b}:</string>
+    <string name="module1_1_3_content_4">"a", "b", "ab", "ba", "aab", and "" (empty string)</string>
+    <string name="module1_1_3_content_5"></string>
+    <string name="module1_1_3_content_6"></string>
+    <string name="module1_1_3_content_7"></string>
+    <string name="module1_1_3_content_8"></string>
+
+    <!-- Module 1 | Page 4 -->
+    <!-- int[] module1_1_4 = {1, 1, 0, 0, 0}; -->
+    <string name="module1_1_4_title">Length of a String:</string>
+    <string name="module1_1_4_content_1">The length of a string is the number of symbols it contains, denoted by  |w|.</string>
+    <string name="module1_1_4_content_2">Example: For the string w = "aab", |w| = 3.</string>
+    <string name="module1_1_4_content_3"></string>
+    <string name="module1_1_4_content_4"></string>
+    <string name="module1_1_4_content_5"></string>
+    <string name="module1_1_4_content_6"></string>
+    <string name="module1_1_4_content_7"></string>
+    <string name="module1_1_4_content_8"></string>
+
+    <!-- Module 1 | Page 5 -->
+    <!-- int[] module1_1_5 = {1, 1, 0, 0, 0}; -->
+    <string name="module1_1_5_title">Concatenation of Strings:</string>
+    <string name="module1_1_5_content_1">Concatenation is the operation of joining two strings end-to-end.</string>
+    <string name="module1_1_5_content_2">Example: If u = "ab" and v = "c", then their concatenation uv = "abc".</string>
+    <string name="module1_1_5_content_3"></string>
+    <string name="module1_1_5_content_4"></string>
+    <string name="module1_1_5_content_5"></string>
+    <string name="module1_1_5_content_6"></string>
+    <string name="module1_1_5_content_7"></string>
+    <string name="module1_1_5_content_8"></string>
+
+    <!-- Module 1 | Page 6 -->
+    <!-- int[] module1_1_6 = {1, 2, 1, 2, 1, 2}; -->
+    <string name="module1_1_6_title">Prefixes, Suffixes, and Substrings:</string>
+    <string name="module1_1_6_content_1">Prefix: A string u is a prefix of a string w if w can be written as w = uv.</string>
+    <string name="module1_1_6_content_2">Example: For w = "abc", "a" and "ab" are prefixes.</string>
+    <string name="module1_1_6_content_3">Suffix: A string v is a suffix if w can be written as w = uv.</string>
+    <string name="module1_1_6_content_4">Example: For w = "abc", "c" and "bc" are suffixes.</string>
+    <string name="module1_1_6_content_5">Substring: A string v is a substring if w can be written as w = u1vu2.</string>
+    <string name="module1_1_6_content_6">Example: For w = "abc", "b" and "ab" are substrings.</string>
+    <string name="module1_1_6_content_7"></string>
+    <string name="module1_1_6_content_8"></string>
+
+    <!-- Module 1 | Page 7 -->
+    <!-- int[] module1_1_7 = {1, 1, 0, 0, 0}; -->
+    <string name="module1_1_7_title">Reversal of Strings:</string>
+    <string name="module1_1_7_content_1">The reversal of a string w, denoted w^R, is the string obtained by reversing the order of its symbols.</string>
+    <string name="module1_1_7_content_2">Example: If w = "abc", then w^R = "cba".</string>
+    <string name="module1_1_7_content_3"></string>
+    <string name="module1_1_7_content_4"></string>
+    <string name="module1_1_7_content_5"></string>
+    <string name="module1_1_7_content_6"></string>
+    <string name="module1_1_7_content_7"></string>
+    <string name="module1_1_7_content_8"></string>
+
+    <!-- Module 1 | Page 8 -->
+    <!-- int[] module1_1_8 = {1, 1, 1, 2, 0}; -->
+    <string name="module1_1_8_title">Basic Examples:</string>
+    <string name="module1_1_8_content_1">Alphabet: Σ = {0, 1} (Binary)</string>
+    <string name="module1_1_8_content_2">String: For Σ = {0, 1}, a string could be "0101".</string>
+    <string name="module1_1_8_content_3">Length: The length of the string "0101" is 4.</string>
+    <string name="module1_1_8_content_4">Concatenation: Concatenating "01" and "10" gives "0110".</string>
+    <string name="module1_1_8_content_5">Prefix: "01" is a prefix of "0101".</string>
+    <string name="module1_1_8_content_6">Suffix: "01" is a suffix of "0101".</string>
+    <string name="module1_1_8_content_7">Substring: "10" is a substring of "0101".</string>
+    <string name="module1_1_8_content_8">Reversal: The reversal of "0101" is "1010".</string>
+
+</resources>

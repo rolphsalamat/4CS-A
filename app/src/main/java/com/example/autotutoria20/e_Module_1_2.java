@@ -14,7 +14,11 @@ public class e_Module_1_2 {
     */
 
     public static e_Question[] get_PreTest_Lesson2_Questions() {
-        return getPreTestQuestions(pre_test_lesson_2_questions, pre_test_lesson_2_choices, pre_test_lesson_2_answers);
+        return e_Module_1.getPreTestQuestions(
+                pre_test_lesson_2_questions,
+                pre_test_lesson_2_choices,
+                pre_test_lesson_2_answers
+        );
     }
 
     public static final String[] pre_test_lesson_2_questions = {
@@ -260,19 +264,4 @@ public class e_Module_1_2 {
             /*14*/     "DNA alphabet",
             /*15*/     "string abc"
     };
-
-    private static e_Question[] getPreTestQuestions(String[] questions, String[][] choices, int[] answers) {
-        List<e_Question> questionList = new ArrayList<>();
-        for (int i = 0; i < questions.length; i++) {
-            questionList.add(new e_Question(questions[i], choices[i], answers[i])); // Pre-test is always multiple choice
-        }
-
-        // Shuffle the list to randomize the order of the questions
-        Collections.shuffle(questionList);
-
-        // Convert the list back to an array
-        return questionList.toArray(new e_Question[0]);
-    }
-
-
 }

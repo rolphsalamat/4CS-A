@@ -107,9 +107,11 @@ public class f_3_lesson_post_test extends Fragment {
         submitButton = view.findViewById(R.id.submit_post_test);
         identificationAnswer = view.findViewById(R.id.identification_answer);
 
-        // DAPAT MAG-IBA TO DEPENDE SA DIFFICULTY...
-        // Initialize BKT Model instance with appropriate parameters
+//        // DAPAT MAG-IBA TO DEPENDE SA DIFFICULTY...
+//        // Initialize BKT Model instance with appropriate parameters
         bktModel = x_bkt_algorithm.getInstance(0.3, 0.2, 0.1, 0.4);
+
+//         dapat ma move to kasi nag n null yung bktModel
 
         // Retrieve arguments passed from the parent container
         if (getArguments() != null) {
@@ -141,9 +143,56 @@ public class f_3_lesson_post_test extends Fragment {
                     difficultyLevel = getDifficultyLevel(userScore);
                     Log.d("f_post_test", "Determined Difficulty Level: " + difficultyLevel);
 
+                    // Adjust BKT Model parameters based on difficulty level
+                    double pInit, pTransit, pSlip, pGuess;
+
+                    switch (difficultyLevel) {
+                        case EASY:
+                            // Set parameters for EASY difficulty
+                            pInit = 0.5;    // Example initial probability of knowledge
+                            pTransit = 0.2; // Example probability of learning the skill after practice
+                            pSlip = 0.1;    // Example probability of making a mistake despite knowing the skill
+                            pGuess = 0.4;   // Example probability of guessing the correct answer without knowing the skill
+                            break;
+                        case MEDIUM:
+                            // Set parameters for MEDIUM difficulty
+                            // Example values for medium difficulty
+                            pInit = 0.4;
+                            pTransit = 0.3;
+                            pSlip = 0.15;
+                            pGuess = 0.3;
+                            break;
+                        case HARD:
+                            // Set parameters for HARD difficulty
+                            pInit = 0.3;
+                            pTransit = 0.4;
+                            pSlip = 0.2;
+                            pGuess = 0.2;
+                            break;
+                        default:
+                            // Fallback to default values
+                            pInit = 0.3;
+                            pTransit = 0.2;
+                            pSlip = 0.1;
+                            pGuess = 0.4;
+                            break;
+                    }
+
+                    String TAG = "Parameter Check";
+
+                    Log.e(TAG, "Difficulty: " + difficultyLevel);
+                    Log.e(TAG, "pInit: " + pInit);
+                    Log.e(TAG, "pTransit: " + pTransit);
+                    Log.e(TAG, "pSlip: " + pSlip);
+                    Log.e(TAG, "pGuess: " + pGuess);
+
+                    // Initialize BKT Model instance with the parameters based on difficulty
+                    bktModel = x_bkt_algorithm.getInstance(pInit, pTransit, pSlip, pGuess);
+
                     // Retrieve post-test questions based on difficulty level
                     questions = getPostTestQuestionsBasedOnDifficulty(module, lesson, difficultyLevel);
                     loadQuestion();
+
                 } else {
                     Log.e("f_post_test", "Invalid moduleIndex: " + moduleIndex + ", cannot retrieve BKT score.");
                 }
@@ -153,12 +202,17 @@ public class f_3_lesson_post_test extends Fragment {
 
         submitButton.setOnClickListener(v -> {
             // Handle the submission of answers
-            answerAttempt++;
             if (choicesGroup.getCheckedRadioButtonId() == -1) {
                 Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
             } else {
+
+                answerAttempt++;
+
                 boolean correctAnswer = checkAnswer();
                 bktModel.updateKnowledge(correctAnswer);
+
+                if (!correctAnswer)
+                    choicesGroup.clearCheck();
 
                 // Log the updated knowledge probability
                 double knowledgeProb = bktModel.getKnowledgeProbability();
@@ -176,10 +230,15 @@ public class f_3_lesson_post_test extends Fragment {
                 // Load next question or finish
                 if (currentQuestionIndex < questions.length - 1) {
                     currentQuestionIndex++;
-                    loadQuestion();
                 } else {
                     Log.d("submitButton.onClick", "Post-test completed");
                     bktModel.logScores();
+                }
+
+                // to give student chance to get correct answer before loading another question
+                if (answerAttempt >= attemptChances) {
+                    loadQuestion(); // Load the next question
+                    answerAttempt = 0;
                 }
             }
         });
@@ -359,7 +418,7 @@ public class f_3_lesson_post_test extends Fragment {
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_1_3.get_PostTest_Lesson3_Easy_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-                    return e_Module_1_3.get_PostTest_Lesson3_Easy_Questions();
+                    return e_Module_1_3.get_PostTest_Lesson3_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_1_3.get_PostTest_Lesson3_Hard_Questions();
             case "M4_Lesson 1":
@@ -383,23 +442,20 @@ public class f_3_lesson_post_test extends Fragment {
 
             /* ===== Module 3 ===== */
             case "M1_Lesson 3":
-                return e_Module_3.getPostTestLesson1Questions();
-//                if (difficultyLevel == e_Question.Difficulty.EASY)
-//                    return e_Module_3_1.get_PostTest_Lesson1_Easy_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                    return e_Module_3_1.get_PostTest_Lesson1_Medium_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                    return e_Module_3_1.get_PostTest_Lesson1_Hard_Questions();
+                if (difficultyLevel == e_Question.Difficulty.EASY)
+                    return e_Module_3_1.get_PostTest_Lesson1_Easy_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                    return e_Module_3_1.get_PostTest_Lesson1_Medium_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.HARD)
+                    return e_Module_3_1.get_PostTest_Lesson1_Hard_Questions();
             case "M2_Lesson 3":
-                return e_Module_3.getPostTestLesson2Questions();
-//                if (difficultyLevel == e_Question.Difficulty.EASY)
-//                    return e_Module_3_2.get_PostTest_Lesson2_Easy_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                    return e_Module_3_2.get_PostTest_Lesson2_Medium_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                    return e_Module_3_2.get_PostTest_Lesson2_Hard_Questions();
+                if (difficultyLevel == e_Question.Difficulty.EASY)
+                    return e_Module_3_2.get_PostTest_Lesson2_Easy_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                    return e_Module_3_2.get_PostTest_Lesson2_Medium_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.HARD)
+                    return e_Module_3_2.get_PostTest_Lesson2_Hard_Questions();
             case "M3_Lesson 3":
-                return e_Module_3.getPostTestLesson3Questions();
 //                if (difficultyLevel == e_Question.Difficulty.EASY)
 //                    return e_Module_3_3.get_PostTest_Lesson3_Easy_Questions();
 //                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
@@ -409,23 +465,20 @@ public class f_3_lesson_post_test extends Fragment {
 
             /* ===== Module 4 ===== */
             case "M1_Lesson 4":
-                return e_Module_4.getPostTestLesson1Questions();
-//                if (difficultyLevel == e_Question.Difficulty.EASY)
-//                    return e_Module_4_1.get_PostTest_Lesson1_Easy_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                    return e_Module_4_1.get_PostTest_Lesson1_Medium_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                    return e_Module_4_1.get_PostTest_Lesson1_Hard_Questions();
+                if (difficultyLevel == e_Question.Difficulty.EASY)
+                    return e_Module_4_1.get_PostTest_Lesson1_Easy_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                    return e_Module_4_1.get_PostTest_Lesson1_Medium_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.HARD)
+                    return e_Module_4_1.get_PostTest_Lesson1_Hard_Questions();
             case "M2_Lesson 4":
-                return e_Module_4.getPostTestLesson2Questions();
-//                if (difficultyLevel == e_Question.Difficulty.EASY)
-//                    return e_Module_4_2.get_PostTest_Lesson2_Easy_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                    return e_Module_4_2.get_PostTest_Lesson2_Medium_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                    return e_Module_4_2.get_PostTest_Lesson2_Hard_Questions();
+                if (difficultyLevel == e_Question.Difficulty.EASY)
+                    return e_Module_4_2.get_PostTest_Lesson2_Easy_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                    return e_Module_4_2.get_PostTest_Lesson2_Medium_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.HARD)
+                    return e_Module_4_2.get_PostTest_Lesson2_Hard_Questions();
             case "M3_Lesson 4":
-                return e_Module_4.getPostTestLesson3Questions();
 //                if (difficultyLevel == e_Question.Difficulty.EASY)
 //                    return e_Module_4_3.get_PostTest_Lesson3_Easy_Questions();
 //                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
@@ -435,55 +488,49 @@ public class f_3_lesson_post_test extends Fragment {
 
             /* ===== Module 5 ===== */
             case "M1_Lesson 5":
-                return e_Module_5.getPostTestLesson1Questions();
-//                if (difficultyLevel == e_Question.Difficulty.EASY)
-//                    return e_Module_5_1.get_PostTest_Lesson1_Easy_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                    return e_Module_5_1.get_PostTest_Lesson1_Medium_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                    return e_Module_5_1.get_PostTest_Lesson1_Hard_Questions();
+                if (difficultyLevel == e_Question.Difficulty.EASY)
+                    return e_Module_5_1.get_PostTest_Lesson1_Easy_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                    return e_Module_5_1.get_PostTest_Lesson1_Medium_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.HARD)
+                    return e_Module_5_1.get_PostTest_Lesson1_Hard_Questions();
             case "M2_Lesson 5":
-                return e_Module_5.getPostTestLesson2Questions();
-//                if (difficultyLevel == e_Question.Difficulty.EASY)
-//                    return e_Module_5_2.get_PostTest_Lesson2_Easy_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                    return e_Module_5_2.get_PostTest_Lesson2_Medium_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                    return e_Module_5_2.get_PostTest_Lesson2_Hard_Questions();
+                if (difficultyLevel == e_Question.Difficulty.EASY)
+                    return e_Module_5_2.get_PostTest_Lesson2_Easy_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                    return e_Module_5_2.get_PostTest_Lesson2_Medium_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.HARD)
+                    return e_Module_5_2.get_PostTest_Lesson2_Hard_Questions();
             case "M3_Lesson 5":
-                return e_Module_5.getPostTestLesson3Questions();
-//                if (difficultyLevel == e_Question.Difficulty.EASY)
-//                    return e_Module_5_3.get_PostTest_Lesson3_Easy_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                    return e_Module_5_3.get_PostTest_Lesson3_Medium_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                    return e_Module_5_3.get_PostTest_Lesson3_Hard_Questions();
+                if (difficultyLevel == e_Question.Difficulty.EASY)
+                    return e_Module_5_3.get_PostTest_Lesson3_Easy_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                    return e_Module_5_3.get_PostTest_Lesson3_Medium_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.HARD)
+                    return e_Module_5_3.get_PostTest_Lesson3_Hard_Questions();
 
             /* ===== Module 6 ===== */
             case "M1_Lesson 6":
-                return e_Module_6.getPostTestLesson1Questions();
-//                if (difficultyLevel == e_Question.Difficulty.EASY)
-//                    return e_Module_6_1.get_PostTest_Lesson1_Easy_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                    return e_Module_6_1.get_PostTest_Lesson1_Medium_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                    return e_Module_6_1.get_PostTest_Lesson1_Hard_Questions();
+                if (difficultyLevel == e_Question.Difficulty.EASY)
+                    return e_Module_6_1.get_PostTest_Lesson1_Easy_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                    return e_Module_6_1.get_PostTest_Lesson1_Medium_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.HARD)
+                    return e_Module_6_1.get_PostTest_Lesson1_Hard_Questions();
             case "M2_Lesson 6":
-                return e_Module_6.getPostTestLesson2Questions();
-//                if (difficultyLevel == e_Question.Difficulty.EASY)
-//                    return e_Module_6_2.get_PostTest_Lesson2_Easy_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                    return e_Module_6_2.get_PostTest_Lesson2_Medium_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                    return e_Module_6_2.get_PostTest_Lesson2_Hard_Questions();
+                if (difficultyLevel == e_Question.Difficulty.EASY)
+                    return e_Module_6_2.get_PostTest_Lesson2_Easy_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                    return e_Module_6_2.get_PostTest_Lesson2_Medium_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.HARD)
+                    return e_Module_6_2.get_PostTest_Lesson2_Hard_Questions();
             case "M3_Lesson 6":
-                return e_Module_6.getPostTestLesson3Questions();
-//                if (difficultyLevel == e_Question.Difficulty.EASY)
-//                    return e_Module_6_3.get_PostTest_Lesson3_Easy_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                    return e_Module_6_3.get_PostTest_Lesson3_Medium_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                    return e_Module_6_3.get_PostTest_Lesson3_Hard_Questions();
+                if (difficultyLevel == e_Question.Difficulty.EASY)
+                    return e_Module_6_3.get_PostTest_Lesson3_Easy_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                    return e_Module_6_3.get_PostTest_Lesson3_Medium_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.HARD)
+                    return e_Module_6_3.get_PostTest_Lesson3_Hard_Questions();
 
             /* ===== Module 7 ===== */
             case "M1_Lesson 7":

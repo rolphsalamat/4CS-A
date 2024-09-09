@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,10 +29,30 @@ public class f_1_lesson_text extends Fragment {
     private String currentLesson; // Variable to store currentLesson
 
     private TextView titleTextView;
+    private LinearLayout
+            contentLayout_1, contentLayout_2, contentLayout_3, contentLayout_4,
+            contentLayout_5, contentLayout_6, contentLayout_7, contentLayout_8;
+    LinearLayout[] contentLayouts = {
+            contentLayout_1, contentLayout_2, contentLayout_3, contentLayout_4,
+            contentLayout_5, contentLayout_6, contentLayout_7, contentLayout_8
+    };
+    private ImageView
+            contentImageView_1, contentImageView_2, contentImageView_3, contentImageView_4,
+            contentImageView_5, contentImageView_6, contentImageView_7, contentImageView_8;
     private TextView
-            contentTextView_1,
-            contentTextView_2,
-            contentTextView_3;
+            contentTextView_1, contentTextView_2, contentTextView_3, contentTextView_4,
+            contentTextView_5, contentTextView_6, contentTextView_7, contentTextView_8;
+
+    // Array of content TextViews and ImageViews
+    TextView[] contentTextViews = {
+            contentTextView_1, contentTextView_2, contentTextView_3, contentTextView_4,
+            contentTextView_5, contentTextView_6, contentTextView_7, contentTextView_8
+    };
+
+    ImageView[] contentImageViews = {
+            contentImageView_1, contentImageView_2, contentImageView_3, contentImageView_4,
+            contentImageView_5, contentImageView_6, contentImageView_7, contentImageView_8
+    };
     private LinearLayout nextButton;
     private Boolean isTextLessonDone = false;
     private Button tapToContinueButton;
@@ -113,42 +134,77 @@ public class f_1_lesson_text extends Fragment {
 
         // Initialize TextView objects
         titleTextView = view.findViewById(R.id.text_lesson_title);
+
+        // Initialize Layouts
+        contentLayout_1 = view.findViewById(R.id.content_1);
+        contentLayout_2 = view.findViewById(R.id.content_2);
+        contentLayout_3 = view.findViewById(R.id.content_3);
+        contentLayout_4 = view.findViewById(R.id.content_4);
+        contentLayout_5 = view.findViewById(R.id.content_5);
+        contentLayout_6 = view.findViewById(R.id.content_6);
+        contentLayout_7 = view.findViewById(R.id.content_7);
+        contentLayout_8 = view.findViewById(R.id.content_8);
+
+        // Now populate the arrays after initializing the layouts
+        contentLayouts = new LinearLayout[]{
+                contentLayout_1, contentLayout_2, contentLayout_3, contentLayout_4,
+                contentLayout_5, contentLayout_6, contentLayout_7, contentLayout_8
+        };
+
+        // Initialize TextViews
         contentTextView_1 = view.findViewById(R.id.text_lesson_content_1);
         contentTextView_2 = view.findViewById(R.id.text_lesson_content_2);
         contentTextView_3 = view.findViewById(R.id.text_lesson_content_3);
+        contentTextView_4 = view.findViewById(R.id.text_lesson_content_4);
+        contentTextView_5 = view.findViewById(R.id.text_lesson_content_5);
+        contentTextView_6 = view.findViewById(R.id.text_lesson_content_6);
+        contentTextView_7 = view.findViewById(R.id.text_lesson_content_7);
+        contentTextView_8 = view.findViewById(R.id.text_lesson_content_8);
+
+        // Initialize ImageViews
+        contentImageView_1 = view.findViewById(R.id.image_lesson_content_1);
+        contentImageView_2 = view.findViewById(R.id.image_lesson_content_2);
+        contentImageView_3 = view.findViewById(R.id.image_lesson_content_3);
+        contentImageView_4 = view.findViewById(R.id.image_lesson_content_4);
+        contentImageView_5 = view.findViewById(R.id.image_lesson_content_5);
+        contentImageView_6 = view.findViewById(R.id.image_lesson_content_6);
+        contentImageView_7 = view.findViewById(R.id.image_lesson_content_7);
+        contentImageView_8 = view.findViewById(R.id.image_lesson_content_8);
+
+        // Now populate the arrays after initializing the views
+        contentTextViews = new TextView[]{
+                contentTextView_1, contentTextView_2, contentTextView_3, contentTextView_4,
+                contentTextView_5, contentTextView_6, contentTextView_7, contentTextView_8
+        };
+
+        contentImageViews = new ImageView[]{
+                contentImageView_1, contentImageView_2, contentImageView_3, contentImageView_4,
+                contentImageView_5, contentImageView_6, contentImageView_7, contentImageView_8
+        };
+
+        // Initialize buttons
         nextButton = view.findViewById(R.id.next_button);
         tapToContinueButton = view.findViewById(R.id.tap_to_continue);
 
-//        // Disable nextButton temporarily and set tapToContinueButton to GONE
-//        nextButton.setEnabled(false);
-//        tapToContinueButton.setVisibility(View.GONE);
-//
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                // Enable nextButton and make tapToContinueButton visible after n seconds
-//                nextButton.setEnabled(true);
-//                tapToContinueButton.setVisibility(View.VISIBLE);
-//            }
-//        }, delayInSeconds * 750);  // 5000 milliseconds = 5 seconds
-
+        // Set visibility for buttons
         nextButton.setEnabled(true);
         tapToContinueButton.setVisibility(View.VISIBLE);
 
         // Ensure TextViews and Button are not null
-        if (titleTextView == null || contentTextView_1 == null || contentTextView_2 == null || contentTextView_3 == null || nextButton == null) {
+        if (titleTextView == null || nextButton == null || tapToContinueButton == null) {
             Log.e("f_text_lesson", "One or more views are null. Check your layout file.");
             return;  // Early return to prevent further crashes
         }
 
-        contentTextView_1.setVisibility(View.GONE);
-        contentTextView_2.setVisibility(View.GONE);
-        contentTextView_3.setVisibility(View.GONE);
+        // Hide all content TextViews initially
+        for (TextView textView : contentTextViews) {
+            textView.setVisibility(View.GONE);
+        }
 
         // Proceed with your logic
         if (getArguments() != null) {
             key = getArguments().getString(ARG_KEY);
-            pageNumber = getArguments().getInt(ARG_PAGE_NUMBER, 1); // Retrieve page number
+            pageNumber = getArguments().getInt(ARG_PAGE_NUMBER, -1); // Retrieve page number
             setTotalStepsForKey(key);
         }
 
@@ -156,30 +212,12 @@ public class f_1_lesson_text extends Fragment {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                // Disable the button immediately
                 nextButton.setEnabled(false);
-
-                // Disable and Hide "Tap to Continue"
                 tapToContinueButton.setEnabled(false);
                 tapToContinueButton.setVisibility(View.GONE);
-
                 handleNextButtonClick();
-
-//                // Use a Handler to re-enable the button after 5 seconds and make it visible again
-//                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        nextButton.setEnabled(true); // Re-enable the button
-//                        // Make the buttons visible again
-//                        nextButton.setVisibility(View.VISIBLE);
-//                        if (!isTextLessonDone)
-//                            tapToContinueButton.setVisibility(View.VISIBLE);
-//                    }
-//                }, delayInSeconds * 1000); // 5000 milliseconds = 5 seconds
             }
         });
-
     }
 
     @Override
@@ -224,6 +262,14 @@ public class f_1_lesson_text extends Fragment {
         totalSteps = 0;  // Reset total steps
 
         // Generate resource names dynamically
+
+        // check pageNumber
+        Log.e("setTotalStepsForKey", "Page Number: " + pageNumber);
+
+//        // ginawa ko lang ganto kasi mali ata yung naming sa String resource file??
+//        String baseName = "module" + key.charAt(10) + "_" + pageNumber + "_" + key.charAt(1);
+
+        // pero eto talaga yung original...
         String baseName = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber;
 
         Log.e("setTotalStepsForKey", "baseName: " + baseName);
@@ -233,12 +279,18 @@ public class f_1_lesson_text extends Fragment {
         if (resourceHasValue(baseName + "_content_1")) totalSteps++;
         if (resourceHasValue(baseName + "_content_2")) totalSteps++;
         if (resourceHasValue(baseName + "_content_3")) totalSteps++;
+        if (resourceHasValue(baseName + "_content_4")) totalSteps++;
+        if (resourceHasValue(baseName + "_content_5")) totalSteps++;
+        if (resourceHasValue(baseName + "_content_6")) totalSteps++;
+        if (resourceHasValue(baseName + "_content_7")) totalSteps++;
+        if (resourceHasValue(baseName + "_content_8")) totalSteps++;
 
         Log.e("setTotalStepsForKey", "totalSteps: " + totalSteps);
     }
 
     private boolean resourceHasValue(String resourceName) {
         int resId = getResources().getIdentifier(resourceName, "string", getContext().getPackageName());
+        Log.e("resourceHasValue()", "checking: " + getResources().getIdentifier(resourceName, "string", getContext().getPackageName()));
         if (resId != 0) {  // Check if the resource ID is valid
             String value = getString(resId);
             Log.d("resourceHasValue", "Resource: " + resourceName + " Value: " + value); // Log the value
@@ -288,128 +340,377 @@ public class f_1_lesson_text extends Fragment {
         }
     }
 
+    private void setBullet(int pageNumber, int step, ImageView contentImageView, TextView contentTextView, LinearLayout linearLayout) {
+        String TAG = "setBullet()";
+
+        // Convert dp to pixels
+        float scale = contentImageView.getContext().getResources().getDisplayMetrics().density;
+        int sizeInDp = (int) (25 * scale + 0.5f); // 25dp to pixels
+
+        int layoutMargin = 16;
+
+        // Validate the pageNumber and step
+        if (pageNumber <= f_1_lesson_text_bullets.module1_1.length && step < f_1_lesson_text_bullets.module1_1[pageNumber - 1].length) {
+            int bulletType = f_1_lesson_text_bullets.module1_1[pageNumber - 1][step];  // Get bullet type for the step
+
+            // Set bullet image and padding based on the bullet type
+            if (bulletType == 1) {
+                // Set padding for linearLayout
+                linearLayout.setPadding((50 + layoutMargin), layoutMargin, layoutMargin, layoutMargin);
+
+                // Set ImageView dimensions to 25x25dp
+                contentImageView.getLayoutParams().width = sizeInDp;
+                contentImageView.getLayoutParams().height = sizeInDp;
+
+                contentImageView.setImageResource(R.drawable.bullet_1);  // Set bullet_1 image
+            } else if (bulletType == 2) {
+                // Set padding for nested bullet
+                linearLayout.setPadding((125 + layoutMargin), layoutMargin, layoutMargin, layoutMargin);
+
+                // Set ImageView dimensions to 25x25dp
+                contentImageView.getLayoutParams().width = sizeInDp;
+                contentImageView.getLayoutParams().height = sizeInDp;
+
+                contentImageView.setImageResource(R.drawable.bullet_2);  // Set bullet_2 image
+            } else {
+                // No bullet case, hide or reset the image and reset padding
+                contentImageView.setImageDrawable(null);
+                contentTextView.setPadding(0, 0, 0, 0);  // No indentation
+            }
+
+            // Request layout update to apply the new size
+            contentImageView.requestLayout();
+        } else {
+            Log.e(TAG, "Invalid page number or step. No bullet set.");
+        }
+    }
+
+
+
+//    private void showNextStep(int step) {
+//        String TAG = "showNextStep";
+//        int actualStep = 0;
+//
+////        nextButton.setVisibility(View.GONE);
+//        nextButton.setEnabled(false);
+//
+//        tapToContinueButton.setVisibility(View.GONE);
+//        tapToContinueButton.setEnabled(false);
+//
+//        // Title is shown by default, so we'll start checking content blocks
+//        // Step 1: Check if content_1 exists and has a value
+//        String content1Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_1";
+//        if (resourceHasValue(content1Key)) {
+//            actualStep++;
+//            if (actualStep == step + 1) {
+//                Log.e(TAG, "Step: " + actualStep + " - Showing content_1");
+//
+//                // Get the content string to determine delay
+//                int resId = getResources().getIdentifier(content1Key, "string", getContext().getPackageName());
+//                String content = getString(resId);
+//                int delayInSeconds = calculateDelayBasedOnLength(content.length());
+//
+//                contentTextView_1.setVisibility(View.VISIBLE);
+//                // Delay showing the nextButton based on the content length
+//
+//                Log.e(TAG, "show context 1 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
+//
+//                if (currentStep < (totalSteps-2)) {
+//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            nextButton.setEnabled(true); // Enable the button
+//                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
+//                        }
+//                    }, delayInSeconds * 1000);
+//                }
+//
+//                return;
+//            }
+//        } else {
+//            contentTextView_1.setVisibility(View.GONE); // Hide if no value
+//        }
+//
+//        // Step 2: Check if content_2 exists and has a value
+//        String content2Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_2";
+//        if (resourceHasValue(content2Key)) {
+//            actualStep++;
+//            if (actualStep == step + 1) {
+//                Log.e(TAG, "Step: " + actualStep + " - Showing content_2");
+//
+//                // Get the content string to determine delay
+//                int resId = getResources().getIdentifier(content2Key, "string", getContext().getPackageName());
+//                String content = getString(resId);
+//                int delayInSeconds = calculateDelayBasedOnLength(content.length());
+//
+//                contentTextView_2.setVisibility(View.VISIBLE);
+//                // Delay showing the nextButton based on the content length
+//
+//                Log.e(TAG, "show context 2 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
+//
+//                if (currentStep < (totalSteps-2)) {
+//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            nextButton.setEnabled(true); // Enable the button
+//                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
+//                        }
+//                    }, delayInSeconds * 1000);
+//                }
+//
+//                return;
+//            }
+//        } else {
+//            contentTextView_2.setVisibility(View.GONE); // Hide if no value
+//        }
+//
+//        // Step 3: Check if content_3 exists and has a value
+//        String content3Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_3";
+//        if (resourceHasValue(content3Key)) {
+//            actualStep++;
+//            if (actualStep == step + 1) {
+//                Log.e(TAG, "Step: " + actualStep + " - Showing content_3");
+//
+//                // Get the content string to determine delay
+//                int resId = getResources().getIdentifier(content3Key, "string", getContext().getPackageName());
+//                String content = getString(resId);
+//                int delayInSeconds = calculateDelayBasedOnLength(content.length());
+//
+//                contentTextView_3.setVisibility(View.VISIBLE);
+//                // Delay showing the nextButton based on the content length
+//
+//                Log.e(TAG, "show context 3 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
+//
+//                if (currentStep < (totalSteps-2)) {
+//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            nextButton.setEnabled(true); // Enable the button
+//                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
+//                        }
+//                    }, delayInSeconds * 1000);
+//                }
+//
+//                return;
+//            }
+//        } else {
+//            contentTextView_3.setVisibility(View.GONE); // Hide if no value
+//        }
+//
+//        // Step 4: Check if content_4 exists and has a value
+//        String content4Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_4";
+//        if (resourceHasValue(content4Key)) {
+//            actualStep++;
+//            if (actualStep == step + 1) {
+//                Log.e(TAG, "Step: " + actualStep + " - Showing content_4");
+//
+//                // Get the content string to determine delay
+//                int resId = getResources().getIdentifier(content4Key, "string", getContext().getPackageName());
+//                String content = getString(resId);
+//                int delayInSeconds = calculateDelayBasedOnLength(content.length());
+//
+//                contentTextView_4.setVisibility(View.VISIBLE);
+//                // Delay showing the nextButton based on the content length
+//
+//                Log.e(TAG, "show context 4 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
+//
+//                if (currentStep < (totalSteps-2)) {
+//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            nextButton.setEnabled(true); // Enable the button
+//                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
+//                        }
+//                    }, delayInSeconds * 1000);
+//                }
+//
+//                return;
+//            }
+//        } else {
+//            contentTextView_4.setVisibility(View.GONE); // Hide if no value
+//        }
+//
+//        // Step 5: Check if content_5 exists and has a value
+//        String content5Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_5";
+//        if (resourceHasValue(content5Key)) {
+//            actualStep++;
+//            if (actualStep == step + 1) {
+//                Log.e(TAG, "Step: " + actualStep + " - Showing content_5");
+//
+//                // Get the content string to determine delay
+//                int resId = getResources().getIdentifier(content4Key, "string", getContext().getPackageName());
+//                String content = getString(resId);
+//                int delayInSeconds = calculateDelayBasedOnLength(content.length());
+//
+//                contentTextView_5.setVisibility(View.VISIBLE);
+//                // Delay showing the nextButton based on the content length
+//
+//                Log.e(TAG, "show context 5 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
+//
+//                if (currentStep < (totalSteps-2)) {
+//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            nextButton.setEnabled(true); // Enable the button
+//                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
+//                        }
+//                    }, delayInSeconds * 1000);
+//                }
+//
+//                return;
+//            }
+//        } else {
+//            contentTextView_5.setVisibility(View.GONE); // Hide if no value
+//        }
+//
+//        // Step 6: Check if content_6 exists and has a value
+//        String content6Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_6";
+//        if (resourceHasValue(content6Key)) {
+//            actualStep++;
+//            if (actualStep == step + 1) {
+//                Log.e(TAG, "Step: " + actualStep + " - Showing content_6");
+//
+//                // Get the content string to determine delay
+//                int resId = getResources().getIdentifier(content4Key, "string", getContext().getPackageName());
+//                String content = getString(resId);
+//                int delayInSeconds = calculateDelayBasedOnLength(content.length());
+//
+//                contentTextView_6.setVisibility(View.VISIBLE);
+//                // Delay showing the nextButton based on the content length
+//
+//                Log.e(TAG, "show context 6 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
+//
+//                if (currentStep < (totalSteps-2)) {
+//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            nextButton.setEnabled(true); // Enable the button
+//                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
+//                        }
+//                    }, delayInSeconds * 1000);
+//                }
+//
+//                return;
+//            }
+//        } else {
+//            contentTextView_6.setVisibility(View.GONE); // Hide if no value
+//        }
+//
+//        // Step 7: Check if content_7 exists and has a value
+//        String content7Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_7";
+//        if (resourceHasValue(content7Key)) {
+//            actualStep++;
+//            if (actualStep == step + 1) {
+//                Log.e(TAG, "Step: " + actualStep + " - Showing content_7");
+//
+//                // Get the content string to determine delay
+//                int resId = getResources().getIdentifier(content4Key, "string", getContext().getPackageName());
+//                String content = getString(resId);
+//                int delayInSeconds = calculateDelayBasedOnLength(content.length());
+//
+//                contentTextView_7.setVisibility(View.VISIBLE);
+//                // Delay showing the nextButton based on the content length
+//
+//                Log.e(TAG, "show context 7 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
+//
+//                if (currentStep < (totalSteps-2)) {
+//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            nextButton.setEnabled(true); // Enable the button
+//                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
+//                        }
+//                    }, delayInSeconds * 1000);
+//                }
+//
+//                return;
+//            }
+//        } else {
+//            contentTextView_7.setVisibility(View.GONE); // Hide if no value
+//        }
+//
+//        // Step 8: Check if content_8 exists and has a value
+//        String content8Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_8";
+//        if (resourceHasValue(content8Key)) {
+//            actualStep++;
+//            if (actualStep == step + 1) {
+//                Log.e(TAG, "Step: " + actualStep + " - Showing content_8");
+//
+//                // Get the content string to determine delay
+//                int resId = getResources().getIdentifier(content4Key, "string", getContext().getPackageName());
+//                String content = getString(resId);
+//                int delayInSeconds = calculateDelayBasedOnLength(content.length());
+//
+//                contentTextView_8.setVisibility(View.VISIBLE);
+//                // Delay showing the nextButton based on the content length
+//
+//                Log.e(TAG, "show context 8 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
+//
+//                if (currentStep < (totalSteps-2)) {
+//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            nextButton.setEnabled(true); // Enable the button
+//                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
+//                        }
+//                    }, delayInSeconds * 1000);
+//                }
+//
+//                return;
+//            }
+//        } else {
+//            contentTextView_8.setVisibility(View.GONE); // Hide if no value
+//        }
+//
+//        // If no more steps are available to show
+//        Log.e(TAG, "No more steps to show, STEP: " + (step + 1));
+//    }
+
     private void showNextStep(int step) {
         String TAG = "showNextStep";
         int actualStep = 0;
 
-//        nextButton.setVisibility(View.GONE);
         nextButton.setEnabled(false);
-
         tapToContinueButton.setVisibility(View.GONE);
         tapToContinueButton.setEnabled(false);
 
-//        if ((step+2) == totalSteps) {
-//            tapToContinueButton.setVisibility(View.GONE);
-//            tapToContinueButton.setEnabled(false);
-//
-//            nextButton.setVisibility(View.VISIBLE);
-//            nextButton.setEnabled(true);
-//
-////            currentStep++;
-//        }
+        String[] contentKeys = {
+                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_1",
+                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_2",
+                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_3",
+                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_4",
+                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_5",
+                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_6",
+                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_7",
+                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_8"
+        };
 
-        // Title is shown by default, so we'll start checking content blocks
-        // Step 1: Check if content_1 exists and has a value
-        String content1Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_1";
-        if (resourceHasValue(content1Key)) {
-            actualStep++;
-            if (actualStep == step + 1) {
-                Log.e(TAG, "Step: " + actualStep + " - Showing content_1");
+        for (int i = 0; i < contentKeys.length; i++) {
+            String contentKey = contentKeys[i];
+            if (resourceHasValue(contentKey)) {
+                actualStep++;
+                if (actualStep == step + 1) {
+                    int resId = getResources().getIdentifier(contentKey, "string", getContext().getPackageName());
+                    String content = getString(resId);
+                    int delayInSeconds = calculateDelayBasedOnLength(content.length());
 
-                // Get the content string to determine delay
-                int resId = getResources().getIdentifier(content1Key, "string", getContext().getPackageName());
-                String content = getString(resId);
-                int delayInSeconds = calculateDelayBasedOnLength(content.length());
+                    contentTextViews[i].setVisibility(View.VISIBLE);
+                    contentTextViews[i].setText(content);
+                    setBullet(pageNumber, i, contentImageViews[i], contentTextViews[i], contentLayouts[i]);
 
-                contentTextView_1.setVisibility(View.VISIBLE);
-                // Delay showing the nextButton based on the content length
+                    if (currentStep < (totalSteps - 2)) {
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            nextButton.setEnabled(true);
+                            tapToContinueButton.setVisibility(View.VISIBLE);
+                        }, delayInSeconds * 1000);
+                    }
 
-                Log.e(TAG, "show context 1 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
-
-                if (currentStep < (totalSteps-2)) {
-                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            nextButton.setEnabled(true); // Enable the button
-                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
-                        }
-                    }, delayInSeconds * 1000);
+                    return;
                 }
-
-                return;
+            } else {
+                contentTextViews[i].setVisibility(View.GONE);
             }
-        } else {
-            contentTextView_1.setVisibility(View.GONE); // Hide if no value
         }
-
-        // Step 2: Check if content_2 exists and has a value
-        String content2Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_2";
-        if (resourceHasValue(content2Key)) {
-            actualStep++;
-            if (actualStep == step + 1) {
-                Log.e(TAG, "Step: " + actualStep + " - Showing content_2");
-
-                // Get the content string to determine delay
-                int resId = getResources().getIdentifier(content2Key, "string", getContext().getPackageName());
-                String content = getString(resId);
-                int delayInSeconds = calculateDelayBasedOnLength(content.length());
-
-                contentTextView_2.setVisibility(View.VISIBLE);
-                // Delay showing the nextButton based on the content length
-
-                Log.e(TAG, "show context 2 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
-
-                if (currentStep < (totalSteps-2)) {
-                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            nextButton.setEnabled(true); // Enable the button
-                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
-                        }
-                    }, delayInSeconds * 1000);
-                }
-
-                return;
-            }
-        } else {
-            contentTextView_2.setVisibility(View.GONE); // Hide if no value
-        }
-
-        // Step 3: Check if content_3 exists and has a value
-        String content3Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_3";
-        if (resourceHasValue(content3Key)) {
-            actualStep++;
-            if (actualStep == step + 1) {
-                Log.e(TAG, "Step: " + actualStep + " - Showing content_3");
-
-                // Get the content string to determine delay
-                int resId = getResources().getIdentifier(content3Key, "string", getContext().getPackageName());
-                String content = getString(resId);
-                int delayInSeconds = calculateDelayBasedOnLength(content.length());
-
-                contentTextView_3.setVisibility(View.VISIBLE);
-                // Delay showing the nextButton based on the content length
-
-                Log.e(TAG, "show context 3 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
-
-                if (currentStep < (totalSteps-2)) {
-                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            nextButton.setEnabled(true); // Enable the button
-                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
-                        }
-                    }, delayInSeconds * 1000);
-                }
-
-                return;
-            }
-        } else {
-            contentTextView_3.setVisibility(View.GONE); // Hide if no value
-        }
-
-        // If no more steps are available to show
-        Log.e(TAG, "No more steps to show, STEP: " + (step + 1));
     }
 
     private int calculateDelayBasedOnLength(int length) {
@@ -519,34 +820,26 @@ public class f_1_lesson_text extends Fragment {
 
         Log.e(TAG, "key: " + key);
 
-        // Please note that ids should be:
-        // for ex:
-
-        // Page 1
-        // module7_1_1_title
-        // module7_1_1_content_1
-        // module7_1_1_content_2
-        // module7_1_1_content_3
-
-        //           |
-        // Page 2    v
-        // module7_1_2_title
-        // module7_1_2_content_1
-        // module7_1_2_content_2
-        // module7_1_2_content_3
-        //           ^
-        //           |
-
         String title = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_title";
         String context1 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_1";
         String context2 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_2";
         String context3 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_3";
+        String context4 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_4";
+        String context5 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_5";
+        String context6 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_6";
+        String context7 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_7";
+        String context8 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_8";
 
         // Retrieve the resource IDs
         int titleResId = getResources().getIdentifier(title, "string", getContext().getPackageName());
         int text1ResId = getResources().getIdentifier(context1, "string", getContext().getPackageName());
         int text2ResId = getResources().getIdentifier(context2, "string", getContext().getPackageName());
         int text3ResId = getResources().getIdentifier(context3, "string", getContext().getPackageName());
+        int text4ResId = getResources().getIdentifier(context4, "string", getContext().getPackageName());
+        int text5ResId = getResources().getIdentifier(context5, "string", getContext().getPackageName());
+        int text6ResId = getResources().getIdentifier(context6, "string", getContext().getPackageName());
+        int text7ResId = getResources().getIdentifier(context7, "string", getContext().getPackageName());
+        int text8ResId = getResources().getIdentifier(context8, "string", getContext().getPackageName());
 
         String TEG = "auto resource ID generator";
 
@@ -559,6 +852,16 @@ public class f_1_lesson_text extends Fragment {
             Log.e(TEG, "Text 2 is wrong: " + context2);
         if (text3ResId == 0)
             Log.e(TEG, "Text 3 is wrong: " + context3);
+        if (text4ResId == 0)
+            Log.e(TEG, "Text 4 is wrong: " + context4);
+        if (text5ResId == 0)
+            Log.e(TEG, "Text 5 is wrong: " + context5);
+        if (text6ResId == 0)
+            Log.e(TEG, "Text 6 is wrong: " + context6);
+        if (text7ResId == 0)
+            Log.e(TEG, "Text 7 is wrong: " + context7);
+        if (text8ResId == 0)
+            Log.e(TEG, "Text 8 is wrong: " + context8);
 
 
         // Set the text content
@@ -566,190 +869,23 @@ public class f_1_lesson_text extends Fragment {
         contentTextView_1.setText("");
         contentTextView_2.setText("");
         contentTextView_3.setText("");
+        contentTextView_4.setText("");
+        contentTextView_5.setText("");
+        contentTextView_6.setText("");
+        contentTextView_7.setText("");
+        contentTextView_8.setText("");
 
         // Set the text content
         titleTextView.setText(titleResId);
         contentTextView_1.setText(text1ResId);
         contentTextView_2.setText(text2ResId);
         contentTextView_3.setText(text3ResId);
+        contentTextView_4.setText(text4ResId);
+        contentTextView_5.setText(text5ResId);
+        contentTextView_6.setText(text6ResId);
+        contentTextView_7.setText(text7ResId);
+        contentTextView_8.setText(text8ResId);
 
-//        switch (key) {
-//            // Module 1
-//            case "M1_Lesson 1":
-//                titleTextView.setText(R.string.module1_1_title);
-//                contentTextView_1.setText(R.string.module1_1_content_1);
-//                contentTextView_2.setText(R.string.module1_1_content_2);
-//                contentTextView_3.setText(R.string.module1_1_content_3);
-//                break;
-//            case "M2_Lesson 1":
-//                titleTextView.setText(R.string.module1_2_title);
-//                contentTextView_1.setText(R.string.module1_2_content_1);
-//                contentTextView_2.setText(R.string.module1_2_content_2);
-//                contentTextView_3.setText(R.string.module1_2_content_3);
-//                break;
-//            case "M3_Lesson 1":
-//                titleTextView.setText(R.string.module1_3_title);
-//                contentTextView_1.setText(R.string.module1_3_content_1);
-//                contentTextView_2.setText(R.string.module1_3_content_2);
-//                contentTextView_3.setText(R.string.module1_3_content_3);
-//                break;
-//            case "M4_Lesson 1":
-//                titleTextView.setText(R.string.module1_4_title);
-//                contentTextView_1.setText(R.string.module1_4_content_1);
-//                contentTextView_2.setText(R.string.module1_4_content_2);
-//                contentTextView_3.setText(R.string.module1_4_content_3);
-//                break;
-//
-//            // Module 2
-//            case "M1_Lesson 2":
-//                titleTextView.setText(R.string.module2_1_title);
-//                contentTextView_1.setText(R.string.module2_1_content_1);
-//                contentTextView_2.setText(R.string.module2_1_content_2);
-//                contentTextView_3.setText(R.string.module2_1_content_3);
-//                break;
-//
-//            // Module 3
-//            case "M1_Lesson 3":
-//                titleTextView.setText(R.string.module3_1_title);
-//                contentTextView_1.setText(R.string.module3_1_content_1);
-//                contentTextView_2.setText(R.string.module3_1_content_2);
-//                contentTextView_3.setText(R.string.module3_1_content_3);
-//                break;
-//            case "M2_Lesson 3":
-//                titleTextView.setText(R.string.module3_2_title);
-//                contentTextView_1.setText(R.string.module3_2_content_1);
-//                contentTextView_2.setText(R.string.module3_2_content_2);
-//                contentTextView_3.setText(R.string.module3_2_content_3);
-//                break;
-//            case "M3_Lesson 3":
-//                titleTextView.setText(R.string.module3_3_title);
-//                contentTextView_1.setText(R.string.module3_3_content_1);
-//                contentTextView_2.setText(R.string.module3_3_content_2);
-//                contentTextView_3.setText(R.string.module3_3_content_3);
-//                break;
-//
-//            // Module 4
-//            case "M1_Lesson 4":
-//                titleTextView.setText(R.string.module4_1_title);
-//                contentTextView_1.setText(R.string.module4_1_content_1);
-//                contentTextView_2.setText(R.string.module4_1_content_2);
-//                contentTextView_3.setText(R.string.module4_1_content_3);
-//                break;
-//            case "M2_Lesson 4":
-//                titleTextView.setText(R.string.module4_2_title);
-//                contentTextView_1.setText(R.string.module4_2_content_1);
-//                contentTextView_2.setText(R.string.module4_2_content_2);
-//                contentTextView_3.setText(R.string.module4_2_content_3);
-//                break;
-//            case "M3_Lesson 4":
-//                titleTextView.setText(R.string.module4_3_title);
-//                contentTextView_1.setText(R.string.module4_3_content_1);
-//                contentTextView_2.setText(R.string.module4_3_content_2);
-//                contentTextView_3.setText(R.string.module4_3_content_3);
-//                break;
-//
-//            // Module 5
-//            case "M1_Lesson 5":
-//                titleTextView.setText(R.string.module5_1_title);
-//                contentTextView_1.setText(R.string.module5_1_content_1);
-//                contentTextView_2.setText(R.string.module5_1_content_2);
-//                contentTextView_3.setText(R.string.module5_1_content_3);
-//                break;
-//            case "M2_Lesson 5":
-//                titleTextView.setText(R.string.module5_2_title);
-//                contentTextView_1.setText(R.string.module5_2_content_1);
-//                contentTextView_2.setText(R.string.module5_2_content_2);
-//                contentTextView_3.setText(R.string.module5_2_content_3);
-//                break;
-//            case "M3_Lesson 5":
-//                titleTextView.setText(R.string.module5_3_title);
-//                contentTextView_1.setText(R.string.module5_3_content_1);
-//                contentTextView_2.setText(R.string.module5_3_content_2);
-//                contentTextView_3.setText(R.string.module5_3_content_3);
-//                break;
-//
-//            // Module 6
-//            case "M1_Lesson 6":
-//                titleTextView.setText(R.string.module6_1_title);
-//                contentTextView_1.setText(R.string.module6_1_content_1);
-//                contentTextView_2.setText(R.string.module6_1_content_2);
-//                contentTextView_3.setText(R.string.module6_1_content_3);
-//                break;
-//            case "M2_Lesson 6":
-//                titleTextView.setText(R.string.module6_2_title);
-//                contentTextView_1.setText(R.string.module6_2_content_1);
-//                contentTextView_2.setText(R.string.module6_2_content_2);
-//                contentTextView_3.setText(R.string.module6_2_content_3);
-//                break;
-//            case "M3_Lesson 6":
-//                titleTextView.setText(R.string.module6_3_title);
-//                contentTextView_1.setText(R.string.module6_3_content_1);
-//                contentTextView_2.setText(R.string.module6_3_content_2);
-//                contentTextView_3.setText(R.string.module6_3_content_3);
-//                break;
-//
-//            // Module 7
-//            case "M1_Lesson 7":
-//
-//                String M7 = "M1_Lesson 7";
-//
-//                Log.e(M7, "Page Number: " + pageNumber);
-//
-//
-//                // Retrieve the resource IDs
-//                int titleResId = getResources().getIdentifier("module7_1_" + pageNumber + "_title", "string", getContext().getPackageName());
-//                int text1ResId = getResources().getIdentifier("module7_1_" + pageNumber + "_content_1", "string", getContext().getPackageName());
-//                int text2ResId = getResources().getIdentifier("module7_1_" + pageNumber + "_content_2", "string", getContext().getPackageName());
-//                int text3ResId = getResources().getIdentifier("module7_1_" + pageNumber + "_content_3", "string", getContext().getPackageName());
-//
-//                // Check if any of the resource IDs are 0 (not found)
-//                if (titleResId == 0 || text1ResId == 0 || text2ResId == 0 || text3ResId == 0) {
-//                    Log.e(M7, "One or more resource IDs were not found. Check the resource names.");
-//                } else {
-//                    // Set the text content using the resolved resource values
-//                    titleTextView.setText(getString(titleResId));
-//                    contentTextView_1.setText(getString(text1ResId));
-//                    contentTextView_2.setText(getString(text2ResId));
-//                    contentTextView_3.setText(getString(text3ResId));
-//
-//                    // Log the resource IDs
-//                    Log.e(M7, "titleResId: " + getString(titleResId));
-//                    Log.e(M7, "text1ResId: " + getString(text1ResId));
-//                    Log.e(M7, "text2ResId: " + getString(text2ResId));
-//                    Log.e(M7, "text3ResId: " + getString(text3ResId));
-//                }
-//
-//                break;
-//
-//
-//            // Module 8
-//            case "M1_Lesson 8":
-//                titleTextView.setText(R.string.module8_1_title);
-//                contentTextView_1.setText(R.string.module8_1_content_1);
-//                contentTextView_2.setText(R.string.module8_1_content_2);
-//                contentTextView_3.setText(R.string.module8_1_content_3);
-//                break;
-//            case "M2_Lesson 8":
-//                titleTextView.setText(R.string.module8_2_title);
-//                contentTextView_1.setText(R.string.module8_2_content_1);
-//                contentTextView_2.setText(R.string.module8_2_content_2);
-//                contentTextView_3.setText(R.string.module8_2_content_3);
-//                break;
-//            case "M3_Lesson 8":
-//                titleTextView.setText(R.string.module8_3_title);
-//                contentTextView_1.setText(R.string.module8_3_content_1);
-//                contentTextView_2.setText(R.string.module8_3_content_2);
-//                contentTextView_3.setText(R.string.module8_3_content_3);
-//                break;
-//
-//            // Fallback case
-//            default:
-//                titleTextView.setText("Default Title");
-//                contentTextView_1.setText("Default Text 1");
-//                contentTextView_2.setText("Default Text 2");
-//                contentTextView_3.setText("Default Text 3");
-//                break;
-//        }
     }
 
 }
