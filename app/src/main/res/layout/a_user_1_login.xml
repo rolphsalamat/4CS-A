@@ -106,8 +106,8 @@
 
                 <EditText
                     android:id="@+id/textPassword"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/roboto_serif"
                     android:hint="Password"

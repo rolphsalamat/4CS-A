@@ -137,13 +137,27 @@ public class f_0_lesson_pre_test extends Fragment {
             if (choicesGroup.isSelected()) {
 //                Toast.makeText(getContext(), "Meron kang selected: " + choicesGroup.getCheckedRadioButtonId(), Toast.LENGTH_SHORT).show();
             }
-            if (choicesGroup.getCheckedRadioButtonId() == -1) {
-//                Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
-                return;
-            } else {
+
+            if (!(choicesGroup.getCheckedRadioButtonId() == -1)) {
+
+                int hey = choicesGroup.getCheckedRadioButtonId();
+                switch(hey) {
+                    case 0:
+                        Log.e("ROP", "A");
+                        break;
+                    case 1:
+                        Log.e("ROP", "B");
+                        break;
+                    case 2:
+                        Log.e("ROP", "C");
+                        break;
+                    case 3:
+                        Log.e("ROP", "D");
+                        break;
+                }
 
                 answerAttempt++;
-                Log.e("answerAttempt", "Answer Attempt: " + answerAttempt);
+                Log.e("ROP", "Answer Attempt: " + answerAttempt);
 
                 boolean correctAnswer = checkAnswer();
                 Log.e("submitButton.onClick", "correctAnswer: " + correctAnswer);
@@ -171,7 +185,7 @@ public class f_0_lesson_pre_test extends Fragment {
                 bktModel.updateScore(moduleIndex, lessonIndex, knowledgeProb, isProgressiveMode);
 
                 // Notify the listener
-                if (preTestCompleteListener != null) {
+                if (preTestCompleteListener != null && correctAnswer) {
                     preTestCompleteListener.onPreTestComplete(correctAnswer);
                 }
 
@@ -190,8 +204,6 @@ public class f_0_lesson_pre_test extends Fragment {
                     answerAttempt = 0;
                 }
             }
-
-
         });
     }
 
@@ -247,19 +259,15 @@ public class f_0_lesson_pre_test extends Fragment {
 
             /* ===== Module 7 ===== */
             case "M1_Lesson 7":
-                return e_Module_7.getPreTestLesson1Questions(); // NOT YET OK
-//                return e_Module_7_1.get_PreTest_Lesson2_Questions();
+                return e_Module_7_1.get_PreTest_Questions();
 
             /* ===== Module 8 ===== */
             case "M1_Lesson 8":
-                return e_Module_8.getPreTestLesson1Questions(); // NOT YET OK
-//                return e_Module_8_1.get_PreTest_Lesson2_Questions();
+                return e_Module_8_1.get_PreTest_Lesson1_Questions();
             case "M2_Lesson 8":
-                return e_Module_8.getPreTestLesson2Questions(); // NOT YET OK
-//                return e_Module_8_2.get_PreTest_Lesson2_Questions();
+                return e_Module_8_2.get_PreTest_Lesson2_Questions();
             case "M3_Lesson 8":
-                return e_Module_8.getPreTestLesson3Questions(); // NOT YET OK
-//                return e_Module_8_3.get_PreTest_Lesson2_Questions();
+                return e_Module_8_3.get_PreTest_Lesson3_Questions();
 
             default:
                 throw new IllegalArgumentException("Invalid module or lesson: " + key);

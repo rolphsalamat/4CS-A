@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -29,7 +30,15 @@ public class a_user_1_login_handler extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Initialize Firebase
+        FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
+
+        if (FirebaseApp.getInstance() != null) {
+            Log.e(TAG, "Firebase initialized successfully.");
+        } else {
+            Log.e(TAG, "Firebase initialization failed.");
+        }
 
         // Check if user is logged in
         SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
@@ -37,9 +46,11 @@ public class a_user_1_login_handler extends AppCompatActivity {
 
         Log.e(TAG, "retrieve isLoggedIn: " + isLoggedIn);
 
-        if (isLoggedIn) {
+        // Check if user is logged in in SharedPreferences AND FirebaseAuth
+        if (isLoggedIn && mAuth.getCurrentUser() != null) {
             Log.e(TAG, "You are already logged in!");
 
+            // Call the checkTutorialCompletion method
             checkTutorialCompletion(new TutorialCompletionCallback() {
                 @Override
                 public void onTutorialChecked(boolean isComplete) {
@@ -58,6 +69,7 @@ public class a_user_1_login_handler extends AppCompatActivity {
             });
         } else {
             // User is not logged in, redirect to login screen
+            Log.e(TAG, "User is not logged in, redirecting to login.");
             Intent loginIntent = new Intent(this, a_user_1_login.class);
             startActivity(loginIntent);
         }
@@ -66,52 +78,12 @@ public class a_user_1_login_handler extends AppCompatActivity {
         finish();
     }
 
-    interface TutorialCompletionCallback {
-        void onTutorialChecked(boolean isComplete);
-    }
-
-    // may kasama daw tong email verifier?? what for??
-
-//    static void checkTutorialCompletion(TutorialCompletionCallback callback) {
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if (currentUser != null) {
-//            if (currentUser.isEmailVerified()) {  // Check if email is verified
-//                String userId = currentUser.getUid();
-//                DocumentReference userRef = db.collection("users").document(userId);
-//
-//                userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            DocumentSnapshot document = task.getResult();
-//                            if (document.exists()) {
-//                                Boolean isComplete = document.getBoolean("Tutorial");
-//                                if (isComplete != null) {
-//                                    callback.onTutorialChecked(isComplete);
-//                                } else {
-//                                    callback.onTutorialChecked(false);
-//                                }
-//                            } else {
-//                                Log.e(TAG, "No user data found");
-//                                callback.onTutorialChecked(false);
-//                            }
-//                        } else {
-//                            Log.e(TAG, "Error fetching user data", task.getException());
-//                            callback.onTutorialChecked(false);
-//                        }
-//                    }
-//                });
-//            } else {
-//                Log.e(TAG, "Email not verified");
-//                Toast.makeText(a_user_1_login_handler.this, "Please verify your email to continue.", Toast.LENGTH_SHORT).show();
-//            }
-//        } else {
-//            callback.onTutorialChecked(false);
-//        }
-//    }
-
-
+    // Move the checkTutorialCompletion method outside the onCreate method
     static void checkTutorialCompletion(TutorialCompletionCallback callback) {
+        if (mAuth == null) {
+            mAuth = FirebaseAuth.getInstance();
+        }
+
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
             String userId = currentUser.getUid();
@@ -124,11 +96,7 @@ public class a_user_1_login_handler extends AppCompatActivity {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             Boolean isComplete = document.getBoolean("Tutorial");
-                            if (isComplete != null) {
-                                callback.onTutorialChecked(isComplete);
-                            } else {
-                                callback.onTutorialChecked(false);
-                            }
+                            callback.onTutorialChecked(isComplete != null ? isComplete : false);
                         } else {
                             Log.e(TAG, "No user data found");
                             callback.onTutorialChecked(false);
@@ -140,8 +108,14 @@ public class a_user_1_login_handler extends AppCompatActivity {
                 }
             });
         } else {
+            Log.e(TAG, "No authenticated user found.");
             callback.onTutorialChecked(false);
         }
+    }
+
+    // Interface for callback
+    interface TutorialCompletionCallback {
+        void onTutorialChecked(boolean isComplete);
     }
 
     private void createNotificationChannel() {
@@ -157,4 +131,3 @@ public class a_user_1_login_handler extends AppCompatActivity {
         }
     }
 }
-

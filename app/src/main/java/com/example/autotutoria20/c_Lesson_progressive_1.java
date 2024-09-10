@@ -203,7 +203,7 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                     setCardCompletionStatus(key, true);
                     Log.d("Completed Lesson!", "Lesson 1 Completed! :D");
 
-                    feedback.retrieveBKTScore("Progressive Mode", "Lesson 1");
+//                    feedback.retrieveBKTScore("Progressive Mode", "Lesson 1");
 
                 }
                 break;
@@ -256,7 +256,7 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
             SharedPreferences sharedPreferences = getSharedPreferences("ModulePreferences", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("numberOfSteps", numberOfSteps);
-
+            editor.putString("currentLesson", "Lesson 1");
             editor.putString("currentModule", "M" + cardNumber);
             editor.putBoolean("isCompleted", cardCompletionStatus[cardNumber - 1]); // Set the actual completion status
             editor.apply();

@@ -207,37 +207,71 @@ public class f_3_lesson_post_test extends Fragment {
         }
 
         submitButton.setOnClickListener(v -> {
-            // Handle the submission of answers
-            if (choicesGroup.getCheckedRadioButtonId() == -1) {
-                Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
-            } else {
+
+            // add validator if no selected answer??
+            // it should ask the user to select an answer otherwise this onClickListener will not do anything
+
+            if (choicesGroup.isSelected()) {
+//                Toast.makeText(getContext(), "Meron kang selected: " + choicesGroup.getCheckedRadioButtonId(), Toast.LENGTH_SHORT).show();
+            }
+
+            if (!(choicesGroup.getCheckedRadioButtonId() == -1)) {
+
+                int hey = choicesGroup.getCheckedRadioButtonId();
+                switch(hey) {
+                    case 0:
+                        Log.e("ROP", "A");
+                        break;
+                    case 1:
+                        Log.e("ROP", "B");
+                        break;
+                    case 2:
+                        Log.e("ROP", "C");
+                        break;
+                    case 3:
+                        Log.e("ROP", "D");
+                        break;
+                }
 
                 answerAttempt++;
+                Log.e("ROP", "Answer Attempt: " + answerAttempt);
 
                 boolean correctAnswer = checkAnswer();
-                bktModel.updateKnowledge(correctAnswer);
+                Log.e("submitButton.onClick", "correctAnswer: " + correctAnswer);
 
                 if (!correctAnswer)
                     choicesGroup.clearCheck();
 
+                // Update BKT model with the result of the answer
+                bktModel.updateKnowledge(correctAnswer);
+
                 // Log the updated knowledge probability
                 double knowledgeProb = bktModel.getKnowledgeProbability();
-                Log.d("submitButton.onClick", "Updated Knowledge Probability: " + knowledgeProb);
+                Log.e("submitButton.onClick", "Updated Knowledge Probability: " + knowledgeProb);
 
-                // Update the score in Firebase
+                // Ensure valid indices are used
                 int moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
                 int lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
+
+                if (moduleIndex < 0 || lessonIndex < 0) {
+                    Log.e("submitButton.onClick", "Invalid module or lesson index");
+                    return;
+                }
+
+                // Update the score
                 bktModel.updateScore(moduleIndex, lessonIndex, knowledgeProb, isProgressiveMode);
 
-                if (postTestCompleteListener != null) {
+                // Notify the listener
+                if (postTestCompleteListener != null && correctAnswer) {
                     postTestCompleteListener.onPostTestComplete(correctAnswer);
                 }
 
-                // Load next question or finish
+                // Move to the next question
                 if (currentQuestionIndex < questions.length - 1) {
                     currentQuestionIndex++;
                 } else {
-                    Log.d("submitButton.onClick", "Post-test completed");
+                    currentQuestionIndex = 0; // Reset to the first question if all are answered
+//                    Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
                     bktModel.logScores();
                 }
 
@@ -540,39 +574,35 @@ public class f_3_lesson_post_test extends Fragment {
 
             /* ===== Module 7 ===== */
             case "M1_Lesson 7":
-                return e_Module_7.getPostTestLesson1Questions();
-//                if (difficultyLevel == e_Question.Difficulty.EASY)
-//                    return e_Module_7_1.get_PostTest_Lesson1_Easy_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                    return e_Module_7_1.get_PostTest_Lesson1_Medium_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                    return e_Module_7_1.get_PostTest_Lesson1_Hard_Questions();
+                if (difficultyLevel == e_Question.Difficulty.EASY)
+                    return e_Module_7_1.get_PostTest_Lesson1_Easy_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                    return e_Module_7_1.get_PostTest_Lesson1_Medium_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.HARD)
+                    return e_Module_7_1.get_PostTest_Lesson1_Hard_Questions();
 
             /* ===== Module 8 ===== */
             case "M1_Lesson 8":
-                return e_Module_8.getPostTestLesson1Questions();
-//                if (difficultyLevel == e_Question.Difficulty.EASY)
-//                    return e_Module_8_1.get_PostTest_Lesson1_Easy_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                    return e_Module_8_1.get_PostTest_Lesson1_Medium_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                    return e_Module_8_1.get_PostTest_Lesson1_Hard_Questions();
+                if (difficultyLevel == e_Question.Difficulty.EASY)
+                    return e_Module_8_1.get_PostTest_Lesson1_Easy_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                    return e_Module_8_1.get_PostTest_Lesson1_Medium_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.HARD)
+                    return e_Module_8_1.get_PostTest_Lesson1_Hard_Questions();
             case "M2_Lesson 8":
-                return e_Module_8.getPostTestLesson2Questions();
-//                if (difficultyLevel == e_Question.Difficulty.EASY)
-//                    return e_Module_8_2.get_PostTest_Lesson2_Easy_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                    return e_Module_8_2.get_PostTest_Lesson2_Medium_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                    return e_Module_8_2.get_PostTest_Lesson2_Hard_Questions();
+                if (difficultyLevel == e_Question.Difficulty.EASY)
+                    return e_Module_8_2.get_PostTest_Lesson2_Easy_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                    return e_Module_8_2.get_PostTest_Lesson2_Medium_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.HARD)
+                    return e_Module_8_2.get_PostTest_Lesson2_Hard_Questions();
             case "M3_Lesson 8":
-                return e_Module_8.getPostTestLesson3Questions();
-//                if (difficultyLevel == e_Question.Difficulty.EASY)
-//                    return e_Module_8_3.get_PostTest_Lesson3_Easy_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                    return e_Module_8_3.get_PostTest_Lesson3_Medium_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                    return e_Module_8_3.get_PostTest_Lesson3_Hard_Questions();
+                if (difficultyLevel == e_Question.Difficulty.EASY)
+                    return e_Module_8_3.get_PostTest_Lesson3_Easy_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                    return e_Module_8_3.get_PostTest_Lesson3_Medium_Questions();
+                else if (difficultyLevel == e_Question.Difficulty.HARD)
+                    return e_Module_8_3.get_PostTest_Lesson3_Hard_Questions();
 
             default:
                 throw new IllegalArgumentException("Invalid module or lesson: " + key);

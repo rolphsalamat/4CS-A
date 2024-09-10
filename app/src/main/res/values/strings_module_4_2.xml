@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Module 2 | Page 1 -->
+
+    <string name="module4_2_1_title"></string>
+    <string name="module4_2_1_content_1">Welcome to today’s deep dive into Context-Free Grammars (CFGs), a cornerstone of formal language theory that powers the way we define and structure languages in computing. In this lesson, we’ll explore how CFGs serve as a blueprint for generating strings and expressions, providing the foundation for programming languages, compilers, and even natural language processing. You’ll get an inside look at how simple symbols evolve into complex sentences and structures through the use of production rules.</string>
+    <string name="module4_2_1_content_2"></string>
+    <string name="module4_2_1_content_3"></string>
+
+    <!-- Module 2 | Page 2 -->
+    <string name="module4_2_2_title"></string>
+    <string name="module4_2_2_content_1">A Context-Free Grammar (CFG) is a formal system used to describe the syntax of languages, consisting of four components:</string>
+    <string name="module4_2_2_content_2">Terminals: The basic symbols or "alphabet" of the language.</string>
+    <string name="module4_2_2_content_3">Non-Terminals: Symbols that represent groups or patterns of terminals, defining the structure of the language.</string>
+    <string name="module4_2_2_content_4">Start Symbol: A designated non-terminal symbol where the generation of strings starts.</string>
+    <string name="module4_2_2_content_5">Production Rules: Rules that define how non-terminals can be expanded into terminals and other non-terminals.</string>
+    <string name="module4_2_2_content_6"></string>
+
+    <!-- Module 2 | Page 3 -->
+    <string name="module4_2_3_title"></string>
+    <string name="module4_2_3_content_1">Example 1: Simple Arithmetic Expressions</string>
+    <string name="module4_2_3_content_2">Terminals: 0-9, +, *, (, ).</string>
+    <string name="module4_2_3_content_3">Non-Terminals: Expr, Term, Factor.</string>
+    <string name="module4_2_3_content_4">Start Symbol: Expr.</string>
+    <string name="module4_2_3_content_5">Production Rules:</string>
+    <string name="module4_2_3_content_6">Expr → Expr + Term | Term</string>
+    <string name="module4_2_3_content_7">Term → Term * Factor | Factor</string>
+    <string name="module4_2_3_content_8">Factor → (Expr) | number</string>
+    <string name="module4_2_3_content_9">Generated Strings: 3 + 5, 3 * (2 + 4), (2 + 3) * 5.</string>
+    <string name="module4_2_3_content_10"></string>
+
+    <!-- Module 2 | Page 4 -->
+    <string name="module4_2_4_title"></string>
+    <string name="module4_2_4_content_1">Example 2: Basic Sentence Construction</string>
+    <string name="module4_2_4_content_2">Terminals: cat, dog, runs, jumps.</string>
+    <string name="module4_2_4_content_3">Non-Terminals: S (Sentence), NP (Noun Phrase), VP (Verb Phrase).</string>
+    <string name="module4_2_4_content_4">Start Symbol: S.</string>
+    <string name="module4_2_4_content_5">Production Rules:</string>
+    <string name="module4_2_4_content_6">S → NP VP</string>
+    <string name="module4_2_4_content_7">NP → cat | dog</string>
+    <string name="module4_2_4_content_8">VP → runs | jumps</string>
+    <string name="module4_2_4_content_9">Generated Strings: cat runs, dog jumps.</string>
+    <string name="module4_2_4_content_10"></string>
+    <string name="module4_2_4_content_11"></string>
+
+    <!-- Module 2 | Page 5 -->
+    <string name="module4_2_5_title"></string>
+    <string name="module4_2_5_content_1">Example 3: Conditional Statements in Programming</string>
+    <string name="module4_2_5_content_2">Terminals: if, else, (, ), {, }, ==, a, b.</string>
+    <string name="module4_2_5_content_3">Non-Terminals: Cond, Stmt</string>
+    <string name="module4_2_5_content_4">Start Symbol: Stmt.</string>
+    <string name="module4_2_5_content_5">Production Rules:</string>
+    <string name="module4_2_5_content_6">Stmt → if (Cond) { Stmt } else { Stmt }</string>
+    <string name="module4_2_5_content_7">Cond → a == b</string>
+    <string name="module4_2_5_content_8">Generated Strings: if (a == b) { Stmt } else { Stmt }.</string>
+    <string name="module4_2_5_content_9"></string>
+
+
+</resources>

@@ -15,7 +15,7 @@
 
     <!-- Module 4 | Page 2 -->
     <!-- int[] module1_4_2 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
-    <string name="module1_4_2_title"></string>
+    <string name="module1_4_2_title">awd</string>
     <string name="module1_4_2_content_1">Automata Theory, as covered in this lesson, focuses on the study of abstract machines and the computational problems they can solve. It introduces key types of automata, including Finite Automata (FA), Pushdown Automata (PDA), and Turing Machines (TM), each with different levels of computational power. The lesson highlights how these automata are used to recognize patterns within input strings, parse languages, and perform complex computational tasks, making them essential tools in computer science.</string>
     <string name="module1_4_2_content_2"></string>
     <string name="module1_4_2_content_3"></string>

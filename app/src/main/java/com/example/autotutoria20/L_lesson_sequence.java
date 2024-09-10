@@ -64,14 +64,16 @@ public class L_lesson_sequence {
         lessonSequences.put("M3_Lesson 1", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-//                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M4_Lesson 1", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-//                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });

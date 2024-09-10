@@ -95,7 +95,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
         Log.d(TAG, "Current Module: " + currentModule);
         Log.d(TAG, "isCompleted: " + isCompleted);
 
-        Log.e("pagerAdapter", "LessonPagerAdapter(" + getSupportFragmentManager() + ", " + stepSequence + ", " + currentModule + "_" + currentLesson + ");");
+        Log.e("pagerAdapter", "LessonPagerAdapter(" + getSupportFragmentManager() + ", " + Arrays.toString(stepSequence) + ", " + currentModule + "_" + currentLesson + ");");
 
         // dapat kasi eto may nag c-call din dito somewhere, kasi pag ganto lagi talaga syang Page 1
         pagerAdapter = new L_lesson_handler(getSupportFragmentManager(), stepSequence, currentModule + "_" + currentLesson, learningMode, pageNumber);
@@ -146,7 +146,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
                     params.bottomMargin = 200;  // Adjust this value as needed
                     viewPager.setLayoutParams(params);
 
-                    // kung ilang seconds ang delay bago ipakita yung next button
+//                  kung ilang seconds ang delay bago ipakita yung next button
                     int delayInSeconds = 5;
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -188,6 +188,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
             }
         });
 
+        // nung naka-comment di na nawawala yung LAST Next button
         nextButton.setVisibility(View.GONE);
 
         Button exitButton = findViewById(R.id.exitButton);
@@ -271,100 +272,6 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
 
         gridLayout.setColumnCount(numberOfSteps * 2 - 1);
     }
-
-//    private void updateStepViewBackgrounds(int clickedStep) {
-//        for (int i = 0; i < numberOfSteps; i++) {
-//            View stepView = gridLayout.getChildAt(i * 2); // Get the step view at index i (multiply by 2 because of spaces)
-//
-//            String TOG = "updateStepViewBackgrounds";
-//
-//
-//            Log.e(TOG, "clickedStep: " + i);
-//
-//            if (i < clickedStep) {
-//                stepView.setBackgroundResource(R.drawable.rounded_corners_completed);
-//            } else if (i >= clickedStep && i < currentStep) {
-//                stepView.setBackgroundResource(R.drawable.rounded_corners_current_step);
-//            } else {
-//                stepView.setBackgroundResource(R.drawable.rounded_corners);
-//            }
-//
-////            if (i >= clickedStep && i <= currentStep) {
-////                stepView.setBackgroundResource(R.drawable.rounded_corners);
-////            } else if (i < clickedStep) {
-////                stepView.setBackgroundResource(R.drawable.rounded_corners_completed); // Set completed background
-////            } else {
-////                stepView.setBackgroundResource(R.drawable.rounded_corners); // Default background
-////            }
-//        }
-//    }
-
-
-
-//    public void onNextButtonClicked() {
-//        String TAG = "onNextButtonClicked()";
-//
-//        Log.e(TAG, "NEXT!!!!");
-//        Log.e(TAG, "currentStep: " + currentStep);
-//
-////        // Get the current fragment using FragmentManager
-////        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewPager + ":" + viewPager.getCurrentItem());
-////
-////        // PRE TEST
-////        if (currentFragment instanceof f_pre_test) {
-////            f_pre_test preTestFragment = (f_pre_test) currentFragment;
-////            if (!preTestFragment.isCorrect) {
-////                Toast.makeText(this, "Please complete the pre-test before proceeding.", Toast.LENGTH_SHORT).show();
-////                return; // Do not proceed to the next step
-////            }
-////        }
-////
-////        // TEXT LESSON
-////        if (currentFragment instanceof f_text_lesson) {
-////            showToast("TEXT LESSON");
-////        }
-////
-////        // VIDEO LESSON
-////        if (currentFragment instanceof f_video_lesson) {
-////            // Adjust the bottom margin of the ViewPager to make space for the nextButton
-////            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) viewPager.getLayoutParams();
-////            params.bottomMargin = 80;  // Adjust this value as needed (80dp equivalent in pixels)
-////            viewPager.setLayoutParams(params);
-////
-////            Log.e(TAG, "params.BottomMargin = " + params.bottomMargin);
-////
-////            // Show a toast message indicating the button will be shown
-////            showToast("VIDEO TO SHOW THE BUTTON");
-////            Log.e("onNextButtonClicked", "VIDEO TO SHOW THE BUTTON");
-////
-////            // Make the nextButton visible
-////            nextButton.setVisibility(View.VISIBLE);
-////        }
-////
-////        // POST TEST
-////        if (currentFragment instanceof f_post_test) {
-////            f_post_test postTestFragment = (f_post_test) currentFragment;
-////            if (!postTestFragment.isCorrect) {
-////                Toast.makeText(this, "Please complete the post-test before proceeding.", Toast.LENGTH_SHORT).show();
-////                return; // Do not proceed to the next step
-////            }
-////        }
-//
-//        // Move to the next step
-//        currentStep++;
-//
-//        if (currentStep >= numberOfSteps) {
-//            finish();
-//        } else {
-//            viewPager.setCurrentItem(currentStep);
-//            populateGridLayout();
-//        }
-//
-//        if (!isCompleted) {
-//            updateCurrentModuleInDatabase();
-//        }
-//    }
-
 
     private void updateProgressAndMoveToNextStep() {
         String TAG = "updateProgressAndMoveToNextStep";
@@ -462,16 +369,16 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
 
         String TEG = "onTextLessonComplete";
 
-        Log.d(TEG, "isCorrect: " + isDone);
+        Log.d(TEG, "isDone: " + isDone);
 
         Log.e(TEG, "pageNumber: " + pageNumber);
         Log.e(TEG, "numberOfTextLessons: " + numberOfTextLessons);
 
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            // Disable the button initially
-            nextButton.setEnabled(false);
-            nextButton.setVisibility(View.GONE);
-        }, delay * 1000);
+//        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+//            // Disable the button initially
+//            nextButton.setEnabled(false);
+//            nextButton.setVisibility(View.GONE);
+//        }, delay * 1000);
 
         // Enable and show the button after the delay
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -480,7 +387,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
                 nextButton.setEnabled(true);
                 nextButton.setVisibility(View.VISIBLE);
             }
-        }, 3000);  // Convert seconds to milliseconds
+        }, delay * 1000);  // Convert seconds to milliseconds
 
         if (isDone && pageNumber <= numberOfTextLessons) {
             // Check if there are any remaining text lessons
@@ -586,7 +493,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
                 simulateClick(x, y);
                 Log.e("simulateClicksInCenter", "Click!");
             }
-        }, 5000);  // Convert seconds to milliseconds
+        }, 7000);  // Convert seconds to milliseconds
     }
 
     public static  void simulateClick(int x, int y) {

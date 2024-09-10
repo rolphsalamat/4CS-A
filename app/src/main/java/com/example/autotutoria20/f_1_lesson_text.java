@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -59,21 +60,6 @@ public class f_1_lesson_text extends Fragment {
     private int delayFinish = 0;
     private int currentStep = 0; // Track which content is currently shown
     private int pageNumber = 1; // will be incremented after page is done :)
-
-    // Initialize arrays for step counts
-    // nagtataka ako dito eh, bakit hindi nalang gamitin yung LessonSequence Class
-    // para mai-store dito yung length nung sequence per individual na module??
-    // tapos pano maii-store kung ilang page ba sa isang module lesson??
-//    private int[] module1Steps = {3, 2, 2, 2};
-//    private int[] module2Steps = {2};
-//    private int[] module3Steps = {2, 2, 2};
-//    private int[] module4Steps = {2, 2, 2};
-//    private int[] module5Steps = {2, 2, 2};
-//    private int[] module6Steps = {2, 2, 2};
-//    private int[] module7Steps = {3};
-//    private int[] module8Steps = {2, 2, 2};
-
-    // Gaano katagal bago mag show yung buttons and others??
     private TextLessonCompleteListener TextLessonCompleteListener;
     private OnNextButtonClickListener callback;
     private int totalSteps = 2; // Default total steps
@@ -219,6 +205,18 @@ public class f_1_lesson_text extends Fragment {
                 handleNextButtonClick();
             }
         });
+
+        // "ALSO" Set OnClickListener for the tapToContinueButton
+        tapToContinueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nextButton.setEnabled(false);
+                tapToContinueButton.setEnabled(false);
+                tapToContinueButton.setVisibility(View.GONE);
+                handleNextButtonClick();
+            }
+        });
+
     }
 
     @Override
@@ -305,27 +303,19 @@ public class f_1_lesson_text extends Fragment {
     private void handleNextButtonClick() {
         Log.d("handleNextButtonClick()", "currentStep(" + currentStep + ") < totalSteps(" + totalSteps + ")");
 
-        // after (n-2)th step, the Text Lesson should display Next Button
-        if (currentStep == (totalSteps-2)) {
-            if (TextLessonCompleteListener != null) {
-                TextLessonCompleteListener.onTextLessonComplete(true, delayFinish);
+//        // (n-1) step, dapat di na mag show yung "Tap to Continue"
+//        // dapat yung Next Button nalang from d_Lesson_container ang mag-show
+//        if (currentStep == (totalSteps - 1)) {
+//            isTextLessonDone = true;
+//
+//            nextButton.setVisibility(View.VISIBLE);
+//            nextButton.setEnabled(true);
+//
+//            tapToContinueButton.setVisibility(View.GONE);
+//            tapToContinueButton.setEnabled(false);
+//        }
 
-            }
-        }
-
-        // (n-1) step, dapat di na mag show yung "Tap to Continue"
-        // dapat yung Next Button nalang from d_Lesson_container ang mag-show
-        if (currentStep == (totalSteps-1)) {
-            isTextLessonDone = true;
-
-            nextButton.setVisibility(View.GONE);
-            nextButton.setEnabled(false);
-
-            tapToContinueButton.setVisibility(View.GONE);
-            tapToContinueButton.setEnabled(false);
-        }
-
-        if (currentStep < (totalSteps-1)) {
+        if (currentStep < (totalSteps - 1)) {
             showNextStep(currentStep);
 
             currentStep++;
@@ -370,12 +360,12 @@ public class f_1_lesson_text extends Fragment {
 
         // Set bullet image and padding based on the bullet type
         if (bulletType == 1) {
-            linearLayout.setPadding((50 + layoutMargin), layoutMargin, layoutMargin, layoutMargin);
+            linearLayout.setPadding((24 + layoutMargin), layoutMargin, layoutMargin, layoutMargin);
             contentImageView.getLayoutParams().width = sizeInDp;
             contentImageView.getLayoutParams().height = sizeInDp;
             contentImageView.setImageResource(R.drawable.bullet_1);  // Set bullet_1 image
         } else if (bulletType == 2) {
-            linearLayout.setPadding((125 + layoutMargin), layoutMargin, layoutMargin, layoutMargin);
+            linearLayout.setPadding((75 + layoutMargin), layoutMargin, layoutMargin, layoutMargin);
             contentImageView.getLayoutParams().width = sizeInDp;
             contentImageView.getLayoutParams().height = sizeInDp;
             contentImageView.setImageResource(R.drawable.bullet_2);  // Set bullet_2 image
@@ -409,25 +399,67 @@ public class f_1_lesson_text extends Fragment {
 
         for (int i = 0; i < contentKeys.length; i++) {
             String contentKey = contentKeys[i];
+
+            int resId = getResources().getIdentifier(contentKey, "string", getContext().getPackageName());
+            String content = getString(resId);
+            int delayInSeconds = calculateDelayBasedOnLength(content.length());
+            delayFinish = delayInSeconds;
+            Log.e(TAG, "delayFinish: " + delayFinish);
+
             if (resourceHasValue(contentKey)) {
                 actualStep++;
                 if (actualStep == step + 1) {
-                    int resId = getResources().getIdentifier(contentKey, "string", getContext().getPackageName());
-                    String content = getString(resId);
-                    int delayInSeconds = calculateDelayBasedOnLength(content.length());
-                    delayFinish = delayInSeconds;
-                    Log.e(TAG, "delayFinish: " + delayFinish);
 
                     contentTextViews[i].setVisibility(View.VISIBLE);
                     contentTextViews[i].setText(content);
                     setBullet(pageNumber, i, contentImageViews[i], contentTextViews[i], contentLayouts[i]);
 
+                    String TUG = "TEST HERE ROP";
+
+                    // Rop's Code
                     if (currentStep < (totalSteps - 2)) {
+                        Log.e(TUG, "currentStep("+currentStep+") < (totalSteps("+(totalSteps-2)+")");
                         new Handler(Looper.getMainLooper()).postDelayed(() -> {
                             nextButton.setEnabled(true);
                             tapToContinueButton.setVisibility(View.VISIBLE);
+                            tapToContinueButton.setEnabled(true);
                         }, delayInSeconds * 1000);
                     }
+                    else if (currentStep == (totalSteps - 2)) {
+                        Log.e(TUG, "currentStep("+currentStep+") == (totalSteps("+(totalSteps-2)+")");
+//                        if (totalSteps == 2) {
+                            if (TextLessonCompleteListener != null) {
+                                TextLessonCompleteListener.onTextLessonComplete(true, delayFinish);
+                            }
+//                        }
+                    }
+                    else if (currentStep == (totalSteps - 1)) {
+                        Log.e(TUG, "currentStep("+currentStep+") == (totalSteps("+(totalSteps-1)+")");
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+
+                            nextButton.setVisibility(View.VISIBLE);
+                            nextButton.setEnabled(true);
+
+                            tapToContinueButton.setVisibility(View.GONE);
+                            tapToContinueButton.setEnabled(false);
+                        }, delayInSeconds * 1000);
+                    }
+
+
+                    // BAKIT HINDI NAG SHO-SHOW YUNG NEXT BUTTON SA LAST STEP
+
+//                    if (currentStep < (totalSteps - 2)) {
+//                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+//                            nextButton.setEnabled(true);
+//                            tapToContinueButton.setVisibility(View.VISIBLE);
+//                            tapToContinueButton.setEnabled(true);
+//                        }, delayInSeconds * 1000);
+//                    }
+//                    else if (currentStep == (totalSteps-2) && (totalSteps == 2)) {
+//                        if (TextLessonCompleteListener != null) {
+//                            TextLessonCompleteListener.onTextLessonComplete(true, delayFinish);
+//                        }
+//                    }
 
                     return;
                 }
@@ -456,7 +488,7 @@ public class f_1_lesson_text extends Fragment {
          * +--------------------------------+-----------------+------------------------------+---------------------------+
          */
 
-        int level = 3; // Default to High School Student
+        int level = 10; // Default to High School Student
 
         // Adjust the multiplier based on the educational level
         double multiplier;
@@ -484,6 +516,9 @@ public class f_1_lesson_text extends Fragment {
                 break;
             case 7: // Doctorate (PhD)
                 multiplier = 0.027; // Average of 0.0240 - 0.0300
+                break;
+            case 10: // TESTING MODE
+                multiplier = 0.015;
                 break;
             default:
                 multiplier = 0.05; // Default value if no valid level is provided

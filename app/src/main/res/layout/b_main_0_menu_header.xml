@@ -28,7 +28,6 @@
             android:layout_width="115dp"
             android:layout_height="115dp"
             android:padding="3dp"
-            android:layout_marginBottom="1.5dp"
             android:layout_gravity="center"
             android:src="@drawable/default_male"
             android:scaleType="fitXY"
@@ -40,16 +39,16 @@
             android:padding="4dp">
             <!-- Gray circle background for camera icon -->
             <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/autotutoria_background_color"
                 app:shapeAppearanceOverlay="@style/ImageViewCircle" />
             <!-- Camera icon -->
             <ImageView
                 android:id="@+id/change_profile_icon"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:layout_gravity="center"
                 android:src="@drawable/camera"
                 app:tint="@color/white" />

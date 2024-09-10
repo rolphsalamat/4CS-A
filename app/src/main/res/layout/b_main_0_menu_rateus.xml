@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="8dp"
     android:background="@drawable/autotutoria_background_color"
-    android:gravity="center">
+    android:gravity="top|center">
     <!-- Rate Us -->
     <ImageView
         android:id="@+id/imageView4"
@@ -38,7 +38,6 @@
         android:layout_height="wrap_content"
         android:numStars="5"
         android:stepSize="1.0"
-        android:layout_marginBottom="16dp"
         android:theme="@style/Widget.AppCompat.RatingBar"/>
     <!-- (Submit) -->
     <Button
@@ -58,14 +57,16 @@
 
         <ImageView
             android:id="@+id/pnc_logo"
-            android:layout_width="50dp"
-            android:layout_height="211dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_margin="8dp"
             app:srcCompat="@drawable/pnc_logo" />
 
         <ImageView
             android:id="@+id/miniautotutoria_logo"
-            android:layout_width="50dp"
-            android:layout_height="211dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_margin="8dp"
             app:srcCompat="@drawable/autotutoria_logo" />
 
     </LinearLayout>
