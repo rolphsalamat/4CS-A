@@ -1,5 +1,7 @@
 package com.example.autotutoria20;
 
+import static android.app.PendingIntent.getActivity;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -80,6 +82,7 @@ public class b_main_0_menu extends AppCompatActivity {
     private View module, description;
     private ShapeableImageView profileImageView;
     private FrameLayout profileFrameLayout;
+    private CustomLoadingDialog loadingDialog;
     private boolean isProgressiveMode = true;
     private TextView learningModeText;
     private ImageView learningModeIcon;
@@ -95,6 +98,8 @@ public class b_main_0_menu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d("hello", "word");
         setContentView(R.layout.b_main_0_menu);
+
+        showLoadingDialog();
 
         // Initialize FirebaseAuth
         mAuth = FirebaseAuth.getInstance();
@@ -124,8 +129,6 @@ public class b_main_0_menu extends AppCompatActivity {
                     }
                 }
             });
-
-
         } else {
             // User is not logged in, redirect to login screen
             redirectToLogin();
@@ -269,6 +272,23 @@ public class b_main_0_menu extends AppCompatActivity {
         });
     }
 
+    private void showLoadingDialog() {
+        loadingDialog = new CustomLoadingDialog(b_main_0_menu.this);
+        loadingDialog.setCancelable(false); // Prevent closing the dialog
+        loadingDialog.show();
+    }
+
+    private void updateProgress(int progress) {
+        if (loadingDialog != null) {
+            loadingDialog.setProgress(progress);
+        }
+    }
+
+    private void hideLoadingDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
+    }
 
     private void showTutorial() {
         Log.d("b_main_0_menu", "Showing tutorial because loginAttempts is 0");
@@ -675,6 +695,7 @@ public class b_main_0_menu extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     private void fetchLessonData(String userId) {
@@ -749,5 +770,7 @@ public class b_main_0_menu extends AppCompatActivity {
             Toast.makeText(this, "Wala par", Toast.LENGTH_SHORT).show();
             Log.d("No Free Use Mode", "Wala ako nakitang Free Use Mode par, sensya na you");
         }
+
+        hideLoadingDialog();
     }
 }
