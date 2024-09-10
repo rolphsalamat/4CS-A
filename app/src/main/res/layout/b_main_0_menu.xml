@@ -36,10 +36,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="AutoTutoria"
-                android:fontFamily="sans-serif-medium"
-                android:textStyle="bold"
+                android:fontFamily="@font/getto_funky"
+                android:textStyle="normal"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="30sp"
                 android:gravity="center_horizontal|center_vertical" />
 
         </LinearLayout>

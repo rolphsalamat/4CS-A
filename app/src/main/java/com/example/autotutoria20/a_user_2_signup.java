@@ -209,9 +209,7 @@ public class a_user_2_signup extends AppCompatActivity {
                                                     .addOnCompleteListener(verificationTask -> {
                                                         if (verificationTask.isSuccessful()) {
                                                             // Notify user that a verification email was sent
-                                                            Toast.makeText(getApplicationContext(),
-                                                                    "Verification email sent to " + user.getEmail(),
-                                                                    Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(getApplicationContext(),"Verification email sent to " + user.getEmail(), Toast.LENGTH_SHORT).show();
 
                                                             // Save user data to Firestore
                                                             String userId = user.getUid();
@@ -232,6 +230,7 @@ public class a_user_2_signup extends AppCompatActivity {
                                                                                 "Error saving user details to Firestore",
                                                                                 Toast.LENGTH_SHORT).show();
                                                                     });
+                                                            finish();
                                                         } else {
                                                             Log.e(TAG, "Failed to send verification email", verificationTask.getException());
                                                             Toast.makeText(getApplicationContext(),

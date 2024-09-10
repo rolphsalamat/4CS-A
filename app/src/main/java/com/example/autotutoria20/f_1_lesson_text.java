@@ -56,6 +56,7 @@ public class f_1_lesson_text extends Fragment {
     private LinearLayout nextButton;
     private Boolean isTextLessonDone = false;
     private Button tapToContinueButton;
+    private int delayFinish = 0;
     private int currentStep = 0; // Track which content is currently shown
     private int pageNumber = 1; // will be incremented after page is done :)
 
@@ -248,7 +249,7 @@ public class f_1_lesson_text extends Fragment {
 
     // Interface to notify the container activity when pre-test is complete
     public interface TextLessonCompleteListener {
-        void onTextLessonComplete(boolean isCorrect);
+        void onTextLessonComplete(boolean isCorrect, int delayFinish);
     }
 
     // Define an interface to communicate with the container activity
@@ -307,7 +308,8 @@ public class f_1_lesson_text extends Fragment {
         // after (n-2)th step, the Text Lesson should display Next Button
         if (currentStep == (totalSteps-2)) {
             if (TextLessonCompleteListener != null) {
-                TextLessonCompleteListener.onTextLessonComplete(true);
+                TextLessonCompleteListener.onTextLessonComplete(true, delayFinish);
+
             }
         }
 
@@ -349,322 +351,42 @@ public class f_1_lesson_text extends Fragment {
 
         int layoutMargin = 16;
 
-        // Validate the pageNumber and step
-        if (pageNumber <= f_1_lesson_text_bullets.module1_1.length && step < f_1_lesson_text_bullets.module1_1[pageNumber - 1].length) {
-            int bulletType = f_1_lesson_text_bullets.module1_1[pageNumber - 1][step];  // Get bullet type for the step
+        Log.e(TAG, "calling getIndentation method");
 
-            // Set bullet image and padding based on the bullet type
-            if (bulletType == 1) {
-                // Set padding for linearLayout
-                linearLayout.setPadding((50 + layoutMargin), layoutMargin, layoutMargin, layoutMargin);
+        // Get the bullet types dynamically based on the key and pageNumber
+        int[][] moduleArray = f_1_lesson_text_bullets.getIndentation(key, pageNumber);
 
-                // Set ImageView dimensions to 25x25dp
-                contentImageView.getLayoutParams().width = sizeInDp;
-                contentImageView.getLayoutParams().height = sizeInDp;
-
-                contentImageView.setImageResource(R.drawable.bullet_1);  // Set bullet_1 image
-            } else if (bulletType == 2) {
-                // Set padding for nested bullet
-                linearLayout.setPadding((125 + layoutMargin), layoutMargin, layoutMargin, layoutMargin);
-
-                // Set ImageView dimensions to 25x25dp
-                contentImageView.getLayoutParams().width = sizeInDp;
-                contentImageView.getLayoutParams().height = sizeInDp;
-
-                contentImageView.setImageResource(R.drawable.bullet_2);  // Set bullet_2 image
-            } else {
-                // No bullet case, hide or reset the image and reset padding
-                contentImageView.setImageDrawable(null);
-                contentTextView.setPadding(0, 0, 0, 0);  // No indentation
-            }
-
-            // Request layout update to apply the new size
-            contentImageView.requestLayout();
-        } else {
-            Log.e(TAG, "Invalid page number or step. No bullet set.");
+        if (moduleArray.length == 0 || pageNumber > moduleArray.length) {
+            Log.e(TAG, "Invalid page number. No bullets available for page " + pageNumber);
+            return; // Invalid page number, return early
         }
+
+        if (step >= moduleArray[pageNumber - 1].length) {
+            Log.e(TAG, "Invalid step number for page " + pageNumber + ". Step: " + step);
+            return; // Invalid step number, return early
+        }
+
+        int bulletType = moduleArray[pageNumber - 1][step];  // Get bullet type for the step
+
+        // Set bullet image and padding based on the bullet type
+        if (bulletType == 1) {
+            linearLayout.setPadding((50 + layoutMargin), layoutMargin, layoutMargin, layoutMargin);
+            contentImageView.getLayoutParams().width = sizeInDp;
+            contentImageView.getLayoutParams().height = sizeInDp;
+            contentImageView.setImageResource(R.drawable.bullet_1);  // Set bullet_1 image
+        } else if (bulletType == 2) {
+            linearLayout.setPadding((125 + layoutMargin), layoutMargin, layoutMargin, layoutMargin);
+            contentImageView.getLayoutParams().width = sizeInDp;
+            contentImageView.getLayoutParams().height = sizeInDp;
+            contentImageView.setImageResource(R.drawable.bullet_2);  // Set bullet_2 image
+        } else {
+            contentImageView.setImageDrawable(null);
+            contentTextView.setPadding(0, 0, 0, 0);  // No indentation
+        }
+
+        contentImageView.requestLayout();  // Request layout update to apply the new size
     }
 
-
-
-//    private void showNextStep(int step) {
-//        String TAG = "showNextStep";
-//        int actualStep = 0;
-//
-////        nextButton.setVisibility(View.GONE);
-//        nextButton.setEnabled(false);
-//
-//        tapToContinueButton.setVisibility(View.GONE);
-//        tapToContinueButton.setEnabled(false);
-//
-//        // Title is shown by default, so we'll start checking content blocks
-//        // Step 1: Check if content_1 exists and has a value
-//        String content1Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_1";
-//        if (resourceHasValue(content1Key)) {
-//            actualStep++;
-//            if (actualStep == step + 1) {
-//                Log.e(TAG, "Step: " + actualStep + " - Showing content_1");
-//
-//                // Get the content string to determine delay
-//                int resId = getResources().getIdentifier(content1Key, "string", getContext().getPackageName());
-//                String content = getString(resId);
-//                int delayInSeconds = calculateDelayBasedOnLength(content.length());
-//
-//                contentTextView_1.setVisibility(View.VISIBLE);
-//                // Delay showing the nextButton based on the content length
-//
-//                Log.e(TAG, "show context 1 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
-//
-//                if (currentStep < (totalSteps-2)) {
-//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            nextButton.setEnabled(true); // Enable the button
-//                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
-//                        }
-//                    }, delayInSeconds * 1000);
-//                }
-//
-//                return;
-//            }
-//        } else {
-//            contentTextView_1.setVisibility(View.GONE); // Hide if no value
-//        }
-//
-//        // Step 2: Check if content_2 exists and has a value
-//        String content2Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_2";
-//        if (resourceHasValue(content2Key)) {
-//            actualStep++;
-//            if (actualStep == step + 1) {
-//                Log.e(TAG, "Step: " + actualStep + " - Showing content_2");
-//
-//                // Get the content string to determine delay
-//                int resId = getResources().getIdentifier(content2Key, "string", getContext().getPackageName());
-//                String content = getString(resId);
-//                int delayInSeconds = calculateDelayBasedOnLength(content.length());
-//
-//                contentTextView_2.setVisibility(View.VISIBLE);
-//                // Delay showing the nextButton based on the content length
-//
-//                Log.e(TAG, "show context 2 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
-//
-//                if (currentStep < (totalSteps-2)) {
-//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            nextButton.setEnabled(true); // Enable the button
-//                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
-//                        }
-//                    }, delayInSeconds * 1000);
-//                }
-//
-//                return;
-//            }
-//        } else {
-//            contentTextView_2.setVisibility(View.GONE); // Hide if no value
-//        }
-//
-//        // Step 3: Check if content_3 exists and has a value
-//        String content3Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_3";
-//        if (resourceHasValue(content3Key)) {
-//            actualStep++;
-//            if (actualStep == step + 1) {
-//                Log.e(TAG, "Step: " + actualStep + " - Showing content_3");
-//
-//                // Get the content string to determine delay
-//                int resId = getResources().getIdentifier(content3Key, "string", getContext().getPackageName());
-//                String content = getString(resId);
-//                int delayInSeconds = calculateDelayBasedOnLength(content.length());
-//
-//                contentTextView_3.setVisibility(View.VISIBLE);
-//                // Delay showing the nextButton based on the content length
-//
-//                Log.e(TAG, "show context 3 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
-//
-//                if (currentStep < (totalSteps-2)) {
-//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            nextButton.setEnabled(true); // Enable the button
-//                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
-//                        }
-//                    }, delayInSeconds * 1000);
-//                }
-//
-//                return;
-//            }
-//        } else {
-//            contentTextView_3.setVisibility(View.GONE); // Hide if no value
-//        }
-//
-//        // Step 4: Check if content_4 exists and has a value
-//        String content4Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_4";
-//        if (resourceHasValue(content4Key)) {
-//            actualStep++;
-//            if (actualStep == step + 1) {
-//                Log.e(TAG, "Step: " + actualStep + " - Showing content_4");
-//
-//                // Get the content string to determine delay
-//                int resId = getResources().getIdentifier(content4Key, "string", getContext().getPackageName());
-//                String content = getString(resId);
-//                int delayInSeconds = calculateDelayBasedOnLength(content.length());
-//
-//                contentTextView_4.setVisibility(View.VISIBLE);
-//                // Delay showing the nextButton based on the content length
-//
-//                Log.e(TAG, "show context 4 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
-//
-//                if (currentStep < (totalSteps-2)) {
-//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            nextButton.setEnabled(true); // Enable the button
-//                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
-//                        }
-//                    }, delayInSeconds * 1000);
-//                }
-//
-//                return;
-//            }
-//        } else {
-//            contentTextView_4.setVisibility(View.GONE); // Hide if no value
-//        }
-//
-//        // Step 5: Check if content_5 exists and has a value
-//        String content5Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_5";
-//        if (resourceHasValue(content5Key)) {
-//            actualStep++;
-//            if (actualStep == step + 1) {
-//                Log.e(TAG, "Step: " + actualStep + " - Showing content_5");
-//
-//                // Get the content string to determine delay
-//                int resId = getResources().getIdentifier(content4Key, "string", getContext().getPackageName());
-//                String content = getString(resId);
-//                int delayInSeconds = calculateDelayBasedOnLength(content.length());
-//
-//                contentTextView_5.setVisibility(View.VISIBLE);
-//                // Delay showing the nextButton based on the content length
-//
-//                Log.e(TAG, "show context 5 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
-//
-//                if (currentStep < (totalSteps-2)) {
-//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            nextButton.setEnabled(true); // Enable the button
-//                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
-//                        }
-//                    }, delayInSeconds * 1000);
-//                }
-//
-//                return;
-//            }
-//        } else {
-//            contentTextView_5.setVisibility(View.GONE); // Hide if no value
-//        }
-//
-//        // Step 6: Check if content_6 exists and has a value
-//        String content6Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_6";
-//        if (resourceHasValue(content6Key)) {
-//            actualStep++;
-//            if (actualStep == step + 1) {
-//                Log.e(TAG, "Step: " + actualStep + " - Showing content_6");
-//
-//                // Get the content string to determine delay
-//                int resId = getResources().getIdentifier(content4Key, "string", getContext().getPackageName());
-//                String content = getString(resId);
-//                int delayInSeconds = calculateDelayBasedOnLength(content.length());
-//
-//                contentTextView_6.setVisibility(View.VISIBLE);
-//                // Delay showing the nextButton based on the content length
-//
-//                Log.e(TAG, "show context 6 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
-//
-//                if (currentStep < (totalSteps-2)) {
-//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            nextButton.setEnabled(true); // Enable the button
-//                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
-//                        }
-//                    }, delayInSeconds * 1000);
-//                }
-//
-//                return;
-//            }
-//        } else {
-//            contentTextView_6.setVisibility(View.GONE); // Hide if no value
-//        }
-//
-//        // Step 7: Check if content_7 exists and has a value
-//        String content7Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_7";
-//        if (resourceHasValue(content7Key)) {
-//            actualStep++;
-//            if (actualStep == step + 1) {
-//                Log.e(TAG, "Step: " + actualStep + " - Showing content_7");
-//
-//                // Get the content string to determine delay
-//                int resId = getResources().getIdentifier(content4Key, "string", getContext().getPackageName());
-//                String content = getString(resId);
-//                int delayInSeconds = calculateDelayBasedOnLength(content.length());
-//
-//                contentTextView_7.setVisibility(View.VISIBLE);
-//                // Delay showing the nextButton based on the content length
-//
-//                Log.e(TAG, "show context 7 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
-//
-//                if (currentStep < (totalSteps-2)) {
-//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            nextButton.setEnabled(true); // Enable the button
-//                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
-//                        }
-//                    }, delayInSeconds * 1000);
-//                }
-//
-//                return;
-//            }
-//        } else {
-//            contentTextView_7.setVisibility(View.GONE); // Hide if no value
-//        }
-//
-//        // Step 8: Check if content_8 exists and has a value
-//        String content8Key = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_8";
-//        if (resourceHasValue(content8Key)) {
-//            actualStep++;
-//            if (actualStep == step + 1) {
-//                Log.e(TAG, "Step: " + actualStep + " - Showing content_8");
-//
-//                // Get the content string to determine delay
-//                int resId = getResources().getIdentifier(content4Key, "string", getContext().getPackageName());
-//                String content = getString(resId);
-//                int delayInSeconds = calculateDelayBasedOnLength(content.length());
-//
-//                contentTextView_8.setVisibility(View.VISIBLE);
-//                // Delay showing the nextButton based on the content length
-//
-//                Log.e(TAG, "show context 8 : if (" + currentStep + " <= (" + (totalSteps-2 + ");"));
-//
-//                if (currentStep < (totalSteps-2)) {
-//                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            nextButton.setEnabled(true); // Enable the button
-//                            tapToContinueButton.setVisibility(View.VISIBLE); // Show tapToContinueButton
-//                        }
-//                    }, delayInSeconds * 1000);
-//                }
-//
-//                return;
-//            }
-//        } else {
-//            contentTextView_8.setVisibility(View.GONE); // Hide if no value
-//        }
-//
-//        // If no more steps are available to show
-//        Log.e(TAG, "No more steps to show, STEP: " + (step + 1));
-//    }
 
     private void showNextStep(int step) {
         String TAG = "showNextStep";
@@ -693,6 +415,8 @@ public class f_1_lesson_text extends Fragment {
                     int resId = getResources().getIdentifier(contentKey, "string", getContext().getPackageName());
                     String content = getString(resId);
                     int delayInSeconds = calculateDelayBasedOnLength(content.length());
+                    delayFinish = delayInSeconds;
+                    Log.e(TAG, "delayFinish: " + delayFinish);
 
                     contentTextViews[i].setVisibility(View.VISIBLE);
                     contentTextViews[i].setText(content);
@@ -713,7 +437,7 @@ public class f_1_lesson_text extends Fragment {
         }
     }
 
-    private int calculateDelayBasedOnLength(int length) {
+    static int calculateDelayBasedOnLength(int length) {
 
         /**
          * This method calculates the delay based on the length of the string and the reading speed of the target audience.

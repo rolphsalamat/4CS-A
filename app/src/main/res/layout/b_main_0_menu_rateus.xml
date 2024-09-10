@@ -1,27 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
+    android:background="@drawable/autotutoria_background_color"
     android:gravity="center">
     <!-- Rate Us -->
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="match_parent"
+        android:layout_height="221dp"
+        app:srcCompat="@drawable/rate_us" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Rate Us"
+        android:textSize="38sp"
         android:textAppearance="?attr/textAppearanceHeadline5"
         android:layout_marginBottom="16dp"
         android:gravity="center"
-        android:textColor="@color/black"/>
+        android:textColor="#89CCFF"
+        android:fontFamily="@font/mouldy_cheese"/>
     <!-- Please rate your experience with our app -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Please rate your experience with our app"
+        android:text="Your opinion matters to us. Please rate your experience with our application"
         android:layout_marginBottom="16dp"
         android:gravity="center"
-        android:textColor="@color/black"/>
+        android:textColor="@color/white"/>
     <!-- * * * * * -->
     <RatingBar
         android:id="@+id/ratingBar"
@@ -34,10 +43,30 @@
     <!-- (Submit) -->
     <Button
         android:id="@+id/submit_button"
+        android:layout_width="155dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/facebook"
+        android:text="Submit"
+        android:textColor="@color/white" />
+
+    <!-- MINI LOGOS -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit"
-        android:backgroundTint="@color/black"
-        android:textColor="@color/white"/>
+        android:orientation="horizontal"
+        android:gravity="center">
 
+        <ImageView
+            android:id="@+id/pnc_logo"
+            android:layout_width="50dp"
+            android:layout_height="211dp"
+            app:srcCompat="@drawable/pnc_logo" />
+
+        <ImageView
+            android:id="@+id/miniautotutoria_logo"
+            android:layout_width="50dp"
+            android:layout_height="211dp"
+            app:srcCompat="@drawable/autotutoria_logo" />
+
+    </LinearLayout>
 </LinearLayout>

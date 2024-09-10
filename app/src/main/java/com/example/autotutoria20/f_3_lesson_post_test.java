@@ -153,6 +153,7 @@ public class f_3_lesson_post_test extends Fragment {
                             pTransit = 0.2; // Example probability of learning the skill after practice
                             pSlip = 0.1;    // Example probability of making a mistake despite knowing the skill
                             pGuess = 0.4;   // Example probability of guessing the correct answer without knowing the skill
+                            Log.d("f_post_test", "BKT Difficulty Level: Easy | " + difficultyLevel);
                             break;
                         case MEDIUM:
                             // Set parameters for MEDIUM difficulty
@@ -161,6 +162,8 @@ public class f_3_lesson_post_test extends Fragment {
                             pTransit = 0.3;
                             pSlip = 0.15;
                             pGuess = 0.3;
+                            Log.d("f_post_test", "(pInit:"+pInit+"pTransit:"+pTransit+"pSlip:"+pSlip+"pGuess:"+pGuess);
+                            Log.d("f_post_test", "BKT Difficulty Level: Medium | " + difficultyLevel);
                             break;
                         case HARD:
                             // Set parameters for HARD difficulty
@@ -168,6 +171,8 @@ public class f_3_lesson_post_test extends Fragment {
                             pTransit = 0.4;
                             pSlip = 0.2;
                             pGuess = 0.2;
+                            Log.d("f_post_test", "(pInit:"+pInit+"pTransit:"+pTransit+"pSlip:"+pSlip+"pGuess:"+pGuess);
+                            Log.d("f_post_test", "BKT Difficulty Level: Hard | " + difficultyLevel);
                             break;
                         default:
                             // Fallback to default values
@@ -175,9 +180,10 @@ public class f_3_lesson_post_test extends Fragment {
                             pTransit = 0.2;
                             pSlip = 0.1;
                             pGuess = 0.4;
+                            Log.d("f_post_test", "(pInit:"+pInit+"pTransit:"+pTransit+"pSlip:"+pSlip+"pGuess:"+pGuess);
+                            Log.d("f_post_test", "BKT Difficulty Level: Default | " + difficultyLevel);
                             break;
                     }
-
                     String TAG = "Parameter Check";
 
                     Log.e(TAG, "Difficulty: " + difficultyLevel);

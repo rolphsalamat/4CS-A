@@ -47,7 +47,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
     private Button nextButton;
     private f_2_lesson_video videoLesson;
     private L_lesson_sequence.StepType[] stepSequence;
-    private ViewPager viewPager;
+    private static ViewPager viewPager;
     private L_lesson_handler pagerAdapter;
     private boolean isLessonFinished = false;
     private long backPressedTime; // Variable to track back press time
@@ -136,6 +136,11 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
 
                 // Update the reference if we're now on a video lesson
                 if (currentFragment instanceof f_2_lesson_video) {
+
+                    // click in the middle one time to auto-play the video..
+                    // sa onCreate nalang ng video class??
+//                    simulateClicksInCenter();
+
                     videoLesson = (f_2_lesson_video) currentFragment;
 
                     params.bottomMargin = 200;  // Adjust this value as needed
@@ -453,7 +458,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
     }
 
     @Override
-    public void onTextLessonComplete(boolean isDone) {
+    public void onTextLessonComplete(boolean isDone, int delay) {
 
         String TEG = "onTextLessonComplete";
 
@@ -462,9 +467,11 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
         Log.e(TEG, "pageNumber: " + pageNumber);
         Log.e(TEG, "numberOfTextLessons: " + numberOfTextLessons);
 
-        // Disable the button initially
-        nextButton.setEnabled(false);
-        nextButton.setVisibility(View.GONE);
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            // Disable the button initially
+            nextButton.setEnabled(false);
+            nextButton.setVisibility(View.GONE);
+        }, delay * 1000);
 
         // Enable and show the button after the delay
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -567,17 +574,22 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void simulateClicksInCenter() {
-        // Get the center coordinates of the screen
-        int x = viewPager.getWidth() / 2;
-        int y = viewPager.getHeight() / 2;
+    public static void simulateClicksInCenter() {
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Get the center coordinates of the screen
+                int x = viewPager.getWidth() / 2;
+                int y = viewPager.getHeight() / 2;
 
-        // Simulate two clicks
-        simulateClick(x, y);
-        simulateClick(x, y);
+                // Simulate click
+                simulateClick(x, y);
+                Log.e("simulateClicksInCenter", "Click!");
+            }
+        }, 5000);  // Convert seconds to milliseconds
     }
 
-    private void simulateClick(int x, int y) {
+    public static  void simulateClick(int x, int y) {
         long downTime = System.currentTimeMillis();
         long eventTime = System.currentTimeMillis() + 10; // Delay between down and up events
 

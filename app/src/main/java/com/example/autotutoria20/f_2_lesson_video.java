@@ -91,6 +91,8 @@ public class f_2_lesson_video extends Fragment {
             videoUrl = sharedPreferences.getString(PREF_VIDEO_URL, null);
             Log.d(TAG, "Video URL retrieved from SharedPreferences: " + videoUrl);
         }
+
+        d_Lesson_container.simulateClicksInCenter();
     }
 
     @Override

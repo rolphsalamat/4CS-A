@@ -20,18 +20,19 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_columnSpan="5"
-            android:backgroundTint="@color/white"
-            android:background="@drawable/exit" />
+            android:backgroundTint="#1D4376"
+            android:background="@drawable/arrow_back" />
 
         <TextView
             android:id="@+id/topic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/mouldy_cheese"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp"
             android:text="@string/module_8"
-            android:textSize="32sp"
-            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:textColor="#D5E7FF"
             android:textStyle="bold"
             />
 

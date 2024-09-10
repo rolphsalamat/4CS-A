@@ -31,7 +31,9 @@
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:orientation="vertical"
-        android:padding="8dp" />
+        android:paddingVertical="8dp"
+        android:paddingStart="16dp"
+        />
 
     <!-- EditText for Identification type question, collapsed by default -->
     <EditText
@@ -56,7 +58,7 @@
         android:id="@+id/submit_post_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Next"
+        android:text="Submit"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginHorizontal="10dp" />
