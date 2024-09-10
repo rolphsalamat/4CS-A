@@ -187,7 +187,7 @@ public class c_Lesson_freeuse_4 extends AppCompatActivity {
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (n_Network.isNetworkAvailable(getBaseContext())) {
+                if (!(n_Network.isNetworkAvailable(getBaseContext()))) {
                     showToast("Please connect to a network.");
                 } else {
                     navigateToModuleActivity(d_Lesson_container.class, cardNumber, numberOfSteps);

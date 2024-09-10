@@ -82,7 +82,8 @@ public class L_lesson_sequence {
         lessonSequences.put("M1_Lesson 2", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-//                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
@@ -91,7 +92,8 @@ public class L_lesson_sequence {
         lessonSequences.put("M1_Lesson 3", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-//                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
@@ -114,14 +116,19 @@ public class L_lesson_sequence {
         lessonSequences.put("M1_Lesson 4", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-//                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M2_Lesson 4", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-//                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
@@ -192,6 +199,9 @@ public class L_lesson_sequence {
         lessonSequences.put("M1_Lesson 8", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
 //                StepType.TEXT,
 //                StepType.VIDEO,
                 StepType.POST_TEST
@@ -199,14 +209,20 @@ public class L_lesson_sequence {
         lessonSequences.put("M2_Lesson 8", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-//                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
 //                StepType.VIDEO,
                 StepType.POST_TEST
         });
         lessonSequences.put("M3_Lesson 8", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT,
-//                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
+                StepType.TEXT,
 //                StepType.VIDEO,
                 StepType.POST_TEST
         });

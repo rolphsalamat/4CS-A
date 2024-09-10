@@ -4,7 +4,7 @@
     <!-- Module 8 -->
     <!-- Module 8_1 page 1 -->
     <string name="module8_1_1_title">Top-down Parsing (Recursive Descent, LL(1) Parsing)</string>
-    <string name="module8_1_1_content_1">This lesson is designed to give you a foundational understanding of parsing, specifically focusing on Top-Down Parsing Techniques. As we explore these methods, you\'ll gain insights into how parsers work to analyze and interpret strings of symbols based on grammar rules. By the end of this lesson, you\'ll have implemented your first recursive descent parser and explored key concepts such as LL(1) Parsing. Let's dive into the exciting world of parsing algorithms and uncover how they are essential in understanding programming and natural languages.</string>
+    <string name="module8_1_1_content_1">This lesson is designed to give you a foundational understanding of parsing, specifically focusing on Top-Down Parsing Techniques. As we explore these methods, you\'ll gain insights into how parsers work to analyze and interpret strings of symbols based on grammar rules. By the end of this lesson, you\'ll have implemented your first recursive descent parser and explored key concepts such as LL(1) Parsing. Let\'s dive into the exciting world of parsing algorithms and uncover how they are essential in understanding programming and natural languages.</string>
     <string name="module8_1_1_content_2"></string>
 
 
