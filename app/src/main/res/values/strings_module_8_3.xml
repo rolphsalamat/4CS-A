@@ -7,6 +7,7 @@
     <string name="module8_3_1_content_2"></string>
 
     <!-- Module 8_3 page 2 -->
+    <string name="module8_3_2_title"></string>
     <string name="module8_3_2_content_1">The lesson presents an introduction to the CYK (Cocke-Younger-Kasami) Algorithm, a dynamic programming algorithm for parsing strings in context-free grammars (CFGs), once they have been converted into Chomsky Normal Form (CNF). It covers the following key points:</string>
     <string name="module8_3_2_content_2">Chomsky Normal Form (CNF): A CFG is in CNF if its production rules either produce two non-terminals or a single terminal symbol.</string>
     <string name="module8_3_2_content_3"></string>
@@ -15,6 +16,7 @@
 
 
     <!-- Module 8_3 page 3 -->
+    <string name="module8_3_3_title"></string>
     <string name="module8_3_3_content_1">Steps in the CYK Algorithm:</string>
     <string name="module8_3_3_content_2">Convert CFG to CNF: Ensure the grammar conforms to CNF rules, such as eliminating epsilon-productions and useless symbols.</string>
     <string name="module8_3_3_content_3">Initialize the Parsing Table: A triangular table is constructed to represent substrings of the input string, with rows representing substring lengths and columns representing their starting positions.</string>
@@ -25,6 +27,7 @@
 
 
     <!-- Module 8_3 page 4 -->
+    <string name="module8_3_4_title"></string>
     <string name="module8_3_4_content_1">Basic Examples</string>
     <string name="module8_3_4_content_2">Example 1: Converting a CFG to CNF</string>
     <string name="module8_3_4_content_3">Suppose you have a CFG with the rule S→AB ∣ BC. To use the CYK algorithm, this grammar must be in CNF, meaning the rules should either be in the form A→BC or A → a , where A, B, C are non-terminal symbols and a is a terminal symbol.</string>
@@ -33,6 +36,7 @@
 
 
     <!-- Module 8_3 page 5 -->
+    <string name="module8_3_5_title"></string>
     <string name="module8_3_5_content_1">Example 2: Parsing with the CYK Algorithm</string>
     <string name="module8_3_5_content_2">Given a grammar in CNF:</string>
     <string name="module8_3_5_content_3">S → AB | BC</string>
@@ -43,6 +47,7 @@
 
 
     <!-- Module 8_3 page 6 -->
+    <string name="module8_3_6_title"></string>
     <string name="module8_3_6_content_1">To parse the string "ba":</string>
     <string name="module8_3_6_content_2">Initialize a table for "ba".</string>
     <string name="module8_3_6_content_3">For the substring "b", the rule B → b applies, so B is added to the table for "b".</string>

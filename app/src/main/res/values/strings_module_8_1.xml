@@ -9,6 +9,7 @@
 
 
     <!-- Module 8_1 page 2 -->
+    <string name="module8_1_2_title"></string>
     <string name="module8_1_2_content_1">This lesson is an introductory lesson on parsing within the context of Context-Free Grammars (CFGs), with a primary focus on Top-Down Parsing Techniques. The document explains parsing as the process of analyzing a sequence of symbols to determine their grammatical structure. It introduces two main types of parsing: Top-down and Bottom-up, and delves into Recursive Descent Parsing and LL(1) Parsing methods.</string>
     <string name="module8_1_2_content_2">The lesson provides a step-by-step guide for implementing Recursive Descent Parsing, which is a type of top-down parsing where grammar rules are recursively applied. It also covers the removal of left recursion from grammar, a key requirement for using recursive descent parsers. Furthermore, the document explains LL(1) Parsing, a predictive, non-backtracking method that uses a lookahead symbol to make parsing decisions.</string>
     <string name="module8_1_2_content_3"></string>
@@ -16,6 +17,7 @@
     <string name="module8_1_2_content_5"></string>
 
     <!-- Module 8_1 page 3 -->
+    <string name="module8_1_3_title"></string>
     <string name="module8_1_3_content_1">Basic Examples:</string>
     <string name="module8_1_3_content_2">Recursive Descent Parsing Example: Given the grammar:</string>
     <string name="module8_1_3_content_3">E → T E\'</string>
@@ -28,6 +30,7 @@
     <string name="module8_1_3_content_10"></string>
 
     <!-- Module 8_1 page 4 -->
+    <string name="module8_1_4_title"></string>
     <string name="module8_1_4_content_1">LL(1) Parsing Example: For the grammar:</string>
     <string name="module8_1_4_content_2">S → aB | bA</string>
     <string name="module8_1_4_content_3">A → a | ε</string>

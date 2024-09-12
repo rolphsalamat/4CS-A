@@ -1,6 +1,8 @@
 package com.example.autotutoria20;
 
 import android.content.Intent;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -61,6 +63,12 @@ public class a_user_2_signup extends AppCompatActivity {
         // Set the maximum date to today
         Calendar calendar = Calendar.getInstance();
         datePicker.setMaxDate(calendar.getTimeInMillis());
+
+        ImageView pnc = findViewById(R.id.pnc_signup);
+        pnc.setOnClickListener(v -> {
+            Log.d(TAG, "PNC in Signup Class Clicked");
+            openFacebookPage();
+        });
 
 
         Log.d(TAG, "Views initialized");
@@ -592,6 +600,35 @@ public class a_user_2_signup extends AppCompatActivity {
             String key = entry.getKey();
             Object value = entry.getValue();
             Log.e(TAG, key + ": " + value.toString());
+        }
+    }
+
+    private void openFacebookPage() {
+        String facebookUrl = "https://www.facebook.com/ucpncofficial";
+        String facebookAppUrl = "fb://facewebmodal/f?href=" + facebookUrl;
+        String facebookLiteUrl = "fb://lite/";
+
+        // Try to open Facebook App
+        try {
+            Intent facebookIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebookAppUrl));
+            facebookIntent.setPackage("com.facebook.katana"); // Facebook App package name
+            startActivity(facebookIntent);
+        } catch (Exception e) {
+            // If Facebook app is not available, try Facebook Lite
+            try {
+                Intent facebookLiteIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebookLiteUrl));
+                facebookLiteIntent.setPackage("com.facebook.lite"); // Facebook Lite package name
+                startActivity(facebookLiteIntent);
+            } catch (Exception liteException) {
+                // If Facebook Lite is not available, open in default browser
+                try {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebookUrl));
+                    startActivity(browserIntent);
+                } catch (Exception browserException) {
+                    // In case no browser is available, show error or handle fallback
+                    Toast.makeText(this, "No application available to open Facebook", Toast.LENGTH_LONG).show();
+                }
+            }
         }
     }
 

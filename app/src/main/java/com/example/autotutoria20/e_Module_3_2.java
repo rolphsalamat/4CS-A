@@ -17,7 +17,8 @@ public class e_Module_3_2 {
         return e_Module_3.getPreTestQuestions(
                 pre_test_lesson_2_questions,
                 pre_test_lesson_2_choices,
-                pre_test_lesson_2_answers);
+                pre_test_lesson_2_answers
+        );
     }
 
     public static final String[] pre_test_lesson_2_questions = {

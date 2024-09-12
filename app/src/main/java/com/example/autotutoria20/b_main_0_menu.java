@@ -591,9 +591,39 @@ public class b_main_0_menu extends AppCompatActivity {
     }
 
     private void openFacebookPage() {
-        Uri uri = Uri.parse("https://www.facebook.com/ucpncofficial");
-        startActivity(new Intent(Intent.ACTION_VIEW, uri));
+        String facebookUrl = "https://www.facebook.com/ucpncofficial";
+        String facebookAppUrl = "fb://facewebmodal/f?href=" + facebookUrl;
+        String facebookLiteUrl = "fb://lite/";
+
+        // Try to open Facebook App
+        try {
+            Intent facebookIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebookAppUrl));
+            facebookIntent.setPackage("com.facebook.katana"); // Facebook App package name
+            startActivity(facebookIntent);
+        } catch (Exception e) {
+            // If Facebook app is not available, try Facebook Lite
+            try {
+                Intent facebookLiteIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebookLiteUrl));
+                facebookLiteIntent.setPackage("com.facebook.lite"); // Facebook Lite package name
+                startActivity(facebookLiteIntent);
+            } catch (Exception liteException) {
+                // If Facebook Lite is not available, open in default browser
+                try {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebookUrl));
+                    startActivity(browserIntent);
+                } catch (Exception browserException) {
+                    // In case no browser is available, show error or handle fallback
+                    Toast.makeText(this, "No application available to open Facebook", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
+
+
+//    private void openFacebookPage() {
+//        Uri uri = Uri.parse("https://www.facebook.com/ucpncofficial");
+//        startActivity(new Intent(Intent.ACTION_VIEW, uri));
+//    }
 
 //    private void fetchUserData(String userId) {
 //        DocumentReference userRef = db.collection("users").document(userId);

@@ -30,11 +30,15 @@ public class c_Lesson_progressive_7 extends AppCompatActivity {
     private boolean[] cardCompletionStatus = {false}; // Track completion status of each card
     private CustomLoadingDialog loadingDialog;
     private int[] moduleProgress;
+    private c_Lesson_feedback feedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.c_lesson_progressive_7);
+
+        feedback = new c_Lesson_feedback(); // Initialize feedback object
+
 
         FrameLayout card1 = findViewById(R.id.card1);
 
@@ -146,6 +150,10 @@ public class c_Lesson_progressive_7 extends AppCompatActivity {
                 if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 7")) {
                     setCardCompletionStatus(key, true);
                     Log.d("Completed Lesson!", "Lesson 7 Completed! :D");
+
+                    Log.e("Comleted Lesson!", "Calling Feedback Class");
+                    feedback.retrieveBKTScore("Progressive Mode", "Lesson 7");
+
                 }
                 break;
             default:

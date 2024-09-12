@@ -29,11 +29,15 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
     private CustomLoadingDialog loadingDialog;
 
     private boolean[] cardCompletionStatus = {false, false, false, false}; // Track completion status of each card
+    private c_Lesson_feedback feedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.c_lesson_freeuse_1);
+
+        feedback = new c_Lesson_feedback(); // Initialize feedback object
+
 
         // Find all card views
         CardView card1 = findViewById(R.id.card1);
@@ -196,6 +200,10 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
                 }
                 if (progress >= L_lesson_sequence.getNumberOfSteps("M4_Lesson 1")) {
                     cardCompletionStatus[3] = true; // Mark card 4 as completed
+
+                    Log.e("Comleted Lesson!", "Calling Feedback Class");
+                    feedback.retrieveBKTScore("Free Use Mode", "Lesson 1");
+
                 }
                 break;
             default:

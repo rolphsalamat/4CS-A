@@ -13,7 +13,8 @@ public class e_Module_3_1 {
         return e_Module_3.getPreTestQuestions(
                 pre_test_lesson_1_questions,
                 pre_test_lesson_1_choices,
-                pre_test_lesson_1_answers);
+                pre_test_lesson_1_answers
+        );
     }
 
     public static final String[] pre_test_lesson_1_questions = {

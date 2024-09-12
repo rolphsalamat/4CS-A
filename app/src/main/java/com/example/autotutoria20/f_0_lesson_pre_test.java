@@ -184,24 +184,24 @@ public class f_0_lesson_pre_test extends Fragment {
                 // Update the score
                 bktModel.updateScore(moduleIndex, lessonIndex, knowledgeProb, isProgressiveMode);
 
-                // Notify the listener
-                if (preTestCompleteListener != null && correctAnswer) {
-                    preTestCompleteListener.onPreTestComplete(correctAnswer);
-                }
-
-                // Move to the next question
-                if (currentQuestionIndex < questions.length - 1) {
-                    currentQuestionIndex++;
-                } else {
-                    currentQuestionIndex = 0; // Reset to the first question if all are answered
-//                    Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
-                    bktModel.logScores();
-                }
-
                 // to give student chance to get correct answer before loading another question
-                if (answerAttempt >= attemptChances) {
+                if (answerAttempt >= attemptChances && !correctAnswer) {
                     loadQuestion(); // Load the next question
                     answerAttempt = 0;
+                } else if (answerAttempt <= attemptChances && correctAnswer) {
+                    // Notify the listener
+                    if (preTestCompleteListener != null && correctAnswer) {
+                        preTestCompleteListener.onPreTestComplete(correctAnswer);
+                    }
+
+                    // Move to the next question
+                    if (currentQuestionIndex < questions.length - 1) {
+                        currentQuestionIndex++;
+                    } else {
+                        currentQuestionIndex = 0; // Reset to the first question if all are answered
+//                    Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
+                        bktModel.logScores();
+                    }
                 }
             }
         });
@@ -239,8 +239,7 @@ public class f_0_lesson_pre_test extends Fragment {
             case "M2_Lesson 4":
                 return e_Module_4_2.get_PreTest_Lesson2_Questions();
             case "M3_Lesson 4":
-//                return e_Module_4_3.get_PreTest_Lesson3_Questions();
-
+//                return e_Module_4_3.get_PreTest_Lesson3_Q
             /* ===== Module 5 ===== */
             case "M1_Lesson 5":
                 return e_Module_5_1.get_PreTest_Lesson1_Questions();
@@ -296,9 +295,10 @@ public class f_0_lesson_pre_test extends Fragment {
         for (int i = 0; i < choices.length; i++) {
             RadioButton choiceButton = new RadioButton(context);
             choiceButton.setId(i);
+            choiceButton.setPadding(16, 0, 0, 0);
             choiceButton.setText(choices[i]);
             choiceButton.setTextColor(getResources().getColor(R.color.white));  // Set text color to white
-            choiceButton.setTextSize(18);  // Set text size to 18sp (you can adjust this size)
+            choiceButton.setTextSize(16);  // Set text size to 18sp (you can adjust this size)
 
             // Create LayoutParams for margin settings
             RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(

@@ -30,24 +30,27 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
     private boolean[] cardCompletionStatus = {false, false, false}; // Track completion status of each card
     private CustomLoadingDialog loadingDialog;
     private int[] moduleProgress;
+    private c_Lesson_feedback feedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.c_lesson_progressive_3);
 
+        feedback = new c_Lesson_feedback(); // Initialize feedback object
+        
         FrameLayout card1 = findViewById(R.id.card1);
         FrameLayout card2 = findViewById(R.id.card2);
-        FrameLayout card3 = findViewById(R.id.card3);
+//        FrameLayout card3 = findViewById(R.id.card3);
 
         // Assuming numberOfSteps is determined based on your logic
         int numberOfStepsForCard1 = z_Lesson_steps.lesson_3_steps[0];
         int numberOfStepsForCard2 = z_Lesson_steps.lesson_3_steps[1];
-        int numberOfStepsForCard3 = z_Lesson_steps.lesson_3_steps[2];
+//        int numberOfStepsForCard3 = z_Lesson_steps.lesson_3_steps[2];
 
         setCardClickListener(card1, 1, numberOfStepsForCard1);
         setCardClickListener(card2, 2, numberOfStepsForCard2);
-        setCardClickListener(card3, 3, numberOfStepsForCard3);
+//        setCardClickListener(card3, 3, numberOfStepsForCard3);
 
         Button exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +146,7 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
         // Update progress text views
         TextView module1ProgressText = findViewById(R.id.progressive_lesson_3_module_1);
         TextView module2ProgressText = findViewById(R.id.progressive_lesson_3_module_2);
-        TextView module3ProgressText = findViewById(R.id.progressive_lesson_3_module_3);
+//        TextView module3ProgressText = findViewById(R.id.progressive_lesson_3_module_3);
 
         // Update locked overlays visibility
         FrameLayout card1LockedOverlay = findViewById(R.id.card1_locked_overlay);
@@ -173,20 +176,25 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
                 if (progress >= L_lesson_sequence.getNumberOfSteps("M2_Lesson 3")) {
                     card3LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
-                }
-                break;
-            case 3:
-                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M3_Lesson 3");
-                module3ProgressText.setText(newText);
-
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M3_Lesson 3")) {
-                    setCardCompletionStatus(key, true);
                     Log.d("Completed Lesson!", "Lesson 3 Completed! :D");
+
+                    Log.e("Comleted Lesson!", "Calling Feedback Class");
+                    feedback.retrieveBKTScore("Progressive Mode", "Lesson 3");
+
                 }
                 break;
-            default:
-                Log.d("updateUI", "Invalid module number: " + key);
-                break;
+//            case 3:
+//                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M3_Lesson 3");
+//                module3ProgressText.setText(newText);
+//
+//                if (progress >= L_lesson_sequence.getNumberOfSteps("M3_Lesson 3")) {
+//                    setCardCompletionStatus(key, true);
+//                    Log.d("Completed Lesson!", "Lesson 3 Completed! :D");
+//                }
+//                break;
+//            default:
+//                Log.d("updateUI", "Invalid module number: " + key);
+//                break;
         }
     }
 

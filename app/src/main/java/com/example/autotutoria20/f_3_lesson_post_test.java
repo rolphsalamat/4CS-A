@@ -140,60 +140,62 @@ public class f_3_lesson_post_test extends Fragment {
                     Log.d("f_post_test", "User BKT Score for Module " + module + ": " + userScore);
 
                     // Determine difficulty based on score
-                    difficultyLevel = getDifficultyLevel(userScore);
+                    difficultyLevel = bktModel.getDifficultyLevel(userScore);
                     Log.d("f_post_test", "Determined Difficulty Level: " + difficultyLevel);
 
-                    // Adjust BKT Model parameters based on difficulty level
-                    double pInit, pTransit, pSlip, pGuess;
+                    bktModel.setBKTParameters(difficultyLevel);
 
-                    switch (difficultyLevel) {
-                        case EASY:
-                            // Set parameters for EASY difficulty
-                            pInit = 0.5;    // Example initial probability of knowledge
-                            pTransit = 0.2; // Example probability of learning the skill after practice
-                            pSlip = 0.1;    // Example probability of making a mistake despite knowing the skill
-                            pGuess = 0.4;   // Example probability of guessing the correct answer without knowing the skill
-                            Log.d("f_post_test", "BKT Difficulty Level: Easy | " + difficultyLevel);
-                            break;
-                        case MEDIUM:
-                            // Set parameters for MEDIUM difficulty
-                            // Example values for medium difficulty
-                            pInit = 0.4;
-                            pTransit = 0.3;
-                            pSlip = 0.15;
-                            pGuess = 0.3;
-                            Log.d("f_post_test", "(pInit:"+pInit+"pTransit:"+pTransit+"pSlip:"+pSlip+"pGuess:"+pGuess);
-                            Log.d("f_post_test", "BKT Difficulty Level: Medium | " + difficultyLevel);
-                            break;
-                        case HARD:
-                            // Set parameters for HARD difficulty
-                            pInit = 0.3;
-                            pTransit = 0.4;
-                            pSlip = 0.2;
-                            pGuess = 0.2;
-                            Log.d("f_post_test", "(pInit:"+pInit+"pTransit:"+pTransit+"pSlip:"+pSlip+"pGuess:"+pGuess);
-                            Log.d("f_post_test", "BKT Difficulty Level: Hard | " + difficultyLevel);
-                            break;
-                        default:
-                            // Fallback to default values
-                            pInit = 0.3;
-                            pTransit = 0.2;
-                            pSlip = 0.1;
-                            pGuess = 0.4;
-                            Log.d("f_post_test", "(pInit:"+pInit+"pTransit:"+pTransit+"pSlip:"+pSlip+"pGuess:"+pGuess);
-                            Log.d("f_post_test", "BKT Difficulty Level: Default | " + difficultyLevel);
-                            break;
-                    }
-                    String TAG = "Parameter Check";
-
-                    Log.e(TAG, "Difficulty: " + difficultyLevel);
-                    Log.e(TAG, "pInit: " + pInit);
-                    Log.e(TAG, "pTransit: " + pTransit);
-                    Log.e(TAG, "pSlip: " + pSlip);
-                    Log.e(TAG, "pGuess: " + pGuess);
-
-                    // Initialize BKT Model instance with the parameters based on difficulty
-                    bktModel = x_bkt_algorithm.getInstance(pInit, pTransit, pSlip, pGuess);
+//                    // Adjust BKT Model parameters based on difficulty level
+//                    double pInit, pTransit, pSlip, pGuess;
+//
+//                    switch (difficultyLevel) {
+//                        case EASY:
+//                            // Set parameters for EASY difficulty
+//                            pInit = 0.5;    // Example initial probability of knowledge
+//                            pTransit = 0.2; // Example probability of learning the skill after practice
+//                            pSlip = 0.1;    // Example probability of making a mistake despite knowing the skill
+//                            pGuess = 0.4;   // Example probability of guessing the correct answer without knowing the skill
+//                            Log.d("f_post_test", "BKT Difficulty Level: Easy | " + difficultyLevel);
+//                            break;
+//                        case MEDIUM:
+//                            // Set parameters for MEDIUM difficulty
+//                            // Example values for medium difficulty
+//                            pInit = 0.4;
+//                            pTransit = 0.3;
+//                            pSlip = 0.15;
+//                            pGuess = 0.3;
+//                            Log.d("f_post_test", "(pInit:"+pInit+"pTransit:"+pTransit+"pSlip:"+pSlip+"pGuess:"+pGuess);
+//                            Log.d("f_post_test", "BKT Difficulty Level: Medium | " + difficultyLevel);
+//                            break;
+//                        case HARD:
+//                            // Set parameters for HARD difficulty
+//                            pInit = 0.3;
+//                            pTransit = 0.4;
+//                            pSlip = 0.2;
+//                            pGuess = 0.2;
+//                            Log.d("f_post_test", "(pInit:"+pInit+"pTransit:"+pTransit+"pSlip:"+pSlip+"pGuess:"+pGuess);
+//                            Log.d("f_post_test", "BKT Difficulty Level: Hard | " + difficultyLevel);
+//                            break;
+//                        default:
+//                            // Fallback to default values
+//                            pInit = 0.3;
+//                            pTransit = 0.2;
+//                            pSlip = 0.1;
+//                            pGuess = 0.4;
+//                            Log.d("f_post_test", "(pInit:"+pInit+"pTransit:"+pTransit+"pSlip:"+pSlip+"pGuess:"+pGuess);
+//                            Log.d("f_post_test", "BKT Difficulty Level: Default | " + difficultyLevel);
+//                            break;
+//                    }
+//                    String TAG = "Parameter Check";
+//
+//                    Log.e(TAG, "Difficulty: " + difficultyLevel);
+//                    Log.e(TAG, "pInit: " + pInit);
+//                    Log.e(TAG, "pTransit: " + pTransit);
+//                    Log.e(TAG, "pSlip: " + pSlip);
+//                    Log.e(TAG, "pGuess: " + pGuess);
+//
+//                    // Initialize BKT Model instance with the parameters based on difficulty
+//                    bktModel = x_bkt_algorithm.getInstance(pInit, pTransit, pSlip, pGuess);
 
                     // Retrieve post-test questions based on difficulty level
                     questions = getPostTestQuestionsBasedOnDifficulty(module, lesson, difficultyLevel);
@@ -261,24 +263,26 @@ public class f_3_lesson_post_test extends Fragment {
                 // Update the score
                 bktModel.updateScore(moduleIndex, lessonIndex, knowledgeProb, isProgressiveMode);
 
-                // Notify the listener
-                if (postTestCompleteListener != null && correctAnswer) {
-                    postTestCompleteListener.onPostTestComplete(correctAnswer);
-                }
 
-                // Move to the next question
-                if (currentQuestionIndex < questions.length - 1) {
-                    currentQuestionIndex++;
-                } else {
-                    currentQuestionIndex = 0; // Reset to the first question if all are answered
-//                    Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
-                    bktModel.logScores();
-                }
 
                 // to give student chance to get correct answer before loading another question
-                if (answerAttempt >= attemptChances) {
+                if (answerAttempt >= attemptChances && !correctAnswer) {
                     loadQuestion(); // Load the next question
                     answerAttempt = 0;
+                } else if (answerAttempt <= attemptChances && correctAnswer) {
+                    // Notify the listener
+                    if (postTestCompleteListener != null && correctAnswer) {
+                        postTestCompleteListener.onPostTestComplete(correctAnswer);
+                    }
+
+                    // Move to the next question
+                    if (currentQuestionIndex < questions.length - 1) {
+                        currentQuestionIndex++;
+                    } else {
+                        currentQuestionIndex = 0; // Reset to the first question if all are answered
+//                    Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
+                        bktModel.logScores();
+                    }
                 }
             }
         });
@@ -669,6 +673,7 @@ public class f_3_lesson_post_test extends Fragment {
             for (int i = 0; i < choices.length; i++) {
                 RadioButton choiceButton = new RadioButton(getContext());
                 choiceButton.setId(i);
+                choiceButton.setPadding(16, 0, 0, 0);
                 choiceButton.setText(choices[i]);
                 choiceButton.setTextColor(getResources().getColor(R.color.white));  // Set text color to white
                 choiceButton.setTextSize(18);  // Set text size to 18sp
