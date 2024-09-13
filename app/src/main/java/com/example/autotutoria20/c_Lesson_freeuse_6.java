@@ -35,9 +35,6 @@ public class c_Lesson_freeuse_6 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.c_lesson_freeuse_6);
 
-        feedback = new c_Lesson_feedback(); // Initialize feedback object
-
-
         // Find all card views
         CardView card1 = findViewById(R.id.card1);
         CardView card2 = findViewById(R.id.card2);
@@ -178,6 +175,7 @@ public class c_Lesson_freeuse_6 extends AppCompatActivity {
                     cardCompletionStatus[2] = true; // Mark card 3 as completed
 
                     Log.e("Comleted Lesson!", "Calling Feedback Class");
+                    feedback = new c_Lesson_feedback(this); // Initialize feedback object
                     feedback.retrieveBKTScore("Free Use Mode", "Lesson 6");
 
                 }

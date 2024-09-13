@@ -1,9 +1,14 @@
 package com.example.autotutoria20;
 
+import android.content.Context;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -15,17 +20,23 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class c_Lesson_feedback {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance(); // FirebaseAuth instance
     private x_bkt_algorithm algo_feedback;
+    private Context context; // Add context field
 
     // Constructor
-    public c_Lesson_feedback() {
+    public c_Lesson_feedback(Context context) {
+
+        this.context = context;
+
         // Initialize algo_feedback here
         algo_feedback = new x_bkt_algorithm();
+
     }
 
     // Retrieve BKTScore from the database
@@ -77,10 +88,18 @@ public class c_Lesson_feedback {
     private void BKTScoreAnalyzer(Map<String, Object> bktScores) {
         List<String> feedbackList = new ArrayList<>();
 
+        int moduleCount = 0;
+        double feedbackScore = 0.0;
+
         // Iterate through BKT Scores for each module and analyze
         for (Map.Entry<String, Object> entry : bktScores.entrySet()) {
             String module = entry.getKey();
             Double score = (Double) entry.getValue();
+
+            // increment the feedbackScore
+            feedbackScore += score;
+
+            moduleCount++;
 
             String feedback;
             if (score < algo_feedback.very_bad) {
@@ -108,20 +127,31 @@ public class c_Lesson_feedback {
             feedbackList.add(module + ": " + feedback);
         }
 
-
         // Log all the feedback
         for (String feedback : feedbackList) {
             Log.d("LessonFeedback", feedback);
-            showFeedbackDialog(feedback);
         }
+
+        // Calculate and round off the total feedback score
+        double totalFeedback = feedbackScore / moduleCount;
+        int roundedFeedback = (int) Math.round(totalFeedback);
+
+        // Show the dialog with the rounded feedback score
+        showDialog(roundedFeedback);
+
     }
 
     // Show feedback dialog based on score
     private void showFeedbackDialog(String feedback) {
+
+        final int min = 20;
+        final int max = 80;
+        final int random = new Random().nextInt((max - min) + 1) + min;
+
         // Display the feedback to the user
         switch (feedback) {
             case "Very Bad":
-//                Log.d("LessonFeedback","Feedback: " + very_bad_string);
+//                if (random == 0)
                 break;
             case "Bad":
 //                Log.d("LessonFeedback","Feedback: " + bad_string);
@@ -141,8 +171,33 @@ public class c_Lesson_feedback {
         }
     }
 
-//    public void showToast (String message) {
-//        Toast.makeText(d_Lesson_container., message, Toast.LENGTH_SHORT).show();
-//    }
+    public void showDialog(double doubleScore) {
+
+        int score = (int) Math.round(doubleScore);
+
+        Toast.makeText(context, "HOY!", Toast.LENGTH_SHORT).show();
+        Log.e("c_Lesson_feedback", "showDialog()");
+
+        Log.e("c_Lesson_feedback", "Score: " + score);
+
+        int layoutId = 0;
+
+        if (score <= 2) layoutId = R.layout.c_lesson_feedback_0_very_bad;
+        else if (score == 3 || score == 4) layoutId = R.layout.c_lesson_feedback_1_bad;
+        else if (score == 5 || score == 6) layoutId = R.layout.c_lesson_feedback_2_neutral;
+        else if (score == 7 || score == 8) layoutId = R.layout.c_lesson_feedback_3_good;
+        else layoutId = R.layout.c_lesson_feedback_4_very_good;
+        
+        if (layoutId == 0) {
+            Log.e("showDialog", "layoutId is 0?? :<");
+        } else {
+            Log.e("showDialog", "OKAY ETO NA!!!");
+            // Create and show the dialog with the selected layout
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setView(View.inflate(context, layoutId, null));
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }
 
 }

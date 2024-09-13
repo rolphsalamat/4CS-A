@@ -37,9 +37,6 @@ public class c_Lesson_progressive_7 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.c_lesson_progressive_7);
 
-        feedback = new c_Lesson_feedback(); // Initialize feedback object
-
-
         FrameLayout card1 = findViewById(R.id.card1);
 
         // Assuming numberOfSteps is determined based on your logic
@@ -152,6 +149,7 @@ public class c_Lesson_progressive_7 extends AppCompatActivity {
                     Log.d("Completed Lesson!", "Lesson 7 Completed! :D");
 
                     Log.e("Comleted Lesson!", "Calling Feedback Class");
+                    feedback = new c_Lesson_feedback(this); // Initialize feedback object
                     feedback.retrieveBKTScore("Progressive Mode", "Lesson 7");
 
                 }

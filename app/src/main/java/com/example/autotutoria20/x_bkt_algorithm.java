@@ -151,42 +151,6 @@ public class x_bkt_algorithm {
         return instance;
     }
 
-    // basta iretrieve dito yung score...
-    // gagamitin to for Post-Test difficulty..
-    public static void getBKTScore(String collectionPath) {
-    }
-
-    // Initialize BKT Scores method
-    // ORIGINAL CODE
-//    public void initializeBKTScores(String collectionPath, String documentName, BKTCallback callback) {
-//        Log.d(TAG, "Attempting to retrieve document from path: " + collectionPath + "/" + documentName);
-//
-//        db.collection("users").document(userId).collection(collectionPath).document(documentName)
-//                .get()
-//                .addOnSuccessListener(documentSnapshot -> {
-//                    if (documentSnapshot.exists()) {
-//                        // Retrieve the BKT Scores as a Map
-//                        Map<String, Double> bktScoresMap = (Map<String, Double>) documentSnapshot.get("BKT Scores");
-//
-//                        if (bktScoresMap != null) {
-//                            // Convert the map to a list
-//                            bktScores = new ArrayList<>(bktScoresMap.values());
-//                        } else {
-//                            bktScores = new ArrayList<>();  // Initialize an empty list if null
-//                        }
-//
-//                        callback.onBKTRetrieved(bktScores);
-//                    } else {
-//                        Log.e(TAG, "Document does not exist at path: " + collectionPath + "/" + documentName);
-//                        callback.onBKTRetrieved(null);
-//                    }
-//                })
-//                .addOnFailureListener(e -> {
-//                    Log.e(TAG, "Error retrieving BKT Scores", e);
-//                    callback.onBKTRetrieved(null);
-//                });
-//    }
-
     // RECOMMENDED BY ChatGPT 4o Plus
     public void initializeBKTScores(String collectionPath, String documentName, BKTCallback callback) {
         Log.d(TAG, "Attempting to retrieve document from path: " + collectionPath + "/" + documentName);

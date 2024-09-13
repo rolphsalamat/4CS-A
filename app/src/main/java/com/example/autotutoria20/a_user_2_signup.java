@@ -39,6 +39,7 @@ public class a_user_2_signup extends AppCompatActivity {
     TextView emailEditText;
     TextView usernameEditText;
     TextView passwordEditText;
+    TextView retypePaswordEditText;
     DatePicker datePicker;
     RadioGroup genderRadioGroup;
 
@@ -56,6 +57,7 @@ public class a_user_2_signup extends AppCompatActivity {
         emailEditText = findViewById(R.id.txtEmail);
         usernameEditText = findViewById(R.id.txtUsername);
         passwordEditText = findViewById(R.id.txtPassword);
+//        retypePaswordEditText = findViewById(R.id.txtRetypePassword);
         genderRadioGroup = findViewById(R.id.rdoGender);
 
         datePicker = findViewById(R.id.datePicker);
@@ -114,6 +116,7 @@ public class a_user_2_signup extends AppCompatActivity {
             String email = emailEditText.getText().toString();
             String username = usernameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
+            String confirmPassword = retypePaswordEditText.getText().toString();
             String gender = "";
 
             Log.d(TAG, "Retrieved input values: firstName=" + firstName + ", lastName=" + lastName +
@@ -194,6 +197,7 @@ public class a_user_2_signup extends AppCompatActivity {
             validCounter += validateName(firstName, "first");
             validCounter += validateName(lastName, "last");
             validCounter += validatePassword(password);
+            validCounter += validateRetypePassword(password, confirmPassword);
 
             // Now handle asynchronous validations for email and username
             validateEmail(email, () -> {
@@ -205,6 +209,7 @@ public class a_user_2_signup extends AppCompatActivity {
                     Log.d(TAG, "Final validCounter: " + validCounter);
 
                     if (validCounter == 5) {
+//                    if (validCounter == 6) { // eto na kapag may CONFIRM PASSWORD na
                         Log.d(TAG, "All validations passed. Proceeding with signup");
 
                         mAuth.createUserWithEmailAndPassword(email, password)
@@ -259,44 +264,15 @@ public class a_user_2_signup extends AppCompatActivity {
 
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                         Map<String, Object> usernameData = new HashMap<>();
+//                        Map<String, Object> emailData = new HashMap<>();
                         usernameData.put("Username", username);
+//                        emailData.put("Email", email);
+
 
                         db.collection("usernames").document(username).set(usernameData)
                                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Username saved to usernames collection"))
                                 .addOnFailureListener(e -> Log.e(TAG, "Error saving username", e));
 
-
-                        // Original working code
-                        // pero wala itong email verification...
-
-//                        mAuth.createUserWithEmailAndPassword(email, password)
-//                                .addOnCompleteListener(createUserTask -> {
-//                                    if (createUserTask.isSuccessful()) {
-//                                        FirebaseUser user = mAuth.getCurrentUser();
-//                                        String userId = user.getUid();
-//                                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//                                        db.collection("users").document(userId).set(userData)
-//                                                .addOnSuccessListener(aVoid -> {
-//                                                    Log.d(TAG, "User details saved to Firestore");
-//                                                    Toast.makeText(getApplicationContext(), "User details saved to Firestore", Toast.LENGTH_SHORT).show();
-//                                                    saveUserModuleProgress(db, userId, moduleProgressData);
-//                                                    finish();
-//                                                    showUserDetails();
-//                                                })
-//                                                .addOnFailureListener(e -> {
-//                                                    Log.e(TAG, "Error saving user details to Firestore", e);
-//                                                    Toast.makeText(getApplicationContext(), "Error saving user details to Firestore", Toast.LENGTH_SHORT).show();
-//                                                    clearAllFields();
-//                                                });
-//                                    } else {
-//                                        Log.w(TAG, "createUserWithEmail:failure", createUserTask.getException());
-//                                        if (createUserTask.getException() instanceof FirebaseAuthUserCollisionException) {
-//                                            Toast.makeText(getApplicationContext(), "The email is already taken.", Toast.LENGTH_SHORT).show();
-//                                        } else {
-//                                            Toast.makeText(getApplicationContext(), "Authentication failed: " + createUserTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    }
-//                                });
                     } else {
                         Log.d(TAG, "Validation failed. ValidCounter: " + validCounter);
                         validCounter = 0;
@@ -408,50 +384,6 @@ public class a_user_2_signup extends AppCompatActivity {
         }
     }
 
-
-    // Original Code : WORKING
-    // Pero walang catching for error handling kapag empty ang database
-
-//    private void validateUsername(String username, UsernameValidationCallback callback) {
-//        if (username.isEmpty()) {
-//            Toast.makeText(a_user_2_signup.this, "Please enter your username", Toast.LENGTH_SHORT).show();
-//            Log.e("validateUsername", "Please enter your username.");
-//            callback.onValidationComplete(false);
-//        } else if (!username.matches("[a-zA-Z0-9_]+")) {
-//            Toast.makeText(a_user_2_signup.this, "Username can only contain letters, numbers, and underscores", Toast.LENGTH_SHORT).show();
-//            Log.e("validateUsername", "Username can only contain letters, numbers, and underscores");
-//            callback.onValidationComplete(false);
-//        } else if (username.length() < 3) {
-//            Toast.makeText(a_user_2_signup.this, "Username must be at least 3 characters long", Toast.LENGTH_SHORT).show();
-//            Log.e("validateUsername", "Username must be at least 3 characters long");
-//            callback.onValidationComplete(false);
-//        } else {
-//            FirebaseFirestore db = FirebaseFirestore.getInstance();
-//
-//            db.collection("users")
-//                    .whereEqualTo("Username", username)
-//                    .get()
-//                    .addOnCompleteListener(task -> {
-//                        if (task.isSuccessful()) {
-//                            if (!task.getResult().isEmpty()) {
-//                                Toast.makeText(a_user_2_signup.this, "The username is already taken.", Toast.LENGTH_SHORT).show();
-//                                Log.e("validateUsername", "The username is already taken.");
-//                                callback.onValidationComplete(false);
-//                            } else {
-//                                Log.e("validateUsername", username + " is a valid username");
-//                                callback.onValidationComplete(true);
-//                            }
-//                        } else {
-//                            Log.e("SignupActivity", "Error checking username availability", task.getException());
-//                            Toast.makeText(a_user_2_signup.this, "Error checking username. Please try again.", Toast.LENGTH_SHORT).show();
-//                            callback.onValidationComplete(false);
-//                        }
-//                    });
-//
-//        }
-//
-//    }
-
     private int validatePassword(String password) {
         if (password.isEmpty()) {
             Toast.makeText(a_user_2_signup.this, "Please enter your password", Toast.LENGTH_SHORT).show();
@@ -472,6 +404,17 @@ public class a_user_2_signup extends AppCompatActivity {
         }
         Log.e("validatePassword", password + " is a valid password");
         return 1;
+    }
+
+    private int validateRetypePassword(String password, String retypePassword) {
+        if (retypePassword != password) {
+            Toast.makeText(a_user_2_signup.this, "Password does not match.", Toast.LENGTH_SHORT).show();
+            Log.e("validateRetypePassword", "Password does not match.");
+            return 0;
+        } else {
+            Log.e("validateRetypePassword", "Confirm Password match.");
+            return 1;
+        }
     }
 
     private int calculateAge(DatePicker datePicker) {
@@ -565,6 +508,7 @@ public class a_user_2_signup extends AppCompatActivity {
         emailEditText.setText("");
         usernameEditText.setText("");
         passwordEditText.setText("");
+//        retypePasswordEditText.setText("");
         datePicker.updateDate(2000, 0, 1);
         genderRadioGroup.clearCheck();
     }

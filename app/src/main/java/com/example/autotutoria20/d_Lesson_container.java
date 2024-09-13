@@ -52,6 +52,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
     private boolean isLessonFinished = false;
     private long backPressedTime; // Variable to track back press time
     private Toast backToast;
+    private c_Lesson_feedback feedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -406,13 +407,15 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
     }
 
     @Override
-    public void onPostTestComplete(boolean isCorrect) {
+    public void onPostTestComplete(boolean isCorrect, double score) {
         Log.d("onPostTestComplete", "isCorrect: " + isCorrect);
 
         if (isCorrect) {
             isLessonFinished = true;
             updateProgressAndMoveToNextStep();
 //            onNextButtonClicked(); // Proceed to the next step if the test is passed
+
+            feedback.showDialog(score);
 
             showToast("Post Test Complete!");
         } else {
@@ -522,5 +525,4 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
         }
         backPressedTime = System.currentTimeMillis(); // Update the back press time
     }
-
 }

@@ -37,8 +37,6 @@ public class c_Lesson_progressive_6 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.c_lesson_progressive_6);
 
-        feedback = new c_Lesson_feedback(); // Initialize feedback object
-
         FrameLayout card1 = findViewById(R.id.card1);
         FrameLayout card2 = findViewById(R.id.card2);
         FrameLayout card3 = findViewById(R.id.card3);
@@ -177,6 +175,7 @@ public class c_Lesson_progressive_6 extends AppCompatActivity {
                     Log.d("Completed Lesson!", "Lesson 6 Completed! :D");
 
                     Log.e("Comleted Lesson!", "Calling Feedback Class");
+                    feedback = new c_Lesson_feedback(this); // Initialize feedback object
                     feedback.retrieveBKTScore("Progressive Mode", "Lesson 6");
 
                 }

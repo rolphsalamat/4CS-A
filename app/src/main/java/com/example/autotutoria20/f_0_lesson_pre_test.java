@@ -184,25 +184,32 @@ public class f_0_lesson_pre_test extends Fragment {
                 // Update the score
                 bktModel.updateScore(moduleIndex, lessonIndex, knowledgeProb, isProgressiveMode);
 
+                String TAG = "TESTING";
+
                 // to give student chance to get correct answer before loading another question
                 if (answerAttempt >= attemptChances && !correctAnswer) {
-                    loadQuestion(); // Load the next question
-                    answerAttempt = 0;
-                } else if (answerAttempt <= attemptChances && correctAnswer) {
-                    // Notify the listener
-                    if (preTestCompleteListener != null && correctAnswer) {
-                        preTestCompleteListener.onPreTestComplete(correctAnswer);
-                    }
 
                     // Move to the next question
+                    Log.e(TAG, "currentQuestionIndex("+currentQuestionIndex+") < questions.length - 1("+ (questions.length-1)+")");
                     if (currentQuestionIndex < questions.length - 1) {
                         currentQuestionIndex++;
+                        Log.e(TAG,"currentQuestionIndex++;" + currentQuestionIndex);
                     } else {
                         currentQuestionIndex = 0; // Reset to the first question if all are answered
 //                    Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
                         bktModel.logScores();
                     }
+
+                    loadQuestion(); // Load the next question
+                    answerAttempt = 0;
+
+                } else if (answerAttempt <= attemptChances && correctAnswer) {
+                    // Notify the listener
+                    if (preTestCompleteListener != null && correctAnswer) {
+                        preTestCompleteListener.onPreTestComplete(correctAnswer);
+                    }
                 }
+
             }
         });
     }
@@ -274,6 +281,9 @@ public class f_0_lesson_pre_test extends Fragment {
     }
 
     private void loadQuestion() {
+
+        Log.e("loadQuestion", "loadQuestion();");
+
         isCorrect = false;
 
         // Clear previous selection

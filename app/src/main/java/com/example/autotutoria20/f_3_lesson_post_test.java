@@ -45,7 +45,7 @@ public class f_3_lesson_post_test extends Fragment {
 
     // Interface to notify the container activity when post-test is complete
     public interface PostTestCompleteListener {
-        void onPostTestComplete(boolean isCorrect);
+        void onPostTestComplete(boolean isCorrect, double knowledgeProb);
     }
 
     public static f_3_lesson_post_test newInstance(String module, String lesson, String mode) {
@@ -145,58 +145,6 @@ public class f_3_lesson_post_test extends Fragment {
 
                     bktModel.setBKTParameters(difficultyLevel);
 
-//                    // Adjust BKT Model parameters based on difficulty level
-//                    double pInit, pTransit, pSlip, pGuess;
-//
-//                    switch (difficultyLevel) {
-//                        case EASY:
-//                            // Set parameters for EASY difficulty
-//                            pInit = 0.5;    // Example initial probability of knowledge
-//                            pTransit = 0.2; // Example probability of learning the skill after practice
-//                            pSlip = 0.1;    // Example probability of making a mistake despite knowing the skill
-//                            pGuess = 0.4;   // Example probability of guessing the correct answer without knowing the skill
-//                            Log.d("f_post_test", "BKT Difficulty Level: Easy | " + difficultyLevel);
-//                            break;
-//                        case MEDIUM:
-//                            // Set parameters for MEDIUM difficulty
-//                            // Example values for medium difficulty
-//                            pInit = 0.4;
-//                            pTransit = 0.3;
-//                            pSlip = 0.15;
-//                            pGuess = 0.3;
-//                            Log.d("f_post_test", "(pInit:"+pInit+"pTransit:"+pTransit+"pSlip:"+pSlip+"pGuess:"+pGuess);
-//                            Log.d("f_post_test", "BKT Difficulty Level: Medium | " + difficultyLevel);
-//                            break;
-//                        case HARD:
-//                            // Set parameters for HARD difficulty
-//                            pInit = 0.3;
-//                            pTransit = 0.4;
-//                            pSlip = 0.2;
-//                            pGuess = 0.2;
-//                            Log.d("f_post_test", "(pInit:"+pInit+"pTransit:"+pTransit+"pSlip:"+pSlip+"pGuess:"+pGuess);
-//                            Log.d("f_post_test", "BKT Difficulty Level: Hard | " + difficultyLevel);
-//                            break;
-//                        default:
-//                            // Fallback to default values
-//                            pInit = 0.3;
-//                            pTransit = 0.2;
-//                            pSlip = 0.1;
-//                            pGuess = 0.4;
-//                            Log.d("f_post_test", "(pInit:"+pInit+"pTransit:"+pTransit+"pSlip:"+pSlip+"pGuess:"+pGuess);
-//                            Log.d("f_post_test", "BKT Difficulty Level: Default | " + difficultyLevel);
-//                            break;
-//                    }
-//                    String TAG = "Parameter Check";
-//
-//                    Log.e(TAG, "Difficulty: " + difficultyLevel);
-//                    Log.e(TAG, "pInit: " + pInit);
-//                    Log.e(TAG, "pTransit: " + pTransit);
-//                    Log.e(TAG, "pSlip: " + pSlip);
-//                    Log.e(TAG, "pGuess: " + pGuess);
-//
-//                    // Initialize BKT Model instance with the parameters based on difficulty
-//                    bktModel = x_bkt_algorithm.getInstance(pInit, pTransit, pSlip, pGuess);
-
                     // Retrieve post-test questions based on difficulty level
                     questions = getPostTestQuestionsBasedOnDifficulty(module, lesson, difficultyLevel);
                     loadQuestion();
@@ -263,180 +211,34 @@ public class f_3_lesson_post_test extends Fragment {
                 // Update the score
                 bktModel.updateScore(moduleIndex, lessonIndex, knowledgeProb, isProgressiveMode);
 
-
+                String TAG = "TESTING";
 
                 // to give student chance to get correct answer before loading another question
                 if (answerAttempt >= attemptChances && !correctAnswer) {
-                    loadQuestion(); // Load the next question
-                    answerAttempt = 0;
-                } else if (answerAttempt <= attemptChances && correctAnswer) {
-                    // Notify the listener
-                    if (postTestCompleteListener != null && correctAnswer) {
-                        postTestCompleteListener.onPostTestComplete(correctAnswer);
-                    }
 
                     // Move to the next question
+                    Log.e(TAG, "currentQuestionIndex("+currentQuestionIndex+") < questions.length - 1("+ (questions.length-1)+")");
                     if (currentQuestionIndex < questions.length - 1) {
                         currentQuestionIndex++;
+                        Log.e(TAG,"currentQuestionIndex++;" + currentQuestionIndex);
                     } else {
                         currentQuestionIndex = 0; // Reset to the first question if all are answered
 //                    Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
                         bktModel.logScores();
                     }
+
+                    loadQuestion(); // Load the next question
+                    answerAttempt = 0;
+
+                } else if (answerAttempt <= attemptChances && correctAnswer) {
+                    // Notify the listener
+                    if (postTestCompleteListener != null && correctAnswer) {
+                        postTestCompleteListener.onPostTestComplete(correctAnswer, knowledgeProb);
+                    }
                 }
             }
         });
     }
-
-//    @Override
-//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//
-//        questionText = view.findViewById(R.id.post_test_question);
-//        choicesGroup = view.findViewById(R.id.choices_group);
-//        submitButton = view.findViewById(R.id.submit_post_test);
-//        identificationAnswer = view.findViewById(R.id.identification_answer);
-//
-//        // Initialize BKT Model instance with appropriate parameters
-//        bktModel = x_bkt_algorithm.getInstance(0.3, 0.2, 0.1, 0.4);
-//
-//        if (getArguments() != null) {
-//            String module = getArguments().getString(ARG_MODULE);
-//            String lesson = getArguments().getString(ARG_LESSON);
-//
-//            // Determine if it's Progressive Mode
-//            isProgressiveMode = getArguments().getString(ARG_MODE).equals("Progressive Mode");
-//
-//            int lessonNumber = getLessonIndex(lesson);
-//
-//            // Initialize BKT Scores
-//            String collectionPath = isProgressiveMode ? "Progressive Mode" : "Free Use Mode";
-//            String documentName = "Lesson " + (lessonNumber + 1);
-//            bktModel.initializeBKTScores(collectionPath, documentName, bktScores -> {
-//                if (bktScores != null && !bktScores.isEmpty()) {
-//                    double userScore = bktScores.get(0);  // Assuming the score is the first item
-//                    Log.d("f_post_test", "User BKT Score: " + userScore);
-//
-//                    // Determine difficulty based on score
-//                    e_Question.Difficulty difficultyLevel = getDifficultyLevel(userScore);
-//                    Log.d("f_post_test", "Determined Difficulty Level: " + difficultyLevel);
-//
-//                    // Retrieve post-test questions based on difficulty level
-//                    questions = getPostTestQuestionsBasedOnDifficulty(module, lesson, difficultyLevel);
-//                    loadQuestion();
-//                } else {
-//                    Log.e("f_post_test", "Failed to retrieve BKT Scores");
-//                }
-//            });
-//        }
-//
-//        submitButton.setOnClickListener(v -> {
-//            // Handle the submission of answers (you already have this implemented)
-//        });
-//    }
-
-
-//    @Override
-//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//
-//        questionText = view.findViewById(R.id.post_test_question); // Ensure this ID matches the layout
-//        choicesGroup = view.findViewById(R.id.choices_group); // Ensure this ID matches the layout
-//        submitButton = view.findViewById(R.id.submit_post_test);
-//        EditText identificationAnswer = view.findViewById(R.id.identification_answer);
-//
-//        // Initialize BKT Model instance with appropriate parameters
-//        bktModel = x_bkt_algorithm.getInstance(0.3, 0.2, 0.1, 0.4);
-//
-//        if (getArguments() != null) {
-//            String module = getArguments().getString(ARG_MODULE);
-//            String lesson = getArguments().getString(ARG_LESSON);
-//
-//            Log.e("f_post_test.java", "module: " + module);
-//            Log.e("f_post_test.java", "lesson: " + lesson);
-//
-//            // Determine if it's Progressive Mode
-//            if (getArguments() != null) {
-//                isProgressiveMode = getArguments().getString(ARG_MODE).equals("Progressive Mode");
-//            }
-//
-//            int lessonNumber = getLessonIndex(lesson);
-//
-//            // Initialize BKT Scores
-//            String collectionPath = isProgressiveMode ? "Progressive Mode" : "Free Use Mode";
-//            String documentName = "Lesson " + (lessonNumber + 1);
-//            bktModel.initializeBKTScores(collectionPath, documentName, bktScores -> {
-//                if (bktScores != null) {
-//                    Log.d("f_post_test", "BKT Scores initialized: " + bktScores);
-//                } else {
-//                    Log.e("f_post_test", "Failed to retrieve BKT Scores");
-//                }
-//            });
-//
-//            // Retrieve questions based on module and lesson
-//            questions = getPostTestQuestions(module, lesson);
-//
-//            // Load the first question
-//            loadQuestion();
-//        }
-//
-//        submitButton.setOnClickListener(v -> {
-//
-//            if (choicesGroup.getCheckedRadioButtonId() == -1) {
-//                Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
-//                return;
-//            } else {
-//
-//                answerAttempt++;
-//
-//                boolean correctAnswer = checkAnswer();
-//                Log.e("submitButton.onClick", "correctAnswer: " + correctAnswer);
-//
-//                // Update BKT model with the result of the answer
-//                bktModel.updateKnowledge(correctAnswer);
-//
-//                // Log the updated knowledge probability
-//                double knowledgeProb = bktModel.getKnowledgeProbability();
-//                Log.e("submitButton.onClick", "Updated Knowledge Probability: " + knowledgeProb);
-//
-//                // Ensure valid indices are used
-//                int moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
-//                int lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
-//
-//                if (moduleIndex < 0 || lessonIndex < 0) {
-//                    Log.e("submitButton.onClick", "Invalid module or lesson index");
-//                    return;
-//                }
-//
-//                // Update the score
-//                bktModel.updateScore(moduleIndex, lessonIndex, knowledgeProb, isProgressiveMode);
-//
-//                // Notify the listener
-//                if (postTestCompleteListener != null) {
-//                    postTestCompleteListener.onPostTestComplete(correctAnswer);
-//                }
-//
-//                // Move to the next question
-//                if (currentQuestionIndex < questions.length - 1) {
-//                    currentQuestionIndex++;
-//                } else {
-//                    currentQuestionIndex = 0; // Reset to the first question if all are answered
-////                    Toast.makeText(getContext(), "Post-test completed!", Toast.LENGTH_SHORT).show();
-//                    bktModel.logScores();
-//                }
-//
-//                // to give student chance to get correct answer before loading another question
-//                if (answerAttempt == attemptChances) {
-//                    if (!correctAnswer) {
-//                        loadQuestion(); // Load the next question
-//                        answerAttempt = 0;
-//                    }
-//                }
-//            }
-//
-//
-//        });
-//    }
 
     private e_Question[] getPostTestQuestions(String module, String lesson) {
         String key = module + "_" + lesson;
