@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Button
+        android:id="@+id/buttonNovice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Novice" />
+
+    <Button
+        android:id="@+id/buttonBeginner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Beginner" />
+
+    <Button
+        android:id="@+id/buttonIntermediate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Intermediate" />
+
+    <Button
+        android:id="@+id/buttonAdvanced"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Advanced" />
+
+    <Button
+        android:id="@+id/buttonExpert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Expert" />
+
+</LinearLayout>

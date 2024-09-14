@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Map;
+
 public class b_main_0_menu_tutorial extends AppCompatActivity {
 
     private WebView webView;
@@ -25,6 +27,7 @@ public class b_main_0_menu_tutorial extends AppCompatActivity {
     private View youtubeButton;
     private View googleDriveButton;
     private FirebaseAuth mAuth;
+    private Map<String, Object> userData;
 
     // Known publicly available YouTube video
     String videoUrl = "0MJAYH7o5fs";
@@ -74,11 +77,19 @@ public class b_main_0_menu_tutorial extends AppCompatActivity {
             Log.d(TAG, "Finish button clicked, marking tutorial as completed");
             markTutorialAsCompleted();
 
-            // Redirect to the main menu after completing the tutorial
-            Intent mainMenuIntent = new Intent(b_main_0_menu_tutorial.this, b_main_0_menu.class);
+            // this is the ORIGINAL CODE
+//            // Redirect to the main menu after completing the tutorial
+//            Intent mainMenuIntent = new Intent(b_main_0_menu_tutorial.this, b_main_0_menu.class);
+//            startActivity(mainMenuIntent);
+//            Log.d(TAG, "Redirecting to main menu");
+
+            // since first log in sya, ask user about category..
+            Intent mainMenuIntent = new Intent(b_main_0_menu_tutorial.this, b_main_0_menu_categorize_user.class);
             startActivity(mainMenuIntent);
-            Log.d(TAG, "Redirecting to main menu");
+            Log.d(TAG, "Redirecting to categorization");
+
             finish();
+
         });
     }
 

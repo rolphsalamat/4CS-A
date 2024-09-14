@@ -1,8 +1,13 @@
 package com.example.autotutoria20;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -12,6 +17,8 @@ import java.util.Map;
 public class x_bkt_algorithm {
 
     private static final String TAG = "x_bkt_algorithm";
+    private Context context;
+
     private FirebaseFirestore db;
     private String userId;
     private List<Double> bktScores;
@@ -38,6 +45,8 @@ public class x_bkt_algorithm {
     String good_string = "Good";
     String very_good_string = "Very Good";
     String undefined_string = "Undefined";
+
+    String category;
 
     // Singleton instance (if you need it to be a singleton)
     private static x_bkt_algorithm instance;
@@ -67,6 +76,68 @@ public class x_bkt_algorithm {
         this.forgetRate = forgetRate;
         this.slipRate = slip;
     }
+
+    public interface FetchCategoryCallback {
+        void onCategoryFetched(String category);
+    }
+
+
+    public void retrieveUserCategory(FetchCategoryCallback callback) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = user != null ? user.getUid() : null;
+
+        if (userId == null) {
+            Log.e(TAG, "User not authenticated");
+            callback.onCategoryFetched(null);
+            return;
+        }
+
+        db.collection("users").document(userId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+
+                        category = documentSnapshot.getString("User Category");
+                        Log.d(TAG, "User Category retrieved: " + category);
+                        callback.onCategoryFetched(category);
+                        updateKnowledgeProbability();
+
+                        // Pag di mapagana to putanginamo wag nalang
+//                        // SharedPreferences nalang
+//                        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+//                        SharedPreferences.Editor editor = sharedPreferences.edit();
+//
+//                        editor.putString("User Category", category);
+
+                    } else {
+                        Log.e(TAG, "No such document");
+                        callback.onCategoryFetched(null);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error retrieving User Category", e);
+                    callback.onCategoryFetched(null);
+                });
+    }
+
+    public void updateKnowledgeProbability() {
+
+        // Level 1 [0.0 - 0.1] Novice
+        knowledgeProbability = 0.0 + (0.1 - 0.0) * Math.random();
+        // Level 2 [0.1 - 0.3] Beginner
+        knowledgeProbability = 0.1 + (0.3 - 0.1) * Math.random();
+        // Level 3 [0.3 - 0.5] Intermediate
+        knowledgeProbability = 0.3 + (0.5 - 0.3) * Math.random();
+        // Level 4 [0.5 - 0.7] Advanced
+        knowledgeProbability = 0.5 + (0.7 - 0.5) * Math.random();
+        // Level 5 [0.7 - 0.9] Expert
+        knowledgeProbability = 0.7 + (0.9 - 0.7) * Math.random();
+
+        Log.e("User Category", "Category: " + category);
+        Log.e("User Category", "pKnow: " + knowledgeProbability);
+
+    }
+
 
     public e_Question.Difficulty getDifficultyLevel(double bktScore) {
 
@@ -189,6 +260,9 @@ public class x_bkt_algorithm {
             return;
         }
 
+        Log.e("updateScore", "Category: " + category);
+        Log.e("updateScore", "pKnow: " + knowledgeProbability);
+
         // Determine the correct collection based on the learning mode
         String collectionPath = isProgressiveMode ? "Progressive Mode" : "Free Use Mode";
         String documentName = "Lesson " + (lessonIndex + 1);
@@ -204,25 +278,37 @@ public class x_bkt_algorithm {
                 .addOnFailureListener(e -> Log.e(TAG, "Error updating BKT Scores in Firestore", e));
     }
 
-
-    // Example BKT algorithm logic for updating knowledge
-    // ETO YUNG ORIGINAL CODE
+//    // NEW CODE *suggested by ChatGPT 4o Plus
 //    public void updateKnowledge(boolean correct) {
 //        if (correct) {
-//            knowledgeProbability = knowledgeProbability * (1 - forgetRate) + (1 - knowledgeProbability) * learnRate;
+//            knowledgeProbability = (knowledgeProbability * (1 - forgetRate)) + ((1 - knowledgeProbability) * learnRate);
 //        } else {
-//            knowledgeProbability = knowledgeProbability * forgetRate;
+//            knowledgeProbability = (knowledgeProbability * forgetRate * slipRate);
 //        }
 //    }
 
-    // NEW CODE *suggested by ChatGPT 4o Plus
+    // Level 1 [0.0 - 0.1] Novice
+    // Level 2 [0.1 - 0.3] Beginner
+    // Level 3 [0.3 - 0.5] Intermediate
+    // Level 4 [0.5 - 0.7] Advanced
+    // Level 5 [0.7 - 0.9] Expert
+
+    // optimized version daw??
     public void updateKnowledge(boolean correct) {
+
+        Log.e("updateKnowledge", "Category: " + category);
+        Log.e("updateKnowledge", "pKnow: " + knowledgeProbability);
+
         if (correct) {
-            knowledgeProbability = (knowledgeProbability * (1 - forgetRate)) + ((1 - knowledgeProbability) * learnRate);
+            knowledgeProbability = knowledgeProbability * (1 - forgetRate) + (1 - knowledgeProbability) * learnRate;
         } else {
-            knowledgeProbability = (knowledgeProbability * forgetRate * slipRate);
+            knowledgeProbability = knowledgeProbability * forgetRate * slipRate;
         }
+
+        // Ensure knowledgeProbability stays within bounds [0, 1]
+        knowledgeProbability = Math.max(0, Math.min(1, knowledgeProbability));
     }
+
 
 
     public double getKnowledgeProbability() {

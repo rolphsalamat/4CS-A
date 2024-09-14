@@ -51,6 +51,7 @@
 
         <!-- MAIN MENU -->
         <activity android:name=".b_main_0_menu" android:exported="true"/>
+        <activity android:name=".b_main_0_menu_categorize_user" android:exported="true"/>
         <activity android:name=".b_main_0_menu_logout" android:exported="true"/>
         <activity android:name=".b_main_0_menu_rateUs" android:exported="true"/>
         <activity android:name=".b_main_0_menu_settings" android:exported="true"/>

@@ -101,6 +101,23 @@ public class b_main_0_menu extends AppCompatActivity {
 
         showLoadingDialog();
 
+        // Instantiate x_bkt_algorithm
+        x_bkt_algorithm algorithm = new x_bkt_algorithm();
+
+        // Retrieve user category
+        algorithm.retrieveUserCategory(new x_bkt_algorithm.FetchCategoryCallback() {
+            @Override
+            public void onCategoryFetched(String category) {
+                // Handle the retrieved category here
+                if (category != null) {
+                    Log.d("MainActivity", "User Category: " + category);
+                    // You can now use the category for further processing
+                } else {
+                    Log.d("MainActivity", "Failed to retrieve user category.");
+                }
+            }
+        });
+
         // Initialize FirebaseAuth
         mAuth = FirebaseAuth.getInstance();
 

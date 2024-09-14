@@ -1,29 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="450dp"
+    android:orientation="vertical"
+    android:background="@drawable/very_bad_0"
+    android:gravity="center_horizontal">
 
-    <FrameLayout
+    <TextView
+        android:id="@+id/very_bad_score"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="135dp"
+        android:text="0/0"
+        android:textSize="50sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/mouldy_cheese"
+        android:gravity="center" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/very_bad_0"
-            />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" /> <!-- Spacer to push button down -->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2/10"
-            android:textColor="@color/white"
-            android:textSize="55sp"
-            android:fontFamily="@font/mouldy_cheese"
-            android:layout_gravity="center"
-            android:layout_marginBottom="50dp"
-            />
+    <Button
+        android:id="@+id/button_okay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginBottom="20dp"
+        android:text="Okay, thanks"
+        android:textSize="16sp"
+        android:gravity="center" />
 
-    </FrameLayout>
 </LinearLayout>

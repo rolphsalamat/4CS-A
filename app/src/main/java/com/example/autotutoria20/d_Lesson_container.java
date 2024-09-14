@@ -255,6 +255,15 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
                         Toast.makeText(d_Lesson_container.this, "You can't access this step yet!", Toast.LENGTH_SHORT).show();
                     }
                     currentStep = stepIndex;
+
+                    // re-show nextButton
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            nextButton.setVisibility(View.VISIBLE);
+                            nextButton.setEnabled(true);
+                        }
+                    }, 3000); // show after 3 seconds
                 }
             });
 
@@ -415,7 +424,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
             updateProgressAndMoveToNextStep();
 //            onNextButtonClicked(); // Proceed to the next step if the test is passed
 
-            feedback.showDialog(score);
+//            feedback.showDialog(score);
 
             showToast("Post Test Complete!");
         } else {

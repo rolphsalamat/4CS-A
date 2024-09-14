@@ -2,9 +2,11 @@ package com.example.autotutoria20;
 
 import android.content.Context;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,9 +19,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 public class c_Lesson_feedback {
@@ -101,6 +106,10 @@ public class c_Lesson_feedback {
 
             moduleCount++;
 
+            Log.e("LessonFeedback", "Module " + moduleCount + ": " + score);
+            Log.e("LessonFeedback", "feedbackScore += score;");
+            Log.e("LessonFeedback", "feedbackScore: " + feedbackScore);
+
             String feedback;
             if (score < algo_feedback.very_bad) {
                 showFeedbackDialog(algo_feedback.very_bad_string);
@@ -134,10 +143,14 @@ public class c_Lesson_feedback {
 
         // Calculate and round off the total feedback score
         double totalFeedback = feedbackScore / moduleCount;
-        int roundedFeedback = (int) Math.round(totalFeedback);
+        Log.e("LessonFeedback", "totalFeedback: " + totalFeedback);
+//        int roundedFeedback = (int) Math.round(totalFeedback);
+//        Log.e("LessonFeedback", "roundedFeedback: " + roundedFeedback);
 
         // Show the dialog with the rounded feedback score
-        showDialog(roundedFeedback);
+//        Log.e("LessonFeedback", "showDialog("+roundedFeedback+");");
+        Log.e("LessonFeedback", "showDialog("+totalFeedback+");");
+        showDialog(totalFeedback);
 
     }
 
@@ -173,7 +186,10 @@ public class c_Lesson_feedback {
 
     public void showDialog(double doubleScore) {
 
-        int score = (int) Math.round(doubleScore);
+//        int score = (int) Math.round(doubleScore);
+
+        // para di na mag rename isa-isa :D
+        double score = doubleScore;
 
         Toast.makeText(context, "HOY!", Toast.LENGTH_SHORT).show();
         Log.e("c_Lesson_feedback", "showDialog()");
@@ -181,22 +197,115 @@ public class c_Lesson_feedback {
         Log.e("c_Lesson_feedback", "Score: " + score);
 
         int layoutId = 0;
+        int category = 0;
 
-        if (score <= 2) layoutId = R.layout.c_lesson_feedback_0_very_bad;
-        else if (score == 3 || score == 4) layoutId = R.layout.c_lesson_feedback_1_bad;
-        else if (score == 5 || score == 6) layoutId = R.layout.c_lesson_feedback_2_neutral;
-        else if (score == 7 || score == 8) layoutId = R.layout.c_lesson_feedback_3_good;
-        else layoutId = R.layout.c_lesson_feedback_4_very_good;
+        double veryBad = 0.2; // or 0.20 to negative infintie
+        double bad = 0.4;
+        double neutral = 0.6;
+        double good = 0.8;
+        double veryGood = 1.0; // or 0.81 to positive infinite
+
+        if (score <= veryBad) {
+            category = 1;
+            Log.e("c_Lesson_feedback", "Layout: " + "very bad");
+            layoutId = R.layout.c_lesson_feedback_0_very_bad;
+        }
+        else if (score > veryBad && score <= bad) {
+            category = 2;
+            Log.e("c_Lesson_feedback", "Layout: " + "bad");
+            layoutId = R.layout.c_lesson_feedback_1_bad;
+        }
+        else if (score > bad && score <= neutral) {
+            category = 3;
+            Log.e("c_Lesson_feedback", "Layout: " + "neutral");
+            layoutId = R.layout.c_lesson_feedback_2_neutral;
+        }
+        else if (score > neutral && score <= good) {
+            category = 4;
+            Log.e("c_Lesson_feedback", "Layout: " + "good");
+            layoutId = R.layout.c_lesson_feedback_3_good;
+        }
+        else {
+            category = 5;
+            Log.e("c_Lesson_feedback", "Layout: " + "very good");
+            layoutId = R.layout.c_lesson_feedback_4_very_good;
+        }
         
         if (layoutId == 0) {
             Log.e("showDialog", "layoutId is 0?? :<");
         } else {
-            Log.e("showDialog", "OKAY ETO NA!!!");
-            // Create and show the dialog with the selected layout
+
+            // Inflate the layout
+            View customView = View.inflate(context, layoutId, null);
+
+            score = score*100;
+
+            // ROUND OFF
+            int decimalPlaces = 2; // Change this to the number of decimal places you want
+            // Convert double to BigDecimal
+            BigDecimal bd = new BigDecimal(score);
+            // Round BigDecimal to specified number of decimal places
+            BigDecimal rounded = bd.setScale(decimalPlaces, RoundingMode.HALF_UP);
+            // Convert back to double if needed
+            double roundedScore = rounded.doubleValue();
+
+            // Create and show the dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setView(View.inflate(context, layoutId, null));
+            builder.setView(customView);
             AlertDialog dialog = builder.create();
             dialog.show();
+
+            // Convert 450dp to pixels
+            int heightInPx = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, 450, context.getResources().getDisplayMetrics());
+
+            // Adjust dialog window parameters
+            Objects.requireNonNull(dialog.getWindow()).setLayout(
+                    ViewGroup.LayoutParams.MATCH_PARENT, // Width = match_parent
+                    heightInPx // Height = 450dp in pixels
+            );
+
+            switch(category) {
+                case 1:
+                    // Find the TextView and set the new text
+                    TextView veryBadScoreTextView = customView.findViewById(R.id.very_bad_score);
+                    veryBadScoreTextView.setText(roundedScore + "%");  // Change the text here
+                    break;
+                case 2:
+                    // Find the TextView and set the new text
+                    TextView badScoreTextView = customView.findViewById(R.id.bad_score);
+                    badScoreTextView.setText(roundedScore + "%");  // Change the text here
+                    break;
+                case 3:
+                    // Find the TextView and set the new text
+                    TextView neutralScoreTextView = customView.findViewById(R.id.neutral_score);
+                    neutralScoreTextView.setText(roundedScore + "%");  // Change the text here
+                    break;
+                case 4:
+                    // Find the TextView and set the new text
+                    TextView goodScoreTextView = customView.findViewById(R.id.good_score);
+                    goodScoreTextView.setText(roundedScore + "%");  // Change the text here
+                    break;
+                case 5:
+                    // Find the TextView and set the new text
+                    TextView veryGoodScoreTextView = customView.findViewById(R.id.very_good_score);
+                    veryGoodScoreTextView.setText(roundedScore + "%");  // Change the text here
+                    break;
+                default:
+                    Log.e("switchCase", "ERROR! T_T");
+                    break;
+            }
+
+            // Find the button and set the OnClickListener to dismiss the dialog
+            Button button = customView.findViewById(R.id.button_okay);
+            button.setOnClickListener(v -> dialog.dismiss()); // dismiss the dialog on button click
+
+//            Log.e("showDialog", "OKAY ETO NA!!!");
+//            // Create and show the dialog with the selected layout
+//            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//            builder.setView(View.inflate(context, layoutId, null));
+//            AlertDialog dialog = builder.create();
+//            dialog.show();
         }
     }
 
