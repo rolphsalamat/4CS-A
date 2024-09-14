@@ -3,8 +3,13 @@
 
     <!-- Module 2 | Page 1 -->
     <!-- int[] module1_2_1 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
-    <string name="module1_2_1_title">Welcoming introduction</string>
-    <string name="module1_2_1_content_1">In this lesson, we will explore the fundamental operations on strings, which are essential for manipulating and analyzing sequences in formal language theory. As you engage with the concepts of concatenation, length, reversal, substrings, prefixes, suffixes, and the empty string, you\'ll build a solid foundation for understanding more complex aspects of language theory. Let\'s dive into these basic yet crucial operations that will equip you with the tools to delve deeper into automata theory and formal languages.</string>
+    <string name="module1_2_1_title">REGULAR LANGUAGES</string>
+    <string name="module1_2_1_content_1">In this lesson, we will explore the fundamental operations
+on strings, which are essential for manipulating and analyzing sequences in formal language theory. As
+you engage with the concepts of concatenation, length, reversal, substrings, prefixes, suffixes, and the
+empty string, you\'ll build a solid foundation for understanding more complex aspects of language
+theory. Let\'s dive into these basic yet crucial operations that will equip you with the tools to delve
+deeper into automata theory and formal languages.</string>
     <string name="module1_2_1_content_2"></string>
     <string name="module1_2_1_content_3"></string>
     <string name="module1_2_1_content_4"></string>
@@ -15,25 +20,40 @@
 
     <!-- Module 2 | Page 2 -->
     <!-- int[] module1_2_2 = {0, 1, 0, 1, 0, 1, 0, 0}; -->
-    <string name="module1_2_2_title">AHEEESHESHE</string>
-    <string name="module1_2_2_content_1">In formal language theory, strings are sequences of symbols from a given alphabet and serve as the building blocks of languages. Understanding operations on strings is fundamental for manipulating and analyzing these sequences. The key operations include:</string>
-    <string name="module1_2_2_content_2">Example: If s1 ​= "abc" and s2 ​= "def", then s1s2  ​=  "abcdef".</string>
-    <string name="module1_2_2_content_3">Length: Counting the number of symbols in a string.</string>
-    <string name="module1_2_2_content_4">Example: For the string "hello", its length ∣s∣=5.</string>
-    <string name="module1_2_2_content_5">Reversal: Reversing the order of characters in a string.</string>
-    <string name="module1_2_2_content_6">Example: If s = "abcd", then the reversal sR = "dcba".</string>
-    <string name="module1_2_2_content_7"></string>
+    <string name="module1_2_2_title"></string>
+    <string name="module1_2_2_content_1">In formal language theory, strings are sequences of symbols
+from a given alphabet and serve as the building blocks of languages. Understanding operations on strings
+is fundamental for manipulating and analyzing these sequences. The key operations include:</string>
+    <string name="module1_2_2_content_2">Concatenation: Combining two strings end-to-end.</string>
+    <string name="module1_2_2_content_3">Example: If s1 = "abc" and s2 = "def", then s1s2
+= "abcdef".</string>
+
+    <string name="module1_2_2_content_4">Length: Counting the number of symbols in a
+string.</string>
+    <string name="module1_2_2_content_5">Example: For the string "hello", its length ∣5∣.</string>
+    <string name="module1_2_2_content_6">Reversal: Reversing the order of characters in a
+string.</string>
+    <string name="module1_2_2_content_7">Example: If s = "abcd", then the reversal sR
+=
+
+"dcba".</string>
     <string name="module1_2_2_content_8"></string>
 
     <!-- Module 2 | Page 3 -->
     <!-- int[] module1_2_3 = {0, 1, 0, 1, 0, 1, 0, 0}; -->
     <string name="module1_2_3_title"></string>
-    <string name="module1_2_3_content_1">Substring: Extracting a contiguous sequence of characters from a string.</string>
-    <string name="module1_2_3_content_2">Example: For the string \"automata\", \"auto\", \"tom\", and \"mata\" are substrings.</string>
-    <string name="module1_2_3_content_3">Prefix and Suffix: A prefix starts from the beginning of a string, while a suffix ends at the string\'s end.</string>
-    <string name="module1_2_3_content_4">Example: For the string "abcdef", "abc" is a prefix, and "def" is a suffix.</string>
-    <string name="module1_2_3_content_5">Empty String: A string with no characters, denoted by ϵ , with a length of 0.</string>
-    <string name="module1_2_3_content_6">Example: Concatenating ϵ to any string s results in the same string s.</string>
+    <string name="module1_2_3_content_1">Substring: Extracting a contiguous sequence of characters
+from a string.</string>
+    <string name="module1_2_3_content_2">Example: For the string \"automata\", \"auto\", \"tom\",
+and \"mata\" are substrings.</string>
+    <string name="module1_2_3_content_3">Prefix and Suffix: A prefix starts from the beginning of a
+string, while a suffix ends at the string\'s end.</string>
+    <string name="module1_2_3_content_4">Example: For the string "abcdef", "abc" is a prefix, and "def"
+is a suffix.</string>
+    <string name="module1_2_3_content_5">Empty String: A string with no characters, denoted by ε ,
+with a length of 0.</string>
+    <string name="module1_2_3_content_6">Example: Concatenating ε to any string s results in the same
+string s.</string>
     <string name="module1_2_3_content_7"></string>
     <string name="module1_2_3_content_8"></string>
 

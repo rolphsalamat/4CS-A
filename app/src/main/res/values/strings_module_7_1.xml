@@ -1,2 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <!-- Module 7_1 page 1 -->
+    <!-- int[] module7_1_1 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module7_1_1_title">NORMAL FORMS OF CONTEXT-FREE GRAMMAR (CFG)</string>
+    <string name="module7_1_1_content_1">In this module, we’ll explore how CFGs, an essential tool in
+defining the syntax of languages, are transformed into simplified and structured forms known as
+Chomsky Normal Form (CNF) and Greibach Normal Form (GNF). These normal forms not only make CFGs
+easier to work with but are also key in various applications like parsing and automata theory. By
+mastering CNF and GNF, you'll gain the skills to efficiently manipulate grammars and streamline language
+processing tasks. Let’sdive into the world of structured grammar transformations.</string>
+    <string name="module7_1_1_content_2"></string>
+
+    <!-- Module 7_1 page 2 -->
+    <!-- int[] module7_1_2 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module7_1_2_title"></string>
+    <string name="module7_1_2_content_1">The lesson focuses on Context-Free Grammars (CFGs) and
+the concept of normal forms used to simplify and manage these grammars. It introduces two key normal
+forms: Chomsky Normal Form (CNF) and Greibach Normal Form (GNF). The document covers the steps
+involved in converting a CFG to both CNF and GNF, emphasizing their importance in theoretical computer
+science and practical applications, such as parsing and language processing.</string>
+    <string name="module7_1_2_content_2"></string>
+    <string name="module7_1_2_content_3"></string>
+
+    <string name="module7_1_2_content_4"></string>
+    <string name="module7_1_2_content_5"></string>
+    <string name="module7_1_2_content_6"></string>
+    <string name="module7_1_2_content_7"></string>
+    <string name="module7_1_2_content_8"></string>
+
+    <!-- Module 7_1 page 3 -->
+    <!-- int[] module7_1_3 = {0, 0, 1, 1, 1, 0, 1, 1, 1}; -->
+    <string name="module7_1_3_title"></string>
+    <string name="module7_1_3_content_1">Chomsky Normal Form (CNF):</string>
+    <string name="module7_1_3_content_2">Production rules in CNF generate either two non-terminals
+or a single terminal.</string>
+    <string name="module7_1_3_content_3">CNF is highly structured, making it useful for algorithms like
+the CYK algorithm used in string derivation.</string>
+    <string name="module7_1_3_content_4">Steps to convert a CFG to CNF include removing null
+productions, unit productions, and simplifying complex rules.</string>
+    <string name="module7_1_3_content_5">Greibach Normal Form (GNF):</string>
+    <string name="module7_1_3_content_6">In GNF, every production begins with a terminal followed by
+non-terminals.</string>
+    <string name="module7_1_3_content_7">It is particularly useful for top-down parsing and eliminating
+left recursion in grammars.</string>
+    <string name="module7_1_3_content_8">The document explains how to convert CFGs to GNF by first
+converting them to CNF and then modifying the productions to fit the GNF criteria.</string>
+
+    <!-- Module 7_1 page 4 -->
+    <!-- int[] module7_1_3 = {0, 0, 1, 1, 1, 0, 0, 0}; -->
+    <string name="module7_1_4_title"></string>
+    <string name="module7_1_4_content_1">Importance of CNF and GNF:</string>
+    <string name="module7_1_4_content_2">CNF is vital for parsing algorithms that require a structured
+approach to derivations.</string>
+
+    <string name="module7_1_4_content_3">GNF supports parsers that work with leftmost
+derivations.</string>
+    <string name="module7_1_4_content_4">Both normal forms are crucial in making CFGs easier to
+handle in theoretical and practical applications.</string>
+    <string name="module7_1_4_content_5"></string>
+    <string name="module7_1_4_content_6"></string>
+    <string name="module7_1_4_content_7"></string>
+    <string name="module7_1_4_content_8"></string>
+
+    <!-- Module 7_1 page 5 -->
+    <!-- int[] module7_1_5 = {0, 0, 0, 1, 1, 1, 0, 1, 1}; -->
+    <string name="module7_1_5_title"></string>
+    <string name="module7_1_5_content_1">Basic Examples from the Document:</string>
+    <string name="module7_1_5_content_2">Chomsky Normal Form (CNF) Example:</string>
+    <string name="module7_1_5_content_3">Given: S → a | aA | B</string>
+    <string name="module7_1_5_content_4">Steps: Introduce a new start symbol S1 → S, eliminate null
+production A → ε, and remove unit production S → B.</string>
+    <string name="module7_1_5_content_5">Result: S1 → a | XA | b, A → XBB, B → XA | b, X →
+a.</string>
+    <string name="module7_1_5_content_6">Greibach Normal Form (GNF) Example:</string>
+    <string name="module7_1_5_content_7">Given: S → XB | AA, A → a | SA, B → b, X → a</string>
+    <string name="module7_1_5_content_8">GNF Result: S → ab | aA, A → aBA | a, B → b, X → a.</string>
+
+</resources>

@@ -33,7 +33,7 @@
             <!-- Repeatable layout for each lesson content -->
             <!-- Horizontal layout for image and text side by side -->
             <LinearLayout
-                android:id="@+id/content_1"
+                android:id="@+id/content_01"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -41,7 +41,7 @@
 
                 <!-- ImageView for the bullet or sample image -->
                 <ImageView
-                    android:id="@+id/image_lesson_content_1"
+                    android:id="@+id/image_lesson_content_01"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_gravity="top"
@@ -49,12 +49,12 @@
 
                 <!-- TextView for the text next to the image -->
                 <TextView
-                    android:id="@+id/text_lesson_content_1"
+                    android:id="@+id/text_lesson_content_01"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Lesson Content 1"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textColor="@color/white"
                     android:justificationMode="inter_word"
                     android:letterSpacing="0.0025"
@@ -64,14 +64,14 @@
 
             <!-- Repeat similar blocks for other contents, only changing the id -->
             <LinearLayout
-                android:id="@+id/content_2"
+                android:id="@+id/content_02"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="8dp">
 
                 <ImageView
-                    android:id="@+id/image_lesson_content_2"
+                    android:id="@+id/image_lesson_content_02"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
 
@@ -79,12 +79,12 @@
                     android:layout_marginEnd="8dp"/>
 
                 <TextView
-                    android:id="@+id/text_lesson_content_2"
+                    android:id="@+id/text_lesson_content_02"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Lesson Content 2"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textColor="@color/white"
                     android:justificationMode="inter_word"
                     android:letterSpacing="0.0025"
@@ -93,14 +93,14 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/content_3"
+                android:id="@+id/content_03"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="8dp">
 
                 <ImageView
-                    android:id="@+id/image_lesson_content_3"
+                    android:id="@+id/image_lesson_content_03"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
 
@@ -108,12 +108,12 @@
                     android:layout_marginEnd="8dp"/>
 
                 <TextView
-                    android:id="@+id/text_lesson_content_3"
+                    android:id="@+id/text_lesson_content_03"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Lesson Content 3"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textColor="@color/white"
                     android:justificationMode="inter_word"
                     android:letterSpacing="0.0025"
@@ -122,14 +122,14 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/content_4"
+                android:id="@+id/content_04"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="8dp">
 
                 <ImageView
-                    android:id="@+id/image_lesson_content_4"
+                    android:id="@+id/image_lesson_content_04"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
 
@@ -137,12 +137,12 @@
                     android:layout_marginEnd="8dp"/>
 
                 <TextView
-                    android:id="@+id/text_lesson_content_4"
+                    android:id="@+id/text_lesson_content_04"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Lesson Content 4"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textColor="@color/white"
                     android:justificationMode="inter_word"
                     android:letterSpacing="0.0025"
@@ -151,14 +151,14 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/content_5"
+                android:id="@+id/content_05"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="8dp">
 
                 <ImageView
-                    android:id="@+id/image_lesson_content_5"
+                    android:id="@+id/image_lesson_content_05"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
 
@@ -166,12 +166,12 @@
                     android:layout_marginEnd="8dp"/>
 
                 <TextView
-                    android:id="@+id/text_lesson_content_5"
+                    android:id="@+id/text_lesson_content_05"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Lesson Content 5"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textColor="@color/white"
                     android:justificationMode="inter_word"
                     android:letterSpacing="0.0025"
@@ -180,14 +180,14 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/content_6"
+                android:id="@+id/content_06"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="8dp">
 
                 <ImageView
-                    android:id="@+id/image_lesson_content_6"
+                    android:id="@+id/image_lesson_content_06"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
 
@@ -195,12 +195,12 @@
                     android:layout_marginEnd="8dp"/>
 
                 <TextView
-                    android:id="@+id/text_lesson_content_6"
+                    android:id="@+id/text_lesson_content_06"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Lesson Content 6"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textColor="@color/white"
                     android:justificationMode="inter_word"
                     android:letterSpacing="0.0025"
@@ -209,14 +209,14 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/content_7"
+                android:id="@+id/content_07"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="8dp">
 
                 <ImageView
-                    android:id="@+id/image_lesson_content_7"
+                    android:id="@+id/image_lesson_content_07"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
 
@@ -224,12 +224,12 @@
                     android:layout_marginEnd="8dp"/>
 
                 <TextView
-                    android:id="@+id/text_lesson_content_7"
+                    android:id="@+id/text_lesson_content_07"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Lesson Content 7"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textColor="@color/white"
                     android:justificationMode="inter_word"
                     android:letterSpacing="0.0025"
@@ -238,14 +238,14 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/content_8"
+                android:id="@+id/content_08"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="8dp">
 
                 <ImageView
-                    android:id="@+id/image_lesson_content_8"
+                    android:id="@+id/image_lesson_content_08"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
 
@@ -253,12 +253,70 @@
                     android:layout_marginEnd="8dp"/>
 
                 <TextView
-                    android:id="@+id/text_lesson_content_8"
+                    android:id="@+id/text_lesson_content_08"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Lesson Content 8"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    android:justificationMode="inter_word"
+                    android:letterSpacing="0.0025"
+                    android:lineSpacingExtra="2dp"
+                    android:lineSpacingMultiplier="1.2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/content_09"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/image_lesson_content_09"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+
+                    android:layout_gravity="top"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_lesson_content_09"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lesson Content 9"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    android:justificationMode="inter_word"
+                    android:letterSpacing="0.0025"
+                    android:lineSpacingExtra="2dp"
+                    android:lineSpacingMultiplier="1.2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/content_10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <ImageView
+                    android:id="@+id/image_lesson_content_10"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+
+                    android:layout_gravity="top"
+                    android:layout_marginEnd="8dp"/>
+
+                <TextView
+                    android:id="@+id/text_lesson_content_10"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lesson Content 10"
+                    android:textSize="14sp"
                     android:textColor="@color/white"
                     android:justificationMode="inter_word"
                     android:letterSpacing="0.0025"

@@ -2,21 +2,39 @@
 <resources>
 
     <!-- Module 8_2 page 1-->
-    <string name="module8_2_1_title">Bottom-up Parsing (Shift-Reduce, LR Parsing)</string>
-    <string name="module8_2_1_content_1">In this lesson, you will dive deep into shift-reduce parsing and LR parsing, two of the most critical bottom-up approaches used in syntax analysis. Whether you\'re a student or a developer working with compilers, this lesson is designed to help you understand how parsers work from the ground up, translating strings into meaningful syntax structures. By mastering these techniques, you\'ll gain a solid foundation in parsing algorithms, equipping you to handle a wide range of grammars.</string>
+    <!-- int[] module8_1_1 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module8_2_1_title">BOTTOM-UP PARSING TECHNIQUES (SHIFT-REDUCE
+PARSING)</string>
+    <string name="module8_2_1_content_1">In this lesson, you will dive deep into shift-reduce parsing
+and LR parsing, two of the most critical bottom-up approaches used in syntax analysis. Whether you\'re
+a student or a developer working with compilers, this lesson is designed to help you understand how
+parsers work from the ground up, translating strings into meaningful syntax structures. By mastering
+these techniques, you\'ll gain a solid foundation in parsing algorithms, equipping you to handle a wide
+range of grammars.</string>
     <string name="module8_2_1_content_2"></string>
     <string name="module8_2_1_content_3"></string>
 
-
     <!-- Module 8_2 page 2-->
+    <!-- int[] module8_1_1 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
     <string name="module8_2_2_title"></string>
-    <string name="module8_2_2_content_1">The lesson focuses on two main bottom-up parsing techniques: shift-reduce parsing and LR parsing. It begins with an introduction to bottom-up parsing, which starts from the input symbols (the leaves of the parse tree) and works up to the start symbol (the root).</string>
-    <string name="module8_2_2_content_2">Shift-reduce parsing involves shifting input symbols onto a stack and reducing them by applyin production rules. The process continues until the input string is reduced to the start symbol. A step- by-step example is provided to demonstrate how an input string is parsed and reduced.</string>
-    <string name="module8_2_2_content_3">LR parsing is introduced as a more powerful form of bottom-up parsing, which can handle a wider range of grammars. LR parsers operate left to right, using a parsing table with actions like shift, reduce, accept, or error. There are several types of LR parsers, including SLR (Simple LR), LALR (Lookahead LR), and Canonical LR, each varying in complexity and practical application.</string>
+    <string name="module8_2_2_content_1">The lesson focuses on two main bottom-up parsing
+techniques: shift-reduce parsing and LR parsing. It begins with an introduction to bottom-up parsing,
+which starts from the input symbols (the leaves of the parse tree) and works up to the start symbol (the
+root).</string>
+    <string name="module8_2_2_content_2">Shift-reduce parsing involves shifting input symbols onto a
+stack and reducing them by applying production rules. The process continues until the input string is
+reduced to the start symbol. A step- by-step example is provided to demonstrate how an input string is
+parsed and reduced.</string>
+
+    <string name="module8_2_2_content_3">LR parsing is introduced as a more powerful form of
+bottom-up parsing, which can handle a wider range of grammars. LR parsers operate left to right, using a
+parsing table with actions like shift, reduce, accept, or error. There are several types of LR parsers,
+including SLR (Simple LR), LALR (Lookahead LR), and Canonical LR, each varying in complexity and
+practical application.</string>
     <string name="module8_2_2_content_4"></string>
 
-
     <!-- Module 8_2 page 3-->
+    <!-- int[] module8_2_3 = {0, 0, 1, 1, 2, 2, 2, 0, 2, 2, 2, 2}; -->
     <string name="module8_2_3_title"></string>
     <string name="module8_2_3_content_1">Examples:</string>
     <string name="module8_2_3_content_2">Shift-Reduce Parsing Example</string>
@@ -27,18 +45,22 @@
     <string name="module8_2_3_content_7">Steps:</string>
     <string name="module8_2_3_content_8">Shift id onto the stack.</string>
     <string name="module8_2_3_content_9">Reduce id to F, then F to T, and T to E.</string>
-    <string name="module8_2_3_content_10">Shift the + token and repeat the process for the next id.</string>
-    <string name="module8_2_3_content_11">The parsing is complete when the entire input is processed and the start symbol isthe only symbol on the stack.</string>
-
+    <string name="module8_2_3_content_10">Shift the + token and repeat the process for the next
+id.</string>
+    <string name="module8_2_3_content_11">The parsing is complete when the entire input is
+processed and the start symbol isthe only symbol on the stack.</string>
 
     <!-- Module 8_2 page 4-->
+    <!-- int[] module8_2_4 = {0, 1, 1, 0, 0, 0, 0, 0}; -->
     <string name="module8_2_4_title"></string>
     <string name="module8_2_4_content_1">LR Parsing Example</string>
-    <string name="module8_2_4_content_2">For the same grammar, the LR parser constructs a parse tree by using a parsing table that defines when to shift or reduce. It systematically reduces the input string based on the current state and symbol until the start symbol is reached.</string>
+
+    <string name="module8_2_4_content_2">For the same grammar, the LR parser constructs a parse
+tree by using a parsing table that defines when to shift or reduce. It systematically reduces the input
+string based on the current state and symbol until the start symbol is reached.</string>
     <string name="module8_2_4_content_3"></string>
     <string name="module8_2_4_content_4"></string>
     <string name="module8_2_4_content_5"></string>
-
 
     <!-- Module 8_2 page 5-->
 

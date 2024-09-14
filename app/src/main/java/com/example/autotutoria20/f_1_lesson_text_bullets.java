@@ -47,7 +47,6 @@ public class f_1_lesson_text_bullets {
                 switch (module) {
                     case 1: return module3_1;
                     case 2: return module3_2;
-                    case 3: return module3_3;
                     default:
                         Log.e(TAG, "Invalid module number for lesson type 3: " + module);
                         return new int[0][0];
@@ -56,7 +55,6 @@ public class f_1_lesson_text_bullets {
                 switch (module) {
                     case 1: return module4_1;
                     case 2: return module4_2;
-                    case 3: return module4_3;
                     default:
                         Log.e(TAG, "Invalid module number for lesson type 4: " + module);
                         return new int[0][0];
@@ -114,43 +112,105 @@ public class f_1_lesson_text_bullets {
     };
 
     static int[][] module1_2 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 1, 0, 1, 0, 1, 0, 0},
+        /* Page 3 */ {0, 1, 0, 1, 0, 1, 0, 0}
     };
+
     static int[][] module1_3 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 3 */ {0, 1, 1, 1, 0, 1, 1, 1, 0}
     };
     static int[][] module1_4 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 3 */ {0, 1, 1, 1, 0, 0, 0, 0}
     };
     static int[][] module2_1 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 3 */ {0, 0, 1, 0, 1, 0, 0, 0}
     };
     static int[][] module3_1 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 3 */ {0, 0, 1, 1, 1, 0, 0, 0}
     };
     static int[][] module3_2 = {
-    };
-    static int[][] module3_3 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 3 */ {0, 0, 1, 1, 1, 0, 0, 0}
     };
     static int[][] module4_1 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 3 */ {0, 0, 1, 2, 2, 0, 0, 0},
+        /* Page 4 */ {0, 0, 1, 1, 0, 0, 0, 0},
+        /* Page 5 */ {0, 0, 1, 1, 0, 0, 0, 0}
     };
     static int[][] module4_2 = {
-    };
-    static int[][] module4_3 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 1, 1, 1, 1, 0, 0},
+        /* Page 3 */ {0, 0, 1, 1, 1, 1, 2, 2, 2, 0},
+        /* Page 4 */ {0, 0, 1, 1, 1, 1, 2, 2, 2, 0},
+        /* Page 5 */ {0, 0, 1, 1, 1, 1, 2, 2, 0}
     };
     static int[][] module5_1 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 0, 1, 2, 2, 0, 0},
+        /* Page 3 */ {0, 1, 2, 2, 2, 0}
     };
     static int[][] module5_2 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 0, 1, 1, 1, 1, 0}
     };
     static int[][] module5_3 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1},
+        /* Page 3 */ {0, 0, 1, 1, 1, 1, 1, 1, 1}
     };
     static int[][] module6_1 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 3 */ {0, 0, 0, 1, 0, 1, 1, 0},
+        /* Page 4 */ {0, 0, 0, 1, 0, 1, 1, 0},
     };
     static int[][] module6_2 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 3 */ {0, 0, 1, 2, 0, 2, 0, 0}
     };
     static int[][] module6_3 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 1, 1, 1, 0, 0, 0},
+        /* Page 3 */ {0, 0, 1, 2, 1, 2, 1, 2, 1, 2}
     };
     static int[][] module7_1 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 3 */ {0, 0, 1, 1, 1, 0, 1, 1, 1},
+        /* Page 4 */ {0, 0, 1, 1, 1, 0, 0, 0},
+        /* Page 5 */ {0, 0, 0, 1, 1, 1, 0, 1, 1}
     };
     static int[][] module8_1 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 3 */ {0, 0, 1, 2, 2, 2, 2, 2, 0},
+        /* Page 4 */ {0, 1, 2, 2, 2, 0}
     };
     static int[][] module8_2 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 3 */ {0, 0, 1, 1, 2, 2, 2, 0, 2, 2, 2, 2},
+        /* Page 4 */ {0, 1, 1, 0, 0, 0, 0, 0}
     };
     static int[][] module8_3 = {
+        /* Page 1 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 2 */ {0, 0, 1, 0, 0, 0, 0, 0},
+        /* Page 3 */ {0, 1, 2, 2, 2, 2, 0, 0},
+        /* Page 4 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 5 */ {0, 0, 0, 0, 0, 0, 0, 0},
+        /* Page 6 */ {0, 0, 1, 1, 1, 1, 0, 0}
     };
 }

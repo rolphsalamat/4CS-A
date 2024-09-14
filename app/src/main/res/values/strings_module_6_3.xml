@@ -1,2 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <!-- Module 6_3 page 1 -->
+    <!-- int[] module6_3_1 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module6_3_1_title">INHERENT AMBIGUITY</string>
+    <string name="module6_3_1_content_1">This lesson will guide you through the different types of
+inherent ambiguity, its implications, and strategies to clarify meaning in ambiguous situations. Whether
+you're deciphering the meaning of a phrase, resolving a technical issue, or navigating complex legal
+language, understanding inherent ambiguity is key to effective problem-solving.</string>
+    <string name="module6_3_1_content_2"></string>
+
+    <!-- Module 6_3 page 2 -->
+    <!-- int[] module6_2_2 = {0, 0, 1, 1, 1, 0, 0, 0}; -->
+    <string name="module6_3_2_title"></string>
+    <string name="module6_3_2_content_1">Inherent Ambiguity occurs when a phrase, word, or
+situation can be interpreted in multiple ways. This is often due to the nature of language or a lack of
+sufficient context.</string>
+    <string name="module6_3_2_content_2">In programming, inherent ambiguity can arise when a
+statement or instruction has more than one potential interpretation, leading to unexpected
+outcomes.</string>
+    <string name="module6_3_2_content_3">In literature or everyday language, ambiguity might be
+deliberate, used to create complexity or encourage multiple perspectives.</string>
+    <string name="module6_3_2_content_4">Resolving ambiguity often involves clarifying the context,
+examining the alternatives, and seeking additional information to narrow the possible
+interpretations.</string>
+
+    <string name="module6_3_2_content_5"></string>
+    <string name="module6_3_2_content_6"></string>
+    <string name="module6_3_2_content_7"></string>
+    <string name="module6_3_2_content_8"></string>
+
+    <!-- Module 6_3 page 3 -->
+    <!-- int[] module6_3_3 = {0, 0, 1, 2, 1, 2, 1, 2, 1, 2}; -->
+    <string name="module6_3_3_title"></string>
+    <string name="module6_3_3_content_1">Basic Examples of Inherent Ambiguity:</string>
+    <string name="module6_3_3_content_2">Linguistic Ambiguity:</string>
+    <string name="module6_3_3_content_3">"I saw her duck."</string>
+    <string name="module6_3_3_content_4">This sentence could mean either the person saw a woman
+crouch down (verb) or they saw her pet duck (noun).</string>
+    <string name="module6_3_3_content_5">Unambiguous Version: Using a telescope, the man saw the
+woman.</string>
+    <string name="module6_3_3_content_6">Programming Ambiguity:</string>
+    <string name="module6_3_3_content_7">An instruction such as x = y + z; could be ambiguous if the
+types of variables (whether integers, floating points, or strings) are not well-defined, potentially leading
+to unintended results.</string>
+    <string name="module6_3_3_content_8">Legal Ambiguity:</string>
+    <string name="module6_3_3_content_9">A contract that states "The lessee may terminate the contract
+at any time during the year" could be ambiguous if "year" is not clearly defined (calendar year or lease
+year).</string>
+
+</resources>

@@ -127,50 +127,50 @@
             </FrameLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Module #3 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card3"
-            android:onClick="onCard3Clicked"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardElevation="20dp"
-            app:cardCornerRadius="15dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="20dp">
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:orientation="vertical"
-                android:background="@drawable/card_background"
-                android:paddingStart="20dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:text="Lesson 3"
-                    android:textColor="@color/white"
-                    android:textSize="22sp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/module_4_3"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"/>
-                <TextView
-                    android:id="@+id/freeuse_lesson_3_module_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="30dp"
-                    android:text="0/4"
-                    android:textSize="20sp"
-                    android:textColor="@color/white"
-                    />
-            </FrameLayout>
-        </androidx.cardview.widget.CardView>
+<!--        &lt;!&ndash; Module #3 &ndash;&gt;-->
+<!--        <androidx.cardview.widget.CardView-->
+<!--            android:id="@+id/card3"-->
+<!--            android:onClick="onCard3Clicked"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:cardElevation="20dp"-->
+<!--            app:cardCornerRadius="15dp"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:layout_marginTop="20dp">-->
+<!--            <FrameLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="80dp"-->
+<!--                android:orientation="vertical"-->
+<!--                android:background="@drawable/card_background"-->
+<!--                android:paddingStart="20dp">-->
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="15dp"-->
+<!--                    android:text="Lesson 3"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="22sp"/>-->
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_gravity="center_vertical"-->
+<!--                    android:text="@string/module_4_3"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textSize="12sp"/>-->
+<!--                <TextView-->
+<!--                    android:id="@+id/freeuse_lesson_3_module_4"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="end|center_vertical"-->
+<!--                    android:layout_marginEnd="30dp"-->
+<!--                    android:text="0/4"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    />-->
+<!--            </FrameLayout>-->
+<!--        </androidx.cardview.widget.CardView>-->
 
         <!-- Automatic Bottom Margin -->
         <ImageView

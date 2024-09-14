@@ -1,2 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <!-- Module 5_3 page 1 -->
+    <!-- int[] module5_3_1 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module5_3_1_title">DERIVATIONS</string>
+    <string name="module5_3_1_content_1">This lesson will introduce you to the foundational concepts
+of syntax analysis in the context of formal grammar. You’ll learn about the two essential types of
+derivations—leftmost and rightmost—which play a crucial role in parsing and generating sentences from
+a grammar. By understanding these derivations, you will enhance your comprehension of how compilers
+process programming languages and the order in which rules are applied during sentence
+generation.</string>
+    <string name="module5_3_1_content_2"></string>
+
+    <!-- Module 5_3 page 2 -->
+    <!-- int[] module5_3_2 = {0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1}; -->
+    <string name="module5_3_2_title"></string>
+    <string name="module5_3_2_content_1">In this lesson, we will explore the process of deriving
+sentences from a grammar using leftmost and rightmost derivations. These derivations are essential in
+syntax analysis, providing different ways to expand non-terminal symbols. In a leftmost derivation, the
+leftmost non-terminal is expanded first, while in a rightmost derivation, the rightmost non-terminal is
+expanded first. Both methods result in the same final string, but they follow different paths.</string>
+    <string name="module5_3_2_content_2">Basic Examples:</string>
+    <string name="module5_3_2_content_3">Leftmost Derivation:</string>
+    <string name="module5_3_2_content_4">Begin with a start symbol (S).</string>
+
+    <string name="module5_3_2_content_5">Always expand the leftmost non-terminal at each
+step.</string>
+    <string name="module5_3_2_content_6">Example:</string>
+    <string name="module5_3_2_content_7">S -> AB</string>
+    <string name="module5_3_2_content_8">A -> a</string>
+    <string name="module5_3_2_content_9">B -> b</string>
+    <string name="module5_3_2_content_10">Derivation: S -> aB -> ab</string>
+
+    <!-- Module 5_3 page 3 -->
+    <!-- int[] module5_3_3 = {0, 0, 1, 1, 1, 1, 1, 1, 1}; -->
+    <string name="module5_3_3_title"></string>
+    <string name="module5_3_3_content_1">Rightmost Derivation:</string>
+    <string name="module5_3_3_content_2">Begin with a start symbol (S).</string>
+    <string name="module5_3_3_content_3">Always expand the rightmost non-terminal at each
+step.</string>
+    <string name="module5_3_3_content_4">Example:</string>
+    <string name="module5_3_3_content_5">S -> AB</string>
+    <string name="module5_3_3_content_6">A -> a</string>
+    <string name="module5_3_3_content_7">B -> b</string>
+    <string name="module5_3_3_content_8">Derivation: S -> AB -> Ab -> ab</string>
+
+</resources>

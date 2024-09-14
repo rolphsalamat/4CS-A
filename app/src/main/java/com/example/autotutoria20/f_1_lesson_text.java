@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,28 +30,26 @@ public class f_1_lesson_text extends Fragment {
 
     private TextView titleTextView;
     private LinearLayout
-            contentLayout_1, contentLayout_2, contentLayout_3, contentLayout_4,
-            contentLayout_5, contentLayout_6, contentLayout_7, contentLayout_8;
+            contentLayout_01, contentLayout_02, contentLayout_03, contentLayout_04, contentLayout_05,
+            contentLayout_06, contentLayout_07, contentLayout_08, contentLayout_09, contentLayout_10;
     LinearLayout[] contentLayouts = {
-            contentLayout_1, contentLayout_2, contentLayout_3, contentLayout_4,
-            contentLayout_5, contentLayout_6, contentLayout_7, contentLayout_8
+            contentLayout_01, contentLayout_02, contentLayout_03, contentLayout_04, contentLayout_05,
+            contentLayout_06, contentLayout_07, contentLayout_08, contentLayout_09, contentLayout_10
     };
     private ImageView
-            contentImageView_1, contentImageView_2, contentImageView_3, contentImageView_4,
-            contentImageView_5, contentImageView_6, contentImageView_7, contentImageView_8;
+            contentImageView_01, contentImageView_02, contentImageView_03, contentImageView_04, contentImageView_05,
+            contentImageView_06, contentImageView_07, contentImageView_08, contentImageView_09, contentImageView_10;
     private TextView
-            contentTextView_1, contentTextView_2, contentTextView_3, contentTextView_4,
-            contentTextView_5, contentTextView_6, contentTextView_7, contentTextView_8;
-
-    // Array of content TextViews and ImageViews
+            contentTextView_01, contentTextView_02, contentTextView_03, contentTextView_04, contentTextView_05,
+            contentTextView_06, contentTextView_07, contentTextView_08, contentTextView_09, contentTextView_10;
     TextView[] contentTextViews = {
-            contentTextView_1, contentTextView_2, contentTextView_3, contentTextView_4,
-            contentTextView_5, contentTextView_6, contentTextView_7, contentTextView_8
+            contentTextView_01, contentTextView_02, contentTextView_03, contentTextView_04, contentTextView_05,
+            contentTextView_06, contentTextView_07, contentTextView_08, contentTextView_09, contentTextView_10
     };
 
     ImageView[] contentImageViews = {
-            contentImageView_1, contentImageView_2, contentImageView_3, contentImageView_4,
-            contentImageView_5, contentImageView_6, contentImageView_7, contentImageView_8
+            contentImageView_01, contentImageView_02, contentImageView_03, contentImageView_04, contentImageView_05,
+            contentImageView_06, contentImageView_07, contentImageView_08, contentImageView_09, contentImageView_10
     };
     private LinearLayout nextButton;
     private Boolean isTextLessonDone = false;
@@ -123,50 +120,56 @@ public class f_1_lesson_text extends Fragment {
         titleTextView = view.findViewById(R.id.text_lesson_title);
 
         // Initialize Layouts
-        contentLayout_1 = view.findViewById(R.id.content_1);
-        contentLayout_2 = view.findViewById(R.id.content_2);
-        contentLayout_3 = view.findViewById(R.id.content_3);
-        contentLayout_4 = view.findViewById(R.id.content_4);
-        contentLayout_5 = view.findViewById(R.id.content_5);
-        contentLayout_6 = view.findViewById(R.id.content_6);
-        contentLayout_7 = view.findViewById(R.id.content_7);
-        contentLayout_8 = view.findViewById(R.id.content_8);
+        contentLayout_01 = view.findViewById(R.id.content_01);
+        contentLayout_02 = view.findViewById(R.id.content_02);
+        contentLayout_03 = view.findViewById(R.id.content_03);
+        contentLayout_04 = view.findViewById(R.id.content_04);
+        contentLayout_05 = view.findViewById(R.id.content_05);
+        contentLayout_06 = view.findViewById(R.id.content_06);
+        contentLayout_07 = view.findViewById(R.id.content_07);
+        contentLayout_08 = view.findViewById(R.id.content_08);
+        contentLayout_09 = view.findViewById(R.id.content_09);
+        contentLayout_10 = view.findViewById(R.id.content_10);
 
         // Now populate the arrays after initializing the layouts
         contentLayouts = new LinearLayout[]{
-                contentLayout_1, contentLayout_2, contentLayout_3, contentLayout_4,
-                contentLayout_5, contentLayout_6, contentLayout_7, contentLayout_8
+                contentLayout_01, contentLayout_02, contentLayout_03, contentLayout_04, contentLayout_05,
+                contentLayout_06, contentLayout_07, contentLayout_08, contentLayout_09, contentLayout_10
         };
 
         // Initialize TextViews
-        contentTextView_1 = view.findViewById(R.id.text_lesson_content_1);
-        contentTextView_2 = view.findViewById(R.id.text_lesson_content_2);
-        contentTextView_3 = view.findViewById(R.id.text_lesson_content_3);
-        contentTextView_4 = view.findViewById(R.id.text_lesson_content_4);
-        contentTextView_5 = view.findViewById(R.id.text_lesson_content_5);
-        contentTextView_6 = view.findViewById(R.id.text_lesson_content_6);
-        contentTextView_7 = view.findViewById(R.id.text_lesson_content_7);
-        contentTextView_8 = view.findViewById(R.id.text_lesson_content_8);
+        contentTextView_01 = view.findViewById(R.id.text_lesson_content_01);
+        contentTextView_02 = view.findViewById(R.id.text_lesson_content_02);
+        contentTextView_03 = view.findViewById(R.id.text_lesson_content_03);
+        contentTextView_04 = view.findViewById(R.id.text_lesson_content_04);
+        contentTextView_05 = view.findViewById(R.id.text_lesson_content_05);
+        contentTextView_06 = view.findViewById(R.id.text_lesson_content_06);
+        contentTextView_07 = view.findViewById(R.id.text_lesson_content_07);
+        contentTextView_08 = view.findViewById(R.id.text_lesson_content_08);
+        contentTextView_09 = view.findViewById(R.id.text_lesson_content_09);
+        contentTextView_10 = view.findViewById(R.id.text_lesson_content_10);
 
         // Initialize ImageViews
-        contentImageView_1 = view.findViewById(R.id.image_lesson_content_1);
-        contentImageView_2 = view.findViewById(R.id.image_lesson_content_2);
-        contentImageView_3 = view.findViewById(R.id.image_lesson_content_3);
-        contentImageView_4 = view.findViewById(R.id.image_lesson_content_4);
-        contentImageView_5 = view.findViewById(R.id.image_lesson_content_5);
-        contentImageView_6 = view.findViewById(R.id.image_lesson_content_6);
-        contentImageView_7 = view.findViewById(R.id.image_lesson_content_7);
-        contentImageView_8 = view.findViewById(R.id.image_lesson_content_8);
+        contentImageView_01 = view.findViewById(R.id.image_lesson_content_01);
+        contentImageView_02 = view.findViewById(R.id.image_lesson_content_02);
+        contentImageView_03 = view.findViewById(R.id.image_lesson_content_03);
+        contentImageView_04 = view.findViewById(R.id.image_lesson_content_04);
+        contentImageView_05 = view.findViewById(R.id.image_lesson_content_05);
+        contentImageView_06 = view.findViewById(R.id.image_lesson_content_06);
+        contentImageView_07 = view.findViewById(R.id.image_lesson_content_07);
+        contentImageView_08 = view.findViewById(R.id.image_lesson_content_08);
+        contentImageView_09 = view.findViewById(R.id.image_lesson_content_09);
+        contentImageView_10 = view.findViewById(R.id.image_lesson_content_10);
 
         // Now populate the arrays after initializing the views
         contentTextViews = new TextView[]{
-                contentTextView_1, contentTextView_2, contentTextView_3, contentTextView_4,
-                contentTextView_5, contentTextView_6, contentTextView_7, contentTextView_8
+                contentTextView_01, contentTextView_02, contentTextView_03, contentTextView_04, contentTextView_05,
+                contentTextView_06, contentTextView_07, contentTextView_08, contentTextView_09, contentTextView_10
         };
 
         contentImageViews = new ImageView[]{
-                contentImageView_1, contentImageView_2, contentImageView_3, contentImageView_4,
-                contentImageView_5, contentImageView_6, contentImageView_7, contentImageView_8
+                contentImageView_01, contentImageView_02, contentImageView_03, contentImageView_04, contentImageView_05,
+                contentImageView_06, contentImageView_07, contentImageView_08, contentImageView_09, contentImageView_10
         };
 
         // Initialize buttons
@@ -275,14 +278,25 @@ public class f_1_lesson_text extends Fragment {
 
         // Check if title and content resources exist and have values, increment totalSteps accordingly
         if (resourceHasValue(baseName + "_title")) totalSteps++;
-        if (resourceHasValue(baseName + "_content_1")) totalSteps++;
-        if (resourceHasValue(baseName + "_content_2")) totalSteps++;
-        if (resourceHasValue(baseName + "_content_3")) totalSteps++;
-        if (resourceHasValue(baseName + "_content_4")) totalSteps++;
-        if (resourceHasValue(baseName + "_content_5")) totalSteps++;
-        if (resourceHasValue(baseName + "_content_6")) totalSteps++;
-        if (resourceHasValue(baseName + "_content_7")) totalSteps++;
-        if (resourceHasValue(baseName + "_content_8")) totalSteps++;
+
+        int contentCount = 10;
+
+        for (int i=1; i<=contentCount;i++) {
+            if (resourceHasValue(baseName + "_content_" + i)) totalSteps++;
+        }
+
+        // replaced by the for loop.. just change the int contentCount integer..
+//        if (resourceHasValue(baseName + "_content_1")) totalSteps++;
+//        if (resourceHasValue(baseName + "_content_2")) totalSteps++;
+//        if (resourceHasValue(baseName + "_content_3")) totalSteps++;
+//        if (resourceHasValue(baseName + "_content_4")) totalSteps++;
+//        if (resourceHasValue(baseName + "_content_5")) totalSteps++;
+//        if (resourceHasValue(baseName + "_content_6")) totalSteps++;
+//        if (resourceHasValue(baseName + "_content_7")) totalSteps++;
+//        if (resourceHasValue(baseName + "_content_8")) totalSteps++;
+//        if (resourceHasValue(baseName + "_content_8")) totalSteps++;
+//        if (resourceHasValue(baseName + "_content_9")) totalSteps++;
+//        if (resourceHasValue(baseName + "_content_10")) totalSteps++;
 
         Log.e("setTotalStepsForKey", "totalSteps: " + totalSteps);
     }
@@ -337,7 +351,7 @@ public class f_1_lesson_text extends Fragment {
 
         // Convert dp to pixels
         float scale = contentImageView.getContext().getResources().getDisplayMetrics().density;
-        int sizeInDp = (int) (25 * scale + 0.5f); // 25dp to pixels
+        int sizeInDp = (int) (20 * scale + 0.5f); // 25dp to pixels
 
         int layoutMargin = 16;
 
@@ -588,6 +602,8 @@ public class f_1_lesson_text extends Fragment {
         String context6 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_6";
         String context7 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_7";
         String context8 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_8";
+        String context9 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_9";
+        String context10 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_10";
 
         // Retrieve the resource IDs
         int titleResId = getResources().getIdentifier(title, "string", getContext().getPackageName());
@@ -599,6 +615,8 @@ public class f_1_lesson_text extends Fragment {
         int text6ResId = getResources().getIdentifier(context6, "string", getContext().getPackageName());
         int text7ResId = getResources().getIdentifier(context7, "string", getContext().getPackageName());
         int text8ResId = getResources().getIdentifier(context8, "string", getContext().getPackageName());
+        int text9ResId = getResources().getIdentifier(context9, "string", getContext().getPackageName());
+        int text10ResId = getResources().getIdentifier(context10, "string", getContext().getPackageName());
 
         String TEG = "auto resource ID generator";
 
@@ -621,29 +639,37 @@ public class f_1_lesson_text extends Fragment {
             Log.e(TEG, "Text 7 is wrong: " + context7);
         if (text8ResId == 0)
             Log.e(TEG, "Text 8 is wrong: " + context8);
+        if (text9ResId == 0)
+            Log.e(TEG, "Text 8 is wrong: " + context9);
+        if (text10ResId == 0)
+            Log.e(TEG, "Text 8 is wrong: " + context10);
 
 
         // Set the text content
         titleTextView.setText("");
-        contentTextView_1.setText("");
-        contentTextView_2.setText("");
-        contentTextView_3.setText("");
-        contentTextView_4.setText("");
-        contentTextView_5.setText("");
-        contentTextView_6.setText("");
-        contentTextView_7.setText("");
-        contentTextView_8.setText("");
+        contentTextView_01.setText("");
+        contentTextView_02.setText("");
+        contentTextView_03.setText("");
+        contentTextView_04.setText("");
+        contentTextView_05.setText("");
+        contentTextView_06.setText("");
+        contentTextView_07.setText("");
+        contentTextView_08.setText("");
+        contentTextView_09.setText("");
+        contentTextView_10.setText("");
 
         // Set the text content
         titleTextView.setText(titleResId);
-        contentTextView_1.setText(text1ResId);
-        contentTextView_2.setText(text2ResId);
-        contentTextView_3.setText(text3ResId);
-        contentTextView_4.setText(text4ResId);
-        contentTextView_5.setText(text5ResId);
-        contentTextView_6.setText(text6ResId);
-        contentTextView_7.setText(text7ResId);
-        contentTextView_8.setText(text8ResId);
+        contentTextView_01.setText(text1ResId);
+        contentTextView_02.setText(text2ResId);
+        contentTextView_03.setText(text3ResId);
+        contentTextView_04.setText(text4ResId);
+        contentTextView_05.setText(text5ResId);
+        contentTextView_06.setText(text6ResId);
+        contentTextView_07.setText(text7ResId);
+        contentTextView_08.setText(text8ResId);
+        contentTextView_09.setText(text8ResId);
+        contentTextView_10.setText(text8ResId);
 
     }
 

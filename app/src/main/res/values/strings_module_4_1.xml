@@ -3,47 +3,74 @@
 
     <!-- Module 4 | Page 1 -->
     <!--slide 1-->
-    <string name="module4_1_1_title"></string>
-    <string name="module4_1_1_content_1">In this lesson, we embark on a journey to explore the limitations of regular languages and the need for more expressive grammars. Context-Free Grammars (CFG) are essential tools in both computer science and linguistics, playing a vital role in defining the syntax of programming languages and structured data formats. By the end of this lesson, you will have a solid understanding of CFG, its components, and how it helps in generating strings for formal languages.</string>
+    <!-- int[] module4_1_1 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module4_1_1_title">DEFINITION OF CONTEXT-FREE GRAMMAR</string>
+    <string name="module4_1_1_content_1">In this lesson, we embark on a journey to explore the
+limitations of regular languages and the need for more expressive grammars. Context-Free Grammar
+(CFG) are essential tools in both computer science and linguistics, playing a vital role in defining the
+syntax of programming languages and structured data formats. By the end of this lesson, you will have a
+solid understanding of CFG, its components, and how it helps in generating strings for formal
+languages.</string>
     <string name="module4_1_1_content_2"></string>
     <string name="module4_1_1_content_3"></string>
 
     <!--slide 2-->
+    <!-- int[] module4_1_2 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
     <string name="module4_1_2_title"></string>
-    <string name="module4_1_2_content_1">This lesson introduces Context-Free Grammars (CFGs), a type of formal grammar that is crucial for generating and describing the syntax of programming languages. CFGs consist of terminals (basic symbols), non-terminals (symbols representing strings of terminals), a start symbol, and production rules that govern how strings are formed. CFGs are more expressive than regular grammars, making them suitable for complex languages such as arithmetic expressions and balanced parentheses.</string>
+    <string name="module4_1_2_content_1">This lesson introduces Context-Free Grammar (CFG), a type
+of formal grammar that is crucial for generating and describing the syntax of programming languages.
+CFGs consist of terminals (basic symbols), non-terminals (symbols representing strings of terminals), a
+start symbol, and production rules that govern how strings are formed. CFGs are more expressive than
+regular grammars, making them suitable for complex languages such as arithmetic expressions and
+balanced parentheses.</string>
     <string name="module4_1_2_content_2"></string>
     <string name="module4_1_2_content_3"></string>
 
     <!--slide 3-->
+    <!-- int[] module4_1_3 = {0, 0, 1, 2, 2, 0, 0, 0}; -->
     <string name="module4_1_3_title"></string>
-    <string name="module4_1_3_content_1">Simplified Examples of Context-Free Grammars (CFG):</string>
+    <string name="module4_1_3_content_1">Simplified Examples of Context-Free Grammar
+(CFG):</string>
     <string name="module4_1_3_content_2">Balanced Parentheses:</string>
-    <string name="module4_1_3_content_3">Language: Strings with balanced parentheses, like those you see in math equations or programming.</string>
-    <string name="module4_1_3_content_4">Explanation: Imagine you need to create well-balanced parentheses. You can add pairs of parentheses one inside another, or place them side by side. You stop adding when you have a complete set.</string>
+    <string name="module4_1_3_content_3">Language: Strings with balanced parentheses, like those
+you see in math equations or programming.</string>
+    <string name="module4_1_3_content_4">Explanation: Imagine you need to create well-balanced
+parentheses. You can add pairs of parentheses one inside another, or place them side by side. You stop
+adding when you have a complete set.</string>
     <string name="module4_1_3_content_5">Example strings: (), (()), ()(), ((())).</string>
-    <string name="module4_1_3_content_6">These strings have perfectly matched open and close parentheses.</string>
+    <string name="module4_1_3_content_6">These strings have perfectly matched open and close
+parentheses.</string>
     <string name="module4_1_3_content_7"></string>
 
     <!--slide 3-->
+    <!-- int[] module4_1_4 = {0, 0, 1, 1, 0, 0, 0, 0}; -->
     <string name="module4_1_4_title"></string>
-    <string name="module4_1_4_content_1">Basic Arithmetic Expressions (Addition and Multiplication):</string>
-    <string name="module4_1_4_content_2">Language: Simple math expressions using addition (+) and multiplication (*).</string>
-    <string name="module4_1_4_content_3">Explanation: Think of this like performing calculations. You can combine numbers with addition and multiplication, or just use single numbers. You can also perform multiplication first, then add, which is how math works in real life.</string>
+    <string name="module4_1_4_content_1">Basic Arithmetic Expressions (Addition and
+Multiplication):</string>
+    <string name="module4_1_4_content_2">Language: Simple math expressions using addition (+) and
+multiplication (*).</string>
+    <string name="module4_1_4_content_3">Explanation: Think of this like performing calculations. You
+can combine numbers with addition and multiplication, or just use single numbers. You can also perform
+multiplication first, then add, which is how math works in real life.</string>
     <string name="module4_1_4_content_4">Example strings: 1, 2 + 3, 4 * 5, 2 + 3 * 4.</string>
-    <string name="module4_1_4_content_5">These are all valid expressions, where addition and multiplication follow normal arithmetic rules.</string>
+    <string name="module4_1_4_content_5">These are all valid expressions, where addition and
+multiplication follow normal arithmetic rules.</string>
     <string name="module4_1_4_content_6"></string>
     <string name="module4_1_4_content_7"></string>
 
     <!--slide 4-->
+    <!-- int[] module4_1_5 = {0, 0, 1, 1, 0, 0, 0, 0}; -->
     <string name="module4_1_5_title"></string>
-    <string name="module4_1_5_content_1">Equal Numbers of  a s and  b s</string>
-    <string name="module4_1_5_content_2">Language: Strings with equal numbers of the letters \'a\' and \'b\', where \'a\'s come first, followed by \'b\'s.</string>
-    <string name="module4_1_5_content_3">Explanation: Imagine you\'re building a string where every \'a\' you add has to be followed by a \'b\'. You stop when the number of \'a\'s and \'b\'s are equal.</string>
+    <string name="module4_1_5_content_1">Equal Numbers of ‘a’s and ‘b’s</string>
+    <string name="module4_1_5_content_2">Language: Strings with equal numbers of the letters \'a\'
+and \'b\', where \'a\'s come first, followed by \'b\'s.</string>
+    <string name="module4_1_5_content_3">Explanation: Imagine you\'re building a string where every
+\'a\' you add has to be followed by a \'b\'. You stop when the number of \'a\'s and \'b\'s are
+equal.</string>
     <string name="module4_1_5_content_4">Example strings: ab, aabb, aaabbb.</string>
-    <string name="module4_1_5_content_5">Each string has the same number of \'a\'s and \'b\'s, and all the \'a\'s appear before the \'b\'s.</string>
+    <string name="module4_1_5_content_5">Each string has the same number of \'a\'s and \'b\'s, and all
+the \'a\'s appear before the \'b\'s.</string>
     <string name="module4_1_5_content_6"></string>
     <string name="module4_1_5_content_7"></string>
-
-
 
 </resources>

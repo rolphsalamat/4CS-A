@@ -193,88 +193,89 @@
                 />
         </FrameLayout>
 
-        <!-- Card #3 -->
-        <FrameLayout
-            android:id="@+id/card3"
-            android:onClick="onCard3Clicked"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/card2"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="20dp"
-            >
-            <!-- Module #3 -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="30dp">
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:orientation="vertical"
-                    android:background="@drawable/card_background"
-                    android:paddingStart="20dp">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:text="Lesson 3"
-                        android:textColor="@color/white"
-                        android:textSize="22sp"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_gravity="center_vertical"
-                        android:text="@string/module_4_3"
-                        android:textColor="@color/white"
-                        android:textSize="12sp"/>
-                    <TextView
-                        android:id="@+id/progressive_lesson_4_module_3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end|center_vertical"
-                        android:layout_marginEnd="30dp"
-                        android:text="0/4"
-                        android:textSize="20sp"
-                        android:textColor="@color/white"
-                        />
-                </FrameLayout>
-            </androidx.cardview.widget.CardView>
-        </FrameLayout>
+<!--        &lt;!&ndash; Card #3 &ndash;&gt;-->
+<!--        <FrameLayout-->
+<!--            android:id="@+id/card3"-->
+<!--            android:onClick="onCard3Clicked"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/card2"-->
+<!--            android:layout_marginHorizontal="20dp"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            >-->
+<!--            &lt;!&ndash; Module #3 &ndash;&gt;-->
+<!--            <androidx.cardview.widget.CardView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:cardCornerRadius="30dp">-->
+<!--                <FrameLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="80dp"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:background="@drawable/card_background"-->
+<!--                    android:paddingStart="20dp">-->
+<!--                    <TextView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="15dp"-->
+<!--                        android:text="Lesson 3"-->
+<!--                        android:textColor="@color/white"-->
+<!--                        android:textSize="22sp"/>-->
+<!--                    <TextView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:layout_gravity="center_vertical"-->
+<!--                        android:text="@string/module_4_3"-->
+<!--                        android:textColor="@color/white"-->
+<!--                        android:textSize="12sp"/>-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/progressive_lesson_4_module_3"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="end|center_vertical"-->
+<!--                        android:layout_marginEnd="30dp"-->
+<!--                        android:text="0/4"-->
+<!--                        android:textSize="20sp"-->
+<!--                        android:textColor="@color/white"-->
+<!--                        />-->
+<!--                </FrameLayout>-->
+<!--            </androidx.cardview.widget.CardView>-->
+<!--            -->
+<!--        </FrameLayout>-->
 
-        <!-- Module #3 LOCKED STATE OVERLAY -->
-        <FrameLayout
-            android:id="@+id/card3_locked_overlay"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            app:layout_constraintStart_toStartOf="@id/card3"
-            app:layout_constraintTop_toTopOf="@id/card3"
-            app:layout_constraintEnd_toEndOf="@id/card3"
-            app:layout_constraintBottom_toBottomOf="@id/card3"
-            android:layout_marginHorizontal="20dp"
-            >
-            <!-- Background for the locked lesson cover -->
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/locked_lesson_cover" />
-            <!-- Lock icon -->
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:src="@drawable/lock"
-                />
-        </FrameLayout>
+<!--        &lt;!&ndash; Module #3 LOCKED STATE OVERLAY &ndash;&gt;-->
+<!--        <FrameLayout-->
+<!--            android:id="@+id/card3_locked_overlay"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="80dp"-->
+<!--            app:layout_constraintStart_toStartOf="@id/card3"-->
+<!--            app:layout_constraintTop_toTopOf="@id/card3"-->
+<!--            app:layout_constraintEnd_toEndOf="@id/card3"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/card3"-->
+<!--            android:layout_marginHorizontal="20dp"-->
+<!--            >-->
+<!--            &lt;!&ndash; Background for the locked lesson cover &ndash;&gt;-->
+<!--            <ImageView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:background="@drawable/locked_lesson_cover" />-->
+<!--            &lt;!&ndash; Lock icon &ndash;&gt;-->
+<!--            <ImageView-->
+<!--                android:layout_width="40dp"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:src="@drawable/lock"-->
+<!--                />-->
+<!--        </FrameLayout>-->
 
         <!-- Automatic Bottom Margin -->
         <ImageView
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="20dp"
-            app:layout_constraintTop_toBottomOf="@id/card3"
+            app:layout_constraintTop_toBottomOf="@id/card2"
             app:layout_constraintStart_toStartOf="parent"
             />
 

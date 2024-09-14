@@ -1,2 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <!-- Module 6_2 page 1 -->
+    <!-- int[] module6_2_1 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module6_2_1_title">UNAMBIGUOUS GRAMMAR</string>
+    <string name="module6_2_1_content_1">In this lesson, we will dive into the critical role that
+grammar plays in crafting clear and precise sentences. Unambiguous grammar can lead to
+misunderstandings, misinterpretations, and confusion. To communicate effectively, it's essential to
+structure sentences in a way that leaves no room for uncertainty. This module will equip you with the
+tools to recognize and correct ambiguous grammatical constructs, ensuring that your communication
+remains concise, accurate, and unambiguous.</string>
+    <string name="module6_2_1_content_2"></string>
+
+    <!-- Module 6_2 page 2 -->
+    <!-- int[] module6_2_2 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module6_2_2_title"></string>
+    <string name="module6_2_2_content_1">This module is likely focused on teaching unambiguous
+grammar—grammatical structures that ensure clarity and precision in communication. The lessons may
+include identifying common grammatical ambiguities, exercises to practice rewriting ambiguous
+sentences, and examples of how small changes in sentence structure can dramatically improve clarity.
+The emphasis is on effective, error-free communication that leaves no room for confusion.</string>
+    <string name="module6_2_2_content_2"></string>
+    <string name="module6_2_2_content_3"></string>
+    <string name="module6_2_2_content_4"></string>
+    <string name="module6_2_2_content_5"></string>
+
+    <string name="module6_2_2_content_6"></string>
+    <string name="module6_2_2_content_7"></string>
+    <string name="module6_2_2_content_8"></string>
+
+    <!-- Module 6_2 page 3 -->
+    <!-- int[] module6_2_3 = {0, 0, 1, 2, 0, 2, 0, 0}; -->
+    <string name="module6_2_3_title"></string>
+    <string name="module6_2_3_content_1">Basic Examples of Unambiguous Grammar:</string>
+    <string name="module6_2_3_content_2">Ambiguous Sentence: The professor discussed the project
+with the student in the office.</string>
+    <string name="module6_2_3_content_3">Unambiguous Version: In the office, the professor discussed
+the project with the student.</string>
+    <string name="module6_2_3_content_4">Ambiguous Sentence: The man saw the woman with a
+telescope.</string>
+    <string name="module6_2_3_content_5">Unambiguous Version: Using a telescope, the man saw the
+woman.</string>
+    <string name="module6_2_3_content_6"></string>
+    <string name="module6_2_3_content_7"></string>
+    <string name="module6_2_3_content_8"></string>
+
+</resources>

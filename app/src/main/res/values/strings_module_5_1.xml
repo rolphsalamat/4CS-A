@@ -1,2 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <!-- Module 5_1 page 1 -->
+    <!-- int[] module5_1_1 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module5_1_1_title">PARSE TREES AND IT’S CONSTRUCTION</string>
+    <string name="module5_1_1_content_1">In this module, we will dive into one of the core concepts in
+computational linguistics and formal grammar. Parse trees play a crucial role in the world of syntax,
+allowing us to break down and understand the structure of sentences and expressions. Whether you're
+new to parsing or have some experience, this lesson will help you build a solid foundation in constructing
+and interpreting parse trees.</string>
+    <string name="module5_1_1_content_2"></string>
+
+    <!-- Module 5_1 page 2 -->
+    <!-- int[] module5_1_2 = {0, 0, 0, 1, 2, 2, 0, 0}; -->
+    <string name="module5_1_2_title"></string>
+    <string name="module5_1_2_content_1">Parse trees, also known as syntax trees, represent the
+syntactic structure of a string according to a given grammar. Each node in the tree represents a grammar
+rule, and the leaves of the tree represent the terminal symbols (the actual elements of the input). Parse
+trees are essential in compilers and natural language processing as they enable us to check the correct
+structure of input data based on a set of grammatical rules. The construction of a parse tree involves
+starting from the root (the start symbol of the grammar) and working through the production rules until
+the input is fully parsed.</string>
+    <string name="module5_1_2_content_2">Basic Examples:</string>
+    <string name="module5_1_2_content_3">Mathematical Expression Parsing: For the expression 3 + (4
+* 5), the parse tree would break it down into:</string>
+    <string name="module5_1_2_content_4">The root representing the + operation</string>
+
+    <string name="module5_1_2_content_5">Two branches: one for the number 3 and another for the
+multiplication 4 * 5</string>
+
+    <!-- Module 5_1 page 3 -->
+    <!-- int[] module5_1_3 = {0, 1, 2, 2, 2, 0}; -->
+    <string name="module5_1_3_title"></string>
+    <string name="module5_1_3_content_1">Sentence Parsing in English: For the sentence "The cat
+sleeps," a simple parse tree would look like:</string>
+    <string name="module5_1_3_content_2">The root node represents a sentence (S).</string>
+    <string name="module5_1_3_content_3">Branches for noun phrase (NP: "The cat") and verb phrase
+(VP: "sleeps").</string>
+    <string name="module5_1_3_content_4">The noun phrase further breaks down into a determiner
+(Det: "The") and a noun (N: "cat").</string>
+    <string name="module5_1_3_content_5"></string>
+    <string name="module5_1_3_content_6"></string>
+
+</resources>

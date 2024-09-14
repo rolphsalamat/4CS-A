@@ -41,7 +41,7 @@ public class c_Lesson_freeuse_4 extends AppCompatActivity {
         // Find all card views
         CardView card1 = findViewById(R.id.card1);
         CardView card2 = findViewById(R.id.card2);
-        CardView card3 = findViewById(R.id.card3);
+//        CardView card3 = findViewById(R.id.card3);
 
         // Assuming numberOfSteps is determined based on your logic
         int numberOfStepsForCard1 = z_Lesson_steps.lesson_4_steps[0];
@@ -51,7 +51,7 @@ public class c_Lesson_freeuse_4 extends AppCompatActivity {
         // Set click listeners for each card
         setCardClickListener(card1, 1, numberOfStepsForCard1);
         setCardClickListener(card2, 2, numberOfStepsForCard2);
-        setCardClickListener(card3, 3, numberOfStepsForCard3);
+//        setCardClickListener(card3, 3, numberOfStepsForCard3);
 
         // Fetch progress data from the database
         fetchProgressData();
@@ -139,7 +139,7 @@ public class c_Lesson_freeuse_4 extends AppCompatActivity {
         // Update progress text views
         TextView module1ProgressText = findViewById(R.id.freeuse_lesson_1_module_4);
         TextView module2ProgressText = findViewById(R.id.freeuse_lesson_2_module_4);
-        TextView module3ProgressText = findViewById(R.id.freeuse_lesson_3_module_4);
+//        TextView module3ProgressText = findViewById(R.id.freeuse_lesson_3_module_4);
 
         // Verify passed values...
         Log.d("updateUI()", "Module: " + key + " | Progress : " + progress);
@@ -167,24 +167,28 @@ public class c_Lesson_freeuse_4 extends AppCompatActivity {
                 }
                 if (progress >= L_lesson_sequence.getNumberOfSteps("M2_Lesson 4")) {
                     cardCompletionStatus[1] = true; // Mark card 2 as completed
-                }
-                break;
-            case 3:
-                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M3_Lesson 4");
-                if (module3ProgressText != null) {
-                    module3ProgressText.setText(newText);
-                } else {
-                    Log.e("updateUI", "TextView for module 3 not found");
-                }
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M3_Lesson 4")) {
-                    cardCompletionStatus[2] = true; // Mark card 3 as completed
 
                     Log.e("Comleted Lesson!", "Calling Feedback Class");
                     feedback = new c_Lesson_feedback(this); // Initialize feedback object
                     feedback.retrieveBKTScore("Free Use Mode", "Lesson 4");
-
                 }
                 break;
+//            case 3:
+//                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M3_Lesson 4");
+//                if (module3ProgressText != null) {
+//                    module3ProgressText.setText(newText);
+//                } else {
+//                    Log.e("updateUI", "TextView for module 3 not found");
+//                }
+//                if (progress >= L_lesson_sequence.getNumberOfSteps("M3_Lesson 4")) {
+//                    cardCompletionStatus[2] = true; // Mark card 3 as completed
+//
+//                    Log.e("Comleted Lesson!", "Calling Feedback Class");
+//                    feedback = new c_Lesson_feedback(this); // Initialize feedback object
+//                    feedback.retrieveBKTScore("Free Use Mode", "Lesson 4");
+//
+//                }
+//                break;
             default:
                 Log.d("updateUI", "Invalid module number: " + key);
                 break;

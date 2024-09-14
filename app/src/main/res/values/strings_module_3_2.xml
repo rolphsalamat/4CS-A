@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Module 3 | Page 1 -->
+    <!-- Module 2 | Page 1 -->
     <!-- int[] module1_3_1 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
-    <string name="module3_2_1_title">Welcoming Introduction</string>
-    <string name="module3_2_1_content_1">In this lesson, you\'ll explore the limitations of regular languages and gain a deeper understanding of why more expressive grammars are required to recognize more complex languages. By the end of this lesson, you\'ll be able to identify examples of non-regular languages and appreciate the importance of advanced computational models, such as context-free grammars and pushdown automata.</string>
+    <string name="module3_2_1_title">EXAMPLES OF NON – REGULAR LANGUAGES</string>
+    <string name="module3_2_1_content_1">In this lesson, you\'ll explore the limitations of regular
+languages and gain a deeper understanding of why more expressive grammars are required to recognize
+more complex languages. By the end of this lesson, you\'ll be able to identify examples of non-regular
+languages and appreciate the importance of advanced computational models, such as context-free
+grammars and pushdown automata.</string>
     <string name="module3_2_1_content_2"></string>
     <string name="module3_2_1_content_3"></string>
     <string name="module3_2_1_content_4"></string>
@@ -13,10 +17,15 @@
     <string name="module3_2_1_content_7"></string>
     <string name="module3_2_1_content_8"></string>
 
-    <!-- Module 3 | Page 2 -->
+    <!-- Module 2 | Page 2 -->
     <!-- int[] module1_3_2 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
     <string name="module3_2_2_title"></string>
-    <string name="module3_2_2_content_1">This lesson focuses on non-regular languages, which cannot be described using regular expressions or recognized by finite automata. Non-regular languages require more powerful computational models, such as context-free grammars or pushdown automata. Examples of non-regular languages include balanced parentheses, palindromes, and strings with an equal number of different symbols. The lesson introduces key methods to test regularity, such as the Myhill-Nerode Theorem and the Pumping Lemma.</string>
+    <string name="module3_2_2_content_1">This lesson focuses on non-regular languages, which cannot
+be described using regular expressions or recognized by finite automata. Non-regular languages require
+more powerful computational models, such as context-free grammars or pushdown automata. Examples
+of non-regular languages include balanced parentheses, palindromes, and strings with an equal number
+of different symbols. The lesson introduces key methods to test regularity, such as the Myhill-Nerode
+Theorem and the Pumping Lemma.</string>
     <string name="module3_2_2_content_2"></string>
     <string name="module3_2_2_content_3"></string>
     <string name="module3_2_2_content_4"></string>
@@ -25,13 +34,16 @@
     <string name="module3_2_2_content_7"></string>
     <string name="module3_2_2_content_8"></string>
 
-    <!-- Module 3 | Page 3 -->
-    <!-- int[] module1_3_3 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <!-- Module 2 | Page 3 -->
+    <!-- int[] module1_3_3 = {0, 0, 1, 1, 1, 0, 0, 0}; -->
     <string name="module3_2_3_title"></string>
     <string name="module3_2_3_content_1">Basic Examples:</string>
-    <string name="module3_2_3_content_2">Balanced Parentheses: Strings like () and (()), which require matching opening and closing brackets</string>
-    <string name="module3_2_3_content_3">Palindromes: Strings that read the same forwards and backwards, such as aba or abba.</string>
-    <string name="module3_2_3_content_4">Equal Numbers of Different Symbols: Strings like aabb that require equal numbers of symbols a and b.</string>
+    <string name="module3_2_3_content_2">Balanced Parentheses: Strings like () and (()), which require
+matching opening and closing brackets.</string>
+    <string name="module3_2_3_content_3">Palindromes: Strings that read the same forwards and
+backwards, such as aba or abba.</string>
+    <string name="module3_2_3_content_4">Equal Numbers of Different Symbols: Strings like aabb that
+require equal numbers of symbols a and b.</string>
     <string name="module3_2_3_content_5"></string>
     <string name="module3_2_3_content_6"></string>
     <string name="module3_2_3_content_7"></string>

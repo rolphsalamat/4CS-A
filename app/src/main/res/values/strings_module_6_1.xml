@@ -1,2 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <!-- Module 6_1 page 1 -->
+    <!-- int[] module6_1_1 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module6_1_1_title">AMBIGUOUS GRAMMAR</string>
+    <string name="module6_1_1_content_1">In this module, you will explore the intriguing world of
+ambiguous grammar within the realm of context-free languages. Ambiguity in grammar occurs when a
+single string can be derived in more than one way, leading to different parse trees. Through this lesson,
+you will gain a deeper understanding of how ambiguous grammars function, why they are significant in
+computational theory, and how they can impact programming language design and parsing. Let's dive
+into this complex yet fascinating topic and unravel the nuances of ambiguous grammar.</string>
+    <string name="module6_1_1_content_2"></string>
+
+    <!-- Module 6_1 page 2 -->
+    <!-- int[] module6_1_2 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
+    <string name="module6_1_2_title"></string>
+    <string name="module6_1_2_content_1">The lesson focuses on ambiguous grammar in context-free
+grammar (CFG). It explains how ambiguity arises when multiple derivations (or parse trees) exist for a
+single string, leading to different syntactic interpretations. The document likely discusses examples of
+ambiguous grammars, how to identify them, and the challenges they present in parsing and language
+design. Ambiguity is important to resolve in computational systems to ensure proper syntax
+interpretation.</string>
+    <string name="module6_1_2_content_2"></string>
+    <string name="module6_1_2_content_3"></string>
+
+    <string name="module6_1_2_content_4"></string>
+    <string name="module6_1_2_content_5"></string>
+    <string name="module6_1_2_content_6"></string>
+    <string name="module6_1_2_content_7"></string>
+    <string name="module6_1_2_content_8"></string>
+
+    <!-- Module 6_1 page 3 -->
+    <!-- int[] module6_1_3 = {0, 0, 0, 1, 0, 1, 1, 0}; -->
+    <string name="module6_1_3_title"></string>
+    <string name="module6_1_3_content_1">Basic Examples of Ambiguity in CFG:</string>
+    <string name="module6_1_3_content_2">Arithmetic Expression Ambiguity: Consider the grammar for
+arithmetic expressions with addition and multiplication:</string>
+    <string name="module6_1_3_content_3">E → E + E | E * E | id</string>
+    <string name="module6_1_3_content_4">For the input string id + id * id, two possible parse trees can
+be derived:</string>
+    <string name="module6_1_3_content_5">First interpreting it as (id + id) * id</string>
+    <string name="module6_1_3_content_6">Second as id + (id * id) This ambiguity makes it unclear which
+operation to prioritize.</string>
+    <string name="module6_1_3_content_7"></string>
+    <string name="module6_1_3_content_8"></string>
+
+    <!-- Module 6_1 page 4 -->
+    <!-- int[] module6_1_4 = {0, 0, 0, 1, 0, 1, 1, 0}; -->
+    <string name="module6_1_4_title"></string>
+    <string name="module6_1_4_content_1">Grammar for Conditional Statements: In natural language
+or programming language parsing, a grammar for conditionals like if-else can lead to ambiguity:</string>
+    <string name="module6_1_4_content_2">Arithmetic Expression Ambiguity: Consider the grammar for
+arithmetic expressions with addition and multiplication:</string>
+    <string name="module6_1_4_content_3">S → if E then S | if E then S else S | other</string>
+    <string name="module6_1_4_content_4">This creates an ambiguity known as the "dangling else
+problem", where it's unclear to which if the else belongs in nested conditionals.</string>
+
+    <string name="module6_1_4_content_5"></string>
+    <string name="module6_1_4_content_6"></string>
+    <string name="module6_1_4_content_7"></string>
+    <string name="module6_1_4_content_8"></string>
+
+</resources>
