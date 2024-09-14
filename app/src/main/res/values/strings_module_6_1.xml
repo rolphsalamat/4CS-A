@@ -8,7 +8,7 @@
 ambiguous grammar within the realm of context-free languages. Ambiguity in grammar occurs when a
 single string can be derived in more than one way, leading to different parse trees. Through this lesson,
 you will gain a deeper understanding of how ambiguous grammars function, why they are significant in
-computational theory, and how they can impact programming language design and parsing. Let's dive
+computational theory, and how they can impact programming language design and parsing. Let\'s dive
 into this complex yet fascinating topic and unravel the nuances of ambiguous grammar.</string>
     <string name="module6_1_1_content_2"></string>
 
@@ -54,7 +54,7 @@ or programming language parsing, a grammar for conditionals like if-else can lea
 arithmetic expressions with addition and multiplication:</string>
     <string name="module6_1_4_content_3">S → if E then S | if E then S else S | other</string>
     <string name="module6_1_4_content_4">This creates an ambiguity known as the "dangling else
-problem", where it's unclear to which if the else belongs in nested conditionals.</string>
+problem", where it\'s unclear to which if the else belongs in nested conditionals.</string>
 
     <string name="module6_1_4_content_5"></string>
     <string name="module6_1_4_content_6"></string>

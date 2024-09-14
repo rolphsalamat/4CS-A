@@ -8,7 +8,7 @@
 defining the syntax of languages, are transformed into simplified and structured forms known as
 Chomsky Normal Form (CNF) and Greibach Normal Form (GNF). These normal forms not only make CFGs
 easier to work with but are also key in various applications like parsing and automata theory. By
-mastering CNF and GNF, you'll gain the skills to efficiently manipulate grammars and streamline language
+mastering CNF and GNF, you\'ll gain the skills to efficiently manipulate grammars and streamline language
 processing tasks. Let’sdive into the world of structured grammar transformations.</string>
     <string name="module7_1_1_content_2"></string>
 
