@@ -419,7 +419,8 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
     public void onPostTestComplete(boolean isCorrect, double score) {
         Log.d("onPostTestComplete", "isCorrect: " + isCorrect);
 
-        if (isCorrect) {
+        // regardless kung tama or mali, basta cinall to tapos na!
+//        if (isCorrect) {
             isLessonFinished = true;
             updateProgressAndMoveToNextStep();
 //            onNextButtonClicked(); // Proceed to the next step if the test is passed
@@ -427,9 +428,9 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
 //            feedback.showDialog(score);
 
             showToast("Post Test Complete!");
-        } else {
-//            Toast.makeText(this, "Please complete the post-test before proceeding.", Toast.LENGTH_SHORT).show();
-        }
+//        } else {
+////            Toast.makeText(this, "Please complete the post-test before proceeding.", Toast.LENGTH_SHORT).show();
+//        }
     }
 
 

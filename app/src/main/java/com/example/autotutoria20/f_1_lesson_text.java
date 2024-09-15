@@ -278,6 +278,7 @@ public class f_1_lesson_text extends Fragment {
 
         // Check if title and content resources exist and have values, increment totalSteps accordingly
         if (resourceHasValue(baseName + "_title")) totalSteps++;
+        else totalSteps++;
 
         int contentCount = 10;
 

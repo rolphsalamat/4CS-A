@@ -143,6 +143,19 @@ public class f_3_lesson_post_test extends Fragment {
                     difficultyLevel = bktModel.getDifficultyLevel(userScore);
                     Log.d("f_post_test", "Determined Difficulty Level: " + difficultyLevel);
 
+                    // True or False
+                    if (difficultyLevel == e_Question.Difficulty.EASY)
+                        attemptChances = 1;
+                    // Multiple Choice
+                    else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                        attemptChances = 2;
+                    // Identification
+                    else if (difficultyLevel == e_Question.Difficulty.HARD)
+                        attemptChances = 3;
+
+
+                    Log.e("f_post_test", "dahil " + difficultyLevel + " ang difficulty, gawin nating " + attemptChances + " ang chances");
+
                     bktModel.setBKTParameters(difficultyLevel);
 
                     // Retrieve post-test questions based on difficulty level
@@ -189,7 +202,7 @@ public class f_3_lesson_post_test extends Fragment {
                 boolean correctAnswer = checkAnswer();
                 Log.e("submitButton.onClick", "correctAnswer: " + correctAnswer);
 
-                if (!correctAnswer)
+                if (!correctAnswer || answerAttempt >= attemptChances)
                     choicesGroup.clearCheck();
 
                 // Update BKT model with the result of the answer
@@ -213,29 +226,55 @@ public class f_3_lesson_post_test extends Fragment {
 
                 String TAG = "TESTING";
 
+
+                Log.d(TAG, "answerAttempt: "+answerAttempt);
+                Log.d(TAG, "attemptChances: " + attemptChances);
+
+                // Check if we need to move to the next question
+                if (answerAttempt >= attemptChances || correctAnswer) {
+                    Log.e(TAG, "currentQuestionIndex(" + currentQuestionIndex + ") < questions.length - 1(" + (questions.length - 1) + ")");
+
+                    // Move to the next question or reset if all questions are answered
+                    if (currentQuestionIndex < questions.length - 1) {
+                        currentQuestionIndex++;
+                        Log.e(TAG, "currentQuestionIndex++;" + currentQuestionIndex);
+                    } else {
+                        currentQuestionIndex = 0; // Reset to the first question if all are answered
+                        // Optionally, you might want to show a message to the user here
+                        // Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
+                        bktModel.logScores();
+                    }
+                }
+
                 // to give student chance to get correct answer before loading another question
                 if (answerAttempt >= attemptChances && !correctAnswer) {
 
-                    // Move to the next question
-                    Log.e(TAG, "currentQuestionIndex("+currentQuestionIndex+") < questions.length - 1("+ (questions.length-1)+")");
-                    if (currentQuestionIndex < questions.length - 1) {
-                        currentQuestionIndex++;
-                        Log.e(TAG,"currentQuestionIndex++;" + currentQuestionIndex);
-                    } else {
-                        currentQuestionIndex = 0; // Reset to the first question if all are answered
-//                    Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
-                        bktModel.logScores();
-                    }
+                    Log.e(TAG, "Answer is INCORRECT!");
 
                     loadQuestion(); // Load the next question
                     answerAttempt = 0;
 
-                } else if (answerAttempt <= attemptChances && correctAnswer) {
-                    // Notify the listener
+                } else if (correctAnswer) {
+                    // Check if the answer is correct
+                    Log.e(TAG, "Answer is CORRECT! but keep asking until maka-10");
+
+                    // Load the next question and reset the attempt counter
+                    loadQuestion();
+                    answerAttempt = 0;
+                }
+
+                int numberofPostTestQuestions = 3;
+
+                Log.e(TAG, "currentQuestionIndex("+currentQuestionIndex+") == " + numberofPostTestQuestions + "?");
+                // lagyan ko ba to na kailangan umabot ng 10 na questions??
+                if (currentQuestionIndex == numberofPostTestQuestions) {
+                    Log.e(TAG,"YES!! TAPOS NA YUNG POST TEST!");
                     if (postTestCompleteListener != null && correctAnswer) {
+                        Log.e(TAG,"FINISH!!!");
                         postTestCompleteListener.onPostTestComplete(correctAnswer, knowledgeProb);
                     }
                 }
+
             }
         });
     }
