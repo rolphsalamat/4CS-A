@@ -102,7 +102,32 @@
 
             </FrameLayout>
 
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/uplifts_button"
+                    android:layout_width="140dp"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:text="Uplifts"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/roboto_serif"
+                    android:textAllCaps="false"
+                    android:gravity="center_horizontal|center_vertical" />
+
+                <View
+                    android:id="@+id/upliftSelected"
+                    android:layout_width="140dp"
+                    android:layout_height="2dp"
+                    android:layout_gravity="bottom"/>
+
+            </FrameLayout>
+
         </LinearLayout>
+
 
         <!-- This should be at the center in both the top panels and bottom panels, but  each panel can have an excess objects overlaying on top of the viewpager -->
         <androidx.viewpager.widget.ViewPager

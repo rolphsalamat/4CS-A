@@ -79,7 +79,7 @@ public class b_main_0_menu extends AppCompatActivity {
     private List<Fragment> freeUseFragmentList;
     private long backPressedTime;
     private Button increment_progress;
-    private View module, description;
+    private View module, description, uplifts;
     private ShapeableImageView profileImageView;
     private FrameLayout profileFrameLayout;
     private CustomLoadingDialog loadingDialog;
@@ -171,12 +171,14 @@ public class b_main_0_menu extends AppCompatActivity {
             progressiveFragmentList = new ArrayList<>();
             progressiveFragmentList.add(new b_main_1_lesson_progressive());
             progressiveFragmentList.add(new b_main_3_description());
+            progressiveFragmentList.add(new b_main_4_uplifts());
         }
 
         if (freeUseFragmentList == null) {
             freeUseFragmentList = new ArrayList<>();
             freeUseFragmentList.add(new b_main_2_lesson_freeuse());
             freeUseFragmentList.add(new b_main_3_description());
+            freeUseFragmentList.add(new b_main_4_uplifts());
         }
 
         pagerAdapter = new CustomPagerAdapter(getSupportFragmentManager(), progressiveFragmentList);
@@ -185,6 +187,7 @@ public class b_main_0_menu extends AppCompatActivity {
         // Button highlighter for Header
         module = findViewById(R.id.modulesSelected);
         description = findViewById(R.id.descriptionSelected);
+        uplifts = findViewById(R.id.upliftSelected);
 
         // OPEN NAVIGATION DRAWER
         Button toggleDrawerButton = findViewById(R.id.toggle_drawer_button);
@@ -236,8 +239,9 @@ public class b_main_0_menu extends AppCompatActivity {
         modulesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                description.setBackgroundColor(Color.TRANSPARENT);
                 module.setBackgroundColor(Color.WHITE);
+                description.setBackgroundColor(Color.TRANSPARENT);
+                uplifts.setBackgroundColor(Color.TRANSPARENT);
                 viewPager.setCurrentItem(0);
             }
         });
@@ -249,26 +253,63 @@ public class b_main_0_menu extends AppCompatActivity {
             public void onClick(View v) {
                 module.setBackgroundColor(Color.TRANSPARENT);
                 description.setBackgroundColor(Color.WHITE);
+                uplifts.setBackgroundColor(Color.TRANSPARENT);
                 viewPager.setCurrentItem(1);
+            }
+        });
+
+        // SHOW UPLIFTS FRAGMENT
+        descriptionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                module.setBackgroundColor(Color.TRANSPARENT);
+                description.setBackgroundColor(Color.TRANSPARENT);
+                uplifts.setBackgroundColor(Color.WHITE);
+                viewPager.setCurrentItem(2);
             }
         });
 
         // Add ViewPager OnPageChangeListener to update button highlights
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageScrolled(
+                    int position,
+                    float positionOffset,
+                    int positionOffsetPixels
+                )
+            {
                 // No action needed here
             }
 
             @Override
             public void onPageSelected(int position) {
-                if (position == 0) {
-                    description.setBackgroundColor(Color.TRANSPARENT);
-                    module.setBackgroundColor(Color.WHITE);
-                } else if (position == 1) {
-                    module.setBackgroundColor(Color.TRANSPARENT);
-                    description.setBackgroundColor(Color.WHITE);
+                switch (position) {
+                    case 0:
+                        module.setBackgroundColor(Color.WHITE);
+                        description.setBackgroundColor(Color.TRANSPARENT);
+                        uplifts.setBackgroundColor(Color.TRANSPARENT);
+                        break;
+                    case 1:
+                        module.setBackgroundColor(Color.TRANSPARENT);
+                        description.setBackgroundColor(Color.WHITE);
+                        uplifts.setBackgroundColor(Color.TRANSPARENT);
+                        break;
+                    case 2:
+                        module.setBackgroundColor(Color.TRANSPARENT);
+                        description.setBackgroundColor(Color.TRANSPARENT);
+                        uplifts.setBackgroundColor(Color.WHITE);
+                        break;
+                    default:
+                        Log.e("onPageSelected(" + position +")", "Error!");
                 }
+
+//                if (position == 0) {
+//                    description.setBackgroundColor(Color.TRANSPARENT);
+//                    module.setBackgroundColor(Color.WHITE);
+//                } else if (position == 1) {
+//                    module.setBackgroundColor(Color.TRANSPARENT);
+//                    description.setBackgroundColor(Color.WHITE);
+//                }
             }
 
             @Override
@@ -631,44 +672,10 @@ public class b_main_0_menu extends AppCompatActivity {
                 } catch (Exception browserException) {
                     // In case no browser is available, show error or handle fallback
                     Toast.makeText(this, "No application available to open Facebook", Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-    }
-
-
-//    private void openFacebookPage() {
-//        Uri uri = Uri.parse("https://www.facebook.com/ucpncofficial");
-//        startActivity(new Intent(Intent.ACTION_VIEW, uri));
-//    }
-
-//    private void fetchUserData(String userId) {
-//        DocumentReference userRef = db.collection("users").document(userId);
-//        userRef.get().addOnCompleteListener(task -> {
-//            if (task.isSuccessful()) {
-//                DocumentSnapshot document = task.getResult();
-//                if (document.exists()) {
-//                    Boolean tutorial = document.getBoolean("Tutorial");
-//                    String firstName = document.getString("First Name");
-//                    String lastName = document.getString("Last Name");
-//                    String email = document.getString("Email Address");
-//                    String gender = document.getString("Gender");
-//                    int age = document.getLong("Age").intValue();
-//
-//                    Log.e("fetchUserData", "First Login?: " + tutorial);
-//
-//                    // Check login attempts and show tutorial if it's 0
-//                    if (!tutorial) {
-//                        showTutorial();
-//                    }
-//                } else {
-//                    Toast.makeText(b_main_0_menu.this, "No user data found", Toast.LENGTH_SHORT).show();
-//                }
-//            } else {
-//                Toast.makeText(b_main_0_menu.this, "Error fetching user data", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+                } // Catch no Browser Application
+            } // Catch no Facebook Lite Application
+        } // Catch no Facebook Application
+    } // Method
 
     private void fetchUserData(String userId) {
 
@@ -681,6 +688,8 @@ public class b_main_0_menu extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
+
+                        // User's Personal Information
                         Boolean tutorial = document.getBoolean("Tutorial");
                         String firstName = document.getString("First Name");
                         String lastName = document.getString("Last Name");

@@ -38,6 +38,14 @@ public class a_user_1_login extends AppCompatActivity {
     private boolean isPasswordVisible = false;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private TextView loginButton, forgotPassword;
+    private LinearLayout signupButton;
+    private EditText
+        emailAddressTextView,
+        usernameTextView,
+        passwordTextView;
+    private ImageButton showHidePasswordButton;
+    private ImageView pncGotoPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +57,16 @@ public class a_user_1_login extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         // Initialize views and buttons
-        TextView loginButton = findViewById(R.id.btnLogin);
-        LinearLayout signupButton = findViewById(R.id.btnSignup);
-        EditText emailAddressTextView = findViewById(R.id.textUsername);
-        EditText usernameTextView = findViewById(R.id.textUsername);
-        EditText passwordTextView = findViewById(R.id.textPassword);
+        loginButton = findViewById(R.id.btnLogin);
+        signupButton = findViewById(R.id.btnSignup);
+        emailAddressTextView = findViewById(R.id.textUsername);
+        usernameTextView = findViewById(R.id.textUsername);
+        passwordTextView = findViewById(R.id.textPassword);
+        forgotPassword = findViewById(R.id.forgotPassword);
+        showHidePasswordButton = findViewById(R.id.btnShowPassword);
+        pncGotoPage = findViewById(R.id.pnc_logo);
 
         // FORGOT PASSWORD
-        TextView forgotPassword = findViewById(R.id.forgotPassword);
         forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,22 +74,12 @@ public class a_user_1_login extends AppCompatActivity {
             }
         });
 
-        ImageButton showHidePasswordButton = findViewById(R.id.btnShowPassword);
+        // Show Password
         // Show Password
         showHidePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Toggle password visibility
-                isPasswordVisible = !isPasswordVisible;
-
-                // Change the password visibility in the EditText
-                if (isPasswordVisible) {
-                    passwordTextView.setTransformationMethod(null); // Show the password
-                    showHidePasswordButton.setBackgroundResource(R.drawable.hide_password); // Change icon to hide password
-                } else {
-                    passwordTextView.setTransformationMethod(new PasswordTransformationMethod()); // Hide the password
-                    showHidePasswordButton.setBackgroundResource(R.drawable.show_password); // Change icon to show password
-                }
+                showPassword();
             }
         });
 
@@ -88,6 +88,8 @@ public class a_user_1_login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String email = emailAddressTextView.getText().toString().trim();
+
+//                String username = usernameTextView.getText().toString().trim();
                 String password = passwordTextView.getText().toString().trim();
 
                 loginUser(email, password);
@@ -98,17 +100,31 @@ public class a_user_1_login extends AppCompatActivity {
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Open Signup Page
                 startActivity(new Intent(a_user_1_login.this, a_user_2_signup.class));
             }
         });
 
-        ImageView pncGotoPage = findViewById(R.id.pnc_logo);
         pncGotoPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openFacebookPage();
             }
         });
+    }
+
+    private void showPassword() {
+        // Toggle password visibility
+        isPasswordVisible = !isPasswordVisible;
+
+        // Change the password visibility in the EditText
+        if (isPasswordVisible) {
+            passwordTextView.setTransformationMethod(null); // Show the password
+            showHidePasswordButton.setBackgroundResource(R.drawable.hide_password); // Change icon to hide password
+        } else {
+            passwordTextView.setTransformationMethod(new PasswordTransformationMethod()); // Hide the password
+            showHidePasswordButton.setBackgroundResource(R.drawable.show_password); // Change icon to show password
+        }
     }
 
     private void openFacebookPage() {
@@ -122,37 +138,31 @@ public class a_user_1_login extends AppCompatActivity {
             facebookIntent.setPackage("com.facebook.katana"); // Facebook App package name
             startActivity(facebookIntent);
         } catch (Exception e) {
-            // If Facebook app is not available, try Facebook Lite
+            // Try to open Facebook Lite
             try {
                 Intent facebookLiteIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebookLiteUrl));
                 facebookLiteIntent.setPackage("com.facebook.lite"); // Facebook Lite package name
                 startActivity(facebookLiteIntent);
             } catch (Exception liteException) {
-                // If Facebook Lite is not available, open in default browser
+                // Try to open Browser
                 try {
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(facebookUrl));
                     startActivity(browserIntent);
                 } catch (Exception browserException) {
                     // In case no browser is available, show error or handle fallback
                     Toast.makeText(this, "No application available to open Facebook", Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-    }
+                } // Catch no Browser Application
+            } // Catch no Facebook Lite Application
+        } // Catch no Facebook Application
+    } // Method
 
     private void loginUser(String username, String enteredPassword) {
-        // Log the start of the login process
-        Log.d("LoginProcess", "Starting login for username: " + username);
-
-        // Convert the username to lowercase for case-insensitive querying (if needed)
-        String lowercaseUsername = username.toLowerCase();
-//        Log.d("LoginProcess", "Using lowercase username for querying: " + lowercaseUsername);
-        Log.d("LoginProcess", "Using username for querying: " + username);
 
         // Query Firestore for the email associated with this username
         db.collection("users")
-//                .document()
-                .whereEqualTo("Username", username)  // Ensure you're querying the lowercase version of the username if stored that way
+
+                // Go to User's Personal Details "Username", for the logging in process.
+                .whereEqualTo("Username", username)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -163,10 +173,12 @@ public class a_user_1_login extends AppCompatActivity {
 
                             QuerySnapshot querySnapshot = task.getResult();
                             if (!querySnapshot.isEmpty()) {
-                                // We found a matching username
+
+                                // A matching username is found
                                 DocumentSnapshot document = querySnapshot.getDocuments().get(0);
                                 Log.d("LoginProcess", "Document retrieved: " + document.getData());
 
+                                // Store retrieved data to String for later logging in
                                 String email = document.getString("Email Address");
                                 String storedHashedPassword = document.getString("Password");
 
@@ -174,12 +186,14 @@ public class a_user_1_login extends AppCompatActivity {
                                 Log.d("LoginProcess", "Retrieved email: " + email);
                                 Log.d("LoginProcess", "Retrieved hashed password: " + storedHashedPassword);
 
+                                // if Email has no value
                                 if (email == null || email.isEmpty()) {
                                     Log.e("LoginProcess", "Email is missing for username: " + username);
                                     Toast.makeText(a_user_1_login.this, "Email is missing for this username", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
 
+                                // if Password has no value
                                 if (storedHashedPassword == null || storedHashedPassword.isEmpty()) {
                                     Log.e("LoginProcess", "Password is missing for username: " + username);
                                     Toast.makeText(a_user_1_login.this, "Password is missing for this username", Toast.LENGTH_SHORT).show();
@@ -241,77 +255,6 @@ public class a_user_1_login extends AppCompatActivity {
                     }
                 });
     }
-
-
-
-    // Method to authenticate user using username and password
-//    private void loginUser(String username, String enteredPassword) {
-//        db.collection("users")
-//                .whereEqualTo("Username", username)
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            QuerySnapshot querySnapshot = task.getResult();
-//                            if (!querySnapshot.isEmpty()) {
-//                                DocumentSnapshot document = querySnapshot.getDocuments().get(0);
-//                                Log.d("LoginProcess", "Document retrieved: " + document.getData());
-//
-//                                String email = document.getString("Email Address");
-//                                String storedHashedPassword = document.getString("Password");
-//
-//                                if (email == null || email.isEmpty()) {
-//                                    Log.e("LoginProcess", "Email is null or empty for username: " + username);
-//                                    Toast.makeText(a_user_1_login.this, "Email is missing for this username", Toast.LENGTH_SHORT).show();
-//                                    return;
-//                                }
-//
-//                                if (storedHashedPassword == null || storedHashedPassword.isEmpty()) {
-//                                    Log.e("LoginProcess", "Password is missing for this username: " + username);
-//                                    Toast.makeText(a_user_1_login.this, "Password is missing for this username", Toast.LENGTH_SHORT).show();
-//                                    return;
-//                                }
-//
-//                                // Verify the entered password against the stored hash
-//                                if (a_user_3_password_encryption.checkPassword(enteredPassword, storedHashedPassword)) {
-//                                    // Password matches, proceed with Firebase authentication
-//                                    mAuth.signInWithEmailAndPassword(email, enteredPassword)
-//                                            .addOnCompleteListener(a_user_1_login.this, new OnCompleteListener<AuthResult>() {
-//                                                @Override
-//                                                public void onComplete(@NonNull Task<AuthResult> task) {
-//                                                    if (task.isSuccessful()) {
-//                                                        FirebaseUser user = mAuth.getCurrentUser();
-//                                                        if (user != null) {
-//                                                            String userId = user.getUid();
-//                                                            Log.d("LoginProcess", "Login successful. User ID: " + userId);
-//                                                            fetchUserInfo(userId);
-//                                                        } else {
-//                                                            Log.d("LoginProcess", "User login failed: User object is null");
-//                                                            Toast.makeText(a_user_1_login.this, "Account does not exist", Toast.LENGTH_SHORT).show();
-//                                                        }
-//                                                    } else {
-//                                                        Log.e("Firebase Authentication", "Authentication failed: " + task.getException().getMessage());
-//                                                        Toast.makeText(a_user_1_login.this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                                                    }
-//                                                }
-//                                            });
-//                                } else {
-//                                    Log.e("LoginProcess", "Password does not match for username: " + username);
-//                                    Toast.makeText(a_user_1_login.this, "Incorrect password", Toast.LENGTH_SHORT).show();
-//                                }
-//                            } else {
-//                                Log.d("LoginProcess", "Username does not exist: " + username);
-//                                Toast.makeText(a_user_1_login.this, "Username does not exist", Toast.LENGTH_SHORT).show();
-//                            }
-//                        } else {
-//                            String errorMessage = task.getException() != null ? task.getException().getMessage() : "Unknown error";
-//                            Log.e("Firestore", "Failed to retrieve username: " + errorMessage);
-//                            Toast.makeText(a_user_1_login.this, "Error retrieving username", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
-//    }
 
     private void fetchUserInfo(String userId) {
         DocumentReference userRef = db.collection("users").document(userId);
