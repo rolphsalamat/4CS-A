@@ -172,7 +172,7 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
                 module2ProgressText.setText(newText);
 
                 if (progress >= L_lesson_sequence.getNumberOfSteps("M2_Lesson 3")) {
-                    card3LockedOverlay.setVisibility(View.GONE);
+//                    card3LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
                     Log.d("Completed Lesson!", "Lesson 3 Completed! :D");
 

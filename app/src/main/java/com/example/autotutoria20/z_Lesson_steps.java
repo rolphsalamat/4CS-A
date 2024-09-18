@@ -61,12 +61,12 @@ public class z_Lesson_steps
             L_lesson_sequence.getNumberOfSteps("M1_Lesson 2")};
     public static final int[] lesson_3_steps = {
             L_lesson_sequence.getNumberOfSteps("M1_Lesson 3"),
-            L_lesson_sequence.getNumberOfSteps("M2_Lesson 3"),
-            L_lesson_sequence.getNumberOfSteps("M3_Lesson 3")};
+            L_lesson_sequence.getNumberOfSteps("M2_Lesson 3")};
+//            L_lesson_sequence.getNumberOfSteps("M3_Lesson 3")};
     public static final int[] lesson_4_steps = {
             L_lesson_sequence.getNumberOfSteps("M1_Lesson 4"),
-            L_lesson_sequence.getNumberOfSteps("M2_Lesson 4"),
-            L_lesson_sequence.getNumberOfSteps("M3_Lesson 4")};
+            L_lesson_sequence.getNumberOfSteps("M2_Lesson 4")};
+//            L_lesson_sequence.getNumberOfSteps("M3_Lesson 4")};
     public static final int[] lesson_5_steps = {
             L_lesson_sequence.getNumberOfSteps("M1_Lesson 5"),
             L_lesson_sequence.getNumberOfSteps("M2_Lesson 5"),

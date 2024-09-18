@@ -246,28 +246,28 @@ public class f_3_lesson_post_test extends Fragment {
                     }
                 }
 
-                // to give student chance to get correct answer before loading another question
-                if (answerAttempt >= attemptChances && !correctAnswer) {
+                int posttestQuestions = 10;
 
-                    Log.e(TAG, "Answer is INCORRECT!");
+                Log.e(TAG, "currentQuestionIndex("+currentQuestionIndex+") == " + posttestQuestions + "?");
+                if (currentQuestionIndex < posttestQuestions) {
+                    // to give student chance to get correct answer before loading another question
+                    if (answerAttempt >= attemptChances && !correctAnswer) {
 
-                    loadQuestion(); // Load the next question
-                    answerAttempt = 0;
+                        Log.e(TAG, "Answer is INCORRECT!");
 
-                } else if (correctAnswer) {
-                    // Check if the answer is correct
-                    Log.e(TAG, "Answer is CORRECT! but keep asking until maka-10");
+                        loadQuestion(); // Load the next question
+                        answerAttempt = 0;
 
-                    // Load the next question and reset the attempt counter
-                    loadQuestion();
-                    answerAttempt = 0;
+                    } else if (correctAnswer) {
+                        // Check if the answer is correct
+                        Log.e(TAG, "Answer is CORRECT! but keep asking until maka-10");
+
+                        // Load the next question and reset the attempt counter
+                        loadQuestion();
+                        answerAttempt = 0;
+                    }
                 }
-
-                int numberofPostTestQuestions = 3;
-
-                Log.e(TAG, "currentQuestionIndex("+currentQuestionIndex+") == " + numberofPostTestQuestions + "?");
-                // lagyan ko ba to na kailangan umabot ng 10 na questions??
-                if (currentQuestionIndex == numberofPostTestQuestions) {
+                else if (currentQuestionIndex == posttestQuestions) {
                     Log.e(TAG,"YES!! TAPOS NA YUNG POST TEST!");
                     if (postTestCompleteListener != null && correctAnswer) {
                         Log.e(TAG,"FINISH!!!");

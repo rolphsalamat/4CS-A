@@ -641,9 +641,9 @@ public class f_1_lesson_text extends Fragment {
         if (text8ResId == 0)
             Log.e(TEG, "Text 8 is wrong: " + context8);
         if (text9ResId == 0)
-            Log.e(TEG, "Text 8 is wrong: " + context9);
+            Log.e(TEG, "Text 9 is wrong: " + context9);
         if (text10ResId == 0)
-            Log.e(TEG, "Text 8 is wrong: " + context10);
+            Log.e(TEG, "Text 10 is wrong: " + context10);
 
 
         // Set the text content

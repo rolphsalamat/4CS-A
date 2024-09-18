@@ -186,26 +186,50 @@ public class f_0_lesson_pre_test extends Fragment {
 
                 String TAG = "TESTING";
 
-                // to give student chance to get correct answer before loading another question
-                if (answerAttempt >= attemptChances && !correctAnswer) {
+                Log.d(TAG, "answerAttempt: "+answerAttempt);
+                Log.d(TAG, "attemptChances: " + attemptChances);
 
-                    // Move to the next question
-                    Log.e(TAG, "currentQuestionIndex("+currentQuestionIndex+") < questions.length - 1("+ (questions.length-1)+")");
+                // Check if we need to move to the next question
+                if (answerAttempt >= attemptChances || correctAnswer) {
+                    Log.e(TAG, "currentQuestionIndex(" + currentQuestionIndex + ") < questions.length - 1(" + (questions.length - 1) + ")");
+
+                    // Move to the next question or reset if all questions are answered
                     if (currentQuestionIndex < questions.length - 1) {
                         currentQuestionIndex++;
-                        Log.e(TAG,"currentQuestionIndex++;" + currentQuestionIndex);
+                        Log.e(TAG, "currentQuestionIndex++;" + currentQuestionIndex);
                     } else {
                         currentQuestionIndex = 0; // Reset to the first question if all are answered
-//                    Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
+                        // Optionally, you might want to show a message to the user here
+                        // Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
                         bktModel.logScores();
                     }
+                }
 
-                    loadQuestion(); // Load the next question
-                    answerAttempt = 0;
+                int pretestQuestions = 5;
 
-                } else if (answerAttempt <= attemptChances && correctAnswer) {
-                    // Notify the listener
+                Log.e(TAG, "currentQuestionIndex("+currentQuestionIndex+") == " + pretestQuestions + "?");
+                if (currentQuestionIndex < pretestQuestions) {
+                    // to give student chance to get correct answer before loading another question
+                    if (answerAttempt >= attemptChances && !correctAnswer) {
+
+                        Log.e(TAG, "Answer is INCORRECT!");
+
+                        loadQuestion(); // Load the next question
+                        answerAttempt = 0;
+
+                    } else if (correctAnswer) {
+                        // Check if the answer is correct
+                        Log.e(TAG, "Answer is CORRECT! but keep asking until maka-10");
+
+                        // Load the next question and reset the attempt counter
+                        loadQuestion();
+                        answerAttempt = 0;
+                    }
+                }
+                else if (currentQuestionIndex == pretestQuestions) {
+                    Log.e(TAG,"YES!! TAPOS NA YUNG PRE TEST!");
                     if (preTestCompleteListener != null && correctAnswer) {
+                        Log.e(TAG,"FINISH!!!");
                         preTestCompleteListener.onPreTestComplete(correctAnswer);
                     }
                 }
