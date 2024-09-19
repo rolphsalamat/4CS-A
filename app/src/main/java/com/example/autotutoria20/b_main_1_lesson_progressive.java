@@ -132,24 +132,13 @@ public class b_main_1_lesson_progressive extends Fragment {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-
-
                     int totalModules = 0;
 
-                    // Reset card progress before updating
-                    resetCardProgress();
-
                     for (DocumentSnapshot lessonDoc : task.getResult()) {
-
-//                        int i
                         int lessonNumber = Integer.parseInt(lessonDoc.getId().substring(7).trim());
-                        Log.e(TAG, "lessonNumber: " + lessonNumber);
                         int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
-                        Log.e(TAG, "maxProgressValues: " + Arrays.toString(maxProgressValues));
                         totalModules += maxProgressValues.length;
-                        Log.e(TAG, "totalModules: " + totalModules);
                     }
-
 
                     int moduleCounter = 0;
 
@@ -158,36 +147,39 @@ public class b_main_1_lesson_progressive extends Fragment {
                         int totalProgress = 0;
                         int totalMaxProgress = 0;
                         int lessonNumber = Integer.parseInt(lesson.substring(7).trim());
-                        Log.e(TAG, "lessonNumber: " + lessonNumber);
                         int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
-                        Log.e(TAG, "maxProgressValues: " + Arrays.toString(maxProgressValues));
 
                         for (int i = 0; i < maxProgressValues.length; i++) {
                             String key = "M" + (i + 1);
                             Long moduleProgress = lessonDoc.getLong(key);
-                            Log.e(TAG, "moduleProgress: " + moduleProgress);
                             if (moduleProgress != null) {
                                 totalProgress += moduleProgress;
                                 totalMaxProgress += maxProgressValues[i];
                             }
 
                             moduleCounter++;
+                            final int progress = (int) ((moduleCounter / (float) totalModules) * 100);
+                            updateProgress(progress);
                         }
 
                         if (totalMaxProgress > 0) {
                             double overallProgress = ((double) totalProgress / totalMaxProgress) * 100;
                             int overallProgressInt = (int) Math.round(overallProgress);
 
-                            Log.e("fetchAllProgressData", "updateCompletionStatus(" + lessonNumber + ");");
-
-                            // Update UI without incrementing beyond actual progress
                             updateCardProgress(lessonNumber, overallProgressInt);
                         }
                     }
 
-                    hideLoadingDialog(); // Ensure the loading dialog is dismissed
+                    // Add delay similar to progressive mode
+                    incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
+                        @Override
+                        public void run() {
+                            hideLoadingDialog();
+                        }
+                    });
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
+                    hideLoadingDialog(); // Hide the dialog in case of failure as well
                 }
             }
         });

@@ -171,23 +171,24 @@ public class b_main_0_menu extends AppCompatActivity {
             progressiveFragmentList = new ArrayList<>();
             progressiveFragmentList.add(new b_main_1_lesson_progressive());
             progressiveFragmentList.add(new b_main_3_description());
-            progressiveFragmentList.add(new b_main_4_uplifts());
+//            progressiveFragmentList.add(new b_main_4_uplifts());
         }
 
         if (freeUseFragmentList == null) {
             freeUseFragmentList = new ArrayList<>();
             freeUseFragmentList.add(new b_main_2_lesson_freeuse());
             freeUseFragmentList.add(new b_main_3_description());
-            freeUseFragmentList.add(new b_main_4_uplifts());
+//            freeUseFragmentList.add(new b_main_4_uplifts());
         }
 
-        pagerAdapter = new CustomPagerAdapter(getSupportFragmentManager(), progressiveFragmentList);
+        pagerAdapter = new CustomPagerAdapter(
+                getSupportFragmentManager(), progressiveFragmentList);
         viewPager.setAdapter(pagerAdapter);
 
         // Button highlighter for Header
         module = findViewById(R.id.modulesSelected);
         description = findViewById(R.id.descriptionSelected);
-        uplifts = findViewById(R.id.upliftSelected);
+//        uplifts = findViewById(R.id.upliftSelected);
 
         // OPEN NAVIGATION DRAWER
         Button toggleDrawerButton = findViewById(R.id.toggle_drawer_button);
@@ -201,7 +202,8 @@ public class b_main_0_menu extends AppCompatActivity {
         // NAVIGATION DRAWER BUTTONS
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+        drawerToggle = new ActionBarDrawerToggle(
+                this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
@@ -241,7 +243,7 @@ public class b_main_0_menu extends AppCompatActivity {
             public void onClick(View v) {
                 module.setBackgroundColor(Color.WHITE);
                 description.setBackgroundColor(Color.TRANSPARENT);
-                uplifts.setBackgroundColor(Color.TRANSPARENT);
+//                uplifts.setBackgroundColor(Color.TRANSPARENT);
                 viewPager.setCurrentItem(0);
             }
         });
@@ -253,21 +255,22 @@ public class b_main_0_menu extends AppCompatActivity {
             public void onClick(View v) {
                 module.setBackgroundColor(Color.TRANSPARENT);
                 description.setBackgroundColor(Color.WHITE);
-                uplifts.setBackgroundColor(Color.TRANSPARENT);
+//                uplifts.setBackgroundColor(Color.TRANSPARENT);
                 viewPager.setCurrentItem(1);
             }
         });
 
-        // SHOW UPLIFTS FRAGMENT
-        descriptionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                module.setBackgroundColor(Color.TRANSPARENT);
-                description.setBackgroundColor(Color.TRANSPARENT);
-                uplifts.setBackgroundColor(Color.WHITE);
-                viewPager.setCurrentItem(2);
-            }
-        });
+//        // SHOW UPLIFTS FRAGMENT
+//        Button upliftsButton = findViewById(R.id.uplifts_button);
+//        upliftsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                module.setBackgroundColor(Color.TRANSPARENT);
+//                description.setBackgroundColor(Color.TRANSPARENT);
+//                uplifts.setBackgroundColor(Color.WHITE);
+//                viewPager.setCurrentItem(2);
+//            }
+//        });
 
         // Add ViewPager OnPageChangeListener to update button highlights
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -276,7 +279,7 @@ public class b_main_0_menu extends AppCompatActivity {
                     int position,
                     float positionOffset,
                     int positionOffsetPixels
-                )
+            )
             {
                 // No action needed here
             }
@@ -287,18 +290,18 @@ public class b_main_0_menu extends AppCompatActivity {
                     case 0:
                         module.setBackgroundColor(Color.WHITE);
                         description.setBackgroundColor(Color.TRANSPARENT);
-                        uplifts.setBackgroundColor(Color.TRANSPARENT);
+//                        uplifts.setBackgroundColor(Color.TRANSPARENT);
                         break;
                     case 1:
                         module.setBackgroundColor(Color.TRANSPARENT);
                         description.setBackgroundColor(Color.WHITE);
-                        uplifts.setBackgroundColor(Color.TRANSPARENT);
+//                        uplifts.setBackgroundColor(Color.TRANSPARENT);
                         break;
-                    case 2:
-                        module.setBackgroundColor(Color.TRANSPARENT);
-                        description.setBackgroundColor(Color.TRANSPARENT);
-                        uplifts.setBackgroundColor(Color.WHITE);
-                        break;
+//                    case 2:
+//                        module.setBackgroundColor(Color.TRANSPARENT);
+//                        description.setBackgroundColor(Color.TRANSPARENT);
+//                        uplifts.setBackgroundColor(Color.WHITE);
+//                        break;
                     default:
                         Log.e("onPageSelected(" + position +")", "Error!");
                 }
@@ -685,8 +688,8 @@ public class b_main_0_menu extends AppCompatActivity {
         userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
 
                         // User's Personal Information

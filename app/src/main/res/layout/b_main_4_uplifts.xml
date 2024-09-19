@@ -1,6 +1,369 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/autotutoria_background_color"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".b_main_3_description">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- WHAT WILL I LEARN? -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/learn_0"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            />
+
+        <!-- LEARN #1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bullet"
+                android:layout_marginStart="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/learn_1"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+
+        <!-- LEARN #2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bullet"
+                android:layout_marginStart="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/learn_2"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+
+        <!-- LEARN #3 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bullet"
+                android:layout_marginStart="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/learn_3"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+
+        <!-- LEARN #4 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bullet"
+                android:layout_marginStart="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/learn_4"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+
+        <!-- WHO IS THE TARGET AUDIENCE -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/audience_0"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            />
+
+        <!-- AUDIENCE #1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bullet"
+                android:layout_marginStart="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/audience_1"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+
+        <!-- AUDIENCE #2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bullet"
+                android:layout_marginStart="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/audience_2"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+
+        <!-- AUDIENCE #3 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bullet"
+                android:layout_marginStart="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/audience_3"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+
+        <!-- BENEFITS -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/benefits_0"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            />
+
+        <!-- BENEFITS #1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bullet"
+                android:layout_marginStart="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/benefits_1"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+
+        <!-- BENEFITS #2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bullet"
+                android:layout_marginStart="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/benefits_2"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+
+        <!-- BENEFITS #3 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bullet"
+                android:layout_marginStart="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/benefits_3"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+
+        <!-- BENEFITS #4 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bullet"
+                android:layout_marginStart="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/benefits_4"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+
+        <!-- SALARY -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/salary_0"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            />
+
+        <!-- SALARY #1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bullet"
+                android:layout_marginStart="20dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/salary_1"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <!-- REQUIREMENTS -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/requirements_0"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            />
+
+        <!-- REQUIREMENTS #1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bullet"
+                android:layout_marginStart="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/requirements_1"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+
+        <!-- REQUIREMENTS #2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bullet"
+                android:layout_marginStart="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/requirements_2"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+
+        <!-- REQUIREMENTS #3 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/bullet"
+                android:layout_marginStart="20dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/requirements_3"
+                android:textColor="@color/white"
+                android:layout_marginStart="10dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.core.widget.NestedScrollView>

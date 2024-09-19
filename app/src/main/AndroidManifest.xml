@@ -43,7 +43,7 @@
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
 
         <!-- LOGIN & SIGNUP -->
         <activity android:name=".a_user_1_login" android:exported="true"/>
@@ -58,7 +58,10 @@
         <activity android:name=".b_main_0_menu_tutorial" android:exported="true"/>
         <activity android:name=".b_main_1_lesson_progressive" android:exported="true"/>
         <activity android:name=".b_main_2_lesson_freeuse" android:exported="true"/>
+
+        <!-- Gagana ba to?? -->
         <activity android:name=".b_main_3_description" android:exported="true"/>
+        <activity android:name=".b_main_4_uplifts" android:exported="true"/>
 
         <!-- Subs (Modules or Lessons?? HAHAHA) -->
         <activity android:name=".c_Lesson_freeuse_1" android:exported="true"/>

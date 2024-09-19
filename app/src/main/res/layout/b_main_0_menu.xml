@@ -102,29 +102,29 @@
 
             </FrameLayout>
 
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+<!--            <FrameLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content">-->
 
-                <Button
-                    android:id="@+id/uplifts_button"
-                    android:layout_width="140dp"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:text="Uplifts"
-                    android:textSize="16sp"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/roboto_serif"
-                    android:textAllCaps="false"
-                    android:gravity="center_horizontal|center_vertical" />
+<!--                <Button-->
+<!--                    android:id="@+id/uplifts_button"-->
+<!--                    android:layout_width="140dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:background="@android:color/transparent"-->
+<!--                    android:text="Uplifts"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:fontFamily="@font/roboto_serif"-->
+<!--                    android:textAllCaps="false"-->
+<!--                    android:gravity="center_horizontal|center_vertical" />-->
 
-                <View
-                    android:id="@+id/upliftSelected"
-                    android:layout_width="140dp"
-                    android:layout_height="2dp"
-                    android:layout_gravity="bottom"/>
+<!--                <View-->
+<!--                    android:id="@+id/upliftSelected"-->
+<!--                    android:layout_width="140dp"-->
+<!--                    android:layout_height="2dp"-->
+<!--                    android:layout_gravity="bottom"/>-->
 
-            </FrameLayout>
+<!--            </FrameLayout>-->
 
         </LinearLayout>
 
