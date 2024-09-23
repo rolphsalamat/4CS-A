@@ -318,18 +318,6 @@ public class f_1_lesson_text extends Fragment {
     private void handleNextButtonClick() {
         Log.d("handleNextButtonClick()", "currentStep(" + currentStep + ") < totalSteps(" + totalSteps + ")");
 
-//        // (n-1) step, dapat di na mag show yung "Tap to Continue"
-//        // dapat yung Next Button nalang from d_Lesson_container ang mag-show
-//        if (currentStep == (totalSteps - 1)) {
-//            isTextLessonDone = true;
-//
-//            nextButton.setVisibility(View.VISIBLE);
-//            nextButton.setEnabled(true);
-//
-//            tapToContinueButton.setVisibility(View.GONE);
-//            tapToContinueButton.setEnabled(false);
-//        }
-
         if (currentStep < (totalSteps - 1)) {
             showNextStep(currentStep);
 
@@ -409,7 +397,9 @@ public class f_1_lesson_text extends Fragment {
                 "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_5",
                 "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_6",
                 "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_7",
-                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_8"
+                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_8",
+                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_9",
+                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_10"
         };
 
         for (int i = 0; i < contentKeys.length; i++) {
@@ -435,9 +425,19 @@ public class f_1_lesson_text extends Fragment {
                     if (currentStep < (totalSteps - 2)) {
                         Log.e(TUG, "currentStep("+currentStep+") < (totalSteps("+(totalSteps-2)+")");
                         new Handler(Looper.getMainLooper()).postDelayed(() -> {
+
+//                            // Enable Tap to Continue kasi tapos na yung delay...
                             nextButton.setEnabled(true);
-                            tapToContinueButton.setVisibility(View.VISIBLE);
-                            tapToContinueButton.setEnabled(true);
+//                            tapToContinueButton.setVisibility(View.VISIBLE);
+//                            tapToContinueButton.setEnabled(true);
+
+                            d_Lesson_container.simulateClicksInCenter();
+
+                            // i-click na agad yung nextButton dito??
+//                            handleNextButtonClick();
+
+                            // may option tayo na
+
                         }, delayInSeconds * 1000);
                     }
                     else if (currentStep == (totalSteps - 2)) {
@@ -459,23 +459,6 @@ public class f_1_lesson_text extends Fragment {
                             tapToContinueButton.setEnabled(false);
                         }, delayInSeconds * 1000);
                     }
-
-
-                    // BAKIT HINDI NAG SHO-SHOW YUNG NEXT BUTTON SA LAST STEP
-
-//                    if (currentStep < (totalSteps - 2)) {
-//                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-//                            nextButton.setEnabled(true);
-//                            tapToContinueButton.setVisibility(View.VISIBLE);
-//                            tapToContinueButton.setEnabled(true);
-//                        }, delayInSeconds * 1000);
-//                    }
-//                    else if (currentStep == (totalSteps-2) && (totalSteps == 2)) {
-//                        if (TextLessonCompleteListener != null) {
-//                            TextLessonCompleteListener.onTextLessonComplete(true, delayFinish);
-//                        }
-//                    }
-
                     return;
                 }
             } else {
@@ -533,7 +516,7 @@ public class f_1_lesson_text extends Fragment {
                 multiplier = 0.027; // Average of 0.0240 - 0.0300
                 break;
             case 10: // TESTING MODE
-                multiplier = 0.015;
+                multiplier = 0.009;
                 break;
             default:
                 multiplier = 0.05; // Default value if no valid level is provided

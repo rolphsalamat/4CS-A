@@ -82,6 +82,8 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
     private void fetchProgressData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String userId;
+
+        // Check for authenticated user
         try {
             userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         } catch (NullPointerException e) {
@@ -90,12 +92,13 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
             return;
         }
 
-        // Reference to the user's progress data
+        // Reference to the user's progress data in "Free Use Mode"
         DocumentReference progressRef = db.collection("users")
                 .document(userId)
                 .collection("Free Use Mode")
                 .document("Lesson 1");
 
+        // Fetch the progress data
         progressRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -109,20 +112,37 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
                         Map<String, Object> progressData = document.getData();
                         if (progressData != null) {
                             for (Map.Entry<String, Object> entry : progressData.entrySet()) {
-                                String key = entry.getKey();
-                                Object value = entry.getValue();
+                                String key = entry.getKey(); // e.g., M1, M2, etc.
+                                Object value = entry.getValue(); // The value associated with the key
 
-                                if (value instanceof Long) {
-                                    int progress = ((Long) value).intValue();
-                                    Log.d(TAG, key + " Progress: " + progress);
+                                Log.d(TAG, "Key: " + key + ", Value: " + value);
 
-                                    // Extract the second character and convert it to an integer
-                                    int moduleNumber = Character.getNumericValue(key.charAt(1));
+                                // Check if the value is a Map
+                                if (value instanceof Map) {
+                                    Map<String, Object> moduleData = (Map<String, Object>) value;
 
-                                    // Update the UI or process the progress value as needed
-                                    updateUI(moduleNumber, progress);
+                                    // Retrieve the "Progress" field from the map
+                                    if (moduleData.containsKey("Progress")) {
+                                        Object progressValue = moduleData.get("Progress");
+
+                                        // Check if the progressValue is of type Long
+                                        if (progressValue instanceof Long) {
+                                            int progress = ((Long) progressValue).intValue();
+                                            Log.d(TAG, key + " Progress: " + progress);
+
+                                            // Extract the second character and convert it to an integer
+                                            int moduleNumber = Character.getNumericValue(key.charAt(1));
+
+                                            // Update the UI or process the progress value as needed
+                                            updateUI(moduleNumber, progress);
+                                        } else {
+                                            Log.d(TAG, key + " Progress is not of expected type Long.");
+                                        }
+                                    } else {
+                                        Log.d(TAG, key + " does not contain a 'Progress' field.");
+                                    }
                                 } else {
-                                    Log.d(TAG, key + " is not of expected type.");
+                                    Log.d(TAG, key + " is not a Map.");
                                 }
                             }
                         } else {
@@ -134,6 +154,8 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
+
+                // Hide loading dialog after fetching data
                 hideLoadingDialog();
             }
         });

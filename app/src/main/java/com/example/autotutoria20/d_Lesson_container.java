@@ -44,7 +44,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
     private int furthestStep = 0; // Track the furthest step reached
 
     private Boolean isCompleted;
-    private Button nextButton;
+    private Button nextButton, backButton;
     private f_2_lesson_video videoLesson;
     private L_lesson_sequence.StepType[] stepSequence;
     private static ViewPager viewPager;
@@ -59,6 +59,9 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.d_lesson_container);
+
+        // Reset the pre-test and post-test counter??
+        c_Lesson_feedback.resetResult();
 
         gridLayout = findViewById(R.id.gridLayout);
         viewPager = findViewById(R.id.viewPager);
@@ -182,11 +185,17 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
         populateGridLayout();
 
         nextButton = findViewById(R.id.nextButton);
+        backButton = findViewById(R.id.backButton);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onNextButtonClicked();
             }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { onBackButtonClicked(); }
         });
 
         // nung naka-comment di na nawawala yung LAST Next button
@@ -199,6 +208,26 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
                 showExitConfirmationDialog();
             }
         });
+    }
+
+    private void onBackButtonClicked() {
+        String TAG = "onBackButtonClicked";
+
+        Log.e(TAG, "Hi! I pressed back, what should we do??");
+
+        // get the current step
+        Log.e(TAG, "currentStep: " + currentStep);
+        Log.e(TAG, "store it to stepIndex...");
+
+        int stepIndex = currentStep;
+
+        Log.e(TAG, "if stepIndex("+stepIndex+") <= currentStep("+currentStep+")");
+        if (stepIndex <= currentStep) {
+            viewPager.setCurrentItem(stepIndex);
+        }
+        // go to the current step
+
+
     }
 
     private void populateGridLayout() {
@@ -367,11 +396,13 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
     public void onPreTestComplete(boolean isCorrect) {
         Log.d("onPreTestComplete", "isCorrect: " + isCorrect);
 
-        if (isCorrect) {
+        // dapat tama o mali, move on na
+
+//        if (isCorrect) {
             onNextButtonClicked(); // Proceed to the next step if the test is passed
-        } else {
-//            Toast.makeText(this, "Please complete the pre-test before proceeding.", Toast.LENGTH_SHORT).show();
-        }
+//        } else {
+////            Toast.makeText(this, "Please complete the pre-test before proceeding.", Toast.LENGTH_SHORT).show();
+//        }
     }
 
     @Override
@@ -420,6 +451,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
         Log.d("onPostTestComplete", "isCorrect: " + isCorrect);
 
         // regardless kung tama or mali, basta cinall to tapos na!
+
 //        if (isCorrect) {
             isLessonFinished = true;
             updateProgressAndMoveToNextStep();
@@ -442,7 +474,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
             DocumentReference userRef = db.collection("users").document(userId)
                     .collection(learningMode).document(currentLesson);
 
-            userRef.update(currentModule, currentStep)
+            userRef.update(currentModule + ".Progress", currentStep)
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -502,8 +534,13 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
                 int x = viewPager.getWidth() / 2;
                 int y = viewPager.getHeight() / 2;
 
-                // Simulate click
-                simulateClick(x, y);
+//                // Number of clicks
+//                int clickCount = 1;
+//
+//                for (int i=0;i<clickCount;i++) {
+                    // Simulate click
+                    simulateClick(x, y);
+//                }
                 Log.e("simulateClicksInCenter", "Click!");
             }
         }, 7000);  // Convert seconds to milliseconds

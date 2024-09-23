@@ -99,7 +99,7 @@ public class b_main_0_menu extends AppCompatActivity {
         Log.d("hello", "word");
         setContentView(R.layout.b_main_0_menu);
 
-        showLoadingDialog();
+//        showLoadingDialog();
 
         // Instantiate x_bkt_algorithm
         x_bkt_algorithm algorithm = new x_bkt_algorithm();
@@ -333,23 +333,23 @@ public class b_main_0_menu extends AppCompatActivity {
         });
     }
 
-    private void showLoadingDialog() {
-        loadingDialog = new CustomLoadingDialog(b_main_0_menu.this);
-        loadingDialog.setCancelable(false); // Prevent closing the dialog
-        loadingDialog.show();
-    }
-
-    private void updateProgress(int progress) {
-        if (loadingDialog != null) {
-            loadingDialog.setProgress(progress);
-        }
-    }
-
-    private void hideLoadingDialog() {
-        if (loadingDialog != null && loadingDialog.isShowing()) {
-            loadingDialog.dismiss();
-        }
-    }
+//    private void showLoadingDialog() {
+//        loadingDialog = new CustomLoadingDialog();
+//        loadingDialog.setCancelable(false); // Prevent closing the dialog
+//        loadingDialog.show();
+//    }
+//
+//    private void updateProgress(int progress) {
+//        if (loadingDialog != null) {
+//            loadingDialog.setProgress(progress);
+//        }
+//    }
+//
+//    private void hideLoadingDialog() {
+//        if (loadingDialog != null && loadingDialog.isShowing()) {
+//            loadingDialog.dismiss();
+//        }
+//    }
 
     private void showTutorial() {
         Log.d("b_main_0_menu", "Showing tutorial because loginAttempts is 0");
@@ -830,6 +830,6 @@ public class b_main_0_menu extends AppCompatActivity {
             Log.d("No Free Use Mode", "Wala ako nakitang Free Use Mode par, sensya na you");
         }
 
-        hideLoadingDialog();
+//        hideLoadingDialog();
     }
 }

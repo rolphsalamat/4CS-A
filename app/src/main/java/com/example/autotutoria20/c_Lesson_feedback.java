@@ -34,6 +34,12 @@ public class c_Lesson_feedback {
     private x_bkt_algorithm algo_feedback;
     private Context context; // Add context field
 
+    // for result:
+    public static int preTestCorrectAnswers = 0;
+    public static int preTestAttemptAnswers = 0;
+    public static int postTestCorrectAnswers = 0;
+    public static int postTestAttemptAnswers = 0;
+
     // Constructor
     public c_Lesson_feedback(Context context) {
 
@@ -41,6 +47,22 @@ public class c_Lesson_feedback {
 
         // Initialize algo_feedback here
         algo_feedback = new x_bkt_algorithm();
+
+    }
+
+    public static void resetResult() {
+        preTestCorrectAnswers = 0;
+        preTestAttemptAnswers = 0;
+        postTestCorrectAnswers = 0;
+        postTestAttemptAnswers = 0;
+    }
+
+    public static void printResult() {
+
+        String TAG = "printResult()";
+
+        Log.e(TAG, "Pre-Test: " + preTestCorrectAnswers + "/" + preTestAttemptAnswers);
+        Log.e(TAG, "Post-Test: " + postTestCorrectAnswers + "/" + postTestAttemptAnswers);
 
     }
 

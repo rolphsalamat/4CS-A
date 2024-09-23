@@ -36,6 +36,8 @@ public class L_lesson_handler extends FragmentPagerAdapter {
         String module = parts[0];
         String lesson = parts[1];
 
+        Log.e(TAG, "module: " + module);
+        Log.e(TAG, "lesson: " + lesson);
 
         switch (stepType) {
             case PRE_TEST:

@@ -75,7 +75,7 @@ public class b_main_2_lesson_freeuse extends Fragment {
     }
 
     private void showLoadingDialog() {
-        loadingDialog = new CustomLoadingDialog(getActivity());
+        loadingDialog = new CustomLoadingDialog((b_main_0_menu) getActivity());
         loadingDialog.setCancelable(false); // Prevent closing the dialog
         loadingDialog.show();
     }
@@ -146,7 +146,7 @@ public class b_main_2_lesson_freeuse extends Fragment {
                         int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
 
                         for (int i = 0; i < maxProgressValues.length; i++) {
-                            String key = "M" + (i + 1);
+                            String key = "M" + (i + 1) + ".Progress";
                             Long moduleProgress = lessonDoc.getLong(key);
                             if (moduleProgress != null) {
                                 totalProgress += moduleProgress;

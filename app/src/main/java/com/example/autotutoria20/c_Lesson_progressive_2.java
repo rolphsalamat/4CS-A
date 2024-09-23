@@ -69,6 +69,7 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
                 .collection("Progressive Mode")
                 .document("Lesson 2");
 
+        // Retrieve "Progress" from each map
         progressRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -79,24 +80,50 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
                         Map<String, Object> progressData = document.getData();
                         if (progressData != null) {
                             // Initialize the array with the length of the lesson steps
-                            moduleProgress = new int[z_Lesson_steps.lesson_2_steps.length];
+                            moduleProgress = new int[z_Lesson_steps.lesson_1_steps.length];
+
+                            String TEST = "HERE!";
+                            Log.e(TEST, "Entering for loop");
 
                             for (Map.Entry<String, Object> entry : progressData.entrySet()) {
-                                String key = entry.getKey();
-                                Object value = entry.getValue();
-                                if (value instanceof Long) {
-                                    int progress = ((Long) value).intValue();
-                                    int moduleNumber = Character.getNumericValue(key.charAt(1));
+                                String key = entry.getKey(); // e.g., M1, M2, etc.
+                                Log.e(TEST, "Key: " + key);
+                                Object value = entry.getValue(); // The value associated with the key
+                                Log.e(TEST, "Value: " + value);
 
-                                    // Store progress in the array
-                                    if (moduleNumber >= 1 && moduleNumber <= moduleProgress.length) {
-                                        moduleProgress[moduleNumber - 1] = progress;
+                                // Check if the value is a Map and contains the "Progress" key
+                                if (value instanceof Map) {
+                                    Map<String, Object> moduleData = (Map<String, Object>) value;
+
+                                    // Check for a Progress key in the module data
+                                    if (moduleData.containsKey("Progress")) {
+                                        Object progressValue = moduleData.get("Progress");
+                                        Log.e(TEST, "Value for Progress: " + progressValue);
+
+                                        // Ensure that the value is of type Long
+                                        if (progressValue instanceof Long) {
+                                            int progress = ((Long) progressValue).intValue();
+                                            Log.e(TEST, "Progress: " + progress);
+                                            int moduleNumber = Character.getNumericValue(key.charAt(1)); // Extract number from key
+                                            Log.e(TEST, "Module Number: " + moduleNumber);
+
+                                            // Store progress in the array if within bounds
+                                            if (moduleNumber >= 1 && moduleNumber <= moduleProgress.length) {
+                                                moduleProgress[moduleNumber - 1] = progress;
+                                            }
+
+                                            // Log the module number and progress
+                                            Log.d(TAG, "Module: " + moduleNumber + " | Progress: " + progress);
+
+                                            updateUI(moduleNumber, progress); // Update UI with new progress
+                                        } else {
+                                            Log.e(TEST, "Progress value is not a Long for key: " + key);
+                                        }
+                                    } else {
+                                        Log.e(TEST, "No Progress key found for module: " + key);
                                     }
-
-                                    // Log the module number and progress
-                                    Log.d(TAG, "Module: " + moduleNumber + " | Progress: " + progress);
-
-                                    updateUI(moduleNumber, progress);
+                                } else {
+                                    Log.e(TEST, "Value is not a Map for key: " + key);
                                 }
                             }
 

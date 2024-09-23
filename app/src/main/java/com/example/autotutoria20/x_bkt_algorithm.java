@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -253,8 +254,15 @@ public class x_bkt_algorithm {
     }
 
 
-    // Update BKT Scores after computation
-    public void updateScore(int moduleIndex, int lessonIndex, double newScore, boolean isProgressiveMode) {
+    public void updateScore(int moduleIndex, int lessonIndex,
+                            double newScore,
+                            boolean isProgressiveMode,
+                            boolean isCorrect) {
+
+        String TAG = "BKT | updateScore()";
+
+        updateKnowledge(isCorrect); // Call to update knowledge based on correctness
+
         if (bktScores == null || moduleIndex < 0 || lessonIndex < 0) {
             Log.e(TAG, "Invalid BKT score update request");
             return;
@@ -263,29 +271,92 @@ public class x_bkt_algorithm {
         Log.e("updateScore", "Category: " + category);
         Log.e("updateScore", "pKnow: " + knowledgeProbability);
 
+        moduleIndex += 1;
+        lessonIndex += 1;
+
         // Determine the correct collection based on the learning mode
         String collectionPath = isProgressiveMode ? "Progressive Mode" : "Free Use Mode";
-        String documentName = "Lesson " + (lessonIndex + 1);
+        String documentName = "Lesson " + lessonIndex;
 
         Log.e(TAG, "moduleIndex: " + moduleIndex);
         Log.e(TAG, "lessonIndex: " + lessonIndex);
 
-        // Fetch the relevant Firestore document directly and update the corresponding score
-        db.collection("users").document(userId).collection(collectionPath).document(documentName)
-                // may tuldok (.) talaga sa dulo ng "BKT Scores." ????
-                .update("BKT Scores." + moduleIndex, newScore)  // Directly updates the score at the correct index
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "BKT Scores successfully updated in Firestore"))
-                .addOnFailureListener(e -> Log.e(TAG, "Error updating BKT Scores in Firestore", e));
+        // Construct the field path using dot notation
+        String moduleFieldPath = "M" + moduleIndex + ".BKT Score";
+
+        Log.e(TAG, "Field path for update: " + moduleFieldPath + " | Lesson " + lessonIndex);
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put(moduleFieldPath, newScore); // Update only the specific field
+
+        db.collection("users").document(userId)
+                .collection(collectionPath)
+                .document(documentName)
+                .update(updates)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Mn map fields successfully updated"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error updating Mn map fields", e));
     }
 
-//    // NEW CODE *suggested by ChatGPT 4o Plus
-//    public void updateKnowledge(boolean correct) {
-//        if (correct) {
-//            knowledgeProbability = (knowledgeProbability * (1 - forgetRate)) + ((1 - knowledgeProbability) * learnRate);
-//        } else {
-//            knowledgeProbability = (knowledgeProbability * forgetRate * slipRate);
-//        }
-//    }
+    public static void updateTestScore(boolean learningMode,
+                                       int moduleIndex, int lessonIndex,
+                                       String testMode, int score) {
+
+        String TAG = "BKT | updateTestSCore()";
+
+        if (moduleIndex < 0 || lessonIndex < 0) {
+            Log.e(TAG, "Invalid module or lesson index");
+            return;
+        }
+
+        // Determine the correct collection based on the learning mode
+        String collectionPath = learningMode ? "Progressive Mode" : "Free Use Mode";
+
+        // Increment indices for display purposes
+        lessonIndex += 1;
+        moduleIndex += 1;
+
+        Log.e(TAG, "moduleIndex: " + moduleIndex);
+        Log.e(TAG, "lessonIndex: " + lessonIndex);
+
+        String documentName = "Lesson " + lessonIndex; // Corrected to use incremented lessonIndex
+
+        // Determine the correct test score field name
+        String testField = null;
+        if (testMode.equals("Pre-Test")) {
+            testField = "Pre-Test Score";
+        } else if (testMode.equals("Post-Test")) {
+            testField = "Post-Test Score";
+        } else {
+            Log.e(TAG, "Invalid test mode");
+            return; // Exit if the test mode is invalid
+        }
+
+
+
+        // Construct the field path using dot notation
+        String moduleFieldPath = "M" + moduleIndex + "." + testField;
+
+        Log.e(TAG, "Field path for update: " + moduleFieldPath + " | Lesson " + lessonIndex);
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put(moduleFieldPath, score); // Update only the specific field
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = user != null ? user.getUid() : null;
+
+        if (userId == null) {
+            Log.e(TAG, "User not authenticated");
+            return; // Exit if user is not authenticated
+        }
+
+        db.collection("users").document(userId)
+                .collection(collectionPath)
+                .document(documentName)
+                .update(updates)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Test score successfully updated"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error updating test score", e));
+    }
 
     // Level 1 [0.0 - 0.1] Novice
     // Level 2 [0.1 - 0.3] Beginner
@@ -296,6 +367,7 @@ public class x_bkt_algorithm {
     // optimized version daw??
     public void updateKnowledge(boolean correct) {
 
+        Log.e("updateKnowledge", "Answer: " + correct);
         Log.e("updateKnowledge", "Category: " + category);
         Log.e("updateKnowledge", "pKnow: " + knowledgeProbability);
 
@@ -305,11 +377,12 @@ public class x_bkt_algorithm {
             knowledgeProbability = knowledgeProbability * forgetRate * slipRate;
         }
 
+        Log.e("updateKnowledge", "pKnow is: " + knowledgeProbability
+                                         + "because Answer is: " + correct);
+
         // Ensure knowledgeProbability stays within bounds [0, 1]
         knowledgeProbability = Math.max(0, Math.min(1, knowledgeProbability));
     }
-
-
 
     public double getKnowledgeProbability() {
         return knowledgeProbability;

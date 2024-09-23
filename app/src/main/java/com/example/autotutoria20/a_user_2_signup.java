@@ -116,7 +116,7 @@ public class a_user_2_signup extends AppCompatActivity {
             String email = emailEditText.getText().toString();
             String username = usernameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
-            String confirmPassword = retypePaswordEditText.getText().toString();
+//            String confirmPassword = retypePaswordEditText.getText().toString();
             String gender = "";
 
             Log.d(TAG, "Retrieved input values: firstName=" + firstName + ", lastName=" + lastName +
@@ -197,7 +197,7 @@ public class a_user_2_signup extends AppCompatActivity {
             validCounter += validateName(firstName, "first");
             validCounter += validateName(lastName, "last");
             validCounter += validatePassword(password);
-            validCounter += validateRetypePassword(password, confirmPassword);
+//            validCounter += validateRetypePassword(password, confirmPassword);
 
             // Now handle asynchronous validations for email and username
             validateEmail(email, () -> {
@@ -262,16 +262,16 @@ public class a_user_2_signup extends AppCompatActivity {
                                     }
                                 });
 
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        Map<String, Object> usernameData = new HashMap<>();
+//                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//                        Map<String, Object> usernameData = new HashMap<>();
 //                        Map<String, Object> emailData = new HashMap<>();
-                        usernameData.put("Username", username);
+//                        usernameData.put("Username", username);
 //                        emailData.put("Email", email);
 
 
-                        db.collection("usernames").document(username).set(usernameData)
-                                .addOnSuccessListener(aVoid -> Log.d(TAG, "Username saved to usernames collection"))
-                                .addOnFailureListener(e -> Log.e(TAG, "Error saving username", e));
+//                        db.collection("usernames").document(username).set(usernameData)
+//                                .addOnSuccessListener(aVoid -> Log.d(TAG, "Username saved to usernames collection"))
+//                                .addOnFailureListener(e -> Log.e(TAG, "Error saving username", e));
 
                     } else {
                         Log.d(TAG, "Validation failed. ValidCounter: " + validCounter);
@@ -434,13 +434,32 @@ public class a_user_2_signup extends AppCompatActivity {
         return age;
     }
 
+    // Modified code base sa new structure..
     private Map<String, Object> createModuleProgress(int moduleCount) {
         Map<String, Object> moduleProgress = new HashMap<>();
+
         for (int i = 1; i <= moduleCount; i++) {
-            moduleProgress.put("M" + i, 0);
+            Map<String, Object> moduleData = new HashMap<>();
+            moduleData.put("BKT Score", 0);
+            moduleData.put("Post-Test Score", 0);
+            moduleData.put("Pre-Test Score", 0);
+            moduleData.put("Progress", 0);
+
+            moduleProgress.put("M" + i, moduleData);
         }
+
         return moduleProgress;
     }
+
+
+    // Original Code
+//    private Map<String, Object> createModuleProgress(int moduleCount) {
+//        Map<String, Object> moduleProgress = new HashMap<>();
+//        for (int i = 1; i <= moduleCount; i++) {
+//            moduleProgress.put("M" + i, 0);
+//        }
+//        return moduleProgress;
+//    }
 
     private void saveUserModuleProgress(FirebaseFirestore db, String userId, Map<String, Map<String, Object>> moduleProgressData) {
         for (Map.Entry<String, Map<String, Object>> entry : moduleProgressData.entrySet()) {
@@ -450,10 +469,10 @@ public class a_user_2_signup extends AppCompatActivity {
             // Get the module progress data
             Map<String, Object> progressData = entry.getValue();
 
-            // Initialize BKT Scores based on the lesson number
-            int lessonNumber = getLessonIndexFromDocumentName(documentName) + 1;
-            Map<String, Double> bktScores = initializeBKTScores(lessonNumber);
-            progressData.put("BKT Scores", bktScores);
+//            // Initialize BKT Scores based on the lesson number
+//            int lessonNumber = getLessonIndexFromDocumentName(documentName) + 1;
+//            Map<String, Double> bktScores = initializeBKTScores(lessonNumber);
+//            progressData.put("BKT Scores", bktScores);
 
             // Save the module progress to Firestore
             db.collection("users").document(userId).collection(collectionPath)

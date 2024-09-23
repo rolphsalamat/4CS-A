@@ -35,6 +35,7 @@ public class f_3_lesson_post_test extends Fragment {
     private e_Question.Difficulty difficultyLevel;
     private int answerAttempt = 0;
     private int attemptChances = 2;
+    private int postTestQuestions = 10;
     private boolean isCorrect = false;
     private boolean isProgressiveMode = true; // Default to Progressive Mode
 
@@ -171,110 +172,91 @@ public class f_3_lesson_post_test extends Fragment {
 
         submitButton.setOnClickListener(v -> {
 
-            // add validator if no selected answer??
-            // it should ask the user to select an answer otherwise this onClickListener will not do anything
-
-            if (choicesGroup.isSelected()) {
-//                Toast.makeText(getContext(), "Meron kang selected: " + choicesGroup.getCheckedRadioButtonId(), Toast.LENGTH_SHORT).show();
-            }
-
             if (!(choicesGroup.getCheckedRadioButtonId() == -1)) {
 
-                int hey = choicesGroup.getCheckedRadioButtonId();
-                switch(hey) {
-                    case 0:
-                        Log.e("ROP", "A");
-                        break;
-                    case 1:
-                        Log.e("ROP", "B");
-                        break;
-                    case 2:
-                        Log.e("ROP", "C");
-                        break;
-                    case 3:
-                        Log.e("ROP", "D");
-                        break;
-                }
-
                 answerAttempt++;
-                Log.e("ROP", "Answer Attempt: " + answerAttempt);
 
-                boolean correctAnswer = checkAnswer();
-                Log.e("submitButton.onClick", "correctAnswer: " + correctAnswer);
+                c_Lesson_feedback.postTestAttemptAnswers++;
 
-                if (!correctAnswer || answerAttempt >= attemptChances)
+                // n <= 10
+                if (answerAttempt <= postTestQuestions) {
+
+                    boolean correctAnswer = checkAnswer();
+                    if (correctAnswer) c_Lesson_feedback.postTestCorrectAnswers++;
+
+//                    // Update BKT model with the result of the answer
+//                    bktModel.updateKnowledge(correctAnswer);
+
+                    // Log the updated knowledge probability
+                    double knowledgeProb = bktModel.getKnowledgeProbability();
+                    Log.e("submitButton.onClick", "Updated Knowledge Probability: " + knowledgeProb);
+
+                    // Ensure valid indices are used
+                    int moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
+                    int lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
+
+                    if (moduleIndex < 0 || lessonIndex < 0) {
+                        Log.e("submitButton.onClick", "Invalid module or lesson index");
+                        return;
+                    }
+
+                    // Update the BKT Score of the module, lesson, and mode of the user
+                    bktModel.updateScore(moduleIndex, lessonIndex,
+                            knowledgeProb,
+                            isProgressiveMode,
+                            correctAnswer);
+
+                    if (correctAnswer)
+                        x_bkt_algorithm.updateTestScore(
+                                isProgressiveMode,
+                                moduleIndex, lessonIndex,
+                                "Post-Test",
+                                c_Lesson_feedback.preTestCorrectAnswers);
+
+                    String TAG = "TESTING";
+
+                    Log.d(TAG, "answerAttempt: " + answerAttempt);
+                    Log.d(TAG, "attemptChances: " + attemptChances);
+
+                    // Check if we need to move to the next question
+                    if (answerAttempt >= attemptChances || correctAnswer) {
+                        Log.e(TAG, "currentQuestionIndex(" + currentQuestionIndex + ") < questions.length - 1(" + (questions.length - 1) + ")");
+                        Log.e(TAG, "questions.length: " + questions.length);
+
+                        // Move to the next question or reset if all questions are answered
+                        if (currentQuestionIndex < questions.length - 1) {
+                            currentQuestionIndex++;
+                            Log.e(TAG, "currentQuestionIndex++;" + currentQuestionIndex);
+                        } else {
+                            currentQuestionIndex = 0; // Reset to the first question if all are answered
+                            // Optionally, you might want to show a message to the user here
+                            // Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
+                            bktModel.logScores();
+                        }
+                    }
+
+                    Log.e(TAG, "currentQuestionIndex("+currentQuestionIndex+") == " + postTestQuestions + "?");
+                    if (currentQuestionIndex < postTestQuestions) {
+                        // to give student chance to get correct answer before loading another question
+                        if (answerAttempt >= attemptChances && !correctAnswer) {
+
+                            Log.e(TAG, "Answer is INCORRECT!");
+
+                            loadQuestion(); // Load the next question
+                            answerAttempt = 0;
+
+                        }
+                    }
+                    else {
+                        Log.e(TAG,"YES!! TAPOS NA YUNG POST TEST!");
+                        if (postTestCompleteListener != null) {
+                            Log.e(TAG,"FINISH!!!");
+                            postTestCompleteListener.onPostTestComplete(correctAnswer, knowledgeProb);
+                            c_Lesson_feedback.printResult();
+                        }
+                    }
                     choicesGroup.clearCheck();
-
-                // Update BKT model with the result of the answer
-                bktModel.updateKnowledge(correctAnswer);
-
-                // Log the updated knowledge probability
-                double knowledgeProb = bktModel.getKnowledgeProbability();
-                Log.e("submitButton.onClick", "Updated Knowledge Probability: " + knowledgeProb);
-
-                // Ensure valid indices are used
-                int moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
-                int lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
-
-                if (moduleIndex < 0 || lessonIndex < 0) {
-                    Log.e("submitButton.onClick", "Invalid module or lesson index");
-                    return;
                 }
-
-                // Update the score
-                bktModel.updateScore(moduleIndex, lessonIndex, knowledgeProb, isProgressiveMode);
-
-                String TAG = "TESTING";
-
-
-                Log.d(TAG, "answerAttempt: "+answerAttempt);
-                Log.d(TAG, "attemptChances: " + attemptChances);
-
-                // Check if we need to move to the next question
-                if (answerAttempt >= attemptChances || correctAnswer) {
-                    Log.e(TAG, "currentQuestionIndex(" + currentQuestionIndex + ") < questions.length - 1(" + (questions.length - 1) + ")");
-
-                    // Move to the next question or reset if all questions are answered
-                    if (currentQuestionIndex < questions.length - 1) {
-                        currentQuestionIndex++;
-                        Log.e(TAG, "currentQuestionIndex++;" + currentQuestionIndex);
-                    } else {
-                        currentQuestionIndex = 0; // Reset to the first question if all are answered
-                        // Optionally, you might want to show a message to the user here
-                        // Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
-                        bktModel.logScores();
-                    }
-                }
-
-                int posttestQuestions = 10;
-
-                Log.e(TAG, "currentQuestionIndex("+currentQuestionIndex+") == " + posttestQuestions + "?");
-                if (currentQuestionIndex < posttestQuestions) {
-                    // to give student chance to get correct answer before loading another question
-                    if (answerAttempt >= attemptChances && !correctAnswer) {
-
-                        Log.e(TAG, "Answer is INCORRECT!");
-
-                        loadQuestion(); // Load the next question
-                        answerAttempt = 0;
-
-                    } else if (correctAnswer) {
-                        // Check if the answer is correct
-                        Log.e(TAG, "Answer is CORRECT! but keep asking until maka-10");
-
-                        // Load the next question and reset the attempt counter
-                        loadQuestion();
-                        answerAttempt = 0;
-                    }
-                }
-                else if (currentQuestionIndex == posttestQuestions) {
-                    Log.e(TAG,"YES!! TAPOS NA YUNG POST TEST!");
-                    if (postTestCompleteListener != null && correctAnswer) {
-                        Log.e(TAG,"FINISH!!!");
-                        postTestCompleteListener.onPostTestComplete(correctAnswer, knowledgeProb);
-                    }
-                }
-
             }
         });
     }

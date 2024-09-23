@@ -76,7 +76,7 @@ public class b_main_1_lesson_progressive extends Fragment {
                     handler.postDelayed(this, 16); // approximately 60fps
                 } else {
                     progressBar.setProgress(100); // ensure we end exactly at 100%
-                    onComplete.run();
+                        onComplete.run();
                 }
             }
         });
@@ -150,7 +150,7 @@ public class b_main_1_lesson_progressive extends Fragment {
                         int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
 
                         for (int i = 0; i < maxProgressValues.length; i++) {
-                            String key = "M" + (i + 1);
+                            String key = "M" + (i + 1) + ".Progress";
                             Long moduleProgress = lessonDoc.getLong(key);
                             if (moduleProgress != null) {
                                 totalProgress += moduleProgress;
