@@ -2,10 +2,10 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/autotutoria_background_color"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/plain_background"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,26 +20,37 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_columnSpan="5"
-            android:backgroundTint="#1D4376"
-            android:background="@drawable/arrow_back"
+            android:background="@drawable/arrow_left"
+            android:backgroundTint="#0FFFFF"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/mouldy_cheese"
+            android:layout_marginStart="8dp"
+            android:text="Module 8"
+            android:textColor="#87CEEB"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="60dp"
+            tools:layout_editor_absoluteY="20dp"
+            tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/topic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/mouldy_cheese"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="45dp"
+            android:fontFamily="@font/milk_cream"
             android:text="@string/module_8"
-            android:textSize="40sp"
-            android:textColor="#D5E7FF"
+            android:textSize="25sp"
+            android:textColor="#87CEEB"
             android:textStyle="bold"
+            android:textAlignment="center"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/exitButton"
-            />
+            app:layout_constraintTop_toBottomOf="@id/exitButton"/>
 
         <!-- Card #1 -->
         <FrameLayout
@@ -72,8 +83,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="17dp"
-                        android:layout_marginEnd="80dp"
+                        android:layout_marginTop="10dp"
                         android:layout_gravity="center_vertical"
                         android:text="@string/module_8_1"
                         android:textColor="@color/white"

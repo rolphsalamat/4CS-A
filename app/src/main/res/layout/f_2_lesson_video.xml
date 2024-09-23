@@ -1,51 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/plain_background"
 
+
+    >
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/video_title"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Video Lesson"-->
+    <!--        android:textSize="24sp"-->
+    <!--        android:textStyle="bold"-->
+    <!--        android:layout_gravity="center"/>-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="WebViewLayout">
+    </LinearLayout>
+
+    <!-- EXIT BUTTON AND TEXT NEXT TO IT -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="20dp">
+
+        <!-- Arrow Button -->
+        <Button
+            android:id="@+id/exitButton"
+            android:layout_width="30dp"
+            android:layout_height="23dp"
+            android:background="@drawable/arrow_left"
+            android:backgroundTint="#0FFFFF" />
+
+        <!-- TextView Next to Arrow -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Tutorial"
+            android:fontFamily="@font/mouldy_cheese"
+            android:textColor="#87CEEB"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+    </LinearLayout>
     <TextView
         android:id="@+id/video_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/video_lesson"
-        android:layout_marginBottom="10dp"
-        android:textSize="22sp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:layout_gravity="center"/>
-
-    <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="45dp"
+        android:fontFamily="@font/milk_cream"
+        android:gravity="center_horizontal"
+        android:text="Welcome to the Tutorial Video"
+        android:textAlignment="center"
+        android:textColor="#87CEEB"
+        android:textSize="25dp"
+        android:textStyle="bold" />
 
-        <WebView
-            android:id="@+id/webView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/roboto_serif"
+        android:gravity="center_horizontal"
+        android:text="Here, you'll find tutorial content that guides you through the app's features."
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="13dp"
+        android:textStyle="bold" />
 
-        <!-- Transparent view to cover the pop-out button -->
-        <View
-            android:id="@+id/pop_out_button"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_gravity="top|end"
-            android:background="@android:color/transparent"
-            android:clickable="true"/>
-
-        <!-- Transparent view to cover the pop-out button -->
-        <View
-            android:id="@+id/youtube_button"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_gravity="bottom"
-            android:backgroundTint="@color/current_step"
-            android:background="@android:color/transparent"
-            android:clickable="true"/>
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="344dp"
+        android:layout_height="411dp"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center_horizontal" />
 
 
-    </FrameLayout>
-
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/tutorial_button"
+        android:fontFamily="@font/roboto_serif"
+        android:textColor="#FFFFFF"
+        android:layout_marginHorizontal="80dp"
+        android:text="Finish Video"/>
 
 </LinearLayout>

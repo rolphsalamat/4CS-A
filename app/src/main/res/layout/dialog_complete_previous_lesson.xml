@@ -7,7 +7,7 @@
     <ImageView
         android:id="@+id/parent"
         android:layout_width="match_parent"
-        android:layout_height="325dp"
+        android:layout_height="350dp"
         android:background="@drawable/complete_previous_lesson_first"
         app:layout_constraintTop_toTopOf="parent"
         />
@@ -20,8 +20,9 @@
         android:layout_marginBottom="20dp"
         android:text="OK"
         android:textStyle="bold"
+        android:textColor="#B5E6FA"
         android:fontFamily="@font/roboto_serif"
-        android:backgroundTint="@color/navy_blue"
+        android:backgroundTint="@color/facebook"
         app:layout_constraintBottom_toBottomOf="@id/parent"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

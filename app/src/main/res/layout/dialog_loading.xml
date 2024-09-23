@@ -6,27 +6,49 @@
     android:gravity="center"
     android:background="@drawable/autotutoria_background_color">
 
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/autotutoria_background_color"
         android:gravity="center">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/autotutoria_logo"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_margin="70dp"/>
+        <!-- Use a LinearLayout to stack the ImageView and TextView -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="688dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/pnc_logo"
-            android:padding="40dp"
-            android:layout_gravity="center_horizontal|bottom"
-            android:layout_marginHorizontal="70dp"
-            android:layout_marginBottom="-100dp"/>
+            <!-- Image at the top -->
+            <ImageView
+                android:layout_width="263dp"
+                android:layout_height="212dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="100dp"
+                android:src="@drawable/updated_logo" />
+
+            <!-- Text below the image -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/getto_funky"
+                android:text="Autotutoria"
+                android:textColor="@color/white"
+                android:textSize="60sp"
+                android:textStyle="bold"/>
+
+            <!-- MOTTO TEXT -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/honey_bread"
+                android:text="Be your best self"
+                android:textColor="#B5E6FA"
+                android:textSize="30dp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
 
 
         <ProgressBar

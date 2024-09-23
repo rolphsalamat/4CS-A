@@ -4,15 +4,43 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/plain_background"
     android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/autotutoria_background_color"
+        android:gravity="center"/>
+
+    <!-- Arrow Button -->
+    <Button
+        android:id="@+id/exitButton"
+        android:layout_width="20dp"
+        android:layout_height="33dp"
+        android:background="@drawable/close_button"
+        android:backgroundTint="#ffffff"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/exit_module_image"
         android:layout_width="match_parent"
-        android:layout_height="380dp"
-        android:background="@drawable/exit_module"
+        android:layout_height="360dp"
+        android:layout_marginTop="11dp"
+        android:src="@drawable/log_out_logo"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/mouldy_cheese"
+        android:text="Are you sure you want to logout? "
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="29dp"
+        tools:layout_editor_absoluteY="266dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,7 +71,7 @@
             android:layout_weight="1"
             android:backgroundTint="#1b5694"
             android:elevation="30dp"
-            android:text="Exit"
+            android:text="Logout"
             android:textColor="#FFF" />
 
     </LinearLayout>
