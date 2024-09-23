@@ -289,12 +289,13 @@ public class x_bkt_algorithm {
         Map<String, Object> updates = new HashMap<>();
         updates.put(moduleFieldPath, newScore); // Update only the specific field
 
+        int finalModuleIndex = moduleIndex;
         db.collection("users").document(userId)
                 .collection(collectionPath)
                 .document(documentName)
                 .update(updates)
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "Mn map fields successfully updated"))
-                .addOnFailureListener(e -> Log.e(TAG, "Error updating Mn map fields", e));
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "M" + finalModuleIndex + " Ma fields successfully updated"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error updating M" + finalModuleIndex + " Ma fields", e));
     }
 
     public static void updateTestScore(boolean learningMode,
@@ -394,14 +395,14 @@ public class x_bkt_algorithm {
     }
 
     public void logScores() {
-        if (bktScores != null) {
-            Log.d(TAG, "BKT Scores:");
-            for (int i = 0; i < bktScores.size(); i++) {
-                Log.d(TAG, "Score " + i + ": " + bktScores.get(i));
-            }
-        } else {
-            Log.d(TAG, "BKT Scores are not initialized.");
-        }
+//        if (bktScores != null) {
+//            Log.d(TAG, "BKT Scores:");
+//            for (int i = 0; i < bktScores.size(); i++) {
+//                Log.d(TAG, "Score " + i + ": " + bktScores.get(i));
+//            }
+//        } else {
+//            Log.d(TAG, "BKT Scores are not initialized.");
+//        }
     }
 
 }

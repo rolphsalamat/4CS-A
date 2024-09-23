@@ -35,6 +35,7 @@ public class f_3_lesson_post_test extends Fragment {
     private e_Question.Difficulty difficultyLevel;
     private int answerAttempt = 0;
     private int attemptChances = 2;
+    private int questionsAnswered = 0;
     private int postTestQuestions = 10;
     private boolean isCorrect = false;
     private boolean isProgressiveMode = true; // Default to Progressive Mode
@@ -178,8 +179,12 @@ public class f_3_lesson_post_test extends Fragment {
 
                 c_Lesson_feedback.postTestAttemptAnswers++;
 
+                answerAttempt++;
+
+                c_Lesson_feedback.postTestAttemptAnswers++;
+
                 // n <= 10
-                if (answerAttempt <= postTestQuestions) {
+                if (questionsAnswered <= postTestQuestions) {
 
                     boolean correctAnswer = checkAnswer();
                     if (correctAnswer) c_Lesson_feedback.postTestCorrectAnswers++;
@@ -217,6 +222,8 @@ public class f_3_lesson_post_test extends Fragment {
 
                     Log.d(TAG, "answerAttempt: " + answerAttempt);
                     Log.d(TAG, "attemptChances: " + attemptChances);
+                    Log.d(TAG, "currentQuestionIndex: " + currentQuestionIndex);
+                    Log.d(TAG, "questions.length-1: " + (questions.length-1));
 
                     // Check if we need to move to the next question
                     if (answerAttempt >= attemptChances || correctAnswer) {
@@ -233,15 +240,15 @@ public class f_3_lesson_post_test extends Fragment {
                             // Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
                             bktModel.logScores();
                         }
+                        questionsAnswered++;
                     }
 
                     Log.e(TAG, "currentQuestionIndex("+currentQuestionIndex+") == " + postTestQuestions + "?");
                     if (currentQuestionIndex < postTestQuestions) {
                         // to give student chance to get correct answer before loading another question
-                        if (answerAttempt >= attemptChances && !correctAnswer) {
+                        if (answerAttempt >= attemptChances) {
 
-                            Log.e(TAG, "Answer is INCORRECT!");
-
+                            questionsAnswered++;
                             loadQuestion(); // Load the next question
                             answerAttempt = 0;
 

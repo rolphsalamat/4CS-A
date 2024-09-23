@@ -36,6 +36,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
     private AlertDialog dialog;
     private int numberOfTextLessons = 0; // Declare here
     private int currentStep = 0;
+    private int returnStep = 0;
     private int numberOfSteps = 0;
     private FirebaseFirestore db;
     private String learningMode;
@@ -166,7 +167,9 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
                 // Handle other fragment-specific logic
                 if (currentFragment instanceof f_1_lesson_text) {
                     f_1_lesson_text textLessonFragment = (f_1_lesson_text) currentFragment;
-//                    textLessonFragment.loadTextContentForKey(currentModule + "_" + currentLesson, pageNumber);
+
+                    // auto-next??
+                    clickCenter(1.5);
 
                 } else if (currentFragment instanceof f_3_lesson_post_test) {
                     // wala na, naka declare na globally eh..
@@ -217,17 +220,42 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
 
         // get the current step
         Log.e(TAG, "currentStep: " + currentStep);
+        Log.e(TAG, "returnStep: " + returnStep);
         Log.e(TAG, "store it to stepIndex...");
 
-        int stepIndex = currentStep;
+        returnStep -= 1;
 
-        Log.e(TAG, "if stepIndex("+stepIndex+") <= currentStep("+currentStep+")");
-        if (stepIndex <= currentStep) {
-            viewPager.setCurrentItem(stepIndex);
-        }
-        // go to the current step
+        // set current item of the viewPager
+        viewPager.setCurrentItem(returnStep);
+        nextButton.setEnabled(true);
+        nextButton.setVisibility(View.VISIBLE);
 
+        // if returnStep == (currentStep - 1),
+        // nextButton lang..
 
+        // if returnStep < (currentStep - 1),
+        // dapat may kasamang return to current step
+
+        // set the stepView designs here??
+        for (int i = 0; i < numberOfSteps; i++) {
+            View stepView = new View(this);
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = 0;
+            params.height = (int) (10 * getResources().getDisplayMetrics().density);
+            params.columnSpec = GridLayout.spec(i * 2, 1, 1f);
+            stepView.setLayoutParams(params);
+
+            // Determine the background based on the step's position relative to the selected step
+            if (i < (returnStep)) {
+                stepView.setBackgroundResource(R.drawable.rounded_corners_completed);
+            }
+            else if (i == (returnStep) || i < currentStep) {
+                stepView.setBackgroundResource(R.drawable.rounded_corners_current_step); // Highlight the current step
+            }
+            else {
+                stepView.setBackgroundResource(R.drawable.rounded_corners);
+            }
+        } // end of for loop
     }
 
     private void populateGridLayout() {
@@ -318,8 +346,10 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
         Log.e(TAG, "updateProgressAndMoveToNextStep()");
 
         // check para di na mag increment anymores :D
-        if (currentStep < numberOfSteps)
+        if (currentStep < numberOfSteps) {
             currentStep++;
+            returnStep++;
+        }
 
         if (currentStep > furthestStep) {
             furthestStep = currentStep;
@@ -524,6 +554,20 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
 
     public void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void clickCenter(double delay) {
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Get the center coordinates of the screen
+                int x = viewPager.getWidth() / 2;
+                int y = viewPager.getHeight() / 2;
+
+                simulateClick(x, y);
+                Log.e("simulateClicksInCenter", "Click!");
+            }
+        }, (int) delay * 1000);  // Convert seconds to milliseconds
     }
 
     public static void simulateClicksInCenter() {

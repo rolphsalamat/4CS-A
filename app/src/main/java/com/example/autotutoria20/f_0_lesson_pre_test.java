@@ -28,7 +28,8 @@ public class f_0_lesson_pre_test extends Fragment {
     private RadioGroup choicesGroup;
     private int answerAttempt = 0;
     private int attemptChances = 2;
-    private int preTestQuestions = 5;
+    private int questionsAnswered = 0;
+    private int preTestQuestions = 0;
     private Button submitButton;
     private boolean isCorrect = false;
     private boolean isProgressiveMode = true; // Default to Progressive Mode
@@ -92,16 +93,16 @@ public class f_0_lesson_pre_test extends Fragment {
         String documentName = "Lesson " + (getLessonIndex(getArguments().getString(ARG_LESSON)) + 1);
         bktModel.initializeBKTScores(collectionPath, documentName, bktScores -> {
             if (bktScores != null) {
-                Log.d("f_pre_test", "BKT Scores initialized: " + bktScores);
+                //Log.d("f_pre_test", "BKT Scores initialized: " + bktScores);
             } else {
-                Log.e("f_pre_test", "Failed to retrieve BKT Scores");
+                //Log.e("f_pre_test", "Failed to retrieve BKT Scores");
             }
         });
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d("FragmentLifecycle", "onCreateView");
+        //Log.d("FragmentLifecycle", "onCreateView");
         if (savedInstanceState != null) {
             isCorrect = savedInstanceState.getBoolean("isCorrect", false);
         }
@@ -120,8 +121,8 @@ public class f_0_lesson_pre_test extends Fragment {
             String module = getArguments().getString(ARG_MODULE);
             String lesson = getArguments().getString(ARG_LESSON);
 
-            Log.e("f_pre_test.java", "module: " + module);
-            Log.e("f_pre_test.java", "lesson: " + lesson);
+            //Log.e("f_pre_test.java", "module: " + module);
+            //Log.e("f_pre_test.java", "lesson: " + lesson);
 
             // Retrieve questions based on module and lesson
             questions = getPreTestQuestions(module, lesson);
@@ -132,14 +133,22 @@ public class f_0_lesson_pre_test extends Fragment {
 
         submitButton.setOnClickListener(v -> {
 
+            Log.e("HEY!", "Submit Button Clicked!");
+
             if (!(choicesGroup.getCheckedRadioButtonId() == -1)) {
 
+                // Dito originally yung answerAttempt++;
                 answerAttempt++;
 
                 c_Lesson_feedback.preTestAttemptAnswers++;
 
+                Log.e("HEY!", "answerAttempt("+answerAttempt+") <= preTestQuestions("+preTestQuestions+")");
+
                 // n <= 5
-                if (answerAttempt <= preTestQuestions) {
+                if (questionsAnswered <= preTestQuestions) {
+
+                    //Log.e("submitButton.onClick", "answerAttempt("+answerAttempt+") <= preTestQuestions("+preTestQuestions+")");
+                    //Log.e("submitButton.onClick", "IM IN!");
 
                     boolean correctAnswer = checkAnswer();
                     if (correctAnswer) c_Lesson_feedback.preTestCorrectAnswers++;
@@ -149,7 +158,7 @@ public class f_0_lesson_pre_test extends Fragment {
 
                     // Log the updated knowledge probability
                     double knowledgeProb = bktModel.getKnowledgeProbability();
-                    Log.e("submitButton.onClick", "Updated Knowledge Probability: " + knowledgeProb);
+                    //Log.e("submitButton.onClick", "Updated Knowledge Probability: " + knowledgeProb);
 
                     // Ensure valid indices are used
                     int moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
@@ -176,8 +185,11 @@ public class f_0_lesson_pre_test extends Fragment {
 
                     String TAG = "TESTING";
 
+                    Log.d(TAG, "Answer: " + correctAnswer);
                     Log.d(TAG, "answerAttempt: " + answerAttempt);
                     Log.d(TAG, "attemptChances: " + attemptChances);
+                    Log.d(TAG, "currentQuestionIndex: " + currentQuestionIndex);
+                    Log.d(TAG, "questions.length-1: " + (questions.length-1));
 
                     // Check if we need to move to the next question
                     if (answerAttempt >= attemptChances || correctAnswer) {
@@ -190,10 +202,11 @@ public class f_0_lesson_pre_test extends Fragment {
                             Log.e(TAG, "currentQuestionIndex++;" + currentQuestionIndex);
                         } else {
                             currentQuestionIndex = 0; // Reset to the first question if all are answered
-                            // Optionally, you might want to show a message to the user here
-                            // Toast.makeText(getContext(), "Pre-test completed!", Toast.LENGTH_SHORT).show();
                             bktModel.logScores();
                         }
+
+                        questionsAnswered++;
+
                     }
 
                     Log.e(TAG, "currentQuestionIndex("+currentQuestionIndex+") == " + preTestQuestions + "?");
@@ -201,8 +214,7 @@ public class f_0_lesson_pre_test extends Fragment {
                         // to give student chance to get correct answer before loading another question
                         if (answerAttempt >= attemptChances) {
 
-                            Log.e(TAG, "Attempt Chances exceeded!");
-
+                            questionsAnswered++;
                             loadQuestion(); // Load the next question
                             answerAttempt = 0;
 
@@ -290,7 +302,7 @@ public class f_0_lesson_pre_test extends Fragment {
 
     private void loadQuestion() {
 
-        Log.e("loadQuestion", "loadQuestion();");
+        //Log.e("loadQuestion", "loadQuestion();");
 
         isCorrect = false;
 
@@ -306,7 +318,7 @@ public class f_0_lesson_pre_test extends Fragment {
         // Validate context before creating RadioButton instances
         Context context = getContext();
         if (context == null) {
-            Log.e("f_pre_test", "Context is null, cannot create RadioButtons");
+            //Log.e("f_pre_test", "Context is null, cannot create RadioButtons");
             return;  // Exit early if context is null to prevent a crash
         }
 
@@ -372,7 +384,7 @@ public class f_0_lesson_pre_test extends Fragment {
             case "Lesson 8": return 7;
             // Add more cases as needed
             default:
-                Log.e("getLessonIndex", "Invalid lesson: " + lesson);
+                //Log.e("getLessonIndex", "Invalid lesson: " + lesson);
                 throw new IllegalArgumentException("Invalid lesson: " + lesson);
         }
     }

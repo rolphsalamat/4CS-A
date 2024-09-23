@@ -421,6 +421,8 @@ public class f_1_lesson_text extends Fragment {
 
                     String TUG = "TEST HERE ROP";
 
+                    Log.e("AAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
                     // Rop's Code
                     if (currentStep < (totalSteps - 2)) {
                         Log.e(TUG, "currentStep("+currentStep+") < (totalSteps("+(totalSteps-2)+")");
@@ -431,14 +433,17 @@ public class f_1_lesson_text extends Fragment {
 //                            tapToContinueButton.setVisibility(View.VISIBLE);
 //                            tapToContinueButton.setEnabled(true);
 
-                            d_Lesson_container.simulateClicksInCenter();
+//                            nextButton.performClick();
+
+                            d_Lesson_container.clickCenter(delayInSeconds);
+//                            d_Lesson_container.simulateClicksInCenter();
 
                             // i-click na agad yung nextButton dito??
 //                            handleNextButtonClick();
 
                             // may option tayo na
 
-                        }, delayInSeconds * 1000);
+                        }, delayInSeconds * 1000L);
                     }
                     else if (currentStep == (totalSteps - 2)) {
                         Log.e(TUG, "currentStep("+currentStep+") == (totalSteps("+(totalSteps-2)+")");
@@ -486,7 +491,10 @@ public class f_1_lesson_text extends Fragment {
          * +--------------------------------+-----------------+------------------------------+---------------------------+
          */
 
-        int level = 10; // Default to High School Student
+
+        // 0 -
+        // n -
+        int level = 3; // Default to High School Student
 
         // Adjust the multiplier based on the educational level
         double multiplier;
@@ -504,7 +512,7 @@ public class f_1_lesson_text extends Fragment {
                 multiplier = 0.0412; // Average of 0.0343 - 0.0480
                 break;
             case 4: // College Student
-                multiplier = 0.0412; // Average of 0.0343 - 0.0480
+                multiplier = 0.0378; // Average of 0.0343 - 0.0480
                 break;
             case 5: // Graduate (Bachelor's)
                 multiplier = 0.035; // Average of 0.0300 - 0.0400
@@ -516,7 +524,7 @@ public class f_1_lesson_text extends Fragment {
                 multiplier = 0.027; // Average of 0.0240 - 0.0300
                 break;
             case 10: // TESTING MODE
-                multiplier = 0.009;
+                multiplier = 0.0009;
                 break;
             default:
                 multiplier = 0.05; // Default value if no valid level is provided
