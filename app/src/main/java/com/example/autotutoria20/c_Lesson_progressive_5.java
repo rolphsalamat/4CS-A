@@ -275,7 +275,7 @@ public class c_Lesson_progressive_5 extends AppCompatActivity {
     private void showExitConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_exit_confirmation, null);
+        View dialogView = inflater.inflate(R.layout.dialog_logout, null);
         builder.setView(dialogView);
 
         Button cancelButton = dialogView.findViewById(R.id.cancel_exit_module);

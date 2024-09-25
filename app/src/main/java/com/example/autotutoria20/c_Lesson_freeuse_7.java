@@ -223,7 +223,7 @@ public class c_Lesson_freeuse_7 extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         // Inflate the custom dialog layout
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_exit_confirmation, null);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_logout, null);
         builder.setView(dialogView);
 
         // Find "Yes" button in custom layout

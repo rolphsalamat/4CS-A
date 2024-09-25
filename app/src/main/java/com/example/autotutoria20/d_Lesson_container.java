@@ -262,11 +262,20 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
         gridLayout.removeAllViews();
 
         for (int i = 0; i < numberOfSteps; i++) {
+
             View stepView = new View(this);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.width = 0;
-            params.height = (int) (10 * getResources().getDisplayMetrics().density);
-            params.columnSpec = GridLayout.spec(i * 2, 1, 1f);
+            params.width = 1;
+            params.height = (int) (8 * getResources().getDisplayMetrics().density);
+
+//            if (i % 2 == 0) {
+                params.columnSpec = GridLayout.spec(i * 2, 1, 3f);
+//            } else {
+//                // For odd indices, use weight for distribution
+//                params.columnSpec = GridLayout.spec(i * 2, 0.5f);
+//            }
+
+
             stepView.setLayoutParams(params);
 
             // Determine the background based on the step's position relative to the selected step
@@ -527,6 +536,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
     }
 
     private void showExitConfirmationDialog() {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_exit_confirmation, null);
         builder.setView(dialogView);

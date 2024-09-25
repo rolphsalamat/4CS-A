@@ -1,0 +1,246 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:fitsSystemWindows="true"
+    android:background="@drawable/autotutoria_background_color"
+    tools:context=".b_main_0_menu">
+
+    <!-- AUTOTUTORIA LOGO -->
+    <ImageView
+        android:id="@+id/AutoTutoria_logo"
+        android:layout_width="195dp"
+        android:layout_height="175dp"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/new_autotutoria_logo" /> <!-- Make sure your logo is added to the drawable folder -->
+
+    <!-- AUTOTUTORIA TEXT -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/getto_funky"
+        android:text="Autotutoria"
+        android:textColor="@color/white"
+        android:textSize="60sp" />
+
+    <!-- MOTTO TEXT -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/honey_bread"
+        android:text="Be your best self"
+        android:textColor="#B5E6FA"
+        android:textSize="30dp" />
+
+    <!-- DON'T HAVE AN ACCOUNT? -->
+    <!-- SIGN UP LAYER -->
+    <LinearLayout
+        android:id="@+id/btnSignup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!-- Signup button or other views can go here -->
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_serif"
+            android:gravity="center_horizontal"
+            android:text="Don't have an account?"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Sign Up!"
+            android:textColor="#90EE90"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <!-- CARD VIEW CONTAINING USERNAME, PASSWORD, AND LOGIN BUTTON -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:padding="20dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- USERNAME FIELD -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/rounded_edit_text_with_border">
+
+                <EditText
+                    android:id="@+id/textUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/roboto_serif"
+                    android:hint="Username"
+                    android:inputType="text"
+                    android:paddingStart="50dp"
+                    android:textColor="@color/navy_blue"
+                    android:textColorHint="#ABABAB"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/usernameIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="14dp"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginStart="15dp"
+                    android:src="@drawable/username" /> <!-- Reference your username icon in drawable -->
+            </FrameLayout>
+
+            <!-- PASSWORD FIELD -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginVertical="5dp"
+                android:background="@drawable/rounded_edit_text_with_border">
+
+                <EditText
+                    android:id="@+id/textPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/roboto_serif"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:paddingStart="50dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="#ABABAB"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/passwordIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginStart="15dp"
+                    android:src="@drawable/password" /> <!-- Reference your password icon in drawable -->
+
+                <!-- Show/Hide Password Button -->
+                <ImageButton
+                    android:id="@+id/btnShowPassword"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/show_password" /> <!-- Reference your show/hide password icon in drawable -->
+            </FrameLayout>
+
+            <!-- SIGN IN BUTTON -->
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="#1F46B5"
+                android:fontFamily="@font/roboto_serif"
+                android:text="Sign in"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:ignore="DuplicateIds" />
+
+            <!-- FORGOT PASSWORD -->
+            <TextView
+                android:id="@+id/forgotPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Forgot Password?"
+                android:textColor="#3b5998"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/roboto_serif" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- sign in to google -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="or "
+        android:textColor="#87CEEB"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="@font/mouldy_cheese" />
+
+    <!-- LinearLayout to hold both the ImageView and the Button side by side -->
+    <LinearLayout
+        android:id="@+id/btnLoginWithGoogle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="20dp">
+
+        <!-- Gmail logo on the left -->
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/google" />
+
+        <!-- google button -->
+        <Button
+            android:layout_width="330dp"
+            android:layout_height="50dp"
+            android:backgroundTint="#00BCD4"
+            android:fontFamily="@font/roboto_serif"
+            android:gravity="center"
+            android:text="Sign in with Google"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:ignore="DuplicateIds" />
+
+    </LinearLayout>
+
+    <!-- MINI LOGOS AT BOTTOM -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/pnc_logo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/pnc_logo" /> <!-- Reference your PNC logo in drawable -->
+
+        <ImageView
+            android:id="@+id/miniautotutoria_logo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/new_autotutoria_logo" /> <!-- Reference your AutoTutoria logo in drawable -->
+
+    </LinearLayout>
+
+</LinearLayout>

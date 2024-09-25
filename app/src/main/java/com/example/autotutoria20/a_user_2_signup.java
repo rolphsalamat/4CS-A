@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -33,6 +34,7 @@ public class a_user_2_signup extends AppCompatActivity {
 
     private static final String TAG = "SignupActivity";
     private boolean isPasswordVisible = false;
+    private boolean isRetypePasswordVisibile = false;
     private Map<String, Object> userData;
     TextView firstNameEditText;
     TextView lastNameEditText;
@@ -57,7 +59,7 @@ public class a_user_2_signup extends AppCompatActivity {
         emailEditText = findViewById(R.id.txtEmail);
         usernameEditText = findViewById(R.id.txtUsername);
         passwordEditText = findViewById(R.id.txtPassword);
-//        retypePaswordEditText = findViewById(R.id.txtRetypePassword);
+        retypePaswordEditText = findViewById(R.id.txtRetypePassword);
         genderRadioGroup = findViewById(R.id.rdoGender);
 
         datePicker = findViewById(R.id.datePicker);
@@ -78,15 +80,16 @@ public class a_user_2_signup extends AppCompatActivity {
         // Find the Button view
         Button signupButton = findViewById(R.id.btnSignup);
 
-        ImageButton showHidePasswordButton = findViewById(R.id.btnShowPassword);
+        ;
         EditText passwordText = findViewById(R.id.txtPassword);
 
-        ImageView exitSignup = findViewById(R.id.exit_signup);
+        Button exitSignup = findViewById(R.id.exit_signup);
         exitSignup.setOnClickListener(v -> {
             Log.d(TAG, "Exit button clicked");
             finish();
         });
 
+        ImageButton showHidePasswordButton = findViewById(R.id.btnShowPassword);
         showHidePasswordButton.setOnClickListener(v -> {
             Log.d(TAG, "Show/Hide password button clicked");
             // Toggle password visibility
@@ -104,6 +107,25 @@ public class a_user_2_signup extends AppCompatActivity {
             }
         });
 
+
+        ImageButton showHideRePasswordButton = findViewById(R.id.btnShowRetypePassword);
+        showHideRePasswordButton.setOnClickListener(v -> {
+            Log.d(TAG, "Show/Hide password button clicked");
+            // Toggle password visibility
+            isRetypePasswordVisibile = !isRetypePasswordVisibile;
+
+            // Change the password visibility in the EditText
+            if (isRetypePasswordVisibile) {
+                // Show password
+                retypePaswordEditText.setTransformationMethod(null); // Set null to show the password
+                showHideRePasswordButton.setBackgroundResource(R.drawable.hide_password); // Change icon to hide password
+            } else {
+                // Hide password
+                retypePaswordEditText.setTransformationMethod(new PasswordTransformationMethod()); // Use PasswordTransformationMethod to hide the password
+                showHideRePasswordButton.setBackgroundResource(R.drawable.show_password); // Change icon to show password
+            }
+        });
+
         signupButton.setOnClickListener(v -> {
             Log.d(TAG, "Signup button clicked");
 
@@ -116,7 +138,7 @@ public class a_user_2_signup extends AppCompatActivity {
             String email = emailEditText.getText().toString();
             String username = usernameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
-//            String confirmPassword = retypePaswordEditText.getText().toString();
+            String confirmPassword = retypePaswordEditText.getText().toString();
             String gender = "";
 
             Log.d(TAG, "Retrieved input values: firstName=" + firstName + ", lastName=" + lastName +
@@ -197,19 +219,18 @@ public class a_user_2_signup extends AppCompatActivity {
             validCounter += validateName(firstName, "first");
             validCounter += validateName(lastName, "last");
             validCounter += validatePassword(password);
-//            validCounter += validateRetypePassword(password, confirmPassword);
+            validCounter += validateRetypePassword(password, confirmPassword);
 
             // Now handle asynchronous validations for email and username
             validateEmail(email, () -> {
                 validateUsername(username, isValid -> {
-                    if (isValid) {
+                    if (isValid)
                         validCounter++;
-                    }
 
                     Log.d(TAG, "Final validCounter: " + validCounter);
 
-                    if (validCounter == 5) {
-//                    if (validCounter == 6) { // eto na kapag may CONFIRM PASSWORD na
+//                    if (validCounter == 5) { // eto WITHOUT CONFIRM PASSWORD
+                    if (validCounter == 6) { // eto na kapag may CONFIRM PASSWORD na
                         Log.d(TAG, "All validations passed. Proceeding with signup");
 
                         mAuth.createUserWithEmailAndPassword(email, password)
@@ -407,7 +428,7 @@ public class a_user_2_signup extends AppCompatActivity {
     }
 
     private int validateRetypePassword(String password, String retypePassword) {
-        if (retypePassword != password) {
+        if (!Objects.equals(retypePassword, password)) {
             Toast.makeText(a_user_2_signup.this, "Password does not match.", Toast.LENGTH_SHORT).show();
             Log.e("validateRetypePassword", "Password does not match.");
             return 0;

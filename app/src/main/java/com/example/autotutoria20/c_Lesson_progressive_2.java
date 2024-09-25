@@ -239,7 +239,7 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
     private void showExitConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_exit_confirmation, null);
+        View dialogView = inflater.inflate(R.layout.dialog_logout, null);
         builder.setView(dialogView);
 
         // Find the buttons in the custom layout

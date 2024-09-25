@@ -44,7 +44,7 @@ public class c_Lesson_progressive_4 extends AppCompatActivity {
         // Assuming numberOfSteps is determined based on your logic
         int numberOfStepsForCard1 = z_Lesson_steps.lesson_4_steps[0];
         int numberOfStepsForCard2 = z_Lesson_steps.lesson_4_steps[1];
-        int numberOfStepsForCard3 = z_Lesson_steps.lesson_4_steps[2];
+//        int numberOfStepsForCard3 = z_Lesson_steps.lesson_4_steps[2];
 
         setCardClickListener(card1, 1, numberOfStepsForCard1);
         setCardClickListener(card2, 2, numberOfStepsForCard2);
@@ -280,7 +280,7 @@ public class c_Lesson_progressive_4 extends AppCompatActivity {
     private void showExitConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_exit_confirmation, null);
+        View dialogView = inflater.inflate(R.layout.dialog_logout, null);
         builder.setView(dialogView);
 
         Button cancelButton = dialogView.findViewById(R.id.cancel_exit_module);

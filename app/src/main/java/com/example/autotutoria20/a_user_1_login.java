@@ -20,11 +20,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -39,18 +46,18 @@ public class a_user_1_login extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private TextView loginButton, forgotPassword;
-    private LinearLayout signupButton;
+    private LinearLayout signupButton, signWithGoogleButton;
     private EditText
         emailAddressTextView,
         usernameTextView,
         passwordTextView;
     private ImageButton showHidePasswordButton;
     private ImageView pncGotoPage;
-
+    private static final int RC_SIGN_IN = 9001; // Define the request code
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_user_1_login);
+        setContentView(R.layout.a_user_1_login_with_google);
 
         // Initialize Firebase Auth and Firestore
         mAuth = FirebaseAuth.getInstance();
@@ -58,6 +65,7 @@ public class a_user_1_login extends AppCompatActivity {
 
         // Initialize views and buttons
         loginButton = findViewById(R.id.btnLogin);
+        signWithGoogleButton = findViewById(R.id.btnLoginWithGoogle);
         signupButton = findViewById(R.id.btnSignup);
         emailAddressTextView = findViewById(R.id.textUsername);
         usernameTextView = findViewById(R.id.textUsername);
@@ -87,12 +95,22 @@ public class a_user_1_login extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // this is modified to use Username and Password for logging in.
                 String email = emailAddressTextView.getText().toString().trim();
 
 //                String username = usernameTextView.getText().toString().trim();
                 String password = passwordTextView.getText().toString().trim();
 
                 loginUser(email, password);
+            }
+        });
+
+        signWithGoogleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Login with Google
+                loginWithGoogle();
             }
         });
 
@@ -111,6 +129,53 @@ public class a_user_1_login extends AppCompatActivity {
                 openFacebookPage();
             }
         });
+    }
+
+    private void loginWithGoogle() {
+        // Configure Google Sign-In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        // Start the sign-in intent
+        Intent signInIntent = googleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    // Handle the result of the sign-in intent
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, authenticate with Firebase
+            AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+            FirebaseAuth.getInstance().signInWithCredential(credential)
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Sign-in success
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            // Update UI with the signed-in user's information
+                        } else {
+                            // If sign-in fails, display a message to the user.
+                        }
+                    });
+        } catch (ApiException e) {
+            // Handle sign-in failure
+        }
     }
 
     private void showPassword() {
@@ -376,8 +441,8 @@ public class a_user_1_login extends AppCompatActivity {
         EditText emailEditText = dialogView.findViewById(R.id.email_edittext);
         Button resetButton = dialogView.findViewById(R.id.btn_reset);
         Button cancelButton = dialogView.findViewById(R.id.btn_cancel);
-        Button createAccount = dialogView.findViewById(R.id.btn_create_new_account);
-        TextView loginButton = dialogView.findViewById(R.id.btn_login);
+//        Button createAccount = dialogView.findViewById(R.id.btn_create_new_account);
+//        TextView loginButton = dialogView.findViewById(R.id.btn_login);`
 
         // Create AlertDialog Builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -409,13 +474,13 @@ public class a_user_1_login extends AppCompatActivity {
             }
         });
 
-        createAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                startActivity(new Intent(a_user_1_login.this, a_user_2_signup.class));
-            }
-        });
+//        createAccount.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//                startActivity(new Intent(a_user_1_login.this, a_user_2_signup.class));
+//            }
+//        });
 
         loginButton.setOnClickListener(new View.OnClickListener() { // Set click listener for LinearLayout
             @Override

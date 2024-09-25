@@ -46,7 +46,7 @@ public class c_Lesson_freeuse_4 extends AppCompatActivity {
         // Assuming numberOfSteps is determined based on your logic
         int numberOfStepsForCard1 = z_Lesson_steps.lesson_4_steps[0];
         int numberOfStepsForCard2 = z_Lesson_steps.lesson_4_steps[1];
-        int numberOfStepsForCard3 = z_Lesson_steps.lesson_4_steps[2];
+//        int numberOfStepsForCard3 = z_Lesson_steps.lesson_4_steps[2];
 
         // Set click listeners for each card
         setCardClickListener(card1, 1, numberOfStepsForCard1);
@@ -260,7 +260,7 @@ public class c_Lesson_freeuse_4 extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         // Inflate the custom dialog layout
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_exit_confirmation, null);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_logout, null);
         builder.setView(dialogView);
 
         // Find "Yes" button in custom layout
