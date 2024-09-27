@@ -22,63 +22,63 @@ public class e_Module_6_1 {
     }
 
     public static final String[] pre_test_lesson_1_questions = {
-            /*1*/    "What is the main characteristic of a leftmost derivation?",
-            /*2*/    "In a rightmost derivation which non-terminal is expanded first?",
-            /*3*/    "What do leftmost and rightmost derivations have in common?",
-            /*4*/    "Which parsing method typically uses leftmost derivations?",
-            /*5*/    "Which parsing method typically uses rightmost derivations?",
-            /*6*/    "Which of the following is an example of a terminal symbol in a derivation?",
-            /*7*/    "In leftmost derivation which non-terminal is expanded at each step?",
-            /*8*/    "What is the result of both leftmost and rightmost derivations?",
-            /*9*/    "Which of the following describes a rightmost derivation?",
-            /*10*/   "In the context of derivations what is a start symbol?",
-            /*11*/   "Which symbol in a derivation is typically expanded during a derivation step?",
-            /*12*/   "What do derivations help in analyzing?",
-            /*13*/   "What is the key difference between leftmost and rightmost derivations?",
-            /*14*/   "Which of the following is a non-terminal symbol in grammar?",
-            /*15*/   "Which of the following statements is true regarding derivations in formal grammar?"
+            /*1*/    "Which derivation method is typically easier to understand for beginners learning grammars?",
+            /*2*/    "In context-free grammar, what type of derivation is often used in predictive parsers?",
+            /*3*/    "When using a rightmost derivation, how does the order of non-terminal replacements progress?",
+            /*4*/    "Which of the following derivation methods is most commonly utilized in bottom-up parsing techniques?",
+            /*5*/    "How can a grammar be determined to be ambiguous based on its derivations?",
+            /*6*/    "In a context-free grammar, which type of derivation ensures that non-terminal symbols are expanded starting from the leftmost part of the string?",
+            /*7*/    "Which derivation process is used to check for ambiguity in a given grammar?",
+            /*8*/    "When expanding a context-free grammar using rightmost derivation, which part of the string is transformed first?",
+            /*9*/    "In leftmost derivation, how does the order of production rule application affect the derivation process?",
+            /*10*/   "Which of the following would you check to confirm that two derivation trees are identical?",
+            /*11*/   "In what scenario would leftmost and rightmost derivations result in different parse trees?",
+            /*12*/   "Why is rightmost derivation commonly used in conjunction with bottom-up parsers?",
+            /*13*/   "Which derivation approach would you choose to trace the syntactic structure of a sentence from the start symbol?",
+            /*14*/   "How does leftmost derivation differ from rightmost derivation in terms of parse tree generation?",
+            /*15*/   "What ensures that both leftmost and rightmost derivations can generate the same final string?"
     };
 
     public static final String[][] pre_test_lesson_1_choices = {
-            /*1*/    {"Expands the rightmost non-terminal first", "Expands the leftmost non-terminal first", "Expands both left and right non-terminals simultaneously", "Expands only terminal symbols"},
-            /*2*/    {"The leftmost non-terminal", "The rightmost non-terminal", "Any non-terminal can be expanded first", "Only the start symbol"},
-            /*3*/    {"They both expand the leftmost non-terminal first", "They both expand the rightmost non-terminal first", "They both follow the same grammar rules to generate strings", "They both result in different final strings"},
-            /*4*/    {"Bottom-up parsing", "Top-down parsing", "In-order parsing", "Pre-order parsing"},
-            /*5*/    {"Top-down parsing", "Pre-order parsing", "Bottom-up parsing", "In-order parsing"},
-            /*6*/    {"Start symbol", "A specific letter or digit in a string", "Non-terminal symbols", "Grammar rules"},
-            /*7*/    {"The rightmost non-terminal", "Any non-terminal", "The leftmost non-terminal", "Only terminal symbols"},
-            /*8*/    {"The same final string", "Different strings", "Incomplete derivations", "No valid output"},
-            /*9*/    {"It expands all non-terminals simultaneously", "It always starts with terminal symbols", "It expands the rightmost non-terminal at each step", "It only applies to recursive grammars"},
-            /*10*/   {"The symbol that represents terminal symbols", "The first non-terminal symbol from which derivation starts", "The last symbol of a string", "A symbol that ends a derivation"},
-            /*11*/   {"Only terminal symbols", "The leftmost or rightmost non-terminal symbol", "Any terminal symbol", "Start symbol only"},
-            /*12*/   {"Semantics of a language", "Syntactic structure of a language", "The meaning of programming keywords", "The compilation process"},
-            /*13*/   {"The final output string", "The order in which terminal symbols are expanded", "The order in which non-terminal symbols are expanded", "The grammar rules applied"},
-            /*14*/   {"A lowercase letter", "An uppercase letter", "A punctuation mark", "A keyword"},
-            /*15*/   {"Derivations cannot use the same rules for both leftmost and rightmost expansions", "Derivations are used to generate valid strings based on grammar rules", "Only rightmost derivations are used in syntax analysis", "Derivations ignore non-terminal symbols"}
+            /*1*/    {"Rightmost Derivation", "Leftmost Derivation", "Random Derivation", "None of the above"},
+            /*2*/    {"Rightmost Derivation", "Leftmost Derivation", "Ambiguous Derivation", "Mixed Derivation"},
+            /*3*/    {"From left to right", "From right to left", "Randomly", "Simultaneously"},
+            /*4*/    {"Leftmost Derivation", "Rightmost Derivation", "Recursive Derivation", "None of the above"},
+            /*5*/    {"When multiple derivation trees are possible for a single string", "When only leftmost derivation is possible", "When all derivations lead to the same parse tree", "When derivation produces terminal symbols only"},
+            /*6*/    {"Rightmost Derivation", "Leftmost Derivation", "Random Derivation", "Mixed Derivation"},
+            /*7*/    {"Rightmost Derivation only", "Leftmost Derivation only", "Both Leftmost and Rightmost Derivations", "None of the above"},
+            /*8*/    {"The first non-terminal from the left", "The first terminal from the right", "The rightmost non-terminal", "The middle non-terminal"},
+            /*9*/    {"It starts with the last production rule", "It always begins by applying the leftmost rule first", "It applies rules in no specific order", "All rules are applied simultaneously"},
+            /*10*/   {"The number of terminal symbols used", "The sequence in which non-terminal symbols were replaced", "The order of production rules applied", "The parse trees generated from the derivation"},
+            /*11*/   {"When the grammar is ambiguous", "When the grammar is context-sensitive", "When there are no non-terminal symbols left", "When both derivations are incomplete"},
+            /*12*/   {"It simplifies the derivation process", "It aligns with the way bottom-up parsers work, processing from right to left", "It is the only derivation method recognized by parsers", "It always results in fewer production rules"},
+            /*13*/   {"Rightmost Derivation", "Leftmost Derivation", "Random Derivation", "Backward Derivation"},
+            /*14*/   {"Leftmost derivation always creates a balanced tree", "Rightmost derivation applies rules more randomly", "Leftmost derivation constructs the tree from the top down", "Rightmost derivation skips non-terminal expansions"},
+            /*15*/   {"The use of the same context-free grammar rules", "The replacement of terminal symbols only", "The application of different grammars", "The elimination of all non-terminal symbols"}
     };
 
     public static final int[] pre_test_lesson_1_answers = {
-            /*1*/    1, // 'Expands the leftmost non-terminal first'
-            /*2*/    1, // 'The rightmost non-terminal'
-            /*3*/    2, // 'They both follow the same grammar rules to generate strings'
-            /*4*/    1, // 'Top-down parsing'
-            /*5*/    2, // 'Bottom-up parsing'
-            /*6*/    1, // 'A specific letter or digit in a string'
-            /*7*/    2, // 'The leftmost non-terminal'
-            /*8*/    0, // 'The same final string'
-            /*9*/    2, // 'It expands the rightmost non-terminal at each step'
-            /*10*/   1, // 'The first non-terminal symbol from which derivation starts'
-            /*11*/   1, // 'The leftmost or rightmost non-terminal symbol'
-            /*12*/   1, // 'Syntactic structure of a language'
-            /*13*/   2, // 'The order in which non-terminal symbols are expanded'
-            /*14*/   1, // 'An uppercase letter'
-            /*15*/   1  // 'Derivations are used to generate valid strings based on grammar rules'
+            /*1*/    1, // Leftmost Derivation
+            /*2*/    1, // Leftmost Derivation
+            /*3*/    1, // From right to left
+            /*4*/    1, // Rightmost Derivation
+            /*5*/    0, // When multiple derivation trees are possible for a single string
+            /*6*/    1, // Leftmost Derivation
+            /*7*/    2, // Both Leftmost and Rightmost Derivations
+            /*8*/    2, // The rightmost non-terminal
+            /*9*/    1, // It always begins by applying the leftmost rule first
+            /*10*/   3, // The parse trees generated from the derivation
+            /*11*/   0, // When the grammar is ambiguous
+            /*12*/   1, // It aligns with the way bottom-up parsers work
+            /*13*/   1, // Leftmost Derivation
+            /*14*/   2, // Leftmost derivation constructs the tree from the top down
+            /*15*/   0  // The use of the same context-free grammar rules
     };
 
     /*
     +----------------------+
     |       POST-TEST      |
-    |        EASY          |
+    |         EASY         |
     +----------------------+
     */
 
@@ -92,21 +92,21 @@ public class e_Module_6_1 {
     }
 
     public static final String[] post_test_lesson_1_questions_easy = {
-            /*1*/    "A grammar is ambiguous if it generates exactly one parse tree for every sentence.",
-            /*2*/    "Every ambiguous grammar has at least one sentence with multiple parse trees.",
-            /*3*/    "Ambiguity in grammar can complicate the process of parsing a sentence.",
-            /*4*/    "A sentence with more than one derivation is always unambiguous.",
-            /*5*/    "Context-free grammars (CFGs) are used in defining programming languages.",
-            /*6*/    "Ambiguity is a desirable property in grammars used for programming languages.",
-            /*7*/    "It is impossible to eliminate ambiguity in all ambiguous grammars.",
-            /*8*/    "Ambiguous grammars can lead to multiple interpretations of the same input string.",
-            /*9*/    "All CFGs are inherently ambiguous.",
-            /*10*/   "Ambiguity affects both natural languages and programming languages.",
-            /*11*/   "A grammar is unambiguous if it has more than one derivation for at least one sentence.",
-            /*12*/   "Ambiguity can arise when there are two or more valid parse trees for a single sentence.",
-            /*13*/   "Eliminating ambiguity is always straightforward in grammars used for natural languages.",
-            /*14*/   "Ambiguous grammars always result in multiple derivations for every sentence.",
-            /*15*/   "Context-free grammar can represent recursive structures."
+            /*1*/    "Context-free grammars can generate ambiguous languages.",
+            /*2*/    "Ambiguity in a grammar means that a string has more than one leftmost derivation.",
+            /*3*/    "An ambiguous grammar always generates an ambiguous language.",
+            /*4*/    "Every language that can be generated by an ambiguous grammar can also be generated by an unambiguous grammar.",
+            /*5*/    "All context-free languages are inherently ambiguous.",
+            /*6*/    "A context-free language can be ambiguous even if no context-free grammar for it is ambiguous.",
+            /*7*/    "If a grammar is ambiguous, then there exists no unambiguous grammar for the language it generates.",
+            /*8*/    "Parsing techniques like LL(1) and LR(1) are designed to handle ambiguous grammars.",
+            /*9*/    "Ambiguity in a grammar can lead to multiple parse trees for the same string.",
+            /*10*/   "Grammar ambiguity can be resolved by left factoring the grammar rules.",
+            /*11*/   "The existence of ambiguity is a property of the language, not just the grammar.",
+            /*12*/   "Ambiguous grammars are generally preferred for efficient parsing in compilers.",
+            /*13*/   "A language is ambiguous if it is generated by an ambiguous grammar.",
+            /*14*/   "Grammars that produce multiple parse trees for the same string are considered ambiguous.",
+            /*15*/   "Ambiguity in grammars can complicate the design of parsers."
     };
 
     public static final String[][] post_test_lesson_1_choices_easy = {
@@ -128,20 +128,20 @@ public class e_Module_6_1 {
     };
 
     public static final int[] post_test_lesson_1_answers_easy = {
-            /*1*/    1, // False
+            /*1*/    0, // True
             /*2*/    0, // True
-            /*3*/    0, // True
+            /*3*/    1, // False
             /*4*/    1, // False
-            /*5*/    0, // True
-            /*6*/    1, // False
-            /*7*/    0, // True
-            /*8*/    0, // True
-            /*9*/    1, // False
+            /*5*/    1, // False
+            /*6*/    0, // True
+            /*7*/    1, // False
+            /*8*/    1, // False
+            /*9*/    0, // True
             /*10*/   0, // True
-            /*11*/   1, // False
-            /*12*/   0, // True
-            /*13*/   1, // False
-            /*14*/   1, // False
+            /*11*/   0, // True
+            /*12*/   1, // False
+            /*13*/   0, // True
+            /*14*/   0, // True
             /*15*/   0  // True
     };
 
@@ -162,57 +162,57 @@ public class e_Module_6_1 {
     }
 
     public static final String[] post_test_lesson_1_questions_medium = {
-            /*1*/    "What defines an ambiguous grammar?",
-            /*2*/    "Which of the following is true about ambiguous grammars?",
-            /*3*/    "What is the primary challenge of ambiguity in grammars?",
-            /*4*/    "Which of the following is an example of an ambiguous expression?",
-            /*5*/    "Why is ambiguity undesirable in programming language grammars?",
-            /*6*/    "In which type of language is ambiguity more frequently encountered?",
-            /*7*/    "A grammar is called ambiguous if it:",
-            /*8*/    "Which type of grammar does not allow ambiguity?",
-            /*9*/    "Ambiguous grammar is problematic in:",
-            /*10*/   "What is a possible solution to resolve ambiguity in a grammar?",
-            /*11*/   "Ambiguity in context-free grammar often leads to:",
-            /*12*/   "Which of the following helps resolve ambiguity in grammars?",
-            /*13*/   "Which of the following sentences would most likely have an ambiguous parse tree?",
-            /*14*/   "What makes a sentence ambiguous in a CFG?",
-            /*15*/   "In terms of CFG, what is ambiguity?"
+            /*1*/    "What is the definition of ambiguity in context-free grammar?",
+            /*2*/    "Which of the following is true for ambiguous grammars?",
+            /*3*/    "Which of the following parsing techniques can handle ambiguous grammars?",
+            /*4*/    "Which of the following is an approach to eliminate ambiguity in a grammar?",
+            /*5*/    "What is a context-free grammar?",
+            /*6*/    "Ambiguous languages can be:",
+            /*7*/    "Which term refers to multiple derivation trees for the same string?",
+            /*8*/    "What is a parse tree?",
+            /*9*/    "Which of the following can lead to ambiguity in grammar?",
+            /*10*/   "In context-free grammars, ambiguity can result in:",
+            /*11*/   "What is the primary issue with ambiguous grammars in compiler design?",
+            /*12*/   "Which of the following cannot be used to prove ambiguity in a grammar?",
+            /*13*/   "Which type of grammar is designed to generate only one parse tree for each valid string?",
+            /*14*/   "Which parsing method is incapable of handling ambiguity?",
+            /*15*/   "Why is ambiguity problematic in grammars?"
     };
 
     public static final String[][] post_test_lesson_1_choices_medium = {
-            /*1*/    {"A grammar with no production rules", "A grammar with more than one parse tree for some sentences", "A grammar that only generates one parse tree", "A grammar used only for arithmetic expressions"},
-            /*2*/    {"They can generate more than one parse tree for a sentence", "They are always preferable for language design", "They eliminate the need for parsing", "They only exist in natural language processing"},
-            /*3*/    {"It simplifies language interpretation", "It can lead to multiple interpretations of a sentence", "It eliminates the need for parsing algorithms", "It makes grammars unusable"},
-            /*4*/    {"id+id*id", "id→id+id", "id→id", "id-id"},
-            /*5*/    {"It requires fewer production rules", "It leads to different interpretations of code", "It simplifies the parsing process", "It enhances compiler efficiency"},
-            /*6*/    {"Natural languages", "Programming languages", "Formal languages", "None of the above"},
-            /*7*/    {"Has only one derivation for each sentence", "Has multiple derivations for at least one sentence", "Does not produce any sentences", "Only generates natural language sentences"},
-            /*8*/    {"Ambiguous grammar", "Context-free grammar", "Unambiguous grammar", "All grammars allow ambiguity"},
-            /*9*/    {"Compilers and parsers", "Syntax analysis of programming languages", "Both a and b", "None of the above"},
-            /*10*/   {"Ignoring it", "Rewriting the production rules", "Adding more symbols", "None of the above"},
-            /*11*/   {"One unique derivation", "Faster parsing times", "Multiple valid parse trees", "No valid sentences being generated"},
-            /*12*/   {"Removing recursion", "Using more non-terminal symbols", "Refining production rules", "Changing the grammar to a different language"},
-            /*13*/   {"A sentence with a single noun and verb", "A complex arithmetic expression with multiple operators", "A sentence with only one possible interpretation", "None of the above"},
-            /*14*/   {"It cannot be derived using the grammar", "It can be derived using only one production rule", "It can be derived using multiple parse trees", "It is not part of the language"},
-            /*15*/   {"A feature that simplifies parsing", "The presence of multiple interpretations for a single sentence", "The use of only terminal symbols in a grammar", "A solution to eliminate all derivations"}
+            /*1*/    {"A grammar that generates more than one language", "A grammar that produces more than one leftmost derivation for some string", "A grammar that generates context-sensitive languages", "A grammar that cannot generate a parse tree"},
+            /*2*/    {"They always lead to parsing errors", "They generate a string with more than one parse tree", "They can only generate finite languages", "They only apply to deterministic parsers"},
+            /*3*/    {"LL(1)", "LR(1)", "GLR", "SLR"},
+            /*4*/    {"Introducing left recursion", "Left factoring", "Using LL(1) parser", "Adding more productions"},
+            /*5*/    {"A grammar where the left-hand side of each rule contains exactly one non-terminal", "A grammar where each production has at least two non-terminals", "A grammar used only for arithmetic expressions", "A grammar that generates ambiguous languages"},
+            /*6*/    {"Generated by only ambiguous grammars", "Generated by both ambiguous and unambiguous grammars", "Generated only by context-sensitive grammars", "Generated by deterministic parsers"},
+            /*7*/    {"Syntax error", "Ambiguity", "Parsing failure", "Non-determinism"},
+            /*8*/    {"A tree that represents all possible derivations of a string", "A tree that represents the hierarchical structure of a string according to a grammar", "A tree that represents a sequence of tokens", "A tree that shows only terminal symbols"},
+            /*9*/    {"Left recursion", "Right recursion", "Overlapping productions", "Grammar simplification"},
+            /*10*/   {"Infinite parse trees", "Multiple valid parse trees for a single string", "Syntax errors", "Deterministic parsing"},
+            /*11*/   {"They increase the size of the language", "They make parsing deterministic", "They create confusion in parsing", "They require fewer parsing steps"},
+            /*12*/   {"Left recursion", "Right recursion", "Multiple parse trees for the same string", "Multiple leftmost derivations for the same string"},
+            /*13*/   {"Ambiguous grammar", "Unambiguous grammar", "Recursive grammar", "Non-terminal grammar"},
+            /*14*/   {"GLR", "LR(1)", "LL(1)", "CYK"},
+            /*15*/   {"It simplifies grammar analysis", "It leads to multiple parse trees, complicating the parsing process", "It improves parsing speed", "It can only be resolved using GLR parsing"}
     };
 
     public static final int[] post_test_lesson_1_answers_medium = {
-            /*1*/    1, // A grammar with more than one parse tree for some sentences
-            /*2*/    0, // They can generate more than one parse tree for a sentence
-            /*3*/    1, // It can lead to multiple interpretations of a sentence
-            /*4*/    0, // id+id*id
-            /*5*/    1, // It leads to different interpretations of code
-            /*6*/    0, // Natural languages
-            /*7*/    1, // Has multiple derivations for at least one sentence
-            /*8*/    2, // Unambiguous grammar
-            /*9*/    2, // Both a and b
-            /*10*/   1, // Rewriting the production rules
-            /*11*/   2, // Multiple valid parse trees
-            /*12*/   2, // Refining production rules
-            /*13*/   1, // A complex arithmetic expression with multiple operators
-            /*14*/   2, // It can be derived using multiple parse trees
-            /*15*/   1  // The presence of multiple interpretations for a single sentence
+            /*1*/    1, // A grammar that produces more than one leftmost derivation for some string
+            /*2*/    1, // They generate a string with more than one parse tree
+            /*3*/    2, // GLR
+            /*4*/    1, // Left factoring
+            /*5*/    0, // A grammar where the left-hand side of each rule contains exactly one non-terminal
+            /*6*/    1, // Generated by both ambiguous and unambiguous grammars
+            /*7*/    1, // Ambiguity
+            /*8*/    1, // A tree that represents the hierarchical structure of a string according to a grammar
+            /*9*/    2, // Overlapping productions
+            /*10*/   1, // Multiple valid parse trees for a single string
+            /*11*/   2, // They create confusion in parsing
+            /*12*/   3, // Multiple leftmost derivations for the same string
+            /*13*/   1, // Unambiguous grammar
+            /*14*/   2, // LL(1)
+            /*15*/   1  // It leads to multiple parse trees, complicating the parsing process
     };
 
     /*
@@ -231,38 +231,39 @@ public class e_Module_6_1 {
     }
 
     public static final String[] post_test_lesson_1_questions_hard = {
-            /*1*/    "The type of grammar where a sentence can have multiple parse trees.",
-            /*2*/    "The structure used to show the syntactic structure of a sentence derived from a grammar.",
-            /*3*/    "The process of transforming a string of symbols into a parse tree.",
-            /*4*/    "The property of a grammar that guarantees one unique parse tree for each sentence.",
-            /*5*/    "A problem in grammars where the same sentence can be parsed in different ways.",
-            /*6*/    "The formal language used to define the syntax of programming languages.",
-            /*7*/    "A grammar that produces multiple derivations for at least one sentence.",
-            /*8*/    "The field of study that involves analyzing the structure of sentences in programming and natural languages.",
-            /*9*/    "A grammar used to generate sentences in a language while maintaining a hierarchical structure.",
-            /*10*/   "A formal structure that represents a derivation of a sentence using production rules.",
-            /*11*/   "A syntactic construct that can cause different interpretations in both programming and natural languages.",
-            /*12*/   "The process of simplifying a grammar to eliminate ambiguity.",
-            /*13*/   "The tree representation used to disambiguate sentences in CFGs.",
-            /*14*/   "The type of ambiguity that occurs in arithmetic expressions such as operator precedence.",
-            /*15*/   "The grammar used to describe recursive language patterns like nested expressions."
+            /*1*/    "The algorithm that builds a tree structure from input to validate a grammar.",
+            /*2*/    "The part of a parser that reads input and produces a parse tree.",
+            /*3*/    "The process of analyzing whether a grammar can be parsed in more than one way.",
+            /*4*/    "The element of a context-free grammar that cannot be further expanded into other symbols.",
+            /*5*/    "The property of a context-free grammar that allows only one unique leftmost derivation per string.",
+            /*6*/    "A data structure used in parsing to represent the syntax of strings.",
+            /*7*/    "A type of recursion that does not contribute to ambiguity in grammars.",
+            /*8*/    "The method used in compilers to remove unnecessary rules in grammars.",
+            /*9*/    "The procedure of rewriting a grammar to remove common prefixes to help disambiguate.",
+            /*10*/   "A characteristic of context-free languages where more than one derivation is possible for some strings.",
+            /*11*/   "A grammar that allows both leftmost and rightmost derivations to produce different results.",
+            /*12*/   "The concept of allowing multiple syntactic structures for the same sentence in natural language processing.",
+            /*13*/   "A tool used by a compiler to convert a context-free grammar into machine-readable format.",
+            /*14*/   "A type of language that cannot be parsed using a context-free grammar.",
+            /*15*/   "A technique in parsing used to reduce ambiguity by assigning priority to certain rules."
     };
 
     public static final String[] post_test_lesson_1_answers_hard = {
-            /*1*/    "ambiguous grammar",
-            /*2*/    "parse tree",
-            /*3*/    "parsing",
-            /*4*/    "unambiguous grammar",
-            /*5*/    "ambiguity",
-            /*6*/    "context-free grammar",
-            /*7*/    "ambiguous grammar",
-            /*8*/    "syntax analysis",
-            /*9*/    "context-free grammar",
-            /*10*/   "parse tree",
-            /*11*/   "ambiguity",
-            /*12*/   "grammar refinement",
-            /*13*/   "parse tree",
-            /*14*/   "structural ambiguity",
-            /*15*/   "context-free grammar"
+            /*1*/    "parser",
+            /*2*/    "syntax analyzer",
+            /*3*/    "ambiguity detection",
+            /*4*/    "terminal",
+            /*5*/    "unambiguity",
+            /*6*/    "parse tree",
+            /*7*/    "left recursion",
+            /*8*/    "grammar simplification",
+            /*9*/    "left factoring",
+            /*10*/   "ambiguity",
+            /*11*/   "ambiguous grammar",
+            /*12*/   "structural ambiguity",
+            /*13*/   "parser generator",
+            /*14*/   "context-sensitive language",
+            /*15*/   "precedence"
     };
+
 }

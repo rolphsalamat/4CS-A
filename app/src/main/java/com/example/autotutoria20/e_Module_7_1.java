@@ -1,5 +1,9 @@
 package com.example.autotutoria20;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class e_Module_7_1 {
 
     /*
@@ -10,64 +14,64 @@ public class e_Module_7_1 {
 
     public static e_Question[] get_PreTest_Questions() {
         return e_Module_7.getPreTestQuestions(
-                pre_test_questions,
-                pre_test_choices,
-                pre_test_answers
+                pre_test_lesson_1_questions,
+                pre_test_lesson_1_choices,
+                pre_test_lesson_1_answers
         );
     }
 
-    public static final String[] pre_test_questions = {
-            /*1*/    "What is inherent ambiguity?",
-            /*2*/    "Which of the following is an example of inherent ambiguity?",
-            /*3*/    "What can help resolve inherent ambiguity in language?",
-            /*4*/    "Which field is least likely to accept inherent ambiguity?",
-            /*5*/    "In legal documents, what often causes inherent ambiguity?",
-            /*6*/    "Which of the following sentences contains inherent ambiguity?",
-            /*7*/    "In programming, inherent ambiguity can lead to:",
-            /*8*/    "How can inherent ambiguity affect communication?",
-            /*9*/    "Why is inherent ambiguity sometimes used in creative writing?",
-            /*10*/   "What term refers to reducing the number of possible meanings in an ambiguous situation?",
-            /*11*/   "In which of the following can inherent ambiguity be a problem?",
-            /*12*/   "A phrase is inherently ambiguous if:",
-            /*13*/   "What is an important factor in resolving inherent ambiguity?",
-            /*14*/   "Which of the following fields actively embraces inherent ambiguity?",
-            /*15*/   "Inherent ambiguity can sometimes lead to which of the following?"
+    public static final String[] pre_test_lesson_1_questions = {
+            /*1*/    "What is the key challenge of inherent ambiguity in grammar?",
+            /*2*/    "Inherent ambiguity most often appears in which type of languages?",
+            /*3*/    "What is a common symptom of inherent ambiguity in a grammar?",
+            /*4*/    "Which strategy helps reduce the risk of ambiguity in grammar?",
+            /*5*/    "What does inherent ambiguity imply about the grammar?",
+            /*6*/    "Why is ambiguity in grammar problematic in programming languages?",
+            /*7*/    "In which situation can ambiguity be beneficial or intentional?",
+            /*8*/    "What is a possible consequence of not addressing ambiguity in technical documentation?",
+            /*9*/    "Which method helps in detecting ambiguity in grammar?",
+            /*10*/   "How does left recursion contribute to ambiguity in grammar?",
+            /*11*/   "What does lexical ambiguity involve?",
+            /*12*/   "Which type of ambiguity arises from the arrangement of words in a sentence?",
+            /*13*/   "Why is inherent ambiguity difficult to eliminate in natural languages?",
+            /*14*/   "What does pragmatic ambiguity depend on?",
+            /*15*/   "Which aspect of inherent ambiguity is relevant in legal contracts?"
     };
 
-    public static final String[][] pre_test_choices = {
-            /*1*/    {"A situation with only one interpretation", "A situation that cannot be resolved", "A situation with multiple possible interpretations", "A situation where ambiguity is not possible"},
-            /*2*/    {"I will meet you tomorrow.", "The bank was closed.", "She fed her cat food.", "The sun rises in the east."},
-            /*3*/    {"Removing context", "Adding more complexity", "Providing clear context", "Ignoring the ambiguity"},
-            /*4*/    {"Creative writing", "Law", "Mathematics", "Art"},
-            /*5*/    {"Lack of vocabulary", "Vague terms and clauses", "Specific and clear language", "Mathematical errors"},
-            /*6*/    {"I parked my car outside the mall.", "The chicken is ready to eat.", "She walked quickly down the street.", "Water freezes at 0°C."},
-            /*7*/    {"Correct outputs", "Multiple possible outputs", "No ambiguity at all", "Increased performance"},
-            /*8*/    {"It makes communication faster", "It can lead to misinterpretation", "It always simplifies communication", "It guarantees clarity"},
-            /*9*/    {"To make the text less interesting", "To confuse readers", "To encourage multiple interpretations", "To create uniformity"},
-            /*10*/   {"Expansion", "Clarification", "Multiplication", "Obfuscation"},
-            /*11*/   {"Painting", "Poetry", "Programming", "Sculpting"},
-            /*12*/   {"It can only mean one thing", "It can be interpreted in several ways", "It has no meaning at all", "It follows strict grammar rules"},
-            /*13*/   {"Changing the sentence structure", "Ignoring context", "Considering the context", "Removing the ambiguity entirely"},
-            /*14*/   {"Creative writing", "Legal drafting", "Scientific reporting", "Financial analysis"},
-            /*15*/   {"Clarification of complex ideas", "Simpler problem-solving", "Misunderstandings in communication", "Clearer interpretations"}
+    public static final String[][] pre_test_lesson_1_choices = {
+            /*1*/    {"It improves clarity in sentences.", "It allows for multiple valid interpretations of the same structure.", "It simplifies the grammar rules.", "It ensures a single correct interpretation."},
+            /*2*/    {"Programming languages", "Natural languages", "Machine code", "Regular languages"},
+            /*3*/    {"The presence of recursion", "Multiple derivation trees for the same string", "An increase in non-terminal symbols", "A reduction in parse tree complexity"},
+            /*4*/    {"Adding more non-terminal symbols", "Simplifying the production rules", "Introducing right recursion", "Allowing leftmost derivations"},
+            /*5*/    {"The grammar can be easily modified to remove ambiguity.", "The ambiguity cannot be resolved, regardless of changes.", "The grammar allows multiple leftmost derivations.", "The grammar only affects natural languages."},
+            /*6*/    {"It can lead to multiple valid parse trees, complicating syntax analysis.", "It makes the code generation process faster.", "It ensures unique interpretations of code.", "It simplifies the debugging process."},
+            /*7*/    {"In legal writing", "In poetic or creative writing", "In programming languages", "In technical documentation"},
+            /*8*/    {"Improved accuracy", "Faster comprehension", "Misinterpretation of key information", "Increased efficiency in editing"},
+            /*9*/    {"Constructing multiple parse trees for different derivations", "Increasing the number of terminal symbols", "Using left recursion to resolve conflicts", "Ignoring recursive elements in grammar"},
+            /*10*/   {"It ensures that terminal symbols appear first.", "It creates overlapping derivations for the same string.", "It eliminates multiple interpretations of the same string.", "It simplifies the parsing process."},
+            /*11*/   {"Ambiguity due to the structure of a sentence", "Ambiguity resulting from the multiple meanings of words", "Ambiguity that arises in parsing algorithms", "Ambiguity due to non-terminal symbols"},
+            /*12*/   {"Syntactic ambiguity", "Lexical ambiguity", "Pragmatic ambiguity", "Structural ambiguity"},
+            /*13*/   {"Natural languages use a strict set of grammar rules.", "The complexity of meaning in natural languages allows for multiple interpretations.", "Natural languages lack the flexibility for ambiguity.", "Natural languages rely solely on syntax."},
+            /*14*/   {"The syntax of the sentence", "The broader context of the statement", "The specific lexical choices in a sentence", "The lack of terminal symbols in grammar"},
+            /*15*/   {"It helps in defining clear terms.", "It can lead to multiple interpretations, potentially causing disputes.", "It simplifies contract negotiations.", "It ensures all parties agree on a single meaning."}
     };
 
-    public static final int[] pre_test_answers = {
-            /*1*/    2,  // 'A situation with multiple possible interpretations'
-            /*2*/    2,  // 'She fed her cat food.'
-            /*3*/    2,  // 'Providing clear context'
-            /*4*/    2,  // 'Mathematics'
-            /*5*/    1,  // 'Vague terms and clauses'
-            /*6*/    1,  // 'The chicken is ready to eat.'
-            /*7*/    1,  // 'Multiple possible outputs'
-            /*8*/    1,  // 'It can lead to misinterpretation'
-            /*9*/    2,  // 'To encourage multiple interpretations'
-            /*10*/   1,  // 'Clarification'
-            /*11*/   2,  // 'Programming'
-            /*12*/   1,  // 'It can be interpreted in several ways'
-            /*13*/   2,  // 'Considering the context'
-            /*14*/   0,  // 'Creative writing'
-            /*15*/   2   // 'Misunderstandings in communication'
+    public static final int[] pre_test_lesson_1_answers = {
+            /*1*/    1,  // 'It allows for multiple valid interpretations of the same structure.'
+            /*2*/    1,  // 'Natural languages'
+            /*3*/    1,  // 'Multiple derivation trees for the same string'
+            /*4*/    1,  // 'Simplifying the production rules'
+            /*5*/    1,  // 'The ambiguity cannot be resolved, regardless of changes.'
+            /*6*/    0,  // 'It can lead to multiple valid parse trees, complicating syntax analysis.'
+            /*7*/    1,  // 'In poetic or creative writing'
+            /*8*/    2,  // 'Misinterpretation of key information'
+            /*9*/    0,  // 'Constructing multiple parse trees for different derivations'
+            /*10*/   1,  // 'It creates overlapping derivations for the same string.'
+            /*11*/   1,  // 'Ambiguity resulting from the multiple meanings of words'
+            /*12*/   0,  // 'Syntactic ambiguity'
+            /*13*/   1,  // 'The complexity of meaning in natural languages allows for multiple interpretations.'
+            /*14*/   1,  // 'The broader context of the statement'
+            /*15*/   1   // 'It can lead to multiple interpretations, potentially causing disputes.'
     };
 
     /*
@@ -78,32 +82,32 @@ public class e_Module_7_1 {
 
     public static e_Question[] get_PostTest_Lesson1_Easy_Questions() {
         return e_Module_7.get_PostTest_EasyMedium_Questions(
-                post_test_easy_questions,
-                post_test_easy_choices,
-                post_test_easy_answers,
+                post_test_lesson_1_questions_easy,
+                post_test_lesson_1_choices_easy,
+                post_test_lesson_1_answers_easy,
                 e_Question.Difficulty.EASY
         );
     }
 
-    public static final String[] post_test_easy_questions = {
-            /*1*/    "Context-Free Grammars (CFGs) are used to define the syntax of programming languages.",
-            /*2*/    "A CFG can have more than one start symbol.",
-            /*3*/    "In Chomsky Normal Form (CNF), each production rule can have either two non-terminals or one terminal.",
-            /*4*/    "The CNF allows epsilon (ε) as a production for any non-terminal.",
-            /*5*/    "Greibach Normal Form (GNF) requires that every production begins with a terminal symbol.",
-            /*6*/    "Left recursion is allowed in Greibach Normal Form (GNF).",
-            /*7*/    "In CNF, a terminal symbol can appear alongside non-terminals in the same production rule.",
-            /*8*/    "CNF simplifies CFGs for use in parsing algorithms like the CYK algorithm.",
-            /*9*/    "A CFG consists of a set of production rules, a set of terminals, a set of non-terminals, and a start symbol.",
-            /*10*/   "In Greibach Normal Form (GNF), production rules can begin with non-terminal symbols.",
-            /*11*/   "Removing null productions is a step in converting a CFG to CNF.",
-            /*12*/   "The conversion to CNF or GNF always results in a more complex CFG.",
-            /*13*/   "In GNF, there must be exactly two non-terminal symbols on the right-hand side of every production rule.",
-            /*14*/   "Left recursion must be eliminated when converting a CFG to Greibach Normal Form (GNF).",
-            /*15*/   "Greibach Normal Form is particularly useful for bottom-up parsing algorithms."
+    public static final String[] post_test_lesson_1_questions_easy = {
+            /*1*/    "A Context-Free Grammar (CFG) consists of four components: G, T, V, and P.",
+            /*2*/    "In Chomsky Normal Form (CNF), a production rule can have more than two non-terminals on the right-hand side.",
+            /*3*/    "Greibach Normal Form (GNF) allows productions to start with non-terminal symbols.",
+            /*4*/    "One of the purposes of normal forms is to simplify the analysis and manipulation of CFGs.",
+            /*5*/    "In CNF, unit productions are allowed as long as they simplify the grammar.",
+            /*6*/    "The process of converting a CFG to CNF involves eliminating null productions.",
+            /*7*/    "GNF ensures that every production starts with a terminal followed by any number of non-terminals.",
+            /*8*/    "In CNF, a rule with the form A → BCD is valid.",
+            /*9*/    "Eliminating left recursion is part of converting a CFG to GNF.",
+            /*10*/   "Chomsky Normal Form allows epsilon (ε) productions only for non-start symbols.",
+            /*11*/   "In CFGs, terminals are represented by uppercase letters.",
+            /*12*/   "Both CNF and GNF contribute to making CFGs easier to parse.",
+            /*13*/   "The start symbol in a CFG is always a terminal symbol.",
+            /*14*/   "Removing null productions is a necessary step in CNF conversion.",
+            /*15*/   "In GNF, epsilon (ε) productions are allowed for any non-terminal."
     };
 
-    public static final String[][] post_test_easy_choices = {
+    public static final String[][] post_test_lesson_1_choices_easy = {
             /*1*/    {"True", "False"},
             /*2*/    {"True", "False"},
             /*3*/    {"True", "False"},
@@ -121,140 +125,141 @@ public class e_Module_7_1 {
             /*15*/   {"True", "False"}
     };
 
-    public static final int[] post_test_easy_answers = {
-            /*1*/    0,  // 'True'
-            /*2*/    1,  // 'False'
-            /*3*/    0,  // 'True'
-            /*4*/    1,  // 'False'
-            /*5*/    0,  // 'True'
-            /*6*/    1,  // 'False'
-            /*7*/    1,  // 'False'
-            /*8*/    0,  // 'True'
-            /*9*/    0,  // 'True'
-            /*10*/   1,  // 'False'
-            /*11*/   0,  // 'True'
-            /*12*/   1,  // 'False'
-            /*13*/   1,  // 'False'
-            /*14*/   0,  // 'True'
-            /*15*/   0   // 'True'
+    public static final int[] post_test_lesson_1_answers_easy = {
+            /*1*/    0,  // True
+            /*2*/    1,  // False
+            /*3*/    1,  // False
+            /*4*/    0,  // True
+            /*5*/    1,  // False
+            /*6*/    0,  // True
+            /*7*/    0,  // True
+            /*8*/    1,  // False
+            /*9*/    0,  // True
+            /*10*/   0,  // True
+            /*11*/   1,  // False
+            /*12*/   0,  // True
+            /*13*/   1,  // False
+            /*14*/   0,  // True
+            /*15*/   1   // False
     };
 
     /*
     +----------------------+
-    |   POST-TEST MEDIUM   |
+    |  POST-TEST MEDIUM    |
     +----------------------+
     */
 
     public static e_Question[] get_PostTest_Lesson1_Medium_Questions() {
         return e_Module_7.get_PostTest_EasyMedium_Questions(
-                post_test_medium_questions,
-                post_test_medium_choices,
-                post_test_medium_answers,
+                post_test_lesson_1_questions_medium,
+                post_test_lesson_1_choices_medium,
+                post_test_lesson_1_answers_medium,
                 e_Question.Difficulty.MEDIUM
         );
     }
 
-    public static final String[] post_test_medium_questions = {
-            /*1*/    "What is a key characteristic of Chomsky Normal Form (CNF)?",
-            /*2*/    "Which of the following is not part of a Context-Free Grammar (CFG)?",
-            /*3*/    "In Greibach Normal Form (GNF), production rules must start with:",
-            /*4*/    "Which of the following must be eliminated to convert a CFG to CNF?",
-            /*5*/    "In CNF, what is the rule for the start symbol?",
-            /*6*/    "Which of the following is a step in converting a CFG to GNF?",
-            /*7*/    "What is a benefit of converting a CFG to Chomsky Normal Form (CNF)?",
-            /*8*/    "What is the form of a production in Greibach Normal Form (GNF)?",
-            /*9*/    "Which algorithm benefits from CFGs in Chomsky Normal Form?",
-            /*10*/   "Which of the following forms is used to simplify CFGs in theoretical computer science?",
-            /*11*/   "What is the main goal of normalizing CFGs into GNF or CNF?",
-            /*12*/   "Which of the following is a feature of Greibach Normal Form (GNF)?",
-            /*13*/   "In a CFG, what does the set of non-terminals represent?",
-            /*14*/   "Which of the following is NOT allowed in Chomsky Normal Form?",
-            /*15*/   "What happens to left recursion in a CFG when converting to GNF?"
+    public static final String[] post_test_lesson_1_questions_medium = {
+            /*1*/    "What is the purpose of normal forms in CFG?",
+            /*2*/    "Which of the following is NOT a component of a CFG?",
+            /*3*/    "What does Chomsky Normal Form (CNF) restrict?",
+            /*4*/    "What is an important feature of Greibach Normal Form (GNF)?",
+            /*5*/    "Which is the first step in converting a CFG to CNF?",
+            /*6*/    "In CNF, what happens when a terminal is mixed with non-terminals on the right-hand side of a production?",
+            /*7*/    "In GNF, what happens to left recursion?",
+            /*8*/    "Which algorithm benefits from using CNF for parsing?",
+            /*9*/    "In CNF, how many non-terminals are allowed on the right-hand side of a production?",
+            /*10*/   "What does the 'G' in CFG stand for?",
+            /*11*/   "What must be done to a CFG before converting it to GNF?",
+            /*12*/   "In CNF, which production rule is allowed?",
+            /*13*/   "What is removed during the CNF conversion process?",
+            /*14*/   "Which of the following describes a unit production?",
+            /*15*/   "Which normal form ensures that all productions start with a terminal?"
     };
 
-    public static final String[][] post_test_medium_choices = {
-            /*1*/    {"Every production starts with a terminal symbol", "Each production rule generates at most two non-terminals or one terminal", "Production rules must begin with a non-terminal symbol", "It allows left recursion"},
-            /*2*/    {"Production rules", "Start symbol", "Terminals", "Deterministic finite automaton"},
-            /*3*/    {"A non-terminal", "A terminal", "A combination of terminal and non-terminal", "The start symbol"},
-            /*4*/    {"Terminal symbols", "Left recursion", "Null and unit productions", "Start symbol"},
-            /*5*/    {"It generates only non-terminals", "It generates exactly one terminal", "It can generate the empty string (ε)", "It does not participate in derivation"},
-            /*6*/    {"Removing left recursion", "Introducing new terminal symbols", "Introducing unit productions", "Allowing null productions"},
-            /*7*/    {"Easier to generate random strings from the grammar", "Simplifies parsing algorithms like the CYK algorithm", "Ensures every derivation starts with a terminal", "Guarantees linear time parsing"},
-            /*8*/    {"A → BC", "A → B", "A → aA", "A → ε"},
-            /*9*/    {"Top-down parsing", "CYK algorithm", "Earley's parser", "Recursive descent parser"},
-            /*10*/   {"Regular Expressions", "Context-Sensitive Grammars", "Chomsky Normal Form (CNF)", "Finite State Machines"},
-            /*11*/   {"To make grammars non-deterministic", "To simplify their structure for easier parsing and manipulation", "To reduce the number of productions", "To introduce ambiguity in the grammar"},
-            /*12*/   {"Each production rule begins with a non-terminal", "Left recursion is allowed", "Each production rule starts with a terminal", "Every rule produces exactly one terminal"},
-            /*13*/   {"The final symbols of the grammar", "The symbols that generate other non-terminals or terminals", "The end of the grammar's derivation", "Invalid productions"},
-            /*14*/   {"A → a", "A → BC", "A → ε", "A → B"},
-            /*15*/   {"It is allowed", "It is eliminated", "It is replaced with unit productions", "It becomes nullable"}
+    public static final String[][] post_test_lesson_1_choices_medium = {
+            /*1*/    {"To complicate CFG structures", "To simplify CFGs for easier parsing", "To eliminate all productions", "To create infinite recursion"},
+            /*2*/    {"Grammar (G)", "Terminal symbols (T)", "Variables (V)", "Production chains (C)"},
+            /*3*/    {"Productions with only non-terminals", "Productions with one terminal or exactly two non-terminals", "Productions with an arbitrary number of terminals", "Productions with epsilon (ε)"},
+            /*4*/    {"Productions start with two non-terminals", "Productions start with a terminal symbol", "Epsilon productions are allowed everywhere", "Only unit productions are allowed"},
+            /*5*/    {"Removing null productions", "Introducing a new start symbol", "Replacing non-terminal productions", "Removing left recursion"},
+            /*6*/    {"It is left as is", "It is replaced by another production", "The production is eliminated", "The terminal is turned into a non-terminal"},
+            /*7*/    {"It is ignored", "It is converted into a right recursion", "It is eliminated", "It is expanded further"},
+            /*8*/    {"DFS algorithm", "CYK algorithm", "Bellman-Ford algorithm", "Topological Sort algorithm"},
+            /*9*/    {"One", "Two", "Three", "Unlimited"},
+            /*10*/   {"Grammar", "Group", "Generalization", "Generation"},
+            /*11*/   {"Remove all null productions", "Convert it to CNF", "Add more terminals", "Introduce recursion"},
+            /*12*/   {"A → BCD", "A → aB", "A → BC", "A → ε for all symbols"},
+            /*13*/   {"Unit productions", "Terminal symbols", "Context-free rules", "Start symbols"},
+            /*14*/   {"A → BC", "A → a", "A → B", "A → ε"},
+            /*15*/   {"CNF", "GNF", "DNF", "ENF"}
     };
 
-    public static final int[] post_test_medium_answers = {
-            /*1*/    1,  // 'Each production rule generates at most two non-terminals or one terminal'
-            /*2*/    3,  // 'Deterministic finite automaton'
-            /*3*/    1,  // 'A terminal'
-            /*4*/    1,  // 'Left recursion'
-            /*5*/    2,  // 'It can generate the empty string (ε)'
-            /*6*/    0,  // 'Removing left recursion'
-            /*7*/    1,  // 'Simplifies parsing algorithms like the CYK algorithm'
-            /*8*/    2,  // 'A → aA'
-            /*9*/    1,  // 'CYK algorithm'
-            /*10*/   2,  // 'Chomsky Normal Form (CNF)'
-            /*11*/   1,  // 'To simplify their structure for easier parsing and manipulation'
-            /*12*/   2,  // 'Each production rule starts with a terminal'
-            /*13*/   1,  // 'The symbols that generate other non-terminals or terminals'
-            /*14*/   2,  // 'A → ε'
-            /*15*/   1   // 'It is eliminated'
+    public static final int[] post_test_lesson_1_answers_medium = {
+            /*1*/    1, // "To simplify CFGs for easier parsing"
+            /*2*/    3, // "Production chains (C)"
+            /*3*/    1, // "Productions with one terminal or exactly two non-terminals"
+            /*4*/    1, // "Productions start with a terminal symbol"
+            /*5*/    0, // "Removing null productions"
+            /*6*/    1, // "It is replaced by another production"
+            /*7*/    2, // "It is eliminated"
+            /*8*/    1, // "CYK algorithm"
+            /*9*/    1, // "Two"
+            /*10*/   0, // "Grammar"
+            /*11*/   0, // "Remove all null productions"
+            /*12*/   2, // "A → BC"
+            /*13*/   0, // "Unit productions"
+            /*14*/   2, // "A → B"
+            /*15*/   1  // "GNF"
     };
 
     /*
     +----------------------+
-    |    POST-TEST HARD    |
+    |  POST-TEST HARD      |
     +----------------------+
     */
 
     public static e_Question[] get_PostTest_Lesson1_Hard_Questions() {
         return e_Module_7.get_PostTest_Hard_Questions(
-                post_test_hard_questions,
-                post_test_hard_answers,
+                post_test_lesson_1_questions_hard,
+                post_test_lesson_1_answers_hard,
                 e_Question.Difficulty.HARD
         );
     }
 
-    public static final String[] post_test_hard_questions = {
-            /*1*/    "What must be eliminated to convert to GNF?",
-            /*2*/    "What symbol represents the empty string?",
-            /*3*/    "What does a CFG generate?",
-            /*4*/    "What does CNF stand for?",
-            /*5*/    "What symbol begins CFG derivation?",
-            /*6*/    "What are non-terminal symbols replaced by?",
-            /*7*/    "What type of parser benefits from GNF?",
-            /*8*/    "What is the process of simplifying CFGs called?",
-            /*9*/    "What algorithm uses CNF?",
-            /*10*/   "What is used to generate terminal symbols?",
-            /*11*/   "What must a CFG eventually derive?",
-            /*12*/   "What normal form requires exactly two non-terminals?",
-            /*13*/   "What eliminates unit productions in CFGs?",
-            /*14*/   "What is replaced by production rules?",
-            /*15*/   "What do you call left-hand side symbols in CFGs?"
+    public static final String[] post_test_lesson_1_questions_hard = {
+            /*1*/    "What form simplifies the structure of a grammar by ensuring that each production has exactly two non-terminals or one terminal?",
+            /*2*/    "Which normal form ensures that each production starts with a terminal symbol, making it useful for top-down parsing?",
+            /*3*/    "In CNF, which symbol is allowed to produce the empty string (ε)?",
+            /*4*/    "What type of productions must be eliminated to convert a CFG to Chomsky Normal Form (CNF)?",
+            /*5*/    "What set in a CFG contains the symbols that represent variables and can be replaced by other symbols?",
+            /*6*/    "In Greibach Normal Form (GNF), what must every production rule start with on the right-hand side?",
+            /*7*/    "What is the purpose of removing unit productions when converting a CFG to CNF?",
+            /*8*/    "Which set in CFG represents the final set of symbols typically denoted by lowercase letters?",
+            /*9*/    "In GNF, what follows the initial terminal symbol in a production rule?",
+            /*10*/   "What key process is used to derive strings in a CFG by replacing non-terminal symbols?",
+            /*11*/   "Which theory in computer science benefits from the simplified structure of CNF for efficient parsing?",
+            /*12*/   "When converting a CFG to CNF, what is done to production rules that contain terminals mixed with non-terminals?",
+            /*13*/   "What is the goal of eliminating left recursion when converting a CFG to Greibach Normal Form (GNF)?",
+            /*14*/   "What type of algorithm benefits from using Chomsky Normal Form due to its structured derivation steps?",
+            /*15*/   "What is the first step when converting a CFG to CNF if the start symbol appears on the right-hand side of a production?"
     };
 
-    public static final String[] post_test_hard_answers = {
-            /*1*/    "left recursion",
-            /*2*/    "epsilon",
-            /*3*/    "strings",
-            /*4*/    "chomsky normal form",
-            /*5*/    "start symbol",
-            /*6*/    "terminals",
-            /*7*/    "top-down parser",
-            /*8*/    "normalization",
-            /*9*/    "CYK algorithm",
+    public static final String[] post_test_lesson_1_answers_hard = {
+            /*1*/    "chomsky normal form",
+            /*2*/    "greibach normal form",
+            /*3*/    "start symbol",
+            /*4*/    "null productions",
+            /*5*/    "non-terminal symbols",
+            /*6*/    "terminal symbol symbols",
+            /*7*/    "simplify grammar",
+            /*8*/    "terminal symbols",
+            /*9*/    "non-terminal symbols",
             /*10*/   "production rules",
-            /*11*/   "terminals",
-            /*12*/   "chomsky normal form",
-            /*13*/   "CNF conversion",
-            /*14*/   "non-terminals",
-            /*15*/   "non-terminals"
+            /*11*/   "automata theory",
+            /*12*/   "replace terminals",
+            /*13*/   "prevent recursion",
+            /*14*/   "parsing algorithm",
+            /*15*/   "introduce"
     };
+
 }

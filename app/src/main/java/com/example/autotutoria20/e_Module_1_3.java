@@ -1,6 +1,5 @@
 package com.example.autotutoria20;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,57 +22,57 @@ public class e_Module_1_3 {
     }
 
     public static final String[] pre_test_lesson_3_questions = {
-            /*1*/    "What is the operation of joining two strings end-to-end called?",
-            /*2*/    "If s1 = \"abc\" and s2 = \"def\" what is the result of s1s2?",
-            /*3*/    "How is the length of a string denoted?",
-            /*4*/    "What is the length of the string \"automata\"?",
-            /*5*/    "The reversal of the string \"hello\" is:",
-            /*6*/    "What is a contiguous sequence of characters within a string called?",
-            /*7*/    "Which of the following is a prefix of the string \"formal\"?",
-            /*8*/    "Which of the following is a suffix of the string \"language\"?",
-            /*9*/    "What is the empty string denoted by?",
-            /*10*/   "What is the length of the empty string?",
-            /*11*/   "Which operation would result in \"defabc\" if applied to strings s1 = \"abc\" and s2 = \"def\"?",
-            /*12*/   "What is the reversal of the string \"abcd\"?",
-            /*13*/   "Which operation is essential for extracting a portion of a string?",
-            /*14*/   "What is the result of concatenating a string s with the empty string ϵ?",
-            /*15*/   "Which of the following strings is a substring of \"automata\"?"
+            /*1*/    "What is the outcome when you concatenate two strings, \"xyz\" and \"123\"?",
+            /*2*/    "If the string s = \"computer\", which of the following is not a substring?",
+            /*3*/    "The string s = \"hello\". What is the length of the substring \"hell\"?",
+            /*4*/    "If s = \"automation\", what would be the reverse of the string \"autom\"?",
+            /*5*/    "Which of the following is not an operation on strings?",
+            /*6*/    "What is the result of reversing the string \"level\"?",
+            /*7*/    "For the string s = \"sunshine\", which is a valid prefix?",
+            /*8*/    "What happens when you concatenate a string with itself, such as s = \"abc\"?",
+            /*9*/    "The notation |s|, where s is a string, refers to:",
+            /*10*/   "What is the correct way to represent an empty string?",
+            /*11*/   "For the string s = \"algorithm\", which of the following is a valid suffix?",
+            /*12*/   "The length of a string is defined as:",
+            /*13*/   "Which of the following is a characteristic of an empty string?",
+            /*14*/   "What is the result of concatenating an empty string (ϵ) with \"abcd\"?",
+            /*15*/   "Which operation would extract \"comp\" from the string \"computer\"?"
     };
 
     public static final String[][] pre_test_lesson_3_choices = {
-            /*1*/    {"Substring", "Concatenation", "Prefix", "Suffix"},
-            /*2*/    {"\"abcdef\"", "\"defabc\"", "\"ab\"", "\"ef\""},
-            /*3*/    {"|sR|", "sϵ", "∣s∣", "s*"},
-            /*4*/    {"9", "7", "8", "6"},
-            /*5*/    {"\"olleh\"", "\"hello\"", "\"eholl\"", "\"lehlo\""},
-            /*6*/    {"Suffix", "Prefix", "Substring", "Concatenation"},
-            /*7*/    {"\"for\"", "\"mal\"", "\"orma\"", "\"l\""},
-            /*8*/    {"\"lang\"", "\"gua\"", "\"age\"", "\"lan\""},
-            /*9*/    {"s*", "∣s∣", "ϵ", "sR"},
-            /*10*/   {"1", "0", "∞", "-1"},
-            /*11*/   {"Concatenation", "Reversal", "Substring extraction", "None"},
-            /*12*/   {"\"abcd\"", "\"dcba\"", "\"bacd\"", "\"cdab\""},
-            /*13*/   {"Concatenation", "Length determination", "Reversal", "Substring extraction"},
-            /*14*/   {"sϵ = s + \"ϵ\"", "sϵ = \"ϵ\"", "sϵ = s", "sϵ = \"ϵ\" + s"},
-            /*15*/   {"\"auto\"", "\"mat\"", "\"tom\"", "All of the above"}
+            /*1*/    {"\"xyz123\"", "\"123xyz\"", "\"xy\"", "\"yz123\""},
+            /*2*/    {"\"comp\"", "\"puter\"", "\"compt\"", "\"uter\""},
+            /*3*/    {"3", "4", "5", "6"},
+            /*4*/    {"\"motua\"", "\"otuma\"", "\"tomau\"", "\"tamou\""},
+            /*5*/    {"Concatenation", "Substring extraction", "Multiplication", "Reversal"},
+            /*6*/    {"\"level\"", "\"evell\"", "\"lleve\"", "\"vel\""},
+            /*7*/    {"\"shine\"", "\"uns\"", "\"sun\"", "\"hine\""},
+            /*8*/    {"\"abcabc\"", "\"abccba\"", "\"cababc\"", "\"bacabc\""},
+            /*9*/    {"The reverse of the string", "The length of the string", "The substring of the string", "The concatenation of the string"},
+            /*10*/   {"∅", "ϵ", "𝜎", "𝛿"},
+            /*11*/   {"\"go\"", "\"rithm\"", "\"ith\"", "\"algor\""},
+            /*12*/   {"The number of unique characters in the string", "The number of symbols in the string", "The number of consonants in the string", "The number of vowels in the string"},
+            /*13*/   {"It contains one character", "Its length is always zero", "Its reversal results in a non-empty string", "Concatenating it with another string alters the original string"},
+            /*14*/   {"\"abcd\"", "\"cbda\"", "\"dcba\"", "\"bcda\""},
+            /*15*/   {"Reversal", "Concatenation", "Substring extraction", "Prefix"}
     };
 
     public static final int[] pre_test_lesson_3_answers = {
-            /*1*/    1, // Concatenation
-            /*2*/    0, // "abcdef"
-            /*3*/    2, // ∣s∣
-            /*4*/    2, // 8
-            /*5*/    0, // "olleh"
-            /*6*/    2, // Substring
-            /*7*/    0, // "for"
-            /*8*/    2, // "age"
-            /*9*/    2, // ϵ
-            /*10*/   1, // 0
-            /*11*/   1, // Reversal
-            /*12*/   1, // "dcba"
-            /*13*/   3, // Substring extraction
-            /*14*/   2, // sϵ = s
-            /*15*/   3  // All of the above
+            /*1*/    0, // "xyz123"
+            /*2*/    2, // "compt"
+            /*3*/    1, // 4
+            /*4*/    0, // "motua"
+            /*5*/    2, // Multiplication
+            /*6*/    0, // "level"
+            /*7*/    2, // "sun"
+            /*8*/    0, // "abcabc"
+            /*9*/    1, // The length of the string
+            /*10*/   1, // ϵ
+            /*11*/   1, // "rithm"
+            /*12*/   1, // The number of symbols in the string
+            /*13*/   1, // Its length is always zero
+            /*14*/   0, // "abcd"
+            /*15*/   2  // Substring extraction
     };
 
     /*
@@ -93,21 +92,21 @@ public class e_Module_1_3 {
     }
 
     public static final String[] post_test_lesson_3_questions_easy = {
-            /*1*/    "A formal language is defined by a set of strings of symbols that follow specific grammatical rules.",
-            /*2*/    "An alphabet in a formal language is an infinite set of symbols.",
+            /*1*/    "A formal language is defined by specific grammatical rules.",
+            /*2*/    "An alphabet in formal languages can consist of an infinite set of symbols.",
             /*3*/    "Strings in a formal language are composed of symbols from the alphabet.",
-            /*4*/    "A string in a formal language can contain symbols that are not part of the language's alphabet.",
-            /*5*/    "The rules that define a formal language are known as its grammar.",
-            /*6*/    "The Chomsky hierarchy classifies formal languages into successively smaller classes.",
-            /*7*/    "Regular expressions can be used to define a formal language.",
-            /*8*/    "In automata theory, a formal language can be recognized by a formal machine.",
-            /*9*/    "A formal language must have an infinite number of strings to be valid.",
-            /*10*/   "The language of balanced parentheses is an example of a formal language.",
-            /*11*/   "In the context of formal languages Σ represents the set of rules.",
-            /*12*/   "Grammar defines the structure of a language by specifying how strings can be formed.",
-            /*13*/   "Formal languages are used to define the syntax and semantics of programming languages.",
-            /*14*/   "The binary alphabet Σ = {0, 1} is an example of an alphabet in a formal language.",
-            /*15*/   "A string of symbols not conforming to the grammar of a formal language is still considered part of that language."
+            /*4*/    "In automata theory, a formal language is recognized by a formal machine.",
+            /*5*/    "Programming languages do not rely on formal languages for syntax definition.",
+            /*6*/    "The Chomsky hierarchy groups formal languages into classes based on the types of machines that recognize them.",
+            /*7*/    "The English alphabet is an example of a binary alphabet.",
+            /*8*/    "Balanced parentheses are an example of a formal language.",
+            /*9*/    "A string is defined as an infinite sequence of symbols from an alphabet.",
+            /*10*/   "Formal languages have no application in automata theory.",
+            /*11*/   "Regular expressions can be used to specify a formal language.",
+            /*12*/   "Compilers use formal languages to translate high-level code into machine code.",
+            /*13*/   "Strings that do not follow grammatical rules still belong to a formal language.",
+            /*14*/   "Natural languages can be analyzed using the concepts of formal languages.",
+            /*15*/   "The binary alphabet consists of the symbols {a, b, c, ..., z}."
     };
 
     public static final String[][] post_test_lesson_3_choices_easy = {
@@ -132,20 +131,19 @@ public class e_Module_1_3 {
             /*1*/    0, // True
             /*2*/    1, // False
             /*3*/    0, // True
-            /*4*/    1, // False
-            /*5*/    0, // True
+            /*4*/    0, // True
+            /*5*/    1, // False
             /*6*/    0, // True
-            /*7*/    0, // True
+            /*7*/    1, // False
             /*8*/    0, // True
             /*9*/    1, // False
-            /*10*/   0, // True
-            /*11*/   1, // False
+            /*10*/   1, // False
+            /*11*/   0, // True
             /*12*/   0, // True
-            /*13*/   0, // True
+            /*13*/   1, // False
             /*14*/   0, // True
             /*15*/   1  // False
     };
-
 
     /*
     +----------------------+

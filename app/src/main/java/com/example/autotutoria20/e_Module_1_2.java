@@ -9,7 +9,7 @@ public class e_Module_1_2 {
     /*
     +----------------------+
     |       PRE-TEST       |
-    |        LESSON 1      |
+    |        LESSON 2      |
     +----------------------+
     */
 
@@ -22,63 +22,63 @@ public class e_Module_1_2 {
     }
 
     public static final String[] pre_test_lesson_2_questions = {
-            /*1*/     "What is an alphabet in the context of formal languages?",
-            /*2*/     "Which of the following is a string over the alphabet Σ = {a, b}?",
-            /*3*/     "What is the length of the string \"abc\" over the alphabet Σ = {a, b, c}?",
-            /*4*/     "What is the empty string commonly denoted by?",
-            /*5*/     "Which of the following operations on strings does the Kleene star (*) represent?",
-            /*6*/     "What is the concatenation of the strings \"ab\" and \"cd\"?",
-            /*7*/     "Which of the following is NOT a property of a regular language?",
-            /*8*/     "Which machine recognizes regular languages?",
-            /*9*/     "If Σ = {0, 1}, which of the following is a language over Σ?",
-            /*10*/     "Which of the following best describes a deterministic finite automaton (DFA)?",
-            /*11*/     "In automata theory, what does a transition function define?",
-            /*12*/     "What does it mean if a string is \"accepted\" by a finite automaton?",
-            /*13*/     "What is a context-free grammar (CFG) used to describe?",
-            /*14*/     "Which of the following is true about a nondeterministic finite automaton (NFA)?",
-            /*15*/     "Which of the following best describes a Turing machine?"
+            /*1*/    "What is the purpose of an alphabet in formal languages?",
+            /*2*/    "How is the length of a string 'bbccc' determined?",
+            /*3*/    "Which of the following is NOT an example of an alphabet?",
+            /*4*/    "What happens to a string when concatenated with the empty string ε?",
+            /*5*/    "Which of the following is true about prefixes of strings?",
+            /*6*/    "In a DNA sequence, what is an example of an alphabet?",
+            /*7*/    "What defines a string reversal in formal language theory?",
+            /*8*/    "Which operation is used to combine two strings into one?",
+            /*9*/    "If a string 'abc' is reversed, what is the outcome?",
+            /*10*/   "How can the set Σ* be described?",
+            /*11*/   "What distinguishes a suffix from a prefix in a string?",
+            /*12*/   "How is a finite string defined?",
+            /*13*/   "What operation is applied when two strings are combined into one?",
+            /*14*/   "Which of the following can be considered a substring of 'network'?",
+            /*15*/   "What is the Greek symbol for an alphabet in formal languages?"
     };
 
     public static final String[][] pre_test_lesson_2_choices = {
-            /*1*/      {"A sequence of symbols", "A set of symbols", "A single symbol", "A string of characters"},
-            /*2*/      {"abba", "123", "ab12", "abb@"},
-            /*3*/      {"1", "2", "3", "4"},
-            /*4*/      {"ε", "Ø", "{}", "∅"},
-            /*5*/      {"Reversal of the string", "Concatenation of strings", "Repetition of strings, including the empty string", "Trimming spaces from the string"},
-            /*6*/      {"abcd", "cdab", "ab, cd", "ab cd"},
-            /*7*/      {"It can be recognized by a finite automaton", "It can be described by a regular expression", "It can be recognized by a Turing machine", "It requires a context-free grammar to be generated"},
-            /*8*/      {"Finite Automaton", "Pushdown Automaton", "Turing Machine", "Context-Free Grammar"},
-            /*9*/      {"All binary strings with an even number of 0s", "All strings with at least one 2", "All strings that are palindromes", "All uppercase English letters"},
-            /*10*/      {"A machine that can recognize context-free languages", "A machine that uses a stack to store information", "A machine with a finite number of states and transitions", "A machine that can only process binary numbers"},
-            /*11*/       {"The start state of the automaton", "The set of final states", "The mapping of states and input symbols to new states", "The length of the input string"},
-            /*12*/       {"The string is too long", "The string is recognized by the automaton", "The string is invalid", "The automaton stops processing"},
-            /*13*/       {"Regular languages", "Context-free languages", "Turing machines", "Finite automata"},
-            /*14*/       {"It has only one possible transition for each state and input symbol", "It can have multiple possible transitions for each state and input symbol", "It cannot be converted to a DFA", "It is slower than a DFA"},
-            /*15*/       {"A machine that can recognize regular languages", "A machine that can recognize recursively enumerable languages", "A machine with finite memory and states", "A machine that only processes strings of even length"}
+            /*1*/    {"To create a rule for strings", "To define a finite set of symbols for constructing strings", "To represent numbers", "To organize data"},
+            /*2*/    {"Count the unique characters", "Count the total number of symbols in the string", "Count the number of distinct symbols", "Multiply the number of characters by two"},
+            /*3*/    {"{a, b, c}", "{0, 1}", "{A, B, C, D}", "'hello'"},
+            /*4*/    {"The string is removed", "The string remains unchanged", "The empty string takes over", "The string is reversed"},
+            /*5*/    {"A prefix includes all characters except the last", "A prefix must always contain the first symbol of the string", "Prefixes can be any part of the string", "A prefix and suffix are always the same"},
+            /*6*/    {"{G, T, A, C}", "{A, B, C}", "{1, 2, 3}", "{X, Y, Z}"},
+            /*7*/    {"Adding extra symbols to a string", "Reading the string backwards", "Removing characters from a string", "Doubling the length of a string"},
+            /*8*/    {"Reversal", "Concatenation", "Substitution", "Prefixing"},
+            /*9*/    {"cab", "bca", "cba", "acb"},
+            /*10*/   {"All possible strings over an alphabet, including the empty string", "A set of only one string", "The reversal of an alphabet", "The sum of all characters in an alphabet"},
+            /*11*/   {"A suffix appears at the beginning, while a prefix appears at the end", "A suffix appears at the end, while a prefix appears at the beginning", "A suffix includes the entire string, but a prefix doesn't", "They are both interchangeable in a string"},
+            /*12*/   {"A string that contains an infinite number of characters", "A sequence of symbols of limited length", "A string that starts with the empty string", "A rule applied to a string"},
+            /*13*/   {"Concatenation", "Substring operation", "String duplication", "Inversion"},
+            /*14*/   {"net", "work", "ork", "All of the above"},
+            /*15*/   {"Σ", "ε", "δ", "π"}
     };
 
     public static final int[] pre_test_lesson_2_answers = {
-            /*1*/       1, // 'A set of symbols'
-            /*2*/       0, // 'abba'
-            /*3*/       2, // '3'
-            /*4*/       0, // 'ε'
-            /*5*/       2, // 'Repetition of strings, including the empty string'
-            /*6*/       0, // 'abcd'
-            /*7*/       3, // 'It requires a context-free grammar to be generated'
-            /*8*/       0, // 'Finite Automaton'
-            /*9*/       0, // 'All binary strings with an even number of 0s'
-            /*10*/       2, // 'A machine with a finite number of states and transitions'
-            /*11*/       2, // 'The mapping of states and input symbols to new states'
-            /*12*/       1, // 'The string is recognized by the automaton'
-            /*13*/       1, // 'Context-free languages'
-            /*14*/       1, // 'It can have multiple possible transitions for each state and input symbol'
-            /*15*/       1  // 'A machine that can recognize recursively enumerable languages'
+            /*1*/    1, // 'To define a finite set of symbols for constructing strings'
+            /*2*/    1, // 'Count the total number of symbols in the string'
+            /*3*/    3, // "'hello'"
+            /*4*/    1, // 'The string remains unchanged'
+            /*5*/    1, // 'A prefix must always contain the first symbol of the string'
+            /*6*/    0, // '{G, T, A, C}'
+            /*7*/    1, // 'Reading the string backwards'
+            /*8*/    1, // 'Concatenation'
+            /*9*/    2, // 'cba'
+            /*10*/   0, // 'All possible strings over an alphabet, including the empty string'
+            /*11*/   1, // 'A suffix appears at the end, while a prefix appears at the beginning'
+            /*12*/   1, // 'A sequence of symbols of limited length'
+            /*13*/   0, // 'Concatenation'
+            /*14*/   3, // 'All of the above'
+            /*15*/   0  // 'Σ'
     };
 
     /*
     +----------------------+
     |       POST-TEST      |
-    |          EASY        |
+    |        EASY          |
     +----------------------+
     */
 
@@ -92,57 +92,57 @@ public class e_Module_1_2 {
     }
 
     public static final String[] post_test_lesson_2_questions_easy = {
-            /*1*/      "An alphabet is a finite non-empty set of symbols.",
-            /*2*/      "The symbol Σ is commonly used to denote a string.",
-            /*3*/      "The binary alphabet consists of the symbols {0, 1}.",
-            /*4*/      "A string can have an infinite number of symbols.",
-            /*5*/      "The length of the string \"abc\" is 3.",
-            /*6*/      "The concatenation of the strings \"ab\" and \"c\" results in \"cab\".",
-            /*7*/      "The reversal of the string \"racecar\" is \"racecar\".",
-            /*8*/      "A string \"u\" is a prefix of string \"w\" if w = uv for some string v.",
-            /*9*/      "A suffix of the string \"abc\" could be \"bc\".",
-            /*10*/      "The set of all possible strings over an alphabet Σ is denoted by Σ+.",
-            /*11*/      "The length of the empty string ε is 1.",
-            /*12*/     "In formal languages, the alphabet {A, C, G, T} is commonly associated with DNA sequences.",
-            /*13*/      "The string \"ba\" is a valid string over the alphabet Σ = {a, b}.",
-            /*14*/      "A string \"v\" is a substring of \"w\" if w = u1vu2 for some strings u1 and u2.",
-            /*15*/      "Every string over the alphabet {0, 1} that starts with '1' and ends with '0' is a regular language."
+            /*1*/    "Concatenation is the operation of combining two strings to form a new string.",
+            /*2*/    "The length of a string is defined as the number of symbols it contains.",
+            /*3*/    "Reversing the string 'abcd' results in 'dbca'.",
+            /*4*/    "A prefix is a substring that ends at the string's end.",
+            /*5*/    "The length of the string 'automata' is 7.",
+            /*6*/    "An empty string has no characters but can still be concatenated with other strings.",
+            /*7*/    "The notation for the length of a string s is |s|.",
+            /*8*/    "The reversal of a string changes the number of symbols it contains.",
+            /*9*/    "The empty string can be concatenated with any other string to change its value.",
+            /*10*/   "A suffix is a substring that starts from the beginning of a string.",
+            /*11*/   "A substring must always contain the entire string to be valid.",
+            /*12*/   "The length of the empty string ϵ is 0.",
+            /*13*/   "The string 'abc' is a substring of 'abcdef'.",
+            /*14*/   "Concatenating a string with itself results in a new string.",
+            /*15*/   "The reversal of 'hello' is 'olleh'."
     };
 
     public static final String[][] post_test_lesson_2_choices_easy = {
-            /*1*/      {"True", "False"},
-            /*2*/      {"True", "False"},
-            /*3*/      {"True", "False"},
-            /*4*/      {"True", "False"},
-            /*5*/      {"True", "False"},
-            /*6*/      {"True", "False"},
-            /*7*/      {"True", "False"},
-            /*8*/      {"True", "False"},
-            /*9*/      {"True", "False"},
-            /*10*/     {"True", "False"},
-            /*11*/     {"True", "False"},
-            /*12*/     {"True", "False"},
-            /*13*/     {"True", "False"},
-            /*14*/     {"True", "False"},
-            /*15*/     {"True", "False"}
+            /*1*/    {"True", "False"},
+            /*2*/    {"True", "False"},
+            /*3*/    {"True", "False"},
+            /*4*/    {"True", "False"},
+            /*5*/    {"True", "False"},
+            /*6*/    {"True", "False"},
+            /*7*/    {"True", "False"},
+            /*8*/    {"True", "False"},
+            /*9*/    {"True", "False"},
+            /*10*/   {"True", "False"},
+            /*11*/   {"True", "False"},
+            /*12*/   {"True", "False"},
+            /*13*/   {"True", "False"},
+            /*14*/   {"True", "False"},
+            /*15*/   {"True", "False"}
     };
 
     public static final int[] post_test_lesson_2_answers_easy = {
-            /*1*/      0, // True
-            /*2*/      1, // False
-            /*3*/      0, // True
-            /*4*/      1, // False
-            /*5*/      0, // True
-            /*6*/      1, // False
-            /*7*/      0, // True
-            /*8*/      0, // True
-            /*9*/      0, // True
-            /*10*/      1, // False
-            /*11*/     1, // False
-            /*12*/     0, // True
-            /*13*/     0, // True
-            /*14*/     0, // True
-            /*15*/     0  // True
+            /*1*/    0, // True
+            /*2*/    0, // True
+            /*3*/    1, // False
+            /*4*/    1, // False
+            /*5*/    1, // False
+            /*6*/    0, // True
+            /*7*/    0, // True
+            /*8*/    1, // False
+            /*9*/    1, // False
+            /*10*/   1, // False
+            /*11*/   1, // False
+            /*12*/   0, // True
+            /*13*/   0, // True
+            /*14*/   0, // True
+            /*15*/   0  // True
     };
 
     /*
@@ -162,57 +162,57 @@ public class e_Module_1_2 {
     }
 
     public static final String[] post_test_lesson_2_questions_medium = {
-            /*1*/     "What is an alphabet in the context of formal languages?",
-            /*2*/     "What symbol is typically used to denote an alphabet?",
-            /*3*/     "Which of the following is an example of a binary alphabet?",
-            /*4*/     "What is a string in the context of formal languages?",
-            /*5*/     "How is the empty string denoted?",
-            /*6*/     "What does the notation Σ (Sigma star) represent?",
-            /*7*/     "What is the length of the string \"aab\"?",
-            /*8*/     "Which of the following is a valid concatenation of the strings \"ab\" and \"c\"?",
-            /*9*/     "What operation combines two strings end-to-end to form a new string?",
-            /*10*/      "Which of the following is a prefix of the string \"abc\"?",
-            /*11*/      "Which of the following is a suffix of the string \"abc\"?",
-            /*12*/      "Which of the following is a substring of the string \"abc\"?",
-            /*13*/      "What is the reversal of the string \"racecar\"?",
-            /*14*/      "What does the notation |w| represent for a string w?",
-            /*15*/      "Which of the following correctly represents the empty string's length?"
+            /*1*/    "What is the operation of joining two strings end-to-end called?",
+            /*2*/    "Which of the following represents the length of the string 'hello'?",
+            /*3*/    "What does the notation sR represent in string operations?",
+            /*4*/    "Which of the following is a valid prefix of the string 'abcdef'?",
+            /*5*/    "The length of the string 'automata' is denoted as:",
+            /*6*/    "What is the result of concatenating an empty string to any other string?",
+            /*7*/    "The reversal of the string 'abcd' is:",
+            /*8*/    "Which operation extracts a portion of a string?",
+            /*9*/    "For the string 'hello', which is a valid suffix?",
+            /*10*/   "If s = 'hello', what is the length of the string s?",
+            /*11*/   "Which of the following operations reverses the characters of a string?",
+            /*12*/   "Which of the following is an empty string property?",
+            /*13*/   "The string 'auto' is a valid ____ of 'automata'.",
+            /*14*/   "The length of the string s = 'automata' is denoted by:",
+            /*15*/   "Which of the following describes a substring?"
     };
 
     public static final String[][] post_test_lesson_2_choices_medium = {
-            /*1*/      {"A set of numbers", "A finite non-empty set of symbols", "A sequence of symbols", "A string of characters"},
-            /*2*/       {"Λ (Lambda)", "Σ (Sigma)", "Ω (Omega)", "ε (Epsilon)"},
-            /*3*/       {"Σ = {A, C, G, T}", "Σ = {0, 1}", "Σ = {a, b, c}", "Σ = {1, 2, 3}"},
-            /*4*/       {"A set of numbers", "A sequence of digits", "A finite sequence of symbols drawn from a given alphabet", "A non-empty set of characters"},
-            /*5*/       {"Σ", "Λ", "ε", "Ω"},
-            /*6*/       {"The set of all possible symbols in an alphabet", "The set of all possible strings over an alphabet including the empty string", "The set of all prefixes of a string", "The set of all suffixes of a string"},
-            /*7*/        {"1", "2", "3", "4"},
-            /*8*/        {"ba", "cab", "abc", "acb"},
-            /*9*/        {"Subtraction", "Concatenation", "Division", "Prefixing"},
-            /*10*/       {"bc", "c", "a", "ac"},
-            /*11*/       {"a", "ab", "c", "ba"},
-            /*12*/       {"ac", "ba", "b", "ca"},
-            /*13*/      {"racecar", "carrace", "racearc", "racerac"},
-            /*14*/      {"The alphabet of w", "The length of w", "The reverse of w", "The concatenation of w with itself"},
-            /*15*/     {"|ε| = 1", "|ε| = 0", "|ε| = 2", "|ε| = ε"}
+            /*1*/    {"Substring", "Prefix", "Suffix", "Concatenation"},
+            /*2*/    {"4", "5", "6", "3"},
+            /*3*/    {"Concatenation of string", "Reversal of string", "Length of string", "Suffix of string"},
+            /*4*/    {"'def'", "'f'", "'abc'", "'bcd'"},
+            /*5*/    {"5", "7", "8", "6"},
+            /*6*/    {"The empty string", "A longer string", "The same string", "A different string"},
+            /*7*/    {"'dbca'", "'abcd'", "'dcba'", "'bcda'"},
+            /*8*/    {"Concatenation", "Reversal", "Substring", "Prefix"},
+            /*9*/    {"'he'", "'o'", "'ell'", "'hello'"},
+            /*10*/   {"4", "5", "6", "3"},
+            /*11*/   {"Concatenation", "Suffix extraction", "Reversal", "Substring extraction"},
+            /*12*/   {"Length is 1", "It changes a string when concatenated", "It can be reversed", "Its length is 0"},
+            /*13*/   {"Prefix", "Suffix", "Substring", "Concatenation"},
+            /*14*/   {"|sR|", "|ϵ|", "|s|", "s"},
+            /*15*/   {"A string obtained by reversing the original string", "A string obtained by combining two strings", "A sequence of characters extracted from another string", "A string that starts at the end of the original string"}
     };
 
     public static final int[] post_test_lesson_2_answers_medium = {
-            /*1*/     1, // A finite non-empty set of symbols
-            /*2*/     1, // Σ (Sigma)
-            /*3*/     1, // Σ = {0, 1}
-            /*4*/     2, // A finite sequence of symbols drawn from a given alphabet
-            /*5*/     2, // ε
-            /*6*/     1, // The set of all possible strings over an alphabet including the empty string
-            /*7*/      2, // 3
-            /*8*/      2, // abc
-            /*9*/      1, // Concatenation
-            /*10*/      2, // a
-            /*11*/      2, // c
-            /*12*/      2, // b
-            /*13*/      0, // racecar
-            /*14*/      1, // The length of w
-            /*15*/      1  // |ε| = 0
+            /*1*/    3, // 'Concatenation'
+            /*2*/    1, // '5'
+            /*3*/    1, // 'Reversal of string'
+            /*4*/    2, // "'abc'"
+            /*5*/    1, // '7'
+            /*6*/    2, // 'The same string'
+            /*7*/    2, // "'dcba'"
+            /*8*/    2, // 'Substring'
+            /*9*/    1, // "'o'"
+            /*10*/   1, // '5'
+            /*11*/   2, // 'Reversal'
+            /*12*/   3, // 'Its length is 0'
+            /*13*/   0, // 'Prefix'
+            /*14*/   2, // '|s|'
+            /*15*/   2  // 'A sequence of characters extracted from another string'
     };
 
     /*
@@ -229,39 +229,40 @@ public class e_Module_1_2 {
                 e_Question.Difficulty.HARD
         );
     }
+
     public static final String[] post_test_lesson_2_questions_hard = {
-            /*1*/      "What is the finite non-empty set of symbols called?",
-            /*2*/      "What symbol typically denotes an alphabet?",
-            /*3*/      "What is a finite sequence of symbols drawn from an alphabet?",
-            /*4*/      "What denotes the empty string?",
-            /*5*/      "What is the operation that combines two strings end-to-end?",
-            /*6*/      "What symbol denotes the set of all possible strings over an alphabet?",
-            /*7*/      "What denotes the length of a string?",
-            /*8*/      "What is the reversal of a string denoted by?",
-            /*9*/      "What is a string that comes before another string?",
-            /*10*/     "What is a string that comes after another string?",
-            /*11*/     "What is a string that is part of another string?",
-            /*12*/     "What is the length of the empty string?",
-            /*13*/     "What are the characters in the binary alphabet?",
-            /*14*/     "What set is {A, C, G, T} an example of?",
-            /*15*/     "What does the concatenation of 'ab' and 'c' result in?"
+            /*1*/    "The operation of joining two strings to form a new string is called ____. ",
+            /*2*/    "The number of characters in a string is called its ____.",
+            /*3*/    "The string obtained by writing the characters in reverse order is called ____.",
+            /*4*/    "A sequence of characters within another string is known as a ____.",
+            /*5*/    "A substring that begins at the start of a string is called a ____.",
+            /*6*/    "A substring that ends at the end of a string is called a ____.",
+            /*7*/    "The string with no characters is called the ____.",
+            /*8*/    "The length of the empty string is ____. ",
+            /*9*/    "If s = 'abcd', the reversal of s is ____. ",
+            /*10*/   "The notation used for the reversal of a string is ____. ",
+            /*11*/   "The operation of extracting a portion of a string is called ____. ",
+            /*12*/   "The concatenation of 'abc' and 'def' results in ____. ",
+            /*13*/   "The length of the string 'abcdef' is ____. ",
+            /*14*/   "The empty string is denoted by the symbol ____. ",
+            /*15*/   "The substring 'auto' is a ____ of 'automata'."
     };
 
     public static final String[] post_test_lesson_2_answers_hard = {
-            /*1*/      "alphabet symbols",
-            /*2*/      "sigma",
-            /*3*/      "string sequence",
-            /*4*/      "epsilon",
-            /*5*/      "string concatenation",
-            /*6*/      "sigma star",
-            /*7*/      "string length",
-            /*8*/      "reversal",
-            /*9*/      "prefix string",
-            /*10*/     "suffix string",
-            /*11*/     "substring string",
-            /*12*/     "zero length",
-            /*13*/     "0 and 1",
-            /*14*/     "DNA alphabet",
-            /*15*/     "string abc"
+            /*1*/    "concatenation",
+            /*2*/    "length",
+            /*3*/    "reversal",
+            /*4*/    "substring",
+            /*5*/    "prefix",
+            /*6*/    "suffix",
+            /*7*/    "empty string",
+            /*8*/    "0",
+            /*9*/    "dcba",
+            /*10*/   "sR",
+            /*11*/   "substring extraction",
+            /*12*/   "abcdef",
+            /*13*/   "6",
+            /*14*/   "epsilon",
+            /*15*/   "prefix"
     };
 }

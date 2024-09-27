@@ -22,57 +22,57 @@ public class e_Module_8_1 {
     }
 
     public static final String[] pre_test_lesson_1_questions = {
-            /*1*/    "What is the purpose of normal forms in Context-Free Grammars (CFGs)?",
-            /*2*/    "Which of the following is a normal form used in CFGs?",
-            /*3*/    "In Chomsky Normal Form (CNF), what is the form of the production rule?",
-            /*4*/    "Which of the following is a step in converting a CFG to CNF?",
-            /*5*/    "In CNF, what should the start symbol generate if the language contains ε?",
-            /*6*/    "Which of the following is NOT a valid production rule in CNF?",
-            /*7*/    "What does the Greibach Normal Form (GNF) ensure in production rules?",
-            /*8*/    "Which parsing approach benefits most from CFGs in GNF?",
-            /*9*/    "What is an example of a GNF production rule?",
-            /*10*/   "What does CNF simplify in terms of parsing algorithms?",
-            /*11*/   "Why is left recursion eliminated when converting a CFG to GNF?",
-            /*12*/   "Which of the following CFG conversions is a necessary step for both CNF and GNF?",
-            /*13*/   "What type of productions does Chomsky Normal Form (CNF) prohibit?",
-            /*14*/   "When converting a CFG to CNF, what is done if the start symbol appears on the right-hand side of a rule?",
-            /*15*/   "In GNF, what is a common use of the grammar form?"
+            /*1*/    "What is the main purpose of converting a CFG into normal forms like CNF or GNF?",
+            /*2*/    "Which component in a CFG represents the non-terminal symbols?",
+            /*3*/    "When converting a CFG to CNF, what is done to unit productions?",
+            /*4*/    "What is the maximum number of non-terminals allowed on the right-hand side of a production rule in CNF?",
+            /*5*/    "In GNF, which of the following is true for a production rule?",
+            /*6*/    "What must be eliminated from a CFG before converting it to CNF?",
+            /*7*/    "Why is CNF particularly useful for certain parsing algorithms?",
+            /*8*/    "Which parsing algorithm benefits directly from the use of CNF?",
+            /*9*/    "In CFG, what is the role of terminal symbols (T)?",
+            /*10*/   "What is the primary challenge addressed by Greibach Normal Form (GNF)?",
+            /*11*/   "What is the significance of the start symbol in a CFG?",
+            /*12*/   "What does the conversion from CFG to CNF generally involve regarding null productions?",
+            /*13*/   "What follows the initial terminal symbol in GNF production rules?",
+            /*14*/   "Why is left recursion eliminated in CFG when converting to GNF?",
+            /*15*/   "Which step is taken first when converting a CFG to CNF if the start symbol appears on the right-hand side of a production?"
     };
 
     public static final String[][] pre_test_lesson_1_choices = {
-            /*1*/    {"To make CFGs more complex", "To simplify the structure of CFGs", "To eliminate CFGs from parsing", "To convert CFGs into regular expressions"},
-            /*2*/    {"Kleene Normal Form", "Chomsky Normal Form (CNF)", "Recursive Normal Form", "Kleene Closure"},
-            /*3*/    {"A → BC or A → c", "A → B or A → ε", "A → a or B → b", "A → BCD"},
-            /*4*/    {"Remove terminals", "Remove null, unit, and useless productions", "Add more production rules", "Eliminate left recursion"},
-            /*5*/    {"S → ε", "S → AB", "S → a", "S → A"},
-            /*6*/    {"S → AB", "S → a", "S → aA", "A → BC"},
-            /*7*/    {"Productions start with a terminal symbol", "Productions start with a non-terminal symbol", "Productions have exactly two non-terminal symbols", "Productions must be recursive"},
-            /*8*/    {"Bottom-up parsing", "Top-down parsing", "Predictive parsing", "Recursive descent parsing"},
-            /*9*/    {"S → AB", "S → aA", "S → BA", "A → ε"},
-            /*10*/   {"Recursive descent parsing", "Syntax tree generation", "The CYK algorithm", "Lexical analysis"},
-            /*11*/   {"To simplify parsing", "To comply with CNF rules", "To ensure productions start with a terminal symbol", "To reduce the number of rules"},
-            /*12*/   {"Removing unit productions", "Removing left recursion", "Adding new terminal symbols", "Eliminating non-terminal symbols"},
-            /*13*/   {"Unit productions", "Recursive productions", "Mixed terminal and non-terminal symbols on the right-hand side", "Productions that start with a terminal symbol"},
-            /*14*/   {"The rule is removed", "The rule is converted to left recursion", "A new start symbol is introduced", "The rule is left unchanged"},
-            /*15*/   {"Eliminating null productions", "Handling ambiguous grammars", "Constructing top-down parsers", "Generating leftmost derivations"}
+            /*1*/    {"To make CFG more ambiguous", "To simplify CFG for parsing and manipulation", "To increase the complexity of grammar", "To add more production rules"},
+            /*2*/    {"G", "T", "P", "V"},
+            /*3*/    {"They are left unchanged", "They are replaced with terminals", "They are removed or rewritten", "They are converted into null productions"},
+            /*4*/    {"One", "Two", "Three", "Unlimited"},
+            /*5*/    {"It starts with two non-terminals", "It starts with a terminal followed by non-terminals", "It allows ε-productions for all non-terminals", "It begins with null production"},
+            /*6*/    {"Terminals", "Unit and null productions", "Start symbols", "Non-terminal symbols"},
+            /*7*/    {"It allows recursion in grammar", "It standardizes production rules for easier analysis", "It creates more complex parse trees", "It eliminates the need for non-terminals"},
+            /*8*/    {"CYK algorithm", "Depth-First Search algorithm", "Bellman-Ford algorithm", "Topological Sort algorithm"},
+            /*9*/    {"They represent rules to replace non-terminals", "They represent the output symbols of the grammar", "They help eliminate ambiguity", "They are used to produce non-terminal symbols"},
+            /*10*/   {"Removing null productions", "Starting production rules with terminal symbols", "Eliminating ambiguity in CFGs", "Reducing the number of terminals"},
+            /*11*/   {"It is used only for complex grammars", "It generates the initial production of strings", "It represents null productions", "It cannot be used on the right-hand side of any production"},
+            /*12*/   {"Adding more non-terminals", "Rewriting or eliminating them", "Simplifying terminals", "Introducing new start symbols"},
+            /*13*/   {"A null symbol", "Any number of non-terminals", "Two terminals", "A new production rule"},
+            /*14*/   {"To increase the complexity of the grammar", "To ensure terminals appear first in production rules", "To allow more non-terminal derivations", "To simplify null productions"},
+            /*15*/   {"Eliminate recursion", "Introduce a new start symbol", "Replace terminals with non-terminals", "Remove unit productions"}
     };
 
     public static final int[] pre_test_lesson_1_answers = {
-            /*1*/    1, // "To simplify the structure of CFGs"
-            /*2*/    1, // "Chomsky Normal Form (CNF)"
-            /*3*/    0, // "A → BC or A → c"
-            /*4*/    1, // "Remove null, unit, and useless productions"
-            /*5*/    0, // "S → ε"
-            /*6*/    2, // "S → aA"
-            /*7*/    0, // "Productions start with a terminal symbol"
-            /*8*/    1, // "Top-down parsing"
-            /*9*/    1, // "S → aA"
-            /*10*/   2, // "The CYK algorithm"
-            /*11*/   2, // "To ensure productions start with a terminal symbol"
-            /*12*/   1, // "Removing left recursion"
-            /*13*/   2, // "Mixed terminal and non-terminal symbols on the right-hand side"
-            /*14*/   2, // "A new start symbol is introduced"
-            /*15*/   2  // "Constructing top-down parsers"
+            /*1*/    1,  // "To simplify CFG for parsing and manipulation"
+            /*2*/    3,  // "V"
+            /*3*/    2,  // "They are removed or rewritten"
+            /*4*/    1,  // "Two"
+            /*5*/    1,  // "It starts with a terminal followed by non-terminals"
+            /*6*/    1,  // "Unit and null productions"
+            /*7*/    1,  // "It standardizes production rules for easier analysis"
+            /*8*/    0,  // "CYK algorithm"
+            /*9*/    1,  // "They represent the output symbols of the grammar"
+            /*10*/   1,  // "Starting production rules with terminal symbols"
+            /*11*/   1,  // "It generates the initial production of strings"
+            /*12*/   1,  // "Rewriting or eliminating them"
+            /*13*/   1,  // "Any number of non-terminals"
+            /*14*/   1,  // "To ensure terminals appear first in production rules"
+            /*15*/   1   // "Introduce a new start symbol"
     };
 
     /*
@@ -92,21 +92,21 @@ public class e_Module_8_1 {
     }
 
     public static final String[] post_test_lesson_1_questions_easy = {
-            /*1*/    "Parsing is the process of determining the grammatical structure of a string of symbols.",
-            /*2*/    "Bottom-up parsing builds the parse tree from the root to the input.",
-            /*3*/    "Recursive descent parsing is a bottom-up parsing method.",
-            /*4*/    "LL(1) parsing uses multiple lookahead symbols to determine the correct production rule.",
-            /*5*/    "Top-down parsing constructs the parse tree from the start symbol downward.",
-            /*6*/    "Parsing is used to analyze a string of symbols based on a given grammar.",
-            /*7*/    "Recursive descent parsing works well for grammars that contain left recursion.",
-            /*8*/    "In LL(1) parsing, the input is read from right to left.",
-            /*9*/    "Top-down parsing is not suitable for grammars with left recursion.",
-            /*10*/   "LL(1) parsers always involve backtracking.",
-            /*11*/   "Parsing is essential for understanding programming language syntax.",
-            /*12*/   "In LL(1) parsing, a parsing table is used to guide decisions based on the current symbol and lookahead.",
-            /*13*/   "Top-down parsers are less efficient than LL(1) parsers.",
-            /*14*/   "Recursive descent parsing always requires backtracking.",
-            /*15*/   "Context-Free Grammars (CFGs) are not used in parsing."
+            /*1*/    "Parsing helps in determining the grammatical structure of a string of symbols based on a given grammar.",
+            /*2*/    "Top-down parsing builds the parse tree from the input and works up to the start symbol.",
+            /*3*/    "Recursive descent parsers can handle grammars with left recursion without modification.",
+            /*4*/    "LL(1) parsing requires two lookahead symbols to determine the correct production rule.",
+            /*5*/    "Recursive descent parsing is simple to implement but requires backtracking.",
+            /*6*/    "LL(1) parsing is predictive and non-backtracking.",
+            /*7*/    "Top-down parsers construct the parse tree from leaves to the root.",
+            /*8*/    "Recursive descent parsers work only for grammars without left recursion.",
+            /*9*/    "In LL(1) parsing, lookahead is used to predict the next production rule.",
+            /*10*/   "Recursive descent parsers do not need to rewrite grammars to handle left recursion.",
+            /*11*/   "Top-down parsing can handle both left and right recursion without modification.",
+            /*12*/   "LL(1) parsing reads input from right to left.",
+            /*13*/   "Backtracking is required in LL(1) parsers.",
+            /*14*/   "LL(1) parsers use a predictive table for decision-making during parsing.",
+            /*15*/   "Recursive descent parsers can use predictive parsing for certain grammars."
     };
 
     public static final String[][] post_test_lesson_1_choices_easy = {
@@ -128,21 +128,21 @@ public class e_Module_8_1 {
     };
 
     public static final int[] post_test_lesson_1_answers_easy = {
-            /*1*/    0, // True
-            /*2*/    1, // False
-            /*3*/    1, // False
-            /*4*/    1, // False
-            /*5*/    0, // True
-            /*6*/    0, // True
-            /*7*/    1, // False
-            /*8*/    1, // False
-            /*9*/    0, // True
-            /*10*/   1, // False
-            /*11*/   0, // True
-            /*12*/   0, // True
-            /*13*/   1, // False
-            /*14*/   1, // False
-            /*15*/   1  // False
+            /*1*/    0,  // True
+            /*2*/    0,  // True
+            /*3*/    1,  // False
+            /*4*/    1,  // False
+            /*5*/    0,  // True
+            /*6*/    0,  // True
+            /*7*/    1,  // False
+            /*8*/    0,  // True
+            /*9*/    0,  // True
+            /*10*/   1,  // False
+            /*11*/   1,  // False
+            /*12*/   1,  // False
+            /*13*/   1,  // False
+            /*14*/   0,  // True
+            /*15*/   0   // True
     };
 
     /*
@@ -162,57 +162,57 @@ public class e_Module_8_1 {
     }
 
     public static final String[] post_test_lesson_1_questions_medium = {
-            /*1*/    "What is parsing in the context of computer science?",
-            /*2*/    "Which of the following is a top-down parsing technique?",
-            /*3*/    "What type of grammar does parsing analyze?",
-            /*4*/    "What does the '1' in LL(1) parsing refer to?",
-            /*5*/    "Which parsing method involves constructing the parse tree from input to the start symbol?",
-            /*6*/    "Which of the following grammars can be parsed by a recursive descent parser?",
-            /*7*/    "In LL(1) parsing, the table is constructed based on:",
-            /*8*/    "Which of these is a key feature of LL(1) parsing?",
-            /*9*/    "What is the primary goal of parsing?",
-            /*10*/   "Which method constructs the parse tree from the root to the terminals?",
-            /*11*/   "Which of these is not a characteristic of recursive descent parsing?",
-            /*12*/   "Which of these parsing techniques produces a leftmost derivation?",
-            /*13*/   "In parsing, which symbol typically starts the parsing process?",
-            /*14*/   "What type of grammar must be used for LL(1) parsing to work efficiently?",
-            /*15*/   "Which of the following is a method for rewriting grammars to remove left recursion?"
+            /*1*/    "Which type of parsing constructs the parse tree from the root to the leaves?",
+            /*2*/    "Which of the following is a characteristic of recursive descent parsing?",
+            /*3*/    "What does LL(1) stand for in LL(1) parsing?",
+            /*4*/    "Which of the following is a correct production rule in recursive descent parsing?",
+            /*5*/    "What is the first step in recursive descent parsing?",
+            /*6*/    "Which parsing technique builds the parse tree from the input and works up to the start symbol?",
+            /*7*/    "Which of the following is a type of top-down parsing?",
+            /*8*/    "In LL(1) parsing, how many symbols are looked ahead to determine the production rule?",
+            /*9*/    "Which of the following is NOT a characteristic of LL(1) parsing?",
+            /*10*/   "Which grammar rule must be rewritten to avoid left recursion?",
+            /*11*/   "Which parsing technique is most efficient for grammars that do not require backtracking?",
+            /*12*/   "Which of the following symbols is a terminal in the example grammar?",
+            /*13*/   "What is the purpose of the match function in recursive descent parsing?",
+            /*14*/   "Which of the following is a benefit of LL(1) parsing?",
+            /*15*/   "In the CFG example for LL(1) parsing, which rule does 'B' derive into?"
     };
 
     public static final String[][] post_test_lesson_1_choices_medium = {
-            /*1*/    {"A method of memory allocation", "A process of analyzing grammatical structure", "A form of data encryption", "A network routing technique"},
-            /*2*/    {"Shift-reduce parsing", "Recursive descent parsing", "LR(1) parsing", "CYK parsing"},
-            /*3*/    {"Regular expressions", "Context-Free Grammar (CFG)", "Context-Sensitive Grammar", "None of the above"},
-            /*4*/    {"One production rule", "One lookahead symbol", "One parsing tree", "One derivation step"},
-            /*5*/    {"Top-down parsing", "Recursive descent parsing", "Bottom-up parsing", "LL(1) parsing"},
-            /*6*/    {"Left-recursive grammars", "LL(1) grammars", "Right-recursive grammars", "LR(1) grammars"},
-            /*7*/    {"The parse tree", "The start symbol and input", "The current symbol and lookahead symbol", "None of the above"},
-            /*8*/    {"Backtracking", "Non-backtracking", "Left recursion", "Rightmost derivation"},
-            /*9*/    {"To check memory usage", "To analyze the syntax of a given input", "To optimize code execution", "To generate machine-level code"},
-            /*10*/   {"Bottom-up parsing", "Top-down parsing", "LR parsing", "CYK parsing"},
-            /*11*/   {"Simple to implement", "Handles grammars with left recursion", "May involve backtracking", "Works for LL(1) grammars"},
-            /*12*/   {"Recursive descent parsing", "Bottom-up parsing", "LR(1) parsing", "Shift-reduce parsing"},
-            /*13*/   {"Terminal symbol", "Non-terminal symbol", "Input symbol", "Start symbol"},
-            /*14*/   {"Context-Free Grammar", "Right-recursive Grammar", "LL(1) Grammar", "Regular Grammar"},
-            /*15*/   {"Recursive descent method", "Parse tree construction", "Grammar transformation", "LR parsing"}
+            /*1*/    {"Bottom-up parsing", "Recursive parsing", "Top-down parsing", "None of the above"},
+            /*2*/    {"It uses backtracking", "It cannot handle grammars with left recursion", "It reads input from right to left", "It requires an LL(1) table"},
+            /*3*/    {"Left-to-Left derivation with 1 symbol lookahead", "Leftmost derivation with 1 symbol lookahead", "Largest lookahead with Left recursion", "Left-Right derivation with 1 symbol lookahead"},
+            /*4*/    {"E→ E + T", "F→ T + E", "T→ E F'", "F→ ( E ) | id"},
+            /*5*/    {"Implement parsing functions", "Define grammar rules as functions", "Rewrite the grammar", "Verify token matches"},
+            /*6*/    {"LL(1) Parsing", "Bottom-up Parsing", "Top-down Parsing", "Predictive Parsing"},
+            /*7*/    {"LR Parsing", "LL(1) Parsing", "CYK Parsing", "None of the above"},
+            /*8*/    {"0", "1", "2", "3"},
+            /*9*/    {"It is predictive", "It uses backtracking", "It reads input from left to right", "It requires an LL(1) grammar"},
+            /*10*/   {"E→ T E'", "E→ E + T", "T→ T F'", "F→ ( E ) | id"},
+            /*11*/   {"Bottom-up Parsing", "Recursive Descent Parsing", "LL(1) Parsing", "None of the above"},
+            /*12*/   {"T", "E", "id", "E'"},
+            /*13*/   {"To define grammar rules as functions", "To verify token matches", "To look ahead at input symbols", "To backtrack when necessary"},
+            /*14*/   {"It is more complex to implement", "It handles left-recursive grammars", "It does not involve backtracking", "It requires multiple lookahead symbols"},
+            /*15*/   {"B → a", "B → ε", "B → b", "B → b | ε"}
     };
 
     public static final int[] post_test_lesson_1_answers_medium = {
-            /*1*/    1, // "A process of analyzing grammatical structure"
-            /*2*/    1, // "Recursive descent parsing"
-            /*3*/    1, // "Context-Free Grammar (CFG)"
-            /*4*/    1, // "One lookahead symbol"
-            /*5*/    2, // "Bottom-up parsing"
-            /*6*/    1, // "LL(1) grammars"
-            /*7*/    2, // "The current symbol and lookahead symbol"
-            /*8*/    1, // "Non-backtracking"
-            /*9*/    1, // "To analyze the syntax of a given input"
-            /*10*/   1, // "Top-down parsing"
-            /*11*/   1, // "Handles grammars with left recursion"
-            /*12*/   0, // "Recursive descent parsing"
-            /*13*/   3, // "Start symbol"
-            /*14*/   2, // "LL(1) Grammar"
-            /*15*/   2  // "Grammar transformation"
+            /*1*/    2,  // "Top-down parsing"
+            /*2*/    0,  // "It uses backtracking"
+            /*3*/    1,  // "Leftmost derivation with 1 symbol lookahead"
+            /*4*/    3,  // "F→ ( E ) | id"
+            /*5*/    1,  // "Define grammar rules as functions"
+            /*6*/    2,  // "Top-down Parsing"
+            /*7*/    1,  // "LL(1) Parsing"
+            /*8*/    1,  // "1"
+            /*9*/    1,  // "It uses backtracking"
+            /*10*/   1,  // "E→ E + T"
+            /*11*/   2,  // "LL(1) Parsing"
+            /*12*/   2,  // "id"
+            /*13*/   1,  // "To verify token matches"
+            /*14*/   2,  // "It does not involve backtracking"
+            /*15*/   3   // "B → b | ε"
     };
 
     /*
@@ -226,42 +226,44 @@ public class e_Module_8_1 {
         return e_Module_8.get_PostTest_Hard_Questions(
                 post_test_lesson_1_questions_hard,
                 post_test_lesson_1_answers_hard,
-                e_Question.Difficulty.HARD);
+                e_Question.Difficulty.HARD
+        );
     }
 
     public static final String[] post_test_lesson_1_questions_hard = {
-            /*1*/    "What is the process of analyzing a string of symbols to determine its grammatical structure?",
-            /*2*/    "What type of parsing builds the parse tree from the root symbol down to the input?",
-            /*3*/    "What is the technique of top-down parsing that recursively applies grammar rules?",
-            /*4*/    "What parsing technique uses one lookahead symbol to predict the correct production rule?",
-            /*5*/    "What is the grammar called that parsing typically analyzes?",
-            /*6*/    "Which parsing method constructs the parse tree from the input back to the start symbol?",
-            /*7*/    "What is the term for rewriting a grammar to remove left recursion?",
-            /*8*/    "Which table is constructed in LL(1) parsing to guide decisions based on the current input symbol?",
-            /*9*/    "What is the name of the symbol from which parsing starts in top-down parsing?",
-            /*10*/   "What method of parsing works without backtracking?",
-            /*11*/   "What is the name of the method that involves reading input from left to right and producing leftmost derivation?",
-            /*12*/   "What does the '1' in LL(1) stand for?",
-            /*13*/   "Which parsing method does not handle left-recursive grammars?",
-            /*14*/   "What type of grammar is required for LL(1) parsing to work efficiently?",
-            /*15*/   "What term is used for a grammar rule that refers to itself on the left side of a production?"
+            /*1*/    "Which parsing method handles backtracking?",
+            /*2*/    "What process builds syntax trees?",
+            /*3*/    "Which symbol initiates parsing?",
+            /*4*/    "What identifies the current input symbol?",
+            /*5*/    "What does LL(1) parsing avoid?",
+            /*6*/    "Which parsing table helps decision making?",
+            /*7*/    "What rule guides grammar expansions?",
+            /*8*/    "What eliminates left recursion?",
+            /*9*/    "What component analyzes grammar?",
+            /*10*/   "What grammar causes backtracking issues?",
+            /*11*/   "What technique predicts input tokens?",
+            /*12*/   "What structure results from parsing?",
+            /*13*/   "What parsing method reads left-to-right?",
+            /*14*/   "Which method constructs derivations?",
+            /*15*/   "What parses from root downward?"
     };
 
     public static final String[] post_test_lesson_1_answers_hard = {
-            /*1*/    "parsing",
-            /*2*/    "top-down parsing",
-            /*3*/    "recursive descent parsing",
-            /*4*/    "LL(1) parsing",
-            /*5*/    "context-free grammar",
-            /*6*/    "bottom-up parsing",
-            /*7*/    "grammar transformation",
-            /*8*/    "parsing table",
-            /*9*/    "start symbol",
-            /*10*/   "LL(1) parsing",
-            /*11*/   "LL(1) parsing",
-            /*12*/   "one lookahead symbol",
-            /*13*/   "recursive descent parsing",
-            /*14*/   "LL(1) grammar",
-            /*15*/   "left recursion"
+            /*1*/    "recursive parsing",
+            /*2*/    "parse tree",
+            /*3*/    "start symbol",
+            /*4*/    "lookahead symbol",
+            /*5*/    "backtracking error",
+            /*6*/    "LL(1) table",
+            /*7*/    "production rule",
+            /*8*/    "grammar rewriting",
+            /*9*/    "parsing function",
+            /*10*/   "left-recursive grammar",
+            /*11*/   "predictive parsing",
+            /*12*/   "parse tree",
+            /*13*/   "LL(1) parsing",
+            /*14*/   "leftmost derivation",
+            /*15*/   "top down"
     };
+
 }

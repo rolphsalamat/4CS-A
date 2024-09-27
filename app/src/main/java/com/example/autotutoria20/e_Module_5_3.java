@@ -15,101 +15,101 @@ public class e_Module_5_3 {
 
     public static e_Question[] get_PreTest_Lesson3_Questions() {
         return e_Module_5.getPreTestQuestions(
-                pre_test_lesson3_questions,
-                pre_test_lesson3_choices,
-                pre_test_lesson3_answers
+                pre_test_lesson_3_questions,
+                pre_test_lesson_3_choices,
+                pre_test_lesson_3_answers
         );
     }
 
-    public static final String[] pre_test_lesson3_questions = {
-            /*1*/    "What does a derivation represent in the context of formal grammars?",
-            /*2*/    "What is the root node of a parse tree always associated with?",
-            /*3*/    "Which derivation process involves replacing the leftmost non-terminal first?",
-            /*4*/    "What is the purpose of a parse tree?",
-            /*5*/    "In which type of derivation are the rightmost non-terminals replaced first?",
-            /*6*/    "How many parse trees can represent a valid string in a grammar with ambiguous rules?",
-            /*7*/    "What do the internal nodes of a parse tree represent?",
-            /*8*/    "Which statement is true about a leftmost and rightmost derivation for the same string?",
-            /*9*/    "What do the leaf nodes of a parse tree represent?",
-            /*10*/   "Which term refers to the structure that can be used to determine whether a string belongs to a language?",
-            /*11*/   "What is the primary difference between a leftmost derivation and a rightmost derivation?",
-            /*12*/   "In a derivation what are non-terminal symbols replaced with?",
-            /*13*/   "How does ambiguity in a grammar affect the parse trees?",
-            /*14*/   "In which phase of language processing is a parse tree typically constructed?",
-            /*15*/   "Which part of a grammar corresponds to the leaf nodes of a parse tree?"
+    public static final String[] pre_test_lesson_3_questions = {
+            /*1*/    "Which component of a parse tree indicates the rules applied during a derivation?",
+            /*2*/    "What do the branches of a parse tree represent?",
+            /*3*/    "How is ambiguity in a grammar identified through a parse tree?",
+            /*4*/    "What aspect of a parse tree helps in detecting syntactic errors in a program?",
+            /*5*/    "In what way does a parse tree assist in the code generation phase of a compiler?",
+            /*6*/    "What is the significance of the start symbol in both derivations and parse trees?",
+            /*7*/    "What is the primary use of a context-free grammar (CFG) in relation to parse trees?",
+            /*8*/    "In a leftmost derivation, how does the parser proceed through the parse tree?",
+            /*9*/    "What does an edge in a parse tree indicate?",
+            /*10*/   "What happens to a string during the derivation process in relation to parse trees?",
+            /*11*/   "How does a rightmost derivation differ from a leftmost derivation in terms of parse trees?",
+            /*12*/   "What is a recursive derivation in the context of parse trees?",
+            /*13*/   "How does a production rule contribute to the structure of a parse tree?",
+            /*14*/   "Why is it important for a parse tree to accurately represent the syntactic structure of a program?",
+            /*15*/   "In a compiler, what is the function of the syntax analysis phase, which utilizes parse trees?"
     };
 
-    public static final String[][] pre_test_lesson3_choices = {
-            /*1*/    {"A graphical representation of a string", "A step-by-step process to generate a string", "A set of rules for parsing a string", "A tree diagram"},
-            /*2*/    {"A terminal symbol", "The start symbol of the grammar", "The end of a derivation", "The longest string in the language"},
-            /*3*/    {"Rightmost derivation", "Mixed derivation", "Leftmost derivation", "Bottom-up derivation"},
-            /*4*/    {"To show the sequence of tokenization", "To visually represent the structure of a derivation", "To define the semantics of a string", "To describe the lexical analysis phase"},
-            /*5*/    {"Top-down derivation", "Leftmost derivation", "Pre-order derivation", "Rightmost derivation"},
-            /*6*/    {"Only one", "Exactly two", "More than one", "None"},
-            /*7*/    {"Terminal symbols", "Non-terminal symbols", "Token types", "Derivation steps"},
-            /*8*/    {"They always generate different parse trees", "They always generate the same parse tree", "They may generate the same parse tree", "Only the leftmost derivation can generate a parse tree"},
-            /*9*/    {"Terminal symbols", "Non-terminal symbols", "Production rules", "Start symbols"},
-            /*10*/   {"Parse tree", "Derivation graph", "Syntax chart", "Finite automaton"},
-            /*11*/   {"The order in which terminal symbols are replaced", "The position of non-terminal symbols being replaced", "The complexity of the parse tree", "The number of production rules used"},
-            /*12*/   {"Other non-terminals", "Terminals according to production rules", "Keywords of the language", "Lexical tokens"},
-            /*13*/   {"It results in more than one possible parse tree", "It makes parse trees invalid", "It restricts the number of parse trees to one", "It prevents the creation of parse trees"},
-            /*14*/   {"Semantic analysis", "Lexical analysis", "Syntax analysis", "Optimization"},
-            /*15*/   {"Non-terminal symbols", "Production rules", "Terminal symbols", "The start symbol"}
+    public static final String[][] pre_test_lesson_3_choices = {
+            /*1*/    {"Leaf nodes", "Internal nodes", "Root node", "Edges"},
+            /*2*/    {"The connection between non-terminal symbols and their derivations.", "The sequence of operations in code execution.", "The relationship between different terminals.", "The arrangement of production rules."},
+            /*3*/    {"When the parse tree has more than one root node.", "When the tree has multiple valid structures for a single input string.", "When there are no terminal symbols in the tree.", "When the tree contains recursive elements."},
+            /*4*/    {"The presence of leaf nodes.", "The internal structure of the tree.", "The production rules used in the tree.", "The root node's relationship to other nodes."},
+            /*5*/    {"By representing the structure of grammar rules.", "By directly converting non-terminals into machine code.", "By organizing the hierarchy of the program’s statements.", "By creating new syntactical rules."},
+            /*6*/    {"It is the first production rule applied in a derivation.", "It is always a terminal symbol in the parse tree.", "It defines the final output of the parse tree.", "It cannot be expanded further."},
+            /*7*/    {"To generate terminals directly.", "To define the hierarchical structure of a string.", "To optimize the syntax of a program.", "To establish the order of token recognition."},
+            /*8*/    {"By converting terminals into non-terminals.", "By expanding the rightmost non-terminal.", "By replacing the leftmost non-terminal first.", "By processing all terminals simultaneously."},
+            /*9*/    {"The application of a production rule.", "The final state of the derivation.", "A leaf node containing a terminal symbol.", "The termination of the parse tree."},
+            /*10*/   {"It is broken down into non-terminal symbols.", "It is transformed into a terminal string step by step.", "It is rearranged into a new order of symbols.", "It remains unchanged throughout the process."},
+            /*11*/   {"It replaces the rightmost non-terminal in each step.", "It always results in ambiguous parse trees.", "It applies all production rules simultaneously.", "It leads to a different root node in the parse tree."},
+            /*12*/   {"A process where the same non-terminal symbol is repeatedly expanded.", "A derivation that involves terminals and non-terminals equally.", "A process that creates new syntactic rules dynamically.", "A derivation that skips over terminal symbols."},
+            /*13*/   {"It defines how non-terminal symbols are expanded.", "It is only used for terminal symbols in the tree.", "It dictates the final form of the parse tree.", "It prevents ambiguity in the grammar."},
+            /*14*/   {"It helps reduce the complexity of the program's source code.", "It ensures that the program can be translated into machine code correctly.", "It improves the execution speed of the compiled program.", "It organizes the grammar into simpler terms for readability."},
+            /*15*/   {"To generate the final executable code.", "To check the semantic meaning of the code.", "To analyze the program's structure according to grammar rules.", "To manage memory usage during program execution."}
     };
 
-    public static final int[] pre_test_lesson3_answers = {
-            /*1*/    1, // A step-by-step process to generate a string
-            /*2*/    1, // The start symbol of the grammar
-            /*3*/    2, // Leftmost derivation
-            /*4*/    1, // To visually represent the structure of a derivation
-            /*5*/    3, // Rightmost derivation
-            /*6*/    2, // More than one
-            /*7*/    1, // Non-terminal symbols
-            /*8*/    2, // They may generate the same parse tree
-            /*9*/    0, // Terminal symbols
-            /*10*/   0, // Parse tree
-            /*11*/   1, // The position of non-terminal symbols being replaced
-            /*12*/   1, // Terminals according to production rules
-            /*13*/   0, // It results in more than one possible parse tree
-            /*14*/   2, // Syntax analysis
-            /*15*/   2  // Terminal symbols
+    public static final int[] pre_test_lesson_3_answers = {
+            /*1*/    1, // Internal nodes
+            /*2*/    0, // The connection between non-terminal symbols and their derivations.
+            /*3*/    1, // When the tree has multiple valid structures for a single input string.
+            /*4*/    1, // The internal structure of the tree.
+            /*5*/    2, // By organizing the hierarchy of the program’s statements.
+            /*6*/    0, // It is the first production rule applied in a derivation.
+            /*7*/    1, // To define the hierarchical structure of a string.
+            /*8*/    2, // By replacing the leftmost non-terminal first.
+            /*9*/    0, // The application of a production rule.
+            /*10*/   1, // It is transformed into a terminal string step by step.
+            /*11*/   0, // It replaces the rightmost non-terminal in each step.
+            /*12*/   0, // A process where the same non-terminal symbol is repeatedly expanded.
+            /*13*/   0, // It defines how non-terminal symbols are expanded.
+            /*14*/   1, // It ensures that the program can be translated into machine code correctly.
+            /*15*/   2  // To analyze the program's structure according to grammar rules.
     };
 
     /*
     +----------------------+
     |       POST-TEST      |
-    |        EASY          |
+    |          EASY        |
     +----------------------+
     */
 
     public static e_Question[] get_PostTest_Lesson3_Easy_Questions() {
         return e_Module_5.get_PostTest_EasyMedium_Questions(
-                post_test_lesson3_questions_easy,
-                post_test_lesson3_choices_easy,
-                post_test_lesson3_answers_easy,
+                post_test_lesson_3_questions_easy,
+                post_test_lesson_3_choices_easy,
+                post_test_lesson_3_answers_easy,
                 e_Question.Difficulty.EASY
         );
     }
 
-    public static final String[] post_test_lesson3_questions_easy = {
-            /*1*/    "In a leftmost derivation the leftmost non-terminal is expanded first.",
-            /*2*/    "A rightmost derivation always expands the leftmost non-terminal first.",
-            /*3*/    "Both leftmost and rightmost derivations can generate the same final string.",
-            /*4*/    "A derivation sequence can only be either leftmost or rightmost but not both.",
-            /*5*/    "Leftmost derivations always result in a different final string compared to rightmost derivations.",
-            /*6*/    "In syntax analysis leftmost and rightmost derivations are used to process non-terminal symbols in different ways.",
-            /*7*/    "Derivations are a key component of generating strings in formal grammars.",
-            /*8*/    "In a rightmost derivation the rightmost non-terminal is expanded first.",
-            /*9*/    "The starting point for both leftmost and rightmost derivations is always a terminal symbol.",
-            /*10*/   "The process of derivation can be performed without following any specific order of non-terminal expansion.",
-            /*11*/   "Both leftmost and rightmost derivations follow a set of grammar rules for expansion.",
-            /*12*/   "Rightmost derivations are primarily used in bottom-up parsing techniques.",
-            /*13*/   "Leftmost derivations are typically used in top-down parsing techniques.",
-            /*14*/   "Derivations in formal grammar are necessary to analyze and generate syntactic structures of programming languages.",
-            /*15*/   "The choice between leftmost and rightmost derivation affects the final output of the parsing process."
+    public static final String[] post_test_lesson_3_questions_easy = {
+            /*1*/    "Leftmost derivation replaces the leftmost non-terminal symbol at each step in the process.",
+            /*2*/    "In rightmost derivation, non-terminal symbols are replaced from the rightmost to the left.",
+            /*3*/    "Both leftmost and rightmost derivations can be used to generate the same final string from a grammar.",
+            /*4*/    "In derivation, the goal is to replace non-terminal symbols with terminal symbols to form a valid string in the language.",
+            /*5*/    "Leftmost and rightmost derivations are only useful in context-sensitive grammars.",
+            /*6*/    "The replacement order in leftmost derivation starts from the leftmost part of the string and works towards the right.",
+            /*7*/    "The order of derivation, whether leftmost or rightmost, determines how efficiently a grammar produces strings.",
+            /*8*/    "In a valid grammar, the derivation process may involve replacing both terminal and non-terminal symbols.",
+            /*9*/    "A derivation ends when all non-terminal symbols have been replaced by terminal symbols, completing the string.",
+            /*10*/   "In rightmost derivation, non-terminal symbols are replaced from the leftmost side of the string.",
+            /*11*/   "Derivations in a context-free grammar must always begin with a terminal symbol.",
+            /*12*/   "Both leftmost and rightmost derivations lead to valid strings, provided the grammar is unambiguous.",
+            /*13*/   "In derivations, the final string can contain non-terminal symbols as long as it is in the grammar's language.",
+            /*14*/   "In a leftmost derivation, non-terminal symbols are always replaced from right to left.",
+            /*15*/   "A valid grammar requires that each derivation begins with the replacement of terminal symbols."
     };
 
-    public static final String[][] post_test_lesson3_choices_easy = {
+    public static final String[][] post_test_lesson_3_choices_easy = {
             /*1*/    {"True", "False"},
             /*2*/    {"True", "False"},
             /*3*/    {"True", "False"},
@@ -127,21 +127,21 @@ public class e_Module_5_3 {
             /*15*/   {"True", "False"}
     };
 
-    public static final int[] post_test_lesson3_answers_easy = {
+    public static final int[] post_test_lesson_3_answers_easy = {
             /*1*/    0, // True
-            /*2*/    1, // False
+            /*2*/    0, // True
             /*3*/    0, // True
-            /*4*/    1, // False
+            /*4*/    0, // True
             /*5*/    1, // False
             /*6*/    0, // True
-            /*7*/    0, // True
+            /*7*/    1, // False
             /*8*/    0, // True
-            /*9*/    1, // False
+            /*9*/    0, // True
             /*10*/   1, // False
-            /*11*/   0, // True
+            /*11*/   1, // False
             /*12*/   0, // True
-            /*13*/   0, // True
-            /*14*/   0, // True
+            /*13*/   1, // False
+            /*14*/   1, // False
             /*15*/   1  // False
     };
 
@@ -154,115 +154,116 @@ public class e_Module_5_3 {
 
     public static e_Question[] get_PostTest_Lesson3_Medium_Questions() {
         return e_Module_5.get_PostTest_EasyMedium_Questions(
-                post_test_lesson3_questions_medium,
-                post_test_lesson3_choices_medium,
-                post_test_lesson3_answers_medium,
+                post_test_lesson_3_questions_medium,
+                post_test_lesson_3_choices_medium,
+                post_test_lesson_3_answers_medium,
                 e_Question.Difficulty.MEDIUM
         );
     }
 
-    public static final String[] post_test_lesson3_questions_medium = {
-            /*1*/    "What is the main characteristic of a leftmost derivation?",
-            /*2*/    "In a rightmost derivation which non-terminal is expanded first?",
-            /*3*/    "What do leftmost and rightmost derivations have in common?",
-            /*4*/    "Which parsing method typically uses leftmost derivations?",
-            /*5*/    "Which parsing method typically uses rightmost derivations?",
-            /*6*/    "Which of the following is an example of a terminal symbol in a derivation?",
-            /*7*/    "In leftmost derivation which non-terminal is expanded at each step?",
-            /*8*/    "What is the result of both leftmost and rightmost derivations?",
-            /*9*/    "Which of the following describes a rightmost derivation?",
-            /*10*/   "In the context of derivations what is a start symbol?",
-            /*11*/   "Which symbol in a derivation is typically expanded during a derivation step?",
-            /*12*/   "What do derivations help in analyzing?",
-            /*13*/   "What is the key difference between leftmost and rightmost derivations?",
-            /*14*/   "Which of the following is a non-terminal symbol in grammar?",
-            /*15*/   "Which of the following statements is true regarding derivations in formal grammar?"
+    public static final String[] post_test_lesson_3_questions_medium = {
+            /*1*/    "What is the main characteristic of leftmost derivation?",
+            /*2*/    "In a rightmost derivation, what symbol is replaced first?",
+            /*3*/    "Which of the following is an accurate description of the derivation process?",
+            /*4*/    "Which of the following grammars allows for both leftmost and rightmost derivations?",
+            /*5*/    "In the process of derivation, what are non-terminal symbols replaced with?",
+            /*6*/    "Which of the following describes a leftmost derivation?",
+            /*7*/    "What does the derivation process in grammars aim to produce?",
+            /*8*/    "What type of derivation begins by replacing the rightmost non-terminal symbol?",
+            /*9*/    "What is replaced during a derivation process in a context-free grammar?",
+            /*10*/   "Which process involves creating valid strings from non-terminal symbols?",
+            /*11*/   "What is the key difference between leftmost and rightmost derivations?",
+            /*12*/   "Which of the following symbols are the focus of replacement during derivations?",
+            /*13*/   "In what type of derivation is the leftmost non-terminal symbol replaced first?",
+            /*14*/   "Which type of grammar uses both leftmost and rightmost derivations?",
+            /*15*/   "What is the goal of the derivation process in formal grammars?"
     };
 
-    public static final String[][] post_test_lesson3_choices_medium = {
-            /*1*/    {"Expands the rightmost non-terminal first", "Expands the leftmost non-terminal first", "Expands both left and right non-terminals simultaneously", "Expands only terminal symbols"},
-            /*2*/    {"The leftmost non-terminal", "The rightmost non-terminal", "Any non-terminal can be expanded first", "Only the start symbol"},
-            /*3*/    {"They both expand the leftmost non-terminal first", "They both expand the rightmost non-terminal first", "They both follow the same grammar rules to generate strings", "They both result in different final strings"},
-            /*4*/    {"Bottom-up parsing", "Top-down parsing", "In-order parsing", "Pre-order parsing"},
-            /*5*/    {"Top-down parsing", "Pre-order parsing", "Bottom-up parsing", "In-order parsing"},
-            /*6*/    {"Start symbol", "A specific letter or digit in a string", "Non-terminal symbols", "Grammar rules"},
-            /*7*/    {"The rightmost non-terminal", "Any non-terminal", "The leftmost non-terminal", "Only terminal symbols"},
-            /*8*/    {"The same final string", "Different strings", "Incomplete derivations", "No valid output"},
-            /*9*/    {"It expands all non-terminals simultaneously", "It always starts with terminal symbols", "It expands the rightmost non-terminal at each step", "It only applies to recursive grammars"},
-            /*10*/   {"The symbol that represents terminal symbols", "The first non-terminal symbol from which derivation starts", "The last symbol of a string", "A symbol that ends a derivation"},
-            /*11*/   {"Only terminal symbols", "The leftmost or rightmost non-terminal symbol", "Any terminal symbol", "Start symbol only"},
-            /*12*/   {"Semantics of a language", "Syntactic structure of a language", "The meaning of programming keywords", "The compilation process"},
-            /*13*/   {"The final output string", "The order in which terminal symbols are expanded", "The order in which non-terminal symbols are expanded", "The grammar rules applied"},
-            /*14*/   {"A lowercase letter", "An uppercase letter", "A punctuation mark", "A keyword"},
-            /*15*/   {"Derivations cannot use the same rules for both leftmost and rightmost expansions.", "Derivations are used to generate valid strings based on grammar rules.", "Only rightmost derivations are used in syntax analysis.", "Derivations ignore non-terminal symbols."}
+    public static final String[][] post_test_lesson_3_choices_medium = {
+            /*1*/    {"Replacing the leftmost non-terminal symbol first", "Replacing the rightmost terminal symbol first", "Replacing all terminal symbols simultaneously", "Ignoring non-terminal symbols"},
+            /*2*/    {"Leftmost terminal symbol", "Rightmost non-terminal symbol", "Rightmost terminal symbol", "Leftmost non-terminal symbol"},
+            /*3*/    {"Replacing terminal symbols with non-terminal symbols", "Replacing non-terminal symbols with terminal symbols", "Replacing terminal symbols with terminal symbols", "Replacing non-terminal symbols with themselves"},
+            /*4*/    {"Context-free grammar", "Context-sensitive grammar", "Deterministic grammar", "Terminal grammar"},
+            /*5*/    {"Other non-terminal symbols", "Terminal symbols", "A combination of both", "Numbers"},
+            /*6*/    {"It replaces the rightmost non-terminal symbol first", "It replaces the leftmost non-terminal symbol first", "It starts with terminal symbols", "It only replaces terminal symbols"},
+            /*7*/    {"A list of non-terminal symbols", "A valid string in the language", "Only terminal symbols", "A parsing tree"},
+            /*8*/    {"Leftmost derivation", "Rightmost derivation", "Random derivation", "None of the above"},
+            /*9*/    {"Terminal symbols", "Non-terminal symbols", "Leftmost terminals", "Numbers and symbols"},
+            /*10*/   {"Tokenization", "Parsing", "Derivation", "Compilation"},
+            /*11*/   {"The order in which non-terminal symbols are replaced", "The number of non-terminal symbols used", "Leftmost derivations only replace terminal symbols", "Rightmost derivations require no replacements"},
+            /*12*/   {"Only terminal symbols", "Both terminal and non-terminal symbols", "Only non-terminal symbols", "Any symbols found in the grammar"},
+            /*13*/   {"Rightmost derivation", "Leftmost derivation", "Deterministic derivation", "No derivation"},
+            /*14*/   {"Context-free grammar", "Deterministic grammar", "Unstructured grammar", "Context-sensitive grammar"},
+            /*15*/   {"To replace terminal symbols with non-terminal symbols", "To generate a valid string by replacing non-terminal symbols", "To determine the validity of terminal symbols", "To eliminate all non-terminal symbols"}
     };
 
-    public static final int[] post_test_lesson3_answers_medium = {
-            /*1*/    1, // Expands the leftmost non-terminal first
-            /*2*/    1, // The rightmost non-terminal
-            /*3*/    2, // They both follow the same grammar rules to generate strings
-            /*4*/    1, // Top-down parsing
-            /*5*/    2, // Bottom-up parsing
-            /*6*/    1, // A specific letter or digit in a string
-            /*7*/    2, // The leftmost non-terminal
-            /*8*/    0, // The same final string
-            /*9*/    2, // It expands the rightmost non-terminal at each step
-            /*10*/   1, // The first non-terminal symbol from which derivation starts
-            /*11*/   1, // The leftmost or rightmost non-terminal symbol
-            /*12*/   1, // Syntactic structure of a language
-            /*13*/   2, // The order in which non-terminal symbols are expanded
-            /*14*/   1, // An uppercase letter
-            /*15*/   1  // Derivations are used to generate valid strings based on grammar rules.
+    public static final int[] post_test_lesson_3_answers_medium = {
+            /*1*/    0, // Replacing the leftmost non-terminal symbol first
+            /*2*/    1, // Rightmost non-terminal symbol
+            /*3*/    1, // Replacing non-terminal symbols with terminal symbols
+            /*4*/    0, // Context-free grammar
+            /*5*/    1, // Terminal symbols
+            /*6*/    1, // It replaces the leftmost non-terminal symbol first
+            /*7*/    1, // A valid string in the language
+            /*8*/    1, // Rightmost derivation
+            /*9*/    1, // Non-terminal symbols
+            /*10*/   2, // Derivation
+            /*11*/   0, // The order in which non-terminal symbols are replaced
+            /*12*/   1, // Both terminal and non-terminal symbols
+            /*13*/   1, // Leftmost derivation
+            /*14*/   0, // Context-free grammar
+            /*15*/   1  // To generate a valid string by replacing non-terminal symbols
     };
 
     /*
     +----------------------+
     |       POST-TEST      |
-    |        HARD          |
+    |         HARD         |
     +----------------------+
     */
 
     public static e_Question[] get_PostTest_Lesson3_Hard_Questions() {
         return e_Module_5.get_PostTest_Hard_Questions(
-                post_test_lesson3_questions_hard,
-                post_test_lesson3_answers_hard,
+                post_test_lesson_3_questions_hard,
+                post_test_lesson_3_answers_hard,
                 e_Question.Difficulty.HARD
         );
     }
 
-    public static final String[] post_test_lesson3_questions_hard = {
-            /*1*/    "Identify the type of derivation where the leftmost non-terminal is always expanded first.",
-            /*2*/    "What is the term for the process of expanding the rightmost non-terminal in a grammar rule first?",
-            /*3*/    "What symbol do you typically begin with in both leftmost and rightmost derivations?",
-            /*4*/    "Which derivation is commonly associated with top-down parsing?",
-            /*5*/    "Which derivation is often used in bottom-up parsing?",
-            /*6*/    "What is the term for symbols that cannot be expanded further in a derivation?",
-            /*7*/    "What kind of symbol such as 'A' or 'B' can be expanded into other symbols in a derivation?",
-            /*8*/    "Identify the type of parsing that generally uses rightmost derivations in reverse order.",
-            /*9*/    "What is the final result called in a derivation sequence regardless of whether it's leftmost or rightmost?",
-            /*10*/   "What process describes breaking down a start symbol into a string of terminal symbols using grammar rules?",
-            /*11*/   "Which type of derivation expands non-terminal symbols from left to right?",
-            /*12*/   "Identify the type of derivation where the non-terminal symbols are expanded from right to left.",
-            /*13*/   "What is the formal grammar concept that includes rules for generating strings using symbols like terminal and non-terminal?",
-            /*14*/   "Which derivation method ensures that the leftmost unresolved non-terminal is always expanded next?",
-            /*15*/   "What is the term for the rules used to expand non-terminal symbols in both leftmost and rightmost derivations?"
+    public static final String[] post_test_lesson_3_questions_hard = {
+            /*1*/    "What process produces a string from non-terminal symbols in a grammar?",
+            /*2*/    "What term describes replacing the leftmost non-terminal first?",
+            /*3*/    "Which process replaces the rightmost non-terminal first in a string?",
+            /*4*/    "What are the symbols that get replaced during derivation?",
+            /*5*/    "What method transforms non-terminals into terminals?",
+            /*6*/    "What process leads to a valid string in a language?",
+            /*7*/    "Which type of derivation replaces symbols from right to left?",
+            /*8*/    "Which part of a string is replaced first in leftmost derivation?",
+            /*9*/    "What is the goal of derivation in formal languages?",
+            /*10*/   "What symbols remain after derivation completes?",
+            /*11*/   "What concept involves following production rules to generate a string?",
+            /*12*/   "Which symbol is replaced first in rightmost derivation?",
+            /*13*/   "What term refers to the rules applied to replace non-terminals?",
+            /*14*/   "What kind of grammar supports leftmost and rightmost derivations?",
+            /*15*/   "What process constructs valid strings from grammar rules?"
     };
 
-    public static final String[] post_test_lesson3_answers_hard = {
-            /*1*/    "leftmost derivation",
-            /*2*/    "rightmost derivation",
-            /*3*/    "start symbol",
-            /*4*/    "leftmost derivation",
-            /*5*/    "rightmost derivation",
-            /*6*/    "terminal symbols",
-            /*7*/    "non-terminal symbol",
-            /*8*/    "bottom-up parsing",
-            /*9*/    "final string",
-            /*10*/   "derivation",
-            /*11*/   "leftmost derivation",
-            /*12*/   "rightmost derivation",
+    public static final String[] post_test_lesson_3_answers_hard = {
+            /*1*/    "string derivation",
+            /*2*/    "leftmost derivation",
+            /*3*/    "rightmost derivation",
+            /*4*/    "non-terminal symbols",
+            /*5*/    "symbol replacement",
+            /*6*/    "string generation",
+            /*7*/    "rightmost derivation",
+            /*8*/    "leftmost symbol",
+            /*9*/    "string creation",
+            /*10*/   "terminal symbols",
+            /*11*/   "grammar derivation",
+            /*12*/   "rightmost symbol",
             /*13*/   "production rules",
-            /*14*/   "leftmost derivation",
-            /*15*/   "grammar rules"
+            /*14*/   "context-free grammar",
+            /*15*/   "string derivation"
     };
+
 }

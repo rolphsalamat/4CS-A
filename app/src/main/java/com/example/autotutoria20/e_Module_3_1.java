@@ -18,57 +18,57 @@ public class e_Module_3_1 {
     }
 
     public static final String[] pre_test_lesson_1_questions = {
-            /*1*/    "What is Automata Theory primarily concerned with?",
-            /*2*/    "What is the primary purpose of a grammar in automata theory?",
-            /*3*/    "Which type of automaton depends only on input for its output?",
-            /*4*/    "What is the difference between deterministic and non-deterministic finite automata?",
-            /*5*/    "Which of the following is an example of a language recognized by a Pushdown Automaton?",
-            /*6*/    "Which type of automaton is used in the lexical analysis phase of a compiler?",
-            /*7*/    "What additional feature does a Pushdown Automaton have compared to a Finite Automaton?",
-            /*8*/    "Which machine can simulate any algorithm and is the most powerful among abstract machines?",
-            /*9*/    "In which phase of compiler design is a Pushdown Automaton typically used?",
-            /*10*/   "What is a key application of automata in natural language processing?",
-            /*11*/   "What is the key feature of a Turing Machine that distinguishes it from other automata?",
-            /*12*/   "Which type of machine is capable of recognizing recursively enumerable languages?",
-            /*13*/   "What is the transition function in automata theory?",
-            /*14*/   "What is the key characteristic of a Moore Machine?",
-            /*15*/   "What kind of automaton would you use for recognizing palindromes over the alphabet {ab}?"
+            /*1*/    "Which of the following describes regular languages?",
+            /*2*/    "What type of memory requirement do regular languages have?",
+            /*3*/    "Which operation is applicable to regular languages?",
+            /*4*/    "What is the primary use of regular expressions?",
+            /*5*/    "Which automata can recognize regular languages?",
+            /*6*/    "Which structure represents a regular expression?",
+            /*7*/    "What role does finite automata play in computational problems?",
+            /*8*/    "Which closure property is true for regular languages?",
+            /*9*/    "Which of the following is an application of regular languages?",
+            /*10*/   "What does a Kleene star (*) in a regular expression represent?",
+            /*11*/   "Which automaton can simulate both deterministic and nondeterministic behavior?",
+            /*12*/   "Regular expressions are used to describe which of the following?",
+            /*13*/   "Which is not a component of a finite automaton?",
+            /*14*/   "How is text search implemented using regular expressions?",
+            /*15*/   "Which of the following describes deterministic finite automata (DFA)?"
     };
 
     public static final String[][] pre_test_lesson_1_choices = {
-            /*1*/    {"Data structures and algorithms", "Abstract machines and the problems they solve", "Object-oriented programming", "Machine learning and artificial intelligence"},
-            /*2*/    {"To recognize languages", "To simulate abstract machines", "To generate sentences in a language", "To design programming languages"},
-            /*3*/    {"Mealy Machine", "Moore Machine", "Automaton without memory", "Pushdown Automaton"},
-            /*4*/    {"DFA has no transitions", "NFA has multiple transitions for each symbol", "DFA has infinite states", "NFA has no output"},
-            /*5*/    {"Binary strings ending in '01'", "Balanced parentheses", "Palindromes over the alphabet {ab}", "Context-free grammars"},
-            /*6*/    {"Pushdown Automaton", "Finite Automaton", "Turing Machine", "Moore Machine"},
-            /*7*/    {"Infinite states", "A stack for memory", "Multiple tape heads", "A transition function"},
-            /*8*/    {"Deterministic Finite Automaton", "Pushdown Automaton", "Mealy Machine", "Turing Machine"},
-            /*9*/    {"Lexical analysis", "Syntax analysis", "Code generation", "Optimization"},
-            /*10*/   {"Model checking", "String matching", "Parsing and analyzing language structure", "Syntax error detection"},
-            /*11*/   {"It has a finite number of states", "It uses an infinite tape for reading and writing", "It has no memory", "It only recognizes regular languages"},
-            /*12*/   {"DFA", "PDA", "Turing Machine", "NFA"},
-            /*13*/   {"A function that defines how the automaton generates outputs", "A function that defines the next state based on the current state and input", "A function that determines the number of states in the automaton", "A function that checks if the input is valid"},
-            /*14*/   {"Output depends on input only", "Output depends on both the state and input", "Output depends only on the states of the machine", "Output is undefined"},
-            /*15*/   {"Deterministic Finite Automaton (DFA)", "Pushdown Automaton (PDA)", "Moore Machine", "Mealy Machine"}
+            /*1*/    {"A type of programming language", "A category of formal languages recognized by finite automata", "A machine learning algorithm", "A hardware design system"},
+            /*2*/    {"Large, infinite memory", "Small, limited memory", "Dynamic memory allocation", "No memory required"},
+            /*3*/    {"Differentiation", "Union", "Multiplication", "Exponentiation"},
+            /*4*/    {"Machine learning", "Text pattern matching", "Data encryption", "Image processing"},
+            /*5*/    {"Finite automata", "Pushdown automata", "Turing machines", "All of the above"},
+            /*6*/    {"Tree", "Stack", "Set of strings accepted by a finite automaton", "Linked list"},
+            /*7*/    {"Track infinite states", "Solve complex mathematical equations", "Model problems requiring small amounts of memory", "Process natural languages"},
+            /*8*/    {"They are closed under subtraction", "They are closed under union", "They are closed under differentiation", "They are not closed under any operation"},
+            /*9*/    {"Database management", "Lexical analysis in compiler design", "Artificial intelligence", "3D rendering"},
+            /*10*/   {"Repeat the preceding character zero or more times", "Optional character", "End of the line", "Negation of the preceding character"},
+            /*11*/   {"Finite automaton", "Pushdown automaton", "Mealy machine", "Moore machine"},
+            /*12*/   {"Recursive structures", "Regular languages", "Context-free languages", "Data structures"},
+            /*13*/   {"Stack memory", "States", "Transition function", "Input alphabet"},
+            /*14*/   {"By creating data structures", "By defining patterns to match substrings", "By generating machine code", "By encrypting text data"},
+            /*15*/   {"Allows multiple transitions for a single input symbol", "Allows only one transition for a single input symbol", "Uses a stack to track states", "Requires infinite memory to process languages"}
     };
 
     public static final int[] pre_test_lesson_1_answers = {
-            /*1*/    1, // 'Abstract machines and the problems they solve'
-            /*2*/    2, // 'To generate sentences in a language'
-            /*3*/    0, // 'Mealy Machine'
-            /*4*/    1, // 'NFA has multiple transitions for each symbol'
-            /*5*/    1, // 'Balanced parentheses'
-            /*6*/    1, // 'Finite Automaton'
-            /*7*/    1, // 'A stack for memory'
-            /*8*/    3, // 'Turing Machine'
-            /*9*/    1, // 'Syntax analysis'
-            /*10*/   2, // 'Parsing and analyzing language structure'
-            /*11*/   1, // 'It uses an infinite tape for reading and writing'
-            /*12*/   2, // 'Turing Machine'
-            /*13*/   1, // 'A function that defines the next state based on the current state and input'
-            /*14*/   2, // 'Output depends only on the states of the machine'
-            /*15*/   1  // 'Pushdown Automaton (PDA)'
+            /*1*/    1,  // "A category of formal languages recognized by finite automata"
+            /*2*/    1,  // "Small, limited memory"
+            /*3*/    1,  // "Union"
+            /*4*/    1,  // "Text pattern matching"
+            /*5*/    0,  // "Finite automata"
+            /*6*/    2,  // "Set of strings accepted by a finite automaton"
+            /*7*/    2,  // "Model problems requiring small amounts of memory"
+            /*8*/    1,  // "They are closed under union"
+            /*9*/    1,  // "Lexical analysis in compiler design"
+            /*10*/   0,  // "Repeat the preceding character zero or more times"
+            /*11*/   0,  // "Finite automaton"
+            /*12*/   1,  // "Regular languages"
+            /*13*/   0,  // "Stack memory"
+            /*14*/   1,  // "By defining patterns to match substrings"
+            /*15*/   1   // "Allows only one transition for a single input symbol"
     };
 
     /*
@@ -88,21 +88,21 @@ public class e_Module_3_1 {
     }
 
     public static final String[] post_test_lesson_1_questions_easy = {
-            /*1*/    "A regular language can always be recognized by a finite automaton.",
-            /*2*/    "Regular expressions are used to define patterns in strings.",
-            /*3*/    "Deterministic finite automata (DFA) and non-deterministic finite automata (NFA) cannot recognize the same set of regular languages.",
-            /*4*/    "Regular languages are closed under the operation of union.",
-            /*5*/    "A regular expression can define an infinite number of strings.",
-            /*6*/    "Finite automata can keep track of how many times a switch was turned on and off.",
-            /*7*/    "A regular language can be recognized only by deterministic finite automata (DFA).",
-            /*8*/    "Regular expressions are not used in compiler design.",
-            /*9*/    "A finite automaton can model problems that require a large amount of memory.",
-            /*10*/   "The Kleene star operation allows for the repetition of symbols in a regular language.",
-            /*11*/   "A regular language is a set of strings formed from an infinite alphabet.",
-            /*12*/   "Regular expressions are used in data validation such as for checking email formats.",
-            /*13*/   "Regular languages can be described by both regular expressions and finite automata.",
-            /*14*/   "Finite automata can be used for text search operations.",
-            /*15*/   "Regular languages are not closed under concatenation."
+            /*1*/    "The Pumping Lemma can be used to prove that a language is regular.",
+            /*2*/    "Finite automata can handle arbitrarily deep nested structures, such as balanced parentheses.",
+            /*3*/    "The Pumping Lemma states that sufficiently long strings in a regular language can be split into three parts.",
+            /*4*/    "Finite automata have infinite memory to process complex patterns.",
+            /*5*/    "The word 'lemma' in Pumping Lemma refers to a general rule in language theory.",
+            /*6*/    "If a language fails the Pumping Lemma, it is definitely not regular.",
+            /*7*/    "Nested structures, such as balanced parentheses, can be recognized by regular languages.",
+            /*8*/    "The Pumping Lemma only applies to context-free languages.",
+            /*9*/    "Regular languages are closed under operations such as union and Kleene star.",
+            /*10*/   "Finite automata can count an arbitrarily high number of occurrences.",
+            /*11*/   "The Pumping Lemma provides a method to divide any string into two parts.",
+            /*12*/   "A regular language always satisfies the Pumping Lemma.",
+            /*13*/   "Finite automata are incapable of handling infinite memory problems.",
+            /*14*/   "If a string can be 'pumped,' the resulting string must still be within the regular language.",
+            /*15*/   "Finite automata can always recognize languages that require complex memory management."
     };
 
     public static final String[][] post_test_lesson_1_choices_easy = {
@@ -124,21 +124,21 @@ public class e_Module_3_1 {
     };
 
     public static final int[] post_test_lesson_1_answers_easy = {
-            /*1*/    0, // True
-            /*2*/    0, // True
-            /*3*/    1, // False
-            /*4*/    0, // True
-            /*5*/    0, // True
-            /*6*/    1, // False
-            /*7*/    1, // False
-            /*8*/    1, // False
-            /*9*/    1, // False
-            /*10*/   0, // True
-            /*11*/   1, // False
-            /*12*/   0, // True
-            /*13*/   0, // True
-            /*14*/   0, // True
-            /*15*/   1  // False
+            /*1*/    0,  // True
+            /*2*/    1,  // False
+            /*3*/    0,  // True
+            /*4*/    1,  // False
+            /*5*/    0,  // True
+            /*6*/    0,  // True
+            /*7*/    1,  // False
+            /*8*/    1,  // False
+            /*9*/    0,  // True
+            /*10*/   1,  // False
+            /*11*/   1,  // False
+            /*12*/   0,  // True
+            /*13*/   0,  // True
+            /*14*/   0,  // True
+            /*15*/   1   // False
     };
 
     /*

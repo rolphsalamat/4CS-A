@@ -1,10 +1,15 @@
 package com.example.autotutoria20;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class e_Module_8_2 {
 
     /*
     +----------------------+
     |       PRE-TEST       |
+    |        LESSON   2    |
     +----------------------+
     */
 
@@ -17,57 +22,57 @@ public class e_Module_8_2 {
     }
 
     public static final String[] pre_test_lesson_8_2_questions = {
-            /*1*/    "What is parsing in the context of computer science?",
-            /*2*/    "Which of the following is a top-down parsing technique?",
-            /*3*/    "What type of grammar does parsing analyze?",
-            /*4*/    "What does the '1' in LL(1) parsing refer to?",
-            /*5*/    "Which parsing method involves constructing the parse tree from input to the start symbol?",
-            /*6*/    "Which of the following grammars can be parsed by a recursive descent parser?",
-            /*7*/    "In LL(1) parsing, the table is constructed based on:",
-            /*8*/    "Which of these is a key feature of LL(1) parsing?",
-            /*9*/    "What is the primary goal of parsing?",
-            /*10*/   "Which method constructs the parse tree from the root to the terminals?",
-            /*11*/   "Which of these is not a characteristic of recursive descent parsing?",
-            /*12*/   "Which of these parsing techniques produces a leftmost derivation?",
-            /*13*/   "In parsing, which symbol typically starts the parsing process?",
-            /*14*/   "What type of grammar must be used for LL(1) parsing to work efficiently?",
-            /*15*/   "Which of the following is a method for rewriting grammars to remove left recursion?"
+            /*1*/    "What is parsing?",
+            /*2*/    "Which of the following is not a type of parsing?",
+            /*3*/    "What is the goal of top-down parsing?",
+            /*4*/    "In recursive descent parsing, what is used to apply grammar rules?",
+            /*5*/    "Which of the following statements is true about recursive descent parsing?",
+            /*6*/    "Which parsing technique does LL(1) belong to?",
+            /*7*/    "What does the 'LL' in LL(1) parsing stand for?",
+            /*8*/    "How many lookahead symbols does LL(1) parsing use?",
+            /*9*/    "Which of the following grammar rules is an example of left recursion?",
+            /*10*/   "What needs to be done to handle left recursion in recursive descent parsing?",
+            /*11*/   "Which of the following is an example of a rewritten grammar after removing left recursion?",
+            /*12*/   "What is the primary feature of LL(1) parsing?",
+            /*13*/   "Which of the following is not a characteristic of top-down parsing?",
+            /*14*/   "What is one advantage of LL(1) parsing over recursive descent parsing?",
+            /*15*/   "Which symbol in a CFG grammar represents an empty string?"
     };
 
     public static final String[][] pre_test_lesson_8_2_choices = {
-            /*1*/    {"A method of memory allocation", "A process of analyzing grammatical structure", "A form of data encryption", "A network routing technique"},
-            /*2*/    {"Shift-reduce parsing", "Recursive descent parsing", "LR(1) parsing", "CYK parsing"},
-            /*3*/    {"Regular expressions", "Context-Free Grammar (CFG)", "Context-Sensitive Grammar", "None of the above"},
-            /*4*/    {"One production rule", "One lookahead symbol", "One parsing tree", "One derivation step"},
-            /*5*/    {"Top-down parsing", "Recursive descent parsing", "Bottom-up parsing", "LL(1) parsing"},
-            /*6*/    {"Left-recursive grammars", "LL(1) grammars", "Right-recursive grammars", "LR(1) grammars"},
-            /*7*/    {"The parse tree", "The start symbol and input", "The current symbol and lookahead symbol", "None of the above"},
-            /*8*/    {"Backtracking", "Non-backtracking", "Left recursion", "Rightmost derivation"},
-            /*9*/    {"To check memory usage", "To analyze the syntax of a given input", "To optimize code execution", "To generate machine-level code"},
-            /*10*/   {"Bottom-up parsing", "Top-down parsing", "LR parsing", "CYK parsing"},
-            /*11*/   {"Simple to implement", "Handles grammars with left recursion", "May involve backtracking", "Works for LL(1) grammars"},
-            /*12*/   {"Recursive descent parsing", "Bottom-up parsing", "LR(1) parsing", "Shift-reduce parsing"},
-            /*13*/   {"Terminal symbol", "Non-terminal symbol", "Input symbol", "Start symbol"},
-            /*14*/   {"Context-Free Grammar", "Right-recursive Grammar", "LL(1) Grammar", "Regular Grammar"},
-            /*15*/   {"Recursive descent method", "Parse tree construction", "Grammar transformation", "LR parsing"}
+            /*1*/    {"The process of analyzing a string of symbols to determine its grammatical structure", "A way of storing data in a file", "A mathematical operation", "A search algorithm"},
+            /*2*/    {"Top-down parsing", "Bottom-up parsing", "Inside-out parsing", "Left-to-right parsing"},
+            /*3*/    {"To build a parse tree from the input and work up to the start symbol", "To build a parse tree from the start symbol and work down to the input", "To scan the input from right to left", "To remove recursion from the grammar"},
+            /*4*/    {"Loops", "Functions", "Arrays", "Symbols"},
+            /*5*/    {"It can handle grammars with left recursion.", "It cannot handle grammars with left recursion.", "It is only used for natural language parsing.", "It works for any type of grammar without restrictions."},
+            /*6*/    {"Bottom-up", "Top-down", "Inside-out", "Right-to-left"},
+            /*7*/    {"Left-to-right and Leftmost derivation", "Lookahead-to-right and Leftmost derivation", "Left-to-left parsing", "Language Learning"},
+            /*8*/    {"2", "3", "1", "0"},
+            /*9*/    {"E → E + T", "T → T * F", "F → ( E )", "T → F T'"},
+            /*10*/   {"The grammar must be rewritten", "Backtracking must be used", "The input must be reversed", "The parse tree must be built bottom-up"},
+            /*11*/   {"E → E + T", "E → T E'", "T → T * F", "F → ( E )"},
+            /*12*/   {"It uses multiple lookahead symbols.", "It is non-backtracking and predictive.", "It requires backtracking to function.", "It can parse any type of grammar."},
+            /*13*/   {"It works from the start symbol down to the input.", "It can involve backtracking.", "It builds the parse tree from input symbols up to the start symbol.", "It includes techniques like recursive descent parsing."},
+            /*14*/   {"LL(1) does not require backtracking", "LL(1) uses a rightmost derivation", "LL(1) can handle any grammar", "LL(1) uses loops instead of functions"},
+            /*15*/   {"ε", "λ", "∅", "*"}
     };
 
     public static final int[] pre_test_lesson_8_2_answers = {
-            /*1*/    1, // 'A process of analyzing grammatical structure'
-            /*2*/    1, // 'Recursive descent parsing'
-            /*3*/    1, // 'Context-Free Grammar (CFG)'
-            /*4*/    1, // 'One lookahead symbol'
-            /*5*/    0, // 'Top-down parsing'
-            /*6*/    1, // 'LL(1) grammars'
-            /*7*/    2, // 'The current symbol and lookahead symbol'
-            /*8*/    1, // 'Non-backtracking'
-            /*9*/    1, // 'To analyze the syntax of a given input'
-            /*10*/   1, // 'Top-down parsing'
-            /*11*/   1, // 'Handles grammars with left recursion'
-            /*12*/   0, // 'Recursive descent parsing'
-            /*13*/   3, // 'Start symbol'
-            /*14*/   2, // 'LL(1) Grammar'
-            /*15*/   2  // 'Grammar transformation'
+            /*1*/    0,  // "The process of analyzing a string of symbols to determine its grammatical structure"
+            /*2*/    2,  // "Inside-out parsing"
+            /*3*/    1,  // "To build a parse tree from the start symbol and work down to the input"
+            /*4*/    1,  // "Functions"
+            /*5*/    1,  // "It cannot handle grammars with left recursion."
+            /*6*/    1,  // "Top-down"
+            /*7*/    0,  // "Left-to-right and Leftmost derivation"
+            /*8*/    2,  // "1"
+            /*9*/    0,  // "E → E + T"
+            /*10*/   0,  // "The grammar must be rewritten"
+            /*11*/   1,  // "E → T E'"
+            /*12*/   1,  // "It is non-backtracking and predictive."
+            /*13*/   2,  // "It builds the parse tree from input symbols up to the start symbol."
+            /*14*/   0,  // "LL(1) does not require backtracking"
+            /*15*/   0   // "ε"
     };
 
     /*
@@ -87,21 +92,21 @@ public class e_Module_8_2 {
     }
 
     public static final String[] post_test_lesson_8_2_questions_easy = {
-            /*1*/    "Shift-reduce parsing is a top-down parsing approach.",
-            /*2*/    "In bottom-up parsing, the parser starts from the leaves and works up to the root of the parse tree.",
-            /*3*/    "The shift-reduce parsing technique uses a stack and input buffer for processing strings.",
-            /*4*/    "LR parsers read input from right to left.",
-            /*5*/    "Canonical LR is a more powerful form of LR parsing compared to SLR and LALR.",
-            /*6*/    "In shift-reduce parsing, ‘shift’ means pushing the input symbol onto the stack.",
-            /*7*/    "LR parsers can only parse a small class of grammars.",
-            /*8*/    "In bottom-up parsing, reductions are applied using production rules.",
-            /*9*/    "SLR parsers are more complex than Canonical LR parsers.",
-            /*10*/   "In LR parsing, the table directs the parser to shift, reduce, accept, or show an error.",
-            /*11*/   "Bottom-up parsers work by predicting the grammar structure from the start symbol.",
-            /*12*/   "The main components of shift-reduce parsing are a stack and an input buffer.",
-            /*13*/   "LR parsers produce a rightmost derivation of the input in reverse.",
-            /*14*/   "The shift-reduce parsing method is a form of top-down parsing.",
-            /*15*/   "In shift-reduce parsing, ‘reduce’ means popping symbols from the stack and applying a production rule."
+            /*1*/    "Shift-Reduce Parsing uses a stack to hold grammar symbols and an input buffer for the remaining string.",
+            /*2*/    "In Shift-Reduce Parsing, reduction always happens before shifting symbols onto the stack.",
+            /*3*/    "LR parsing stands for Left-to-right parsing of a leftmost derivation in reverse.",
+            /*4*/    "Shift-Reduce Parsing is an example of a top-down parsing technique.",
+            /*5*/    "In LR parsing, the parsing table helps in deciding whether to shift or reduce based on the current state and input symbol.",
+            /*6*/    "SLR is the most general form of LR parsing.",
+            /*7*/    "In LR parsing, the process starts with the root of the parse tree and works its way to the leaves.",
+            /*8*/    "The canonical LR parser can handle the largest class of grammars among all LR parsers.",
+            /*9*/    "In Shift-Reduce Parsing, every symbol shifted onto the stack is immediately reduced.",
+            /*10*/   "Bottom-up parsers work their way from the leaves of the parse tree to the start symbol.",
+            /*11*/   "LALR parsing is less practical than SLR parsing for compiler design.",
+            /*12*/   "The steps of shift-reduce parsing include shift, reduce, accept, and error actions.",
+            /*13*/   "LR parsers read the input from right to left and generate a leftmost derivation.",
+            /*14*/   "LR parsers are limited to LL(1) grammars.",
+            /*15*/   "Bottom-up parsing cannot be implemented using a stack."
     };
 
     public static final String[][] post_test_lesson_8_2_choices_easy = {
@@ -123,21 +128,21 @@ public class e_Module_8_2 {
     };
 
     public static final int[] post_test_lesson_8_2_answers_easy = {
-            /*1*/    1, // False
-            /*2*/    0, // True
-            /*3*/    0, // True
-            /*4*/    1, // False
-            /*5*/    0, // True
-            /*6*/    0, // True
-            /*7*/    1, // False
-            /*8*/    0, // True
-            /*9*/    1, // False
-            /*10*/   0, // True
-            /*11*/   1, // False
-            /*12*/   0, // True
-            /*13*/   0, // True
-            /*14*/   1, // False
-            /*15*/   0  // True
+            /*1*/    0,  // True
+            /*2*/    1,  // False
+            /*3*/    1,  // False
+            /*4*/    1,  // False
+            /*5*/    0,  // True
+            /*6*/    1,  // False
+            /*7*/    1,  // False
+            /*8*/    0,  // True
+            /*9*/    1,  // False
+            /*10*/   0,  // True
+            /*11*/   1,  // False
+            /*12*/   0,  // True
+            /*13*/   1,  // False
+            /*14*/   1,  // False
+            /*15*/   1   // False
     };
 
     /*
@@ -157,57 +162,57 @@ public class e_Module_8_2 {
     }
 
     public static final String[] post_test_lesson_8_2_questions_medium = {
-            /*1*/    "What is the main purpose of bottom-up parsing?",
-            /*2*/    "Which of the following is the most general form of LR parsing?",
-            /*3*/    "In shift-reduce parsing, what does 'shift' mean?",
-            /*4*/    "Which of the following is not a type of LR parser?",
-            /*5*/    "The parsing table in LR parsing decides actions like shift, reduce, accept, or:",
-            /*6*/    "In shift-reduce parsing, what is reduced to non-terminals?",
-            /*7*/    "What does LR stand for in LR parsing?",
-            /*8*/    "Which of the following is the simplest form of LR parsing?",
-            /*9*/    "What does the stack in shift-reduce parsing hold?",
-            /*10*/   "Which part of the parsing process does LR parsing handle more effectively than LL(1) parsing?",
-            /*11*/   "What does ‘F’ typically represent in parsing grammars like the one used in this lesson?",
-            /*12*/   "Which of the following correctly defines LALR parsing?",
-            /*13*/   "Which parsing technique uses both a stack and input buffer?",
-            /*14*/   "In bottom-up parsing, the grammar production rule applied to reduce symbols is based on:",
-            /*15*/   "Which of the following is a key characteristic of LR parsers?"
+            /*1*/    "Which parsing technique does Shift-Reduce Parsing belong to?",
+            /*2*/    "What is the function of a stack in Shift-Reduce Parsing?",
+            /*3*/    "What does LR in LR parsing stand for?",
+            /*4*/    "What is the simplest form of LR parsing?",
+            /*5*/    "Which of the following is not an action in the parsing table for LR parsers?",
+            /*6*/    "In Shift-Reduce Parsing, which of the following happens after shifting a symbol onto the stack?",
+            /*7*/    "Which of the following parsers can handle the largest class of grammars?",
+            /*8*/    "Which technique is used to produce a rightmost derivation in reverse?",
+            /*9*/    "What is the purpose of the parsing table in LR Parsing?",
+            /*10*/   "In the grammar: E→ E + T | T, what would be the first step in Shift-Reduce Parsing for the input 'id + id'?",
+            /*11*/   "Which parser variation is most commonly used in compilers?",
+            /*12*/   "What does LR parsing do when it encounters an error?",
+            /*13*/   "Which of the following is a key characteristic of LR parsing?",
+            /*14*/   "Which parser variation allows for lookahead to make parsing decisions?",
+            /*15*/   "Which of the following is an example of bottom-up parsing?"
     };
 
     public static final String[][] post_test_lesson_8_2_choices_medium = {
-            /*1*/    {"To construct the parse tree from the root", "To construct the parse tree from the leaves", "To predict the next input symbol", "To simplify the grammar"},
-            /*2*/    {"SLR", "Canonical LR", "LALR", "Top-down"},
-            /*3*/    {"Remove the symbol from the stack", "Push the input symbol onto the stack", "Apply a production rule", "Accept the input"},
-            /*4*/    {"SLR", "LALR", "Canonical LR", "Predictive LR"},
-            /*5*/    {"Insert", "Error", "Predict", "Parse"},
-            /*6*/    {"Terminals", "Production rules", "Handles", "Tokens"},
-            /*7*/    {"Left to right parsing of leftmost derivation", "Left to right parsing of rightmost derivation in reverse", "Right to left parsing of rightmost derivation", "Right to left parsing of leftmost derivation"},
-            /*8*/    {"LALR", "Canonical LR", "SLR", "LL(1)"},
-            /*9*/    {"Input buffer symbols", "Production rules", "Grammar symbols", "Terminals only"},
-            /*10*/   {"Predicting terminal symbols", "Reducing non-terminals", "Handling a wider range of grammars", "Scanning input tokens"},
-            /*11*/   {"Function", "Factor", "Fragment", "Formula"},
-            /*12*/   {"Lookahead LR", "Left Action LR", "Less Ambiguous LR", "Logical Action LR"},
-            /*13*/   {"LL(1)", "Shift-reduce parsing", "Predictive parsing", "Recursive descent parsing"},
-            /*14*/   {"Leftmost derivation", "Rightmost derivation in reverse", "Context-free grammar simplification", "LL(1) predictive parsing"},
-            /*15*/   {"They always produce a leftmost derivation", "They can handle ambiguous grammars", "They parse from the start symbol to terminals", "They use a parsing table for decision making"}
+            /*1*/    {"Top-Down", "Bottom-Up", "Recursive", "Predictive"},
+            /*2*/    {"To hold input symbols", "To store grammar rules", "To hold grammar symbols and input buffer", "To store errors"},
+            /*3*/    {"Left to Right", "Lookahead Right", "Last Right", "Left Recursive"},
+            /*4*/    {"Canonical LR", "SLR", "LALR", "CLR"},
+            /*5*/    {"Shift", "Reduce", "Derive", "Accept"},
+            /*6*/    {"Parsing complete", "Immediate reduction", "Comparison with the input buffer", "Application of production rules"},
+            /*7*/    {"SLR", "Canonical LR", "LALR", "Recursive Descent"},
+            /*8*/    {"LL Parsing", "Recursive Parsing", "LR Parsing", "Predictive Parsing"},
+            /*9*/    {"To store tokens", "To decide shift and reduce actions", "To generate errors", "To create parse trees"},
+            /*10*/   {"Reduce E to id", "Shift the first token id", "Reduce T to E", "Shift the '+' symbol"},
+            /*11*/   {"SLR", "LALR", "Canonical LR", "LL(1)"},
+            /*12*/   {"Shifts the next token", "Performs a reduction", "Accepts the input", "Signals an error in the table"},
+            /*13*/   {"Top-down parsing", "Uses predictive methods", "Rightmost derivation in reverse", "Immediate left recursion"},
+            /*14*/   {"Canonical LR", "SLR", "LALR", "Predictive"},
+            /*15*/   {"LL(1) Parsing", "Recursive Descent", "Shift-Reduce Parsing", "Predictive Parsing"}
     };
 
     public static final int[] post_test_lesson_8_2_answers_medium = {
-            /*1*/    1, // To construct the parse tree from the leaves
-            /*2*/    1, // Canonical LR
-            /*3*/    1, // Push the input symbol onto the stack
-            /*4*/    3, // Predictive LR
-            /*5*/    1, // Error
-            /*6*/    2, // Handles
-            /*7*/    1, // Left to right parsing of rightmost derivation in reverse
-            /*8*/    2, // SLR
-            /*9*/    2, // Grammar symbols
-            /*10*/   2, // Handling a wider range of grammars
-            /*11*/   1, // Factor
-            /*12*/   0, // Lookahead LR
-            /*13*/   1, // Shift-reduce parsing
-            /*14*/   1, // Rightmost derivation in reverse
-            /*15*/   3  // They use a parsing table for decision making
+            /*1*/    1,  // "Bottom-Up"
+            /*2*/    2,  // "To hold grammar symbols and input buffer"
+            /*3*/    0,  // "Left to Right"
+            /*4*/    1,  // "SLR"
+            /*5*/    2,  // "Derive"
+            /*6*/    3,  // "Application of production rules"
+            /*7*/    1,  // "Canonical LR"
+            /*8*/    2,  // "LR Parsing"
+            /*9*/    1,  // "To decide shift and reduce actions"
+            /*10*/   1,  // "Shift the first token id"
+            /*11*/   1,  // "LALR"
+            /*12*/   3,  // "Signals an error in the table"
+            /*13*/   2,  // "Rightmost derivation in reverse"
+            /*14*/   2,  // "LALR"
+            /*15*/   2   // "Shift-Reduce Parsing"
     };
 
     /*
@@ -226,38 +231,39 @@ public class e_Module_8_2 {
     }
 
     public static final String[] post_test_lesson_8_2_questions_hard = {
-            /*1*/    "What parsing technique uses a stack and input buffer?",
-            /*2*/    "What is the simplest form of LR parsing?",
-            /*3*/    "What type of parser reads left to right?",
-            /*4*/    "What is used to decide actions in LR parsing?",
-            /*5*/    "What parser variation is commonly used in compilers?",
-            /*6*/    "What is a substring reduced during parsing?",
-            /*7*/    "What does LR parsing handle more than LL(1)?",
-            /*8*/    "What parsing method produces reverse derivation?",
-            /*9*/    "What is the second step in shift-reduce parsing?",
-            /*10*/   "What is the starting point for bottom-up parsing?",
-            /*11*/   "What represents a non-terminal in grammars?",
-            /*12*/   "What structure is used for reduction in shift-reduce parsing?",
-            /*13*/   "What does LR stand for?",
-            /*14*/   "What action does shift-reduce parsing take when no rule applies?",
-            /*15*/   "What method processes context-free grammars?"
+            /*1*/    "Identify the parsing technique that uses a stack to hold grammar symbols and an input buffer for the remaining string.",
+            /*2*/    "Name the parsing table used in LR Parsing to decide actions.",
+            /*3*/    "Which bottom-up parsing approach is the most common?",
+            /*4*/    "Identify the simplest form of LR Parsing.",
+            /*5*/    "What does the abbreviation LR stand for in LR parsing?",
+            /*6*/    "Which type of parser produces a rightmost derivation in reverse?",
+            /*7*/    "Name the action taken in Shift-Reduce Parsing when a symbol is pushed onto the stack.",
+            /*8*/    "What is the most general form of LR Parsing?",
+            /*9*/    "Identify the type of grammar that LR parsing can handle that is more powerful than LL(1) grammar.",
+            /*10*/   "Name the action in LR parsing when a handle is replaced by a non-terminal.",
+            /*11*/   "What is the key characteristic that distinguishes LALR from other LR parsers?",
+            /*12*/   "Which action in Shift-Reduce Parsing corresponds to accepting the input string?",
+            /*13*/   "Name the grammar symbol that Shift-Reduce Parsing aims to reduce the input to.",
+            /*14*/   "What does LALR stand for in LR Parsing?",
+            /*15*/   "Which parser is used most in modern compiler design?"
     };
 
     public static final String[] post_test_lesson_8_2_answers_hard = {
-            /*1*/    "shift-reduce",
-            /*2*/    "simple LR",
-            /*3*/    "LR parser",
-            /*4*/    "parsing table",
-            /*5*/    "lookahead LR",
-            /*6*/    "Handle symbol",
-            /*7*/    "wider grammars",
-            /*8*/    "LR parsing",
-            /*9*/    "reduce action",
-            /*10*/   "input symbols",
-            /*11*/   "grammar symbol",
-            /*12*/   "parse tree",
-            /*13*/   "left-right",
-            /*14*/   "error state",
-            /*15*/   "bottom-up parsing"
+            /*1*/    "shift-reduce parsing",
+            /*2*/    "parsing table",
+            /*3*/    "shift-reduce parsing",
+            /*4*/    "SLR",
+            /*5*/    "left to right",
+            /*6*/    "LR parser",
+            /*7*/    "shift",
+            /*8*/    "canonical LR",
+            /*9*/    "context-free grammar",
+            /*10*/   "reduce",
+            /*11*/   "lookahead",
+            /*12*/   "accept",
+            /*13*/   "start Symbol",
+            /*14*/   "lookahead LR",
+            /*15*/   "LALR parser"
     };
+
 }

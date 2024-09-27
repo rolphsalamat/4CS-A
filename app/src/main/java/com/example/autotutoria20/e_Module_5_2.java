@@ -15,101 +15,101 @@ public class e_Module_5_2 {
 
     public static e_Question[] get_PreTest_Lesson2_Questions() {
         return e_Module_5.getPreTestQuestions(
-                pre_test_lesson2_questions,
-                pre_test_lesson2_choices,
-                pre_test_lesson2_answers
+                pre_test_lesson_2_questions,
+                pre_test_lesson_2_choices,
+                pre_test_lesson_2_answers
         );
     }
 
-    public static final String[] pre_test_lesson2_questions = {
-            /*1*/    "Which of the following is true about a parse tree?",
-            /*2*/    "What do the leaves of a parse tree represent?",
-            /*3*/    "The root of a parse tree is typically associated with which element?",
-            /*4*/    "Which of the following is NOT true about parse trees?",
-            /*5*/    "In a parse tree, which component is associated with non-terminal symbols?",
-            /*6*/    "What is the purpose of constructing a parse tree?",
-            /*7*/    "Which of the following best describes an ambiguous grammar?",
-            /*8*/    "Which of the following statements is true about terminal symbols in a parse tree?",
-            /*9*/    "What is the main difference between a parse tree and an abstract syntax tree (AST)?",
-            /*10*/   "Which of the following is an essential step in constructing a parse tree?",
-            /*11*/   "Which of the following is true about ambiguous grammars?",
-            /*12*/   "In a parse tree, the process of applying production rules starts from:",
-            /*13*/   "Which type of grammar typically constructs parse trees?",
-            /*14*/   "Which of the following is NOT an element found in a parse tree?",
-            /*15*/   "Which structure is used to represent the hierarchical structure of a language's syntax?"
+    public static final String[] pre_test_lesson_2_questions = {
+            /*1*/    "What is the primary difference between terminals and non-terminals in a parse tree?",
+            /*2*/    "In which phase of a compiler is the parse tree most actively used?",
+            /*3*/    "What is the role of a context-free grammar (CFG) in constructing a parse tree?",
+            /*4*/    "Which of the following statements is true about ambiguous grammars and parse trees?",
+            /*5*/    "In a parse tree, the internal nodes represent which of the following?",
+            /*6*/    "What does the root node of a parse tree correspond to?",
+            /*7*/    "What is the main advantage of using parse trees in programming language compilers?",
+            /*8*/    "How does a leftmost derivation in a parse tree proceed?",
+            /*9*/    "What does a production rule define in the context of a parse tree?",
+            /*10*/   "Which of the following best describes the structure of a parse tree?",
+            /*11*/   "In a parse tree, what is the relationship between the root node and the leaf nodes?",
+            /*12*/   "Why is it important that a parse tree be unambiguous in a compiler?",
+            /*13*/   "What is the main purpose of a parse tree in natural language processing (NLP)?",
+            /*14*/   "What is the significance of edges in a parse tree?",
+            /*15*/   "Which of the following is a common error if a parse tree is constructed incorrectly in a compiler?"
     };
 
-    public static final String[][] pre_test_lesson2_choices = {
-            /*1*/     {"The root represents the terminal symbol", "The leaves represent the non-terminal symbols", "The internal nodes represent the production rules", "The leaves represent the start symbol"},
-            /*2*/     {"Non-terminal symbols", "The input string", "Production rules", "Terminal symbols"},
-            /*3*/     {"A terminal symbol", "The start symbol of the grammar", "A non-terminal symbol", "A production rule"},
-            /*4*/     {"They represent the syntactic structure of a string", "They can have more than one valid form for ambiguous grammars", "They are only used in lexical analysis", "The leaves represent terminal symbols"},
-            /*5*/     {"Internal nodes", "Leaf nodes", "Terminal symbols", "Edges"},
-            /*6*/     {"To break down a sentence into words", "To represent the syntactic structure of a string based on grammar", "To generate lexical tokens", "To find ambiguities in the input string"},
-            /*7*/     {"A grammar that cannot generate a valid parse tree", "A grammar with multiple start symbols", "A grammar that generates more than one valid parse tree for a single string", "A grammar with no terminal symbols"},
-            /*8*/     {"They appear at the root of the tree", "They are located at the leaves of the tree", "They correspond to the non-terminal symbols of the grammar", "They represent the production rules"},
-            /*9*/     {"An AST represents all the production rules while a parse tree does not", "A parse tree shows all the syntactic details while an AST abstracts unnecessary details", "A parse tree is used in lexical analysis and an AST is used in syntax analysis", "An AST is more commonly used in natural language processing"},
-            /*10*/     {"Identifying the lexical tokens of the input string", "Starting from the terminal symbols and moving upward", "Applying production rules starting from the root node", "Labeling each node with a numerical value"},
-            /*11*/    {"They can result in multiple valid parse trees for the same string", "They always produce only one parse tree", "They cannot be used to generate any valid parse tree", "They are used exclusively in machine learning"},
-            /*12*/    {"The leaves and moves upwards", "The root and moves downwards", "The leftmost terminal symbol", "The rightmost non-terminal symbol"},
-            /*13*/    {"Regular grammar", "Context-free grammar", "Context-sensitive grammar", "Unrestricted grammar"},
-            /*14*/    {"Terminal symbols", "Production rules", "Non-terminal symbols", "Ambiguous rules"},
-            /*15*/    {"Finite State Automaton", "Lexical Analyzer", "Parse Tree", "Transition Table"}
+    public static final String[][] pre_test_lesson_2_choices = {
+            /*1*/    {"Terminals can be broken down further, while non-terminals cannot.", "Non-terminals are internal nodes, while terminals are leaf nodes.", "Terminals represent the root of the tree, while non-terminals are leaf nodes.", "Non-terminals define the structure, while terminals represent operators."},
+            /*2*/    {"Lexical analysis", "Syntax analysis", "Code generation", "Semantic analysis"},
+            /*3*/    {"It specifies how a string of terminals is derived.", "It generates all possible outputs of a program.", "It verifies the correctness of a derivation.", "It defines the order of mathematical operations."},
+            /*4*/    {"Ambiguous grammars have multiple parse trees for a single string.", "Ambiguous grammars generate only one parse tree for all inputs.", "Ambiguous grammars cannot generate any valid parse trees.", "Ambiguous grammars are error-free in terms of syntax."},
+            /*5*/    {"Characters in the input string", "Operations or non-terminal symbols", "Final output of the program", "The start symbol"},
+            /*6*/    {"The first terminal symbol", "The start symbol of the grammar", "The most complex production rule", "The longest terminal string"},
+            /*7*/    {"They allow for code optimization.", "They simplify debugging.", "They help visualize the hierarchical structure of the code.", "They reduce memory usage."},
+            /*8*/    {"By replacing the rightmost non-terminal first", "By expanding the leftmost non-terminal first", "By converting terminals into non-terminals", "By ignoring non-terminal symbols"},
+            /*9*/    {"How a non-terminal can be expanded into terminals and other non-terminals", "How terminals are directly converted into program output", "The speed of program execution", "The size of the parse tree"},
+            /*10*/   {"It has a root node, branches, and leaf nodes.", "It has a root node and multiple terminals as branches.", "It consists only of leaf nodes.", "It does not have a hierarchical structure."},
+            /*11*/   {"The root node is always a terminal symbol, and leaf nodes are non-terminals.", "The root node is derived first, and leaf nodes represent terminal symbols.", "The leaf nodes are derived first, and the root node is always non-terminal.", "The leaf nodes contain production rules, and the root node represents the final string."},
+            /*12*/   {"To ensure efficient program execution", "To guarantee a single, correct structure for any input", "To allow for multiple interpretations of the input", "To simplify the derivation of new languages"},
+            /*13*/   {"To identify syntactical errors in a program", "To structure sentences according to grammar rules", "To create new programming languages", "To increase computational efficiency"},
+            /*14*/   {"They define the sequence of input tokens.", "They connect the parent node to its children, representing the application of production rules.", "They separate non-terminals from terminals.", "They help organize the branches based on memory usage."},
+            /*15*/   {"Lexical errors", "Syntactic ambiguity", "Memory overflow", "Semantic correctness"}
     };
 
-    public static final int[] pre_test_lesson2_answers = {
-            /*1*/     2, // The internal nodes represent the production rules
-            /*2*/     3, // Terminal symbols
-            /*3*/     1, // The start symbol of the grammar
-            /*4*/     2, // They are only used in lexical analysis
-            /*5*/     0, // Internal nodes
-            /*6*/     1, // To represent the syntactic structure of a string based on grammar
-            /*7*/     2, // A grammar that generates more than one valid parse tree for a single string
-            /*8*/     1, // They are located at the leaves of the tree
-            /*9*/     1, // A parse tree shows all the syntactic details while an AST abstracts unnecessary details
-            /*10*/     2, // Applying production rules starting from the root node
-            /*11*/    0, // They can result in multiple valid parse trees for the same string
-            /*12*/    1, // The root and moves downwards
-            /*13*/    1, // Context-free grammar
-            /*14*/    3, // Ambiguous rules
-            /*15*/    2  // Parse Tree
+    public static final int[] pre_test_lesson_2_answers = {
+            /*1*/    1, // Non-terminals are internal nodes, while terminals are leaf nodes.
+            /*2*/    1, // Syntax analysis
+            /*3*/    0, // It specifies how a string of terminals is derived.
+            /*4*/    0, // Ambiguous grammars have multiple parse trees for a single string.
+            /*5*/    1, // Operations or non-terminal symbols
+            /*6*/    1, // The start symbol of the grammar
+            /*7*/    2, // They help visualize the hierarchical structure of the code.
+            /*8*/    1, // By expanding the leftmost non-terminal first
+            /*9*/    0, // How a non-terminal can be expanded into terminals and other non-terminals
+            /*10*/   0, // It has a root node, branches, and leaf nodes.
+            /*11*/   1, // The root node is derived first, and leaf nodes represent terminal symbols.
+            /*12*/   1, // To guarantee a single, correct structure for any input
+            /*13*/   1, // To structure sentences according to grammar rules
+            /*14*/   1, // They connect the parent node to its children, representing the application of production rules.
+            /*15*/   1  // Syntactic ambiguity
     };
 
     /*
     +----------------------+
     |       POST-TEST      |
-    |        EASY          |
+    |          EASY        |
     +----------------------+
     */
 
     public static e_Question[] get_PostTest_Lesson2_Easy_Questions() {
         return e_Module_5.get_PostTest_EasyMedium_Questions(
-                post_test_lesson2_questions_easy,
-                post_test_lesson2_choices_easy,
-                post_test_lesson2_answers_easy,
+                post_test_lesson_2_questions_easy,
+                post_test_lesson_2_choices_easy,
+                post_test_lesson_2_answers_easy,
                 e_Question.Difficulty.EASY
         );
     }
 
-    public static final String[] post_test_lesson2_questions_easy = {
-            /*1*/    "A derivation is a sequence of production rule applications that generate a string.",
-            /*2*/    "A parse tree visually represents the hierarchical structure of a derivation.",
-            /*3*/    "In a parse tree the root node always represents the start symbol of the grammar.",
-            /*4*/    "A leftmost derivation replaces the leftmost non-terminal at each step of the derivation process.",
-            /*5*/    "A rightmost derivation replaces the rightmost non-terminal at each step of the derivation process.",
-            /*6*/    "Every valid string in a language generated by a grammar can be represented by exactly one parse tree.",
-            /*7*/    "A parse tree can only be constructed using a leftmost derivation.",
-            /*8*/    "Parse trees can be used to check if a string belongs to the language defined by a grammar.",
-            /*9*/    "Both leftmost and rightmost derivations can generate the same parse tree for a string.",
-            /*10*/   "The internal nodes of a parse tree always represent terminal symbols.",
-            /*11*/   "In a derivation the non-terminal symbols are replaced by terminal symbols according to the production rules of the grammar.",
-            /*12*/   "A parse tree only represents the structure of a sentence not its meaning.",
-            /*13*/   "The leaf nodes of a parse tree are always terminal symbols.",
-            /*14*/   "A single derivation can correspond to multiple parse trees.",
-            /*15*/   "A parse tree is a representation that only applies to lexical analysis."
+    public static final String[] post_test_lesson_2_questions_easy = {
+            /*1*/    "The leftmost derivation expands the leftmost non-terminal first.",
+            /*2*/    "A rightmost derivation expands non-terminals in a left-to-right sequence.",
+            /*3*/    "Every parse tree corresponds to a unique leftmost derivation.",
+            /*4*/    "A derivation process can have multiple corresponding parse trees.",
+            /*5*/    "Both leftmost and rightmost derivations yield the same parse tree for a given string.",
+            /*6*/    "Derivations and parse trees are distinct but related representations of grammar structure.",
+            /*7*/    "A derivation tree and a parse tree are two names for the same structure.",
+            /*8*/    "Leftmost derivation always results in ambiguous grammar.",
+            /*9*/    "A parse tree can represent both terminals and non-terminals.",
+            /*10*/   "The root of a parse tree represents the start symbol of the grammar.",
+            /*11*/   "In a parse tree, leaf nodes are always non-terminals.",
+            /*12*/   "Rightmost derivation expands the rightmost non-terminal first.",
+            /*13*/   "A parse tree cannot be constructed from a rightmost derivation.",
+            /*14*/   "An ambiguous grammar has more than one possible derivation for some strings.",
+            /*15*/   "The number of nodes in a parse tree is directly related to the number of terminals in the input string."
     };
 
-    public static final String[][] post_test_lesson2_choices_easy = {
+    public static final String[][] post_test_lesson_2_choices_easy = {
             /*1*/    {"True", "False"},
             /*2*/    {"True", "False"},
             /*3*/    {"True", "False"},
@@ -127,22 +127,22 @@ public class e_Module_5_2 {
             /*15*/   {"True", "False"}
     };
 
-    public static final int[] post_test_lesson2_answers_easy = {
+    public static final int[] post_test_lesson_2_answers_easy = {
             /*1*/    0, // True
-            /*2*/    0, // True
+            /*2*/    1, // False
             /*3*/    0, // True
             /*4*/    0, // True
             /*5*/    0, // True
             /*6*/    0, // True
-            /*7*/    1, // False
-            /*8*/    0, // True
+            /*7*/    0, // True
+            /*8*/    1, // False
             /*9*/    0, // True
-            /*10*/   1, // False
-            /*11*/   0, // True
+            /*10*/   0, // True
+            /*11*/   1, // False
             /*12*/   0, // True
-            /*13*/   0, // True
+            /*13*/   1, // False
             /*14*/   0, // True
-            /*15*/   1  // False
+            /*15*/   0  // True
     };
 
     /*
@@ -154,115 +154,115 @@ public class e_Module_5_2 {
 
     public static e_Question[] get_PostTest_Lesson2_Medium_Questions() {
         return e_Module_5.get_PostTest_EasyMedium_Questions(
-                post_test_lesson2_questions_medium,
-                post_test_lesson2_choices_medium,
-                post_test_lesson2_answers_medium,
+                post_test_lesson_2_questions_medium,
+                post_test_lesson_2_choices_medium,
+                post_test_lesson_2_answers_medium,
                 e_Question.Difficulty.MEDIUM
         );
     }
 
-    public static final String[] post_test_lesson2_questions_medium = {
-            /*1*/    "What does a derivation represent in the context of formal grammars?",
-            /*2*/    "What is the root node of a parse tree always associated with?",
-            /*3*/    "Which derivation process involves replacing the leftmost non-terminal first?",
-            /*4*/    "What is the purpose of a parse tree?",
-            /*5*/    "In which type of derivation are the rightmost non-terminals replaced first?",
-            /*6*/    "How many parse trees can represent a valid string in a grammar with ambiguous rules?",
-            /*7*/    "What do the internal nodes of a parse tree represent?",
-            /*8*/    "Which statement is true about a leftmost and rightmost derivation for the same string?",
-            /*9*/    "What do the leaf nodes of a parse tree represent?",
-            /*10*/   "Which term refers to the structure that can be used to determine whether a string belongs to a language?",
-            /*11*/   "What is the primary difference between a leftmost derivation and a rightmost derivation?",
-            /*12*/   "In a derivation what are non-terminal symbols replaced with?",
-            /*13*/   "How does ambiguity in a grammar affect the parse trees?",
-            /*14*/   "In which phase of language processing is a parse tree typically constructed?",
-            /*15*/   "Which part of a grammar corresponds to the leaf nodes of a parse tree?"
+    public static final String[] post_test_lesson_2_questions_medium = {
+            /*1*/    "What is the primary relationship between derivations and parse trees?",
+            /*2*/    "Which derivation process involves replacing the leftmost non-terminal first?",
+            /*3*/    "What does the root node of a parse tree represent?",
+            /*4*/    "Which derivation expands the rightmost non-terminal first?",
+            /*5*/    "In a parse tree, the leaf nodes represent:",
+            /*6*/    "What kind of grammar typically generates a parse tree?",
+            /*7*/    "Which of the following statements about ambiguous grammars is correct?",
+            /*8*/    "A parse tree represents the hierarchical structure of:",
+            /*9*/    "Which of the following is true about a derivation in a grammar?",
+            /*10*/   "A parse tree is useful in which of the following fields?",
+            /*11*/   "Which part of a parse tree represents the non-terminal symbols?",
+            /*12*/   "What defines an ambiguous grammar in terms of parse trees?",
+            /*13*/   "Which derivation process is most commonly visualized with a parse tree?",
+            /*14*/   "How does a parse tree relate to a derivation process?",
+            /*15*/   "In a parse tree, what is represented by the root node?"
     };
 
-    public static final String[][] post_test_lesson2_choices_medium = {
-            /*1*/    {"A graphical representation of a string", "A step-by-step process to generate a string", "A set of rules for parsing a string", "A tree diagram"},
-            /*2*/    {"A terminal symbol", "The start symbol of the grammar", "The end of a derivation", "The longest string in the language"},
-            /*3*/    {"Rightmost derivation", "Mixed derivation", "Leftmost derivation", "Bottom-up derivation"},
-            /*4*/    {"To show the sequence of tokenization", "To visually represent the structure of a derivation", "To define the semantics of a string", "To describe the lexical analysis phase"},
-            /*5*/    {"Top-down derivation", "Leftmost derivation", "Pre-order derivation", "Rightmost derivation"},
-            /*6*/    {"Only one", "Exactly two", "More than one", "None"},
-            /*7*/    {"Terminal symbols", "Non-terminal symbols", "Token types", "Derivation steps"},
-            /*8*/    {"They always generate different parse trees", "They always generate the same parse tree", "They may generate the same parse tree", "Only the leftmost derivation can generate a parse tree"},
-            /*9*/    {"Terminal symbols", "Non-terminal symbols", "Production rules", "Start symbols"},
-            /*10*/    {"Parse tree", "Derivation graph", "Syntax chart", "Finite automaton"},
-            /*11*/    {"The order in which terminal symbols are replaced", "The position of non-terminal symbols being replaced", "The complexity of the parse tree", "The number of production rules used"},
-            /*12*/    {"Other non-terminals", "Terminals according to production rules", "Keywords of the language", "Lexical tokens"},
-            /*13*/    {"It results in more than one possible parse tree", "It makes parse trees invalid", "It restricts the number of parse trees to one", "It prevents the creation of parse trees"},
-            /*14*/    {"Semantic analysis", "Lexical analysis", "Syntax analysis", "Optimization"},
-            /*15*/    {"Non-terminal symbols", "Production rules", "Terminal symbols", "The start symbol"}
+    public static final String[][] post_test_lesson_2_choices_medium = {
+            /*1*/    {"Derivations build the parse tree node by node", "Parse trees visualize the steps of derivations", "Parse trees are derived from the terminal symbols only", "Derivations occur only for ambiguous grammars"},
+            /*2*/    {"Leftmost derivation", "Rightmost derivation", "Bottom-up derivation", "Top-down derivation"},
+            /*3*/    {"The last production rule applied", "The first terminal in the string", "The start symbol of the grammar", "The result of the derivation process"},
+            /*4*/    {"Leftmost derivation", "Rightmost derivation", "Center-out derivation", "Topmost derivation"},
+            /*5*/    {"Non-terminal symbols", "Terminal symbols", "Start symbols", "Production rules"},
+            /*6*/    {"Regular grammar", "Context-free grammar", "Context-sensitive grammar", "Phrase structure grammar"},
+            /*7*/    {"Ambiguous grammars allow only one parse tree per string.", "Ambiguous grammars have more than one derivation for some strings.", "Ambiguous grammars are not related to parse trees.", "Ambiguous grammars are errors in programming."},
+            /*8*/    {"Tokens", "Operators", "Sentences according to grammar rules", "Programming logic"},
+            /*9*/    {"It defines the flow of control in a program", "It breaks down a string into terminals and non-terminals", "It checks for syntax errors in a program", "It is used only in machine learning algorithms"},
+            /*10*/   {"Arithmetic calculations", "Syntax analysis in compilers", "Database optimization", "Physical simulations"},
+            /*11*/   {"Root nodes", "Leaf nodes", "Interior nodes", "Edge nodes"},
+            /*12*/   {"It has the same parse tree for all strings.", "It generates multiple valid parse trees for a single string.", "It cannot generate a parse tree at all.", "It only generates invalid strings."},
+            /*13*/   {"Semantic derivation", "Leftmost derivation", "Lexical derivation", "Functional derivation"},
+            /*14*/   {"It shows the chronological steps of the derivation.", "It reverses the derivation order.", "It skips non-terminal steps.", "It only shows the end result of the derivation."},
+            /*15*/   {"The last non-terminal in the string", "The start symbol of the grammar", "The last terminal in the string", "The first production rule"}
     };
 
-    public static final int[] post_test_lesson2_answers_medium = {
-            /*1*/    1, // A step-by-step process to generate a string
-            /*2*/    1, // The start symbol of the grammar
-            /*3*/    2, // Leftmost derivation
-            /*4*/    1, // To visually represent the structure of a derivation
-            /*5*/    3, // Rightmost derivation
-            /*6*/    2, // More than one
-            /*7*/    1, // Non-terminal symbols
-            /*8*/    2, // They may generate the same parse tree
-            /*9*/    0, // Terminal symbols
-            /*10*/    0, // Parse tree
-            /*11*/    1, // The position of non-terminal symbols being replaced
-            /*12*/    1, // Terminals according to production rules
-            /*13*/    0, // It results in more than one possible parse tree
-            /*14*/    2, // Syntax analysis
-            /*15*/    2  // Terminal symbols
+    public static final int[] post_test_lesson_2_answers_medium = {
+            /*1*/    1, // Parse trees visualize the steps of derivations
+            /*2*/    0, // Leftmost derivation
+            /*3*/    2, // The start symbol of the grammar
+            /*4*/    1, // Rightmost derivation
+            /*5*/    1, // Terminal symbols
+            /*6*/    1, // Context-free grammar
+            /*7*/    1, // Ambiguous grammars have more than one derivation for some strings.
+            /*8*/    2, // Sentences according to grammar rules
+            /*9*/    1, // It breaks down a string into terminals and non-terminals
+            /*10*/   1, // Syntax analysis in compilers
+            /*11*/   2, // Interior nodes
+            /*12*/   1, // It generates multiple valid parse trees for a single string.
+            /*13*/   1, // Leftmost derivation
+            /*14*/   0, // It shows the chronological steps of the derivation.
+            /*15*/   1  // The start symbol of the grammar
     };
 
     /*
     +----------------------+
     |       POST-TEST      |
-    |        HARD          |
+    |         HARD         |
     +----------------------+
     */
 
     public static e_Question[] get_PostTest_Lesson2_Hard_Questions() {
         return e_Module_5.get_PostTest_Hard_Questions(
-                post_test_lesson2_questions_hard,
-                post_test_lesson2_answers_hard,
+                post_test_lesson_2_questions_hard,
+                post_test_lesson_2_answers_hard,
                 e_Question.Difficulty.HARD
         );
     }
 
-    public static final String[] post_test_lesson2_questions_hard = {
-            /*1*/    "Identify the structure that represents the syntactic structure of a string based on a given grammar.",
-            /*2*/    "What is the process called where production rules are applied to generate a string in a formal grammar?",
-            /*3*/    "What is the starting symbol of a grammar represented in the root node of a parse tree?",
-            /*4*/    "What do you call a derivation that replaces the leftmost non-terminal first?",
-            /*5*/    "What type of derivation replaces the rightmost non-terminal at each step?",
-            /*6*/    "What type of symbols are represented by internal nodes in a parse tree?",
-            /*7*/    "What symbols are represented by the leaf nodes in a parse tree?",
-            /*8*/    "What is a rule that defines how non-terminal symbols can be replaced by other symbols in a grammar?",
-            /*9*/    "Identify the phenomenon where a grammar allows more than one parse tree for the same string.",
-            /*10*/   "What is the process called when a string is checked to determine if it belongs to a language defined by a grammar?",
-            /*11*/   "What is another term for a parse tree that represents the structure of a sentence based on syntax?",
-            /*12*/   "In a leftmost derivation which side of the string contains the non-terminal that is replaced first?",
-            /*13*/   "What term describes a grammar that can generate multiple parse trees for the same string?",
-            /*14*/   "In which phase of a compiler is a parse tree typically constructed?",
-            /*15*/   "Identify the structure that connects production rules with non-terminal and terminal symbols to illustrate a string's formation."
+    public static final String[] post_test_lesson_2_questions_hard = {
+            /*1*/    "What is the process called where a string is repeatedly transformed by applying production rules until it consists only of terminal symbols?",
+            /*2*/    "What graphical tool is used to represent both the syntactic structure and derivation process in a formal grammar?",
+            /*3*/    "What is the term for a sequence of production rules that leads from the start symbol to a terminal string?",
+            /*4*/    "In formal grammar, what is used to describe the set of rules that governs the syntax of a language?",
+            /*5*/    "What type of derivation starts by expanding the leftmost non-terminal symbol and continues until only terminals remain?",
+            /*6*/    "What are the non-terminal symbols that can be further expanded using production rules in a derivation process?",
+            /*7*/    "What term describes a grammar that has more than one valid derivation or parse tree for some strings?",
+            /*8*/    "What kind of node in a parse tree directly corresponds to the application of a production rule?",
+            /*9*/    "In a context-free grammar, what is the term for the initial symbol from which derivations begin?",
+            /*10*/   "Which grammar rule format is used to transform non-terminal symbols into other non-terminals or terminals?",
+            /*11*/   "What is the step-by-step process of applying production rules to generate a terminal string called?",
+            /*12*/   "What is the term for the hierarchical representation of syntactic rules used to analyze sentences in programming languages?",
+            /*13*/   "What do we call the sequence of transformations applied to derive a string from a grammar’s start symbol?",
+            /*14*/   "What part of a parse tree contains both the terminal and non-terminal symbols?",
+            /*15*/   "What is the formal system that defines how sentences in a language are generated and structured?"
     };
 
-    public static final String[] post_test_lesson2_answers_hard = {
-            /*1*/    "parse tree",
-            /*2*/    "derivation",
-            /*3*/    "start symbol",
-            /*4*/    "leftmost derivation",
-            /*5*/    "rightmost derivation",
-            /*6*/    "non-terminal symbols",
-            /*7*/    "terminal symbols",
-            /*8*/    "production rule",
-            /*9*/    "ambiguity",
-            /*10*/    "parsing",
-            /*11*/    "syntax tree",
-            /*12*/    "left",
-            /*13*/    "ambiguous grammar",
-            /*14*/    "syntax analysis",
-            /*15*/    "parse tree"
+    public static final String[] post_test_lesson_2_answers_hard = {
+            /*1*/    "string derivation",
+            /*2*/    "derivation tree",
+            /*3*/    "derivation sequence",
+            /*4*/    "context-free grammar",
+            /*5*/    "leftmost derivation",
+            /*6*/    "variables",
+            /*7*/    "ambiguous grammar",
+            /*8*/    "parent node",
+            /*9*/    "start symbol",
+            /*10*/   "production rule",
+            /*11*/   "recursive derivation",
+            /*12*/   "syntax tree",
+            /*13*/   "production sequence",
+            /*14*/   "branches",
+            /*15*/   "generative grammar"
     };
 }

@@ -9,7 +9,6 @@ public class e_Module_6_2 {
     /*
     +----------------------+
     |       PRE-TEST       |
-    |        LESSON   2    |
     +----------------------+
     */
 
@@ -22,57 +21,57 @@ public class e_Module_6_2 {
     }
 
     public static final String[] pre_test_lesson_2_questions = {
-            /*1*/    "What defines an ambiguous grammar?",
-            /*2*/    "Which of the following is true about ambiguous grammars?",
-            /*3*/    "What is the primary challenge of ambiguity in grammars?",
-            /*4*/    "Which of the following is an example of an ambiguous expression?",
-            /*5*/    "Why is ambiguity undesirable in programming language grammars?",
-            /*6*/    "In which type of language is ambiguity more frequently encountered?",
-            /*7*/    "A grammar is called ambiguous if it:",
-            /*8*/    "Which type of grammar does not allow ambiguity?",
-            /*9*/    "Ambiguous grammar is problematic in:",
-            /*10*/   "What is a possible solution to resolve ambiguity in a grammar?",
-            /*11*/   "Ambiguity in context-free grammar often leads to:",
-            /*12*/   "Which of the following helps resolve ambiguity in grammars?",
-            /*13*/   "Which of the following sentences would most likely have an ambiguous parse tree?",
-            /*14*/   "What makes a sentence ambiguous in a CFG?",
-            /*15*/   "In terms of CFG what is ambiguity?"
+            /*1*/    "What is a primary challenge when working with ambiguous grammars in computer language processing?",
+            /*2*/    "In context-free grammars, ambiguity typically arises when:",
+            /*3*/    "What type of derivation is typically used to resolve ambiguity in grammars?",
+            /*4*/    "Which of the following would indicate that a grammar is unambiguous?",
+            /*5*/    "When simplifying a grammar to remove ambiguity, which method is commonly used?",
+            /*6*/    "Which of the following is not a factor that contributes to ambiguity in a grammar?",
+            /*7*/    "What happens when a string has multiple valid parse trees?",
+            /*8*/    "Which parsing technique would you choose to avoid ambiguity in grammars?",
+            /*9*/    "When checking for ambiguity in a grammar, which part of the process is analyzed?",
+            /*10*/   "Which of the following is a correct strategy to handle grammar ambiguity in a parser?",
+            /*11*/   "Why is ambiguity problematic in context-free grammars used in programming languages?",
+            /*12*/   "Which of the following grammars will always result in unambiguous parsing?",
+            /*13*/   "Which is a key indicator that a grammar contains ambiguity?",
+            /*14*/   "Ambiguous grammars are problematic in which context?",
+            /*15*/   "Which concept describes a situation where a sentence can be derived from a grammar in multiple ways?"
     };
 
     public static final String[][] pre_test_lesson_2_choices = {
-            /*1*/    {"A grammar with no production rules", "A grammar with more than one parse tree for some sentences", "A grammar that only generates one parse tree", "A grammar used only for arithmetic expressions"},
-            /*2*/    {"They can generate more than one parse tree for a sentence", "They are always preferable for language design", "They eliminate the need for parsing", "They only exist in natural language processing"},
-            /*3*/    {"It simplifies language interpretation", "It can lead to multiple interpretations of a sentence", "It eliminates the need for parsing algorithms", "It makes grammars unusable"},
-            /*4*/    {"id+id∗id", "id→id+id", "id→id", "id−id"},
-            /*5*/    {"It requires fewer production rules", "It leads to different interpretations of code", "It simplifies the parsing process", "It enhances compiler efficiency"},
-            /*6*/    {"Natural languages", "Programming languages", "Formal languages", "None of the above"},
-            /*7*/    {"Has only one derivation for each sentence", "Has multiple derivations for at least one sentence", "Does not produce any sentences", "Only generates natural language sentences"},
-            /*8*/    {"Ambiguous grammar", "Context-free grammar", "Unambiguous grammar", "All grammars allow ambiguity"},
-            /*9*/    {"Compilers and parsers", "Syntax analysis of programming languages", "Both a and b", "None of the above"},
-            /*10*/   {"Ignoring it", "Rewriting the production rules", "Adding more symbols", "None of the above"},
-            /*11*/   {"One unique derivation", "Faster parsing times", "Multiple valid parse trees", "No valid sentences being generated"},
-            /*12*/   {"Removing recursion", "Using more non-terminal symbols", "Refining production rules", "Changing the grammar to a different language"},
-            /*13*/   {"A sentence with a single noun and verb", "A complex arithmetic expression with multiple operators", "A sentence with only one possible interpretation", "None of the above"},
-            /*14*/   {"It cannot be derived using the grammar", "It can be derived using only one production rule", "It can be derived using multiple parse trees", "It is not part of the language"},
-            /*15*/   {"A feature that simplifies parsing", "The presence of multiple interpretations for a single sentence", "The use of only terminal symbols in a grammar", "A solution to eliminate all derivations"}
+            /*1*/    {"Multiple meanings of a single string", "No possibility of generating terminal symbols", "Only one derivation is possible", "Left recursion is not allowed"},
+            /*2*/    {"The same string has more than one valid parse tree", "Non-terminal symbols are not properly defined", "Only terminal symbols are present in the grammar", "There is no derivation for a string"},
+            /*3*/    {"Leftmost derivation", "Rightmost derivation", "Both leftmost and rightmost derivation", "None of the above"},
+            /*4*/    {"Every string generates exactly one parse tree", "Each string generates multiple derivation trees", "The grammar produces terminal symbols only", "All derivations start with a terminal symbol"},
+            /*5*/    {"Removing left recursion", "Adding more terminal symbols", "Left factoring", "Adding random productions"},
+            /*6*/    {"Overlapping rules for the same string", "Multiple leftmost derivations for a string", "No rightmost derivation possible for any string", "Multiple parse trees for a single string"},
+            /*7*/    {"The string cannot be generated by the grammar", "The string is unambiguous", "The grammar is considered ambiguous", "The parse trees are considered invalid"},
+            /*8*/    {"GLR parser", "SLR parser", "LL(1) parser", "All of the above"},
+            /*9*/    {"Only the terminal symbols", "The number of parse trees generated for a string", "The total number of derivations for each string", "Whether each string contains non-terminal symbols"},
+            /*10*/   {"Removing terminal symbols", "Adding more rules to the grammar", "Left factoring the grammar", "Ignoring ambiguous strings"},
+            /*11*/   {"It leads to unclear instructions for the compiler", "It makes the grammar simpler to process", "It allows for more efficient code generation", "It ensures all strings have unique derivations"},
+            /*12*/   {"Regular grammars", "Context-sensitive grammars", "Context-free grammars with no overlapping productions", "Ambiguous grammars"},
+            /*13*/   {"There are only terminal symbols in the grammar", "It generates multiple parse trees for at least one string", "No derivation trees can be formed", "It only uses leftmost derivation"},
+            /*14*/   {"Simple text processing", "Natural language processing", "Compiler design for programming languages", "Basic arithmetic evaluation"},
+            /*15*/   {"Determinism", "Ambiguity", "Regularity", "Context-sensitivity"}
     };
 
     public static final int[] pre_test_lesson_2_answers = {
-            /*1*/    1, // 'A grammar with more than one parse tree for some sentences'
-            /*2*/    0, // 'They can generate more than one parse tree for a sentence'
-            /*3*/    1, // 'It can lead to multiple interpretations of a sentence'
-            /*4*/    0, // 'id+id∗id'
-            /*5*/    1, // 'It leads to different interpretations of code'
-            /*6*/    0, // 'Natural languages'
-            /*7*/    1, // 'Has multiple derivations for at least one sentence'
-            /*8*/    2, // 'Unambiguous grammar'
-            /*9*/    2, // 'Both a and b'
-            /*10*/   1, // 'Rewriting the production rules'
-            /*11*/   2, // 'Multiple valid parse trees'
-            /*12*/   2, // 'Refining production rules'
-            /*13*/   1, // 'A complex arithmetic expression with multiple operators'
-            /*14*/   2, // 'It can be derived using multiple parse trees'
-            /*15*/   1  // 'The presence of multiple interpretations for a single sentence'
+            /*1*/    0,  // Multiple meanings of a single string
+            /*2*/    0,  // The same string has more than one valid parse tree
+            /*3*/    2,  // Both leftmost and rightmost derivation
+            /*4*/    0,  // Every string generates exactly one parse tree
+            /*5*/    0,  // Removing left recursion
+            /*6*/    2,  // No rightmost derivation possible for any string
+            /*7*/    2,  // The grammar is considered ambiguous
+            /*8*/    0,  // GLR parser
+            /*9*/    1,  // The number of parse trees generated for a string
+            /*10*/   2,  // Left factoring the grammar
+            /*11*/   0,  // It leads to unclear instructions for the compiler
+            /*12*/   0,  // Regular grammars
+            /*13*/   1,  // It generates multiple parse trees for at least one string
+            /*14*/   2,  // Compiler design for programming languages
+            /*15*/   1   // Ambiguity
     };
 
     /*
@@ -92,21 +91,21 @@ public class e_Module_6_2 {
     }
 
     public static final String[] post_test_lesson_2_questions_easy = {
-            /*1*/    "Ambiguity in a sentence occurs when a sentence has more than one possible meaning.",
-            /*2*/    "Parentheses can be used to remove ambiguity in arithmetic expressions.",
-            /*3*/    "\"I saw her duck\" is an example of an unambiguous sentence.",
-            /*4*/    "An unambiguous grammar ensures that each valid sentence has only one correct parse tree.",
-            /*5*/    "A sentence is considered ambiguous only if its meaning can change depending on the context.",
-            /*6*/    "Adding a modifier can help make sentences more ambiguous.",
-            /*7*/    "The use of commas can help clarify meaning and reduce ambiguity in complex sentences.",
-            /*8*/    "The phrase \"The chicken is ready to eat\" is unambiguous.",
-            /*9*/    "In computational contexts ambiguity can cause syntax errors in programming.",
-            /*10*/   "Removing ambiguity from grammar is essential for accurate communication in natural and programming languages.",
-            /*11*/   "In formal grammars ambiguity occurs when two different parse trees are possible for the same sentence.",
-            /*12*/   "Using parentheses to clarify an equation is a method to avoid ambiguity.",
-            /*13*/   "\"He saw the girl with the telescope\" is an example of an unambiguous sentence.",
-            /*14*/   "Ambiguous grammar can lead to misinterpretation in formal logic and computational algorithms.",
-            /*15*/   "All languages whether natural or computational can be completely free from ambiguity."
+            /*1*/    "An unambiguous grammar ensures that every valid string has exactly one parse tree.",
+            /*2*/    "All context-free grammars are unambiguous by definition.",
+            /*3*/    "The unambiguous grammar can generate more than one parse tree for a single string.",
+            /*4*/    "It is possible to eliminate ambiguity from any given grammar.",
+            /*5*/    "A grammar is said to be unambiguous if it produces multiple leftmost derivations for a sentence.",
+            /*6*/    "If a grammar is unambiguous, it cannot be used in compilers.",
+            /*7*/    "Unambiguous grammars are useful when dealing with natural languages.",
+            /*8*/    "Removing ambiguity from a grammar always leads to a more complex grammar structure.",
+            /*9*/    "Unambiguous grammars cannot be used to define programming languages.",
+            /*10*/   "Ambiguity can exist in a context-free grammar even if it is well-formed.",
+            /*11*/   "The Chomsky Normal Form (CNF) helps to ensure a grammar is unambiguous.",
+            /*12*/   "Unambiguous grammars are considered ideal for defining formal languages.",
+            /*13*/   "In unambiguous grammars, every production rule must generate exactly one derivation.",
+            /*14*/   "The process of transforming an ambiguous grammar to an unambiguous one can sometimes eliminate valid sentences.",
+            /*15*/   "Every regular grammar is automatically unambiguous."
     };
 
     public static final String[][] post_test_lesson_2_choices_easy = {
@@ -128,21 +127,21 @@ public class e_Module_6_2 {
     };
 
     public static final int[] post_test_lesson_2_answers_easy = {
-            /*1*/    0, // True
-            /*2*/    0, // True
-            /*3*/    1, // False
-            /*4*/    0, // True
-            /*5*/    1, // False
-            /*6*/    1, // False
-            /*7*/    0, // True
-            /*8*/    1, // False
-            /*9*/    0, // True
-            /*10*/   0, // True
-            /*11*/   0, // True
-            /*12*/   0, // True
-            /*13*/   1, // False
-            /*14*/   0, // True
-            /*15*/   1  // False
+            /*1*/    0,  // True
+            /*2*/    1,  // False
+            /*3*/    1,  // False
+            /*4*/    1,  // False
+            /*5*/    1,  // False
+            /*6*/    1,  // False
+            /*7*/    0,  // True
+            /*8*/    1,  // False
+            /*9*/    1,  // False
+            /*10*/   0,  // True
+            /*11*/   1,  // False
+            /*12*/   0,  // True
+            /*13*/   1,  // False
+            /*14*/   0,  // True
+            /*15*/   0   // True
     };
 
     /*
@@ -162,57 +161,57 @@ public class e_Module_6_2 {
     }
 
     public static final String[] post_test_lesson_2_questions_medium = {
-            /*1*/    "What does it mean for a sentence to be ambiguous?",
-            /*2*/    "Which punctuation can help clarify the meaning of a sentence?",
-            /*3*/    "Which of the following is a method to make sentences unambiguous?",
-            /*4*/    "The sentence \"He fed her cat food\" could mean:",
-            /*5*/    "In programming ambiguity can lead to:",
-            /*6*/    "What kind of ambiguity arises from phrases like \"He saw the man with the telescope\"?",
-            /*7*/    "What is one solution to resolve ambiguity in formal grammar?",
-            /*8*/    "Which of the following best describes \"unambiguous grammar\" in computational terms?",
-            /*9*/    "In which case is ambiguity most likely to occur?",
-            /*10*/   "What is one common source of ambiguity in natural language?",
-            /*11*/   "Which of the following strategies helps avoid ambiguity in writing?",
-            /*12*/   "What type of grammar is essential for programming languages?",
-            /*13*/   "In the sentence \"The professor discussed the project with the student in the office\" the ambiguity arises from:",
-            /*14*/   "What is the function of parentheses in mathematical expressions?",
-            /*15*/   "What does the phrase \"a woman without her man is nothing\" exemplify?"
+            /*1*/    "What defines an unambiguous grammar?",
+            /*2*/    "Which of the following is NOT true about unambiguous grammars?",
+            /*3*/    "Ambiguity in a grammar means that:",
+            /*4*/    "Which of the following methods can be used to check if a grammar is ambiguous?",
+            /*5*/    "Which grammar property is crucial for ensuring that a programming language is parsed deterministically?",
+            /*6*/    "Which is an example of unambiguous grammar?",
+            /*7*/    "When is a grammar said to be unambiguous?",
+            /*8*/    "Which is a common application of unambiguous grammars?",
+            /*9*/    "What is the main drawback of unambiguous grammars?",
+            /*10*/   "Which feature distinguishes an unambiguous grammar from an ambiguous one?",
+            /*11*/   "How is ambiguity typically handled in grammar design?",
+            /*12*/   "Which tool is typically used to check for unambiguous grammars?",
+            /*13*/   "Which of the following is a benefit of using unambiguous grammars in compilers?",
+            /*14*/   "Which of the following properties is essential for ensuring that a grammar is unambiguous?",
+            /*15*/   "Which is NOT an approach for handling ambiguity in grammar?"
     };
 
     public static final String[][] post_test_lesson_2_choices_medium = {
-            /*1*/    {"It has no meaning", "It has multiple possible interpretations", "It is too long", "It contains complex vocabulary"},
-            /*2*/    {"Exclamation mark", "Comma", "Hyphen", "Parentheses"},
-            /*3*/    {"Using metaphors", "Adding context", "Removing verbs", "Using vague language"},
-            /*4*/    {"He fed the cat food to her", "He fed her food to the cat", "Both a and b", "Neither a nor b"},
-            /*5*/    {"Syntax errors", "Logical clarity", "Faster computation", "Automatic error correction"},
-            /*6*/    {"Lexical", "Structural", "Contextual", "Grammatical"},
-            /*7*/    {"Add more rules", "Use recursion", "Rewrite the grammar", "Ignore it"},
-            /*8*/    {"A set of rules with multiple interpretations", "A set of rules with only one valid parse tree for each sentence", "A grammar that allows multiple sentence structures", "A grammar without symbols"},
-            /*9*/    {"When using specific vocabulary", "When there is more than one subject", "When sentence structure is unclear", "When the sentence is too short"},
-            /*10*/   {"Vague pronouns", "Mathematical formulas", "Clear definitions", "Specific measurements"},
-            /*11*/   {"Using short sentences", "Using passive voice", "Clarifying pronouns", "Adding more adjectives"},
-            /*12*/   {"Ambiguous grammar", "Unambiguous grammar", "Informal grammar", "Vague grammar"},
-            /*13*/   {"The verb \"discussed\"", "The phrase \"with the student\"", "The phrase \"in the office\"", "The word \"project\""},
-            /*14*/   {"To introduce ambiguity", "To clarify the order of operations", "To separate variables", "To hide operations"},
-            /*15*/   {"A well-structured sentence", "An unambiguous sentence", "A sentence needing punctuation to avoid ambiguity", "A sentence that needs more adjectives"}
+            /*1*/    {"A grammar that generates exactly one parse tree for every valid string", "A grammar that generates multiple parse trees for the same string", "A grammar that allows context-sensitive derivations", "A grammar with no production rules"},
+            /*2*/    {"They produce unique parse trees", "They can have multiple leftmost derivations", "They are preferred in the design of compilers", "They ensure deterministic parsing"},
+            /*3*/    {"There is a conflict in the derivation rules", "Every string has more than one valid derivation", "The grammar generates a unique parse tree", "Multiple derivations exist for some strings"},
+            /*4*/    {"Checking if each non-terminal has more than one production rule", "Constructing parse trees for different derivations of the same string", "Transforming it into Chomsky Normal Form", "None of the above"},
+            /*5*/    {"Left recursion", "Ambiguity", "Unambiguity", "Right recursion"},
+            /*6*/    {"A grammar that generates strings with a unique parse tree", "A grammar that allows multiple interpretations of a sentence", "A grammar that uses complex recursive rules", "A grammar that generates strings with several derivation paths"},
+            /*7*/    {"When it generates strings with a unique derivation tree for each string", "When it has multiple ways to derive the same string", "When it contains no non-terminal symbols", "When every string has more than one valid interpretation"},
+            /*8*/    {"Parsing natural languages", "Defining programming languages", "Generating ambiguous sentences", "Writing production rules for recursion"},
+            /*9*/    {"They can be more complex and less intuitive than ambiguous grammars", "They limit the flexibility of language generation", "They may require more extensive rules to achieve unambiguity", "They generate multiple valid parse trees for the same string"},
+            /*10*/   {"Rightmost derivation", "Unique parse tree for each string", "Use of non-terminal symbols", "Left recursion"},
+            /*11*/   {"By removing production rules", "By introducing multiple derivations", "By rewriting the grammar to be unambiguous", "By adding more ambiguity"},
+            /*12*/   {"Parse trees", "Terminal symbols", "Chomsky Normal Form", "Context-sensitive rules"},
+            /*13*/   {"More flexibility in rule creation", "Deterministic parsing algorithms", "Simplified syntax generation", "Reduced parsing speed"},
+            /*14*/   {"Every non-terminal symbol has a unique production rule", "The grammar has a unique derivation for each string", "All derivations lead to multiple parse trees", "All strings generated by the grammar are ambiguous"},
+            /*15*/   {"Removing recursion", "Rewriting the grammar", "Introducing precedence rules", "Simplifying the production rules"}
     };
 
     public static final int[] post_test_lesson_2_answers_medium = {
-            /*1*/    1, // 'It has multiple possible interpretations'
-            /*2*/    3, // 'Parentheses'
-            /*3*/    1, // 'Adding context'
-            /*4*/    2, // 'Both a and b'
-            /*5*/    0, // 'Syntax errors'
-            /*6*/    1, // 'Structural'
-            /*7*/    2, // 'Rewrite the grammar'
-            /*8*/    1, // 'A set of rules with only one valid parse tree for each sentence'
-            /*9*/    2, // 'When sentence structure is unclear'
-            /*10*/   0, // 'Vague pronouns'
-            /*11*/   2, // 'Clarifying pronouns'
-            /*12*/   1, // 'Unambiguous grammar'
-            /*13*/   1, // 'The phrase "with the student"'
-            /*14*/   1, // 'To clarify the order of operations'
-            /*15*/   2  // 'A sentence needing punctuation to avoid ambiguity'
+            /*1*/    0,  // A grammar that generates exactly one parse tree for every valid string
+            /*2*/    1,  // They can have multiple leftmost derivations
+            /*3*/    3,  // Multiple derivations exist for some strings
+            /*4*/    1,  // Constructing parse trees for different derivations of the same string
+            /*5*/    2,  // Unambiguity
+            /*6*/    0,  // A grammar that generates strings with a unique parse tree
+            /*7*/    0,  // When it generates strings with a unique derivation tree for each string
+            /*8*/    1,  // Defining programming languages
+            /*9*/    0,  // They can be more complex and less intuitive than ambiguous grammars
+            /*10*/   1,  // Unique parse tree for each string
+            /*11*/   2,  // By rewriting the grammar to be unambiguous
+            /*12*/   0,  // Parse trees
+            /*13*/   1,  // Deterministic parsing algorithms
+            /*14*/   1,  // The grammar has a unique derivation for each string
+            /*15*/   0   // Removing recursion
     };
 
     /*
@@ -231,38 +230,39 @@ public class e_Module_6_2 {
     }
 
     public static final String[] post_test_lesson_2_questions_hard = {
-            /*1*/    "Identify the punctuation that helps remove ambiguity in a sentence.",
-            /*2*/    "What is the term for when a sentence can be interpreted in more than one way?",
-            /*3*/    "What type of ambiguity is caused by unclear sentence structure?",
-            /*4*/    "What do you call a grammar that ensures only one interpretation of a sentence?",
-            /*5*/    "Identify the term used when multiple parse trees are possible for a single sentence in formal language.",
-            /*6*/    "In formal grammars what is the term for rewriting rules to remove ambiguity?",
-            /*7*/    "What symbol is commonly used to clarify the order of operations in arithmetic expressions?",
-            /*8*/    "What is the cause of ambiguity in the sentence \"He saw the girl with the telescope\"?",
-            /*9*/    "What method is used to resolve ambiguity in programming languages?",
-            /*10*/   "What grammatical element can clarify whether the subject or object is acting in a sentence?",
-            /*11*/   "What is the term for multiple interpretations of the same sentence due to lexical choices?",
-            /*12*/   "Identify the process of breaking down ambiguous sentences into parts to analyze their meaning.",
-            /*13*/   "What is the term used when vague pronouns lead to unclear sentences?",
-            /*14*/   "What is an effective way to eliminate ambiguity in instructions?",
-            /*15*/   "What is the result of using ambiguous grammar in formal language systems?"
+            /*1*/    "What type of grammar eliminates syntactic ambiguity?",
+            /*2*/    "What ensures that every valid string has exactly one interpretation?",
+            /*3*/    "What tool visually represents the structure of a sentence?",
+            /*4*/    "What is used to detect ambiguity in grammar?",
+            /*5*/    "What is essential for building deterministic parsers?",
+            /*6*/    "What defines the structure of valid strings in a grammar?",
+            /*7*/    "What type of grammar allows only one derivation per sentence?",
+            /*8*/    "What eliminates multiple valid interpretations of a sentence?",
+            /*9*/    "What ensures there are no conflicts in sentence structure?",
+            /*10*/   "What helps compilers avoid multiple interpretations of code?",
+            /*11*/   "What process is used to verify if a grammar is unambiguous?",
+            /*12*/   "What prevents more than one parse tree for the same string?",
+            /*13*/   "What is necessary for compilers to function efficiently?",
+            /*14*/   "What kind of grammar helps define programming languages?",
+            /*15*/   "What ensures sentences are processed correctly in programming?"
     };
 
     public static final String[] post_test_lesson_2_answers_hard = {
-            /*1*/    "parentheses",
-            /*2*/    "ambiguity",
-            /*3*/    "structural ambiguity",
-            /*4*/    "unambiguous grammar",
-            /*5*/    "ambiguous grammar",
-            /*6*/    "grammar refinement",
-            /*7*/    "parentheses",
-            /*8*/    "unclear modifier",
+            /*1*/    "unambiguous grammar",
+            /*2*/    "unique parsing",
+            /*3*/    "parse tree",
+            /*4*/    "tree comparison",
+            /*5*/    "unambiguous rules",
+            /*6*/    "grammar derivation",
+            /*7*/    "deterministic grammar",
+            /*8*/    "parsing clarity",
             /*9*/    "syntax rules",
-            /*10*/   "subject-verb agreement",
-            /*11*/   "lexical ambiguity",
-            /*12*/   "parsing",
-            /*13*/   "pronoun ambiguity",
-            /*14*/   "clarifying language",
-            /*15*/   "multiple interpretations"
+            /*10*/   "grammar consistency",
+            /*11*/   "parse analysis",
+            /*12*/   "unique derivation",
+            /*13*/   "syntactic unambiguity",
+            /*14*/   "formal grammar",
+            /*15*/   "grammar precision"
     };
+
 }
