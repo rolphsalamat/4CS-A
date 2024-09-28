@@ -52,6 +52,7 @@
             android:textSize="30dp"
             android:textStyle="bold" />
     </LinearLayout>
+
     <TextView
         android:id="@+id/video_title"
         android:layout_width="match_parent"
@@ -79,12 +80,43 @@
         android:textSize="13dp"
         android:textStyle="bold" />
 
-    <WebView
-        android:id="@+id/webView"
-        android:layout_width="344dp"
-        android:layout_height="411dp"
-        android:layout_marginTop="15dp"
-        android:layout_gravity="center_horizontal" />
+    <!-- Wag tanggalin to -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="100dp"
+        >
+
+        <!-- Wag tanggalin to -->
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+        <!-- Wag tanggalin to -->
+        <View
+            android:id="@+id/pop_out_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#88FFFFFF"
+            />
+
+        <!-- Wag tanggalin to -->
+        <View
+            android:id="@+id/youtube_button"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="bottom"
+            android:background="#88FFFFFF"
+            />
+
+
+    </FrameLayout>
+
+</LinearLayout>
 
 <!--    <Button-->
 <!--        android:id="@+id/button"-->
@@ -96,5 +128,3 @@
 <!--        android:textColor="#FFFFFF"-->
 <!--        android:layout_marginHorizontal="80dp"-->
 <!--        android:text="Finish Video"/>-->
-
-</LinearLayout>

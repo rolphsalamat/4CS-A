@@ -17,7 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class f_1_lesson_text extends Fragment {
+public class f_2_lesson_text extends Fragment {
 
     private static final String ARG_KEY = "key";
     private static final String ARG_PAGE_NUMBER = "pageNumber"; // New argument
@@ -61,10 +61,10 @@ public class f_1_lesson_text extends Fragment {
     private OnNextButtonClickListener callback;
     private int totalSteps = 2; // Default total steps
 
-    public static f_1_lesson_text newInstance(String key, int pageNumber) {
+    public static f_2_lesson_text newInstance(String key, int pageNumber) {
 
         Log.e("IM HERE", "IM HERE, nasa newInstance nako...");
-        f_1_lesson_text fragment = new f_1_lesson_text();
+        f_2_lesson_text fragment = new f_2_lesson_text();
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
         args.putInt(ARG_PAGE_NUMBER, pageNumber); // Pass the page number
@@ -73,8 +73,8 @@ public class f_1_lesson_text extends Fragment {
 
     }
 
-    public static f_1_lesson_text newInstance(String key) {
-        f_1_lesson_text fragment = new f_1_lesson_text();
+    public static f_2_lesson_text newInstance(String key) {
+        f_2_lesson_text fragment = new f_2_lesson_text();
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
         fragment.setArguments(args);
@@ -232,8 +232,8 @@ public class f_1_lesson_text extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnNextButtonClickListener");
         }
-        if (context instanceof f_1_lesson_text.TextLessonCompleteListener) {
-            TextLessonCompleteListener = (f_1_lesson_text.TextLessonCompleteListener) context;
+        if (context instanceof f_2_lesson_text.TextLessonCompleteListener) {
+            TextLessonCompleteListener = (f_2_lesson_text.TextLessonCompleteListener) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement TextLessonCompleteListener");
         }
@@ -347,7 +347,7 @@ public class f_1_lesson_text extends Fragment {
         Log.e(TAG, "calling getIndentation method");
 
         // Get the bullet types dynamically based on the key and pageNumber
-        int[][] moduleArray = f_1_lesson_text_bullets.getIndentation(key, pageNumber);
+        int[][] moduleArray = f_2_lesson_text_bullets.getIndentation(key, pageNumber);
 
         if (moduleArray.length == 0 || pageNumber > moduleArray.length) {
             Log.e(TAG, "Invalid page number. No bullets available for page " + pageNumber);

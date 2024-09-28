@@ -225,7 +225,7 @@ public class f_0_lesson_pre_test extends Fragment {
                         if (preTestCompleteListener != null) {
                             Log.e(TAG,"FINISH!!!");
                             preTestCompleteListener.onPreTestComplete(correctAnswer);
-                            c_Lesson_feedback.printResult();
+                            c_Lesson_feedback.printResult("Pre-Test");
                         }
                     }
                     choicesGroup.clearCheck();

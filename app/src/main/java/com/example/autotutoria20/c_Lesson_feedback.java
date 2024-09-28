@@ -57,12 +57,14 @@ public class c_Lesson_feedback {
         postTestAttemptAnswers = 0;
     }
 
-    public static void printResult() {
+    public static void printResult(String mode) {
 
         String TAG = "printResult()";
 
-        Log.e(TAG, "Pre-Test: " + preTestCorrectAnswers + "/" + preTestAttemptAnswers);
-        Log.e(TAG, "Post-Test: " + postTestCorrectAnswers + "/" + postTestAttemptAnswers);
+        if (mode.equals("Pre-Test"))
+            Log.e(TAG, "Pre-Test: " + preTestCorrectAnswers + "/" + preTestAttemptAnswers);
+        else if (mode.equals("Post-Test"))
+            Log.e(TAG, "Post-Test: " + postTestCorrectAnswers + "/" + postTestAttemptAnswers);
 
     }
 

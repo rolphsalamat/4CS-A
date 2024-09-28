@@ -50,7 +50,7 @@ public class L_lesson_handler extends FragmentPagerAdapter {
             case TEXT:
                 Log.e(TAG, "Loading text lesson for key: " + currentLesson);
                 Log.e(TAG, "ill go to text lesson.newInstance(" + currentLesson + ", " + pageNumber + ");");
-                return f_1_lesson_text.newInstance(currentLesson, pageNumber);
+                return f_2_lesson_text.newInstance(currentLesson, pageNumber);
             default:
                 throw new IllegalStateException("Unexpected step type: " + stepType);
         }

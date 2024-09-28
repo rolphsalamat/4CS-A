@@ -28,7 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.Arrays;
 
-public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_pre_test.PreTestCompleteListener, f_1_lesson_text.OnNextButtonClickListener, f_1_lesson_text.TextLessonCompleteListener  , f_3_lesson_post_test.PostTestCompleteListener {
+public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_pre_test.PreTestCompleteListener, f_2_lesson_text.OnNextButtonClickListener, f_2_lesson_text.TextLessonCompleteListener  , f_3_lesson_post_test.PostTestCompleteListener {
 
     private static final String TAG = "Module3Steps";
     public int pageNumber = 1;
@@ -165,11 +165,11 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
                 }
 
                 // Handle other fragment-specific logic
-                if (currentFragment instanceof f_1_lesson_text) {
-                    f_1_lesson_text textLessonFragment = (f_1_lesson_text) currentFragment;
+                if (currentFragment instanceof f_2_lesson_text) {
+                    f_2_lesson_text textLessonFragment = (f_2_lesson_text) currentFragment;
 
                     // auto-next??
-                    clickCenter(1.5);
+                    clickCenter(1);
 
                 } else if (currentFragment instanceof f_3_lesson_post_test) {
                     // wala na, naka declare na globally eh..
@@ -434,14 +434,10 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
     @Override
     public void onPreTestComplete(boolean isCorrect) {
         Log.d("onPreTestComplete", "isCorrect: " + isCorrect);
+        onNextButtonClicked(); // Proceed to the next step if the test is passed
 
-        // dapat tama o mali, move on na
-
-//        if (isCorrect) {
-            onNextButtonClicked(); // Proceed to the next step if the test is passed
-//        } else {
-////            Toast.makeText(this, "Please complete the pre-test before proceeding.", Toast.LENGTH_SHORT).show();
-//        }
+        // call feedback for pre-test
+        c_Lesson_feedback.printResult("Pre-Test");
     }
 
     @Override
@@ -489,19 +485,11 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
     public void onPostTestComplete(boolean isCorrect, double score) {
         Log.d("onPostTestComplete", "isCorrect: " + isCorrect);
 
-        // regardless kung tama or mali, basta cinall to tapos na!
+        isLessonFinished = true;
+        updateProgressAndMoveToNextStep();
 
-//        if (isCorrect) {
-            isLessonFinished = true;
-            updateProgressAndMoveToNextStep();
-//            onNextButtonClicked(); // Proceed to the next step if the test is passed
+        c_Lesson_feedback.printResult("Post-Test");
 
-//            feedback.showDialog(score);
-
-            showToast("Post Test Complete!");
-//        } else {
-////            Toast.makeText(this, "Please complete the post-test before proceeding.", Toast.LENGTH_SHORT).show();
-//        }
     }
 
 

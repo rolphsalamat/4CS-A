@@ -259,7 +259,7 @@ public class f_3_lesson_post_test extends Fragment {
                         if (postTestCompleteListener != null) {
                             Log.e(TAG,"FINISH!!!");
                             postTestCompleteListener.onPostTestComplete(correctAnswer, knowledgeProb);
-                            c_Lesson_feedback.printResult();
+                            c_Lesson_feedback.printResult("Post-Test");
                         }
                     }
                     choicesGroup.clearCheck();

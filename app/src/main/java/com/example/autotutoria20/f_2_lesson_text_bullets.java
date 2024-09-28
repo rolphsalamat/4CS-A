@@ -2,7 +2,7 @@ package com.example.autotutoria20;
 
 import android.util.Log;
 
-public class f_1_lesson_text_bullets {
+public class f_2_lesson_text_bullets {
 
     // bat ko nga ba pinarameter yung pageNumber di ko rin alam :D
     public static int[][] getIndentation(String key, int pageNumber) {
