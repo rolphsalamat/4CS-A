@@ -45,5 +45,12 @@ public class e_Module_5 {
         return questionList.toArray(new e_Question[0]);
     }
 
-
+    static int getPreTestCount(String module) {
+        switch (module) {
+            case "M1": return e_Module_5_1.pre_test_lesson_1_answers.length;
+            case "M2": return e_Module_5_2.pre_test_lesson_2_answers.length;
+            case "M3": return e_Module_5_3.pre_test_lesson_3_answers.length;
+        }
+        return 0;
+    }
 }

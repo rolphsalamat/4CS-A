@@ -38,10 +38,13 @@ public class f_0_lesson_pre_test extends Fragment {
 
     // BKT Model instance
     private x_bkt_algorithm bktModel;
+    private d_Lesson_container lesson;
 
     // Interface to notify the container activity when pre-test is complete
     public interface PreTestCompleteListener {
-        void onPreTestComplete(boolean isCorrect);
+//        void onPreTestComplete(boolean isCorrect);
+
+        void onPreTestComplete(boolean isCorrect, int score);
     }
 
     public static f_0_lesson_pre_test newInstance(String module, String lesson, String mode) {
@@ -133,102 +136,153 @@ public class f_0_lesson_pre_test extends Fragment {
 
         submitButton.setOnClickListener(v -> {
 
-            Log.e("HEY!", "Submit Button Clicked!");
-
-            if (!(choicesGroup.getCheckedRadioButtonId() == -1)) {
-
-                // Dito originally yung answerAttempt++;
-                answerAttempt++;
-
-                c_Lesson_feedback.preTestAttemptAnswers++;
-
-                Log.e("HEY!", "answerAttempt("+answerAttempt+") <= preTestQuestions("+preTestQuestions+")");
-
-                // n <= 5
-                if (questionsAnswered <= preTestQuestions) {
-
-                    //Log.e("submitButton.onClick", "answerAttempt("+answerAttempt+") <= preTestQuestions("+preTestQuestions+")");
-                    //Log.e("submitButton.onClick", "IM IN!");
-
-                    boolean correctAnswer = checkAnswer();
-                    if (correctAnswer) c_Lesson_feedback.preTestCorrectAnswers++;
-
-//                    // Update BKT model with the result of the answer
-//                    bktModel.updateKnowledge(correctAnswer);
-
-                    // Log the updated knowledge probability
-                    double knowledgeProb = bktModel.getKnowledgeProbability();
-                    //Log.e("submitButton.onClick", "Updated Knowledge Probability: " + knowledgeProb);
-
-                    // Ensure valid indices are used
-                    int moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
-                    int lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
-
-                    if (moduleIndex < 0 || lessonIndex < 0) {
-                        Log.e("submitButton.onClick", "Invalid module or lesson index");
-                        return;
-                    }
 
 
-                    // Update the BKT Score of the module, lesson, and mode of the user
-                    bktModel.updateScore(moduleIndex, lessonIndex,
-                            knowledgeProb,
-                            isProgressiveMode,
-                            correctAnswer);
+//            // Ensure valid indices are used
+//            int moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
+//            int lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
 
-                    if (correctAnswer)
-                        x_bkt_algorithm.updateTestScore(
-                                isProgressiveMode,
-                                moduleIndex, lessonIndex,
-                                "Pre-Test",
-                                c_Lesson_feedback.preTestCorrectAnswers);
+            Log.e("CHECK MO TO", "moduleIndex: " + d_Lesson_container.currentModule);
+            Log.e("CHECK MO TO", "lessonIndex: " + d_Lesson_container.currentLesson);
 
-                    String TAG = "TESTING";
+            String moduleIndex = String.valueOf(d_Lesson_container.currentModule.charAt(1));
+            String lessonIndex = String.valueOf(d_Lesson_container.currentLesson.charAt(7));
 
-                    Log.d(TAG, "Answer: " + correctAnswer);
-                    Log.d(TAG, "answerAttempt: " + answerAttempt);
-                    Log.d(TAG, "attemptChances: " + attemptChances);
-                    Log.d(TAG, "currentQuestionIndex: " + currentQuestionIndex);
-                    Log.d(TAG, "questions.length-1: " + (questions.length-1));
+            String TAG = "submitButton.setOnClickListener";
 
-                    // Check if we need to move to the next question
-                    if (answerAttempt >= attemptChances || correctAnswer) {
-                        Log.e(TAG, "currentQuestionIndex(" + currentQuestionIndex + ") < questions.length - 1(" + (questions.length - 1) + ")");
-                        Log.e(TAG, "questions.length: " + questions.length);
+            // Check if the pre-test is complete
+            if (d_Lesson_container.isPreTestComplete) {
+                Log.e(TAG, "Pre-test is complete. User can still answer questions.");
+
+                // Allow answering questions even if pre-test is complete
+                if (!(choicesGroup.getCheckedRadioButtonId() == -1)) {
+                    // Increment answer attempts
+                    answerAttempt++;
+                    Log.e("HEY!", "Submit Button Clicked! (Post Pre-Test)");
+
+                    // retrieve the number of pre-test questions for the module and lesson
+
+                    String module = "M" + String.valueOf(Integer.parseInt(moduleIndex));
+                    String lesson = "Lesson " + String.valueOf(Integer.parseInt(lessonIndex));
+
+                    Log.e("HEY", "getPreTestQuestionCount("+lesson+", "+module+");");
+
+                    // balikan mo to pag gising mo..
+                    // gawa ka ng method sa e_question siguro??
+                    // na magrereturn ng int..
+                    // naka switch case sya mase sa moduleIndex and lessonIndex..
+                    // then getLength() lang nung pre-test question.
+                    // tapos ireturn dito..
+                    // para magamit na to..
+
+
+                    int modulePreTestQuestions = // kung ILAN yung number of pretest questions ng current module lesson
+                            e_Question.getPreTestQuestionCount(lesson, module);
+
+                    // Check if we are still within the limit of questions answered
+                    if (questionsAnswered < modulePreTestQuestions) { // Because the total number of pre-test for all is 15..
+                        boolean correctAnswer = checkAnswer();
+                        Log.d(TAG, "Answer: " + correctAnswer);
 
                         // Move to the next question or reset if all questions are answered
-                        if (currentQuestionIndex < questions.length - 1) {
-                            currentQuestionIndex++;
-                            Log.e(TAG, "currentQuestionIndex++;" + currentQuestionIndex);
-                        } else {
-                            currentQuestionIndex = 0; // Reset to the first question if all are answered
-                            bktModel.logScores();
-                        }
-
-                        questionsAnswered++;
-
-                    }
-
-                    Log.e(TAG, "currentQuestionIndex("+currentQuestionIndex+") == " + preTestQuestions + "?");
-                    if (currentQuestionIndex < preTestQuestions) {
-                        // to give student chance to get correct answer before loading another question
-                        if (answerAttempt >= attemptChances) {
-
+                        if (answerAttempt >= attemptChances || correctAnswer) {
+                            if (currentQuestionIndex < questions.length - 1) {
+                                currentQuestionIndex++;
+                                Log.e(TAG, "Moving to next question: " + currentQuestionIndex);
+                            } else {
+                                currentQuestionIndex = 0; // Reset to the first question if all are answered
+                                bktModel.logScores(); // Log scores at the end of all questions
+                            }
                             questionsAnswered++;
-                            loadQuestion(); // Load the next question
-                            answerAttempt = 0;
-
                         }
-                    }
-                    else {
-                        Log.e(TAG,"YES!! TAPOS NA YUNG PRE TEST!");
-                        if (preTestCompleteListener != null) {
-                            Log.e(TAG,"FINISH!!!");
-                            preTestCompleteListener.onPreTestComplete(correctAnswer);
-                            c_Lesson_feedback.printResult("Pre-Test");
+
+                        // Load next question if attempts are exhausted
+                        if (answerAttempt >= attemptChances) {
+                            loadQuestion(); // Load the next question
+                            answerAttempt = 0; // Reset attempts for the next question
                         }
                     }
                     choicesGroup.clearCheck();
+                }
+            } else {
+
+                // Original behavior for when pre-test is not complete
+                Log.e(TAG, "Pre-test is not complete. Proceeding with original logic.");
+
+                Log.e("HEY!", "Submit Button Clicked!");
+
+                if (!(choicesGroup.getCheckedRadioButtonId() == -1)) {
+
+                    answerAttempt++;
+                    c_Lesson_feedback.preTestAttemptAnswers++;
+
+                    Log.e("HEY!", "answerAttempt(" + answerAttempt + ") <= preTestQuestions(" + preTestQuestions + ")");
+
+                    // n <= 5
+                    if (questionsAnswered <= preTestQuestions) {
+                        boolean correctAnswer = checkAnswer();
+                        if (correctAnswer) {
+                            c_Lesson_feedback.preTestCorrectAnswers++;
+                            x_bkt_algorithm.updateTestScore(
+                                    isProgressiveMode,
+                                    Integer.parseInt(moduleIndex), Integer.parseInt(lessonIndex),
+                                    "Pre-Test",
+                                    c_Lesson_feedback.preTestCorrectAnswers);
+                        }
+
+                        double knowledgeProb = bktModel.getKnowledgeProbability();
+
+                        bktModel.updateScore(
+                                Integer.parseInt(moduleIndex), Integer.parseInt(lessonIndex),
+                                knowledgeProb,
+                                isProgressiveMode,
+                                correctAnswer);
+
+                        Log.d(TAG, "Answer: " + correctAnswer);
+                        Log.d(TAG, "answerAttempt: " + answerAttempt);
+                        Log.d(TAG, "attemptChances: " + attemptChances);
+                        Log.d(TAG, "currentQuestionIndex: " + currentQuestionIndex);
+                        Log.d(TAG, "questions.length-1: " + (questions.length - 1));
+
+                        // Check if we need to move to the next question
+                        if (answerAttempt >= attemptChances || correctAnswer) {
+                            Log.e(TAG, "currentQuestionIndex(" + currentQuestionIndex + ") < questions.length - 1(" + (questions.length - 1) + ")");
+                            Log.e(TAG, "questions.length: " + questions.length);
+
+                            // Move to the next question or reset if all questions are answered
+                            if (currentQuestionIndex < questions.length - 1) {
+                                currentQuestionIndex++;
+                                Log.e(TAG, "currentQuestionIndex++;" + currentQuestionIndex);
+                            } else {
+                                currentQuestionIndex = 0; // Reset to the first question if all are answered
+                                bktModel.logScores();
+                            }
+
+                            questionsAnswered++;
+                        }
+
+                        Log.e(TAG, "currentQuestionIndex(" + currentQuestionIndex + ") == " + preTestQuestions + "?");
+                        if (currentQuestionIndex < preTestQuestions) {
+                            // Allow user a chance to get correct answer before loading another question
+                            if (answerAttempt >= attemptChances) {
+                                questionsAnswered++;
+                                loadQuestion(); // Load the next question
+                                answerAttempt = 0;
+                            }
+                        } else {
+                            Log.e(TAG,"YES!! TAPOS NA YUNG PRE TEST!");
+                            if (preTestCompleteListener != null) {
+                                Log.e(TAG,"FINISH!!!");
+                                preTestCompleteListener.onPreTestComplete(
+                                        correctAnswer,
+                                        c_Lesson_feedback.preTestCorrectAnswers);
+                                c_Lesson_feedback.printResult("Pre-Test");
+                                loadQuestion(); // para pag binalikan, iba na yung question..
+                            }
+                        }
+
+                        choicesGroup.clearCheck();
+                    }
                 }
             }
         });

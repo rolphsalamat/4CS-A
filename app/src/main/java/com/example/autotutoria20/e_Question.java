@@ -93,4 +93,22 @@ public class e_Question {
     public void setType(QuestionType type) {
         this.type = type;
     }
+
+    public static int getPreTestQuestionCount(String lesson, String module) {
+        switch (lesson) {
+            case "Lesson 1": return e_Module_1.getPreTestCount(module);
+            case "Lesson 2": return e_Module_2.getPreTestCount(module);
+            case "Lesson 3": return e_Module_3.getPreTestCount(module);
+            case "Lesson 4": return e_Module_4.getPreTestCount(module);
+            case "Lesson 5": return e_Module_5.getPreTestCount(module);
+            case "Lesson 6": return e_Module_6.getPreTestCount(module);
+            case "Lesson 7": return e_Module_7.getPreTestCount(module);
+            case "Lesson 8": return e_Module_8.getPreTestCount(module);
+            // Add more cases as needed
+            default:
+                //Log.e("getLessonIndex", "Invalid lesson: " + lesson);
+                throw new IllegalArgumentException("Invalid lesson: " + lesson);
+        }
+    }
+
 }

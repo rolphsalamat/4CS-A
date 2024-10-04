@@ -1,5 +1,6 @@
 package com.example.autotutoria20;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +29,15 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.Arrays;
 
-public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_pre_test.PreTestCompleteListener, f_2_lesson_text.OnNextButtonClickListener, f_2_lesson_text.TextLessonCompleteListener  , f_3_lesson_post_test.PostTestCompleteListener {
+public class d_Lesson_container extends AppCompatActivity implements
+        f_0_lesson_pre_test.PreTestCompleteListener,
+        f_2_lesson_text.OnNextButtonClickListener,
+        f_2_lesson_text.TextLessonCompleteListener,
+        f_3_lesson_post_test.PostTestCompleteListener
+{
+
+    public static boolean isPreTestComplete = false;
+    public static boolean isPostTestComplete = false;
 
     private static final String TAG = "Module3Steps";
     public int pageNumber = 1;
@@ -40,8 +49,8 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
     private int numberOfSteps = 0;
     private FirebaseFirestore db;
     private String learningMode;
-    private String currentLesson;
-    private String currentModule;
+    static String currentLesson;
+    static String currentModule;
     private int furthestStep = 0; // Track the furthest step reached
 
     private Boolean isCompleted;
@@ -54,6 +63,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
     private long backPressedTime; // Variable to track back press time
     private Toast backToast;
     private c_Lesson_feedback feedback;
+    private x_bkt_algorithm bktAlgo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +73,10 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
 
         // Reset the pre-test and post-test counter??
         c_Lesson_feedback.resetResult();
+
+        // e kasi ibang lesson na to :D
+        isPreTestComplete = false;
+        isPostTestComplete = false;
 
         gridLayout = findViewById(R.id.gridLayout);
         viewPager = findViewById(R.id.viewPager);
@@ -172,7 +186,49 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
                     clickCenter(1);
 
                 } else if (currentFragment instanceof f_3_lesson_post_test) {
-                    // wala na, naka declare na globally eh..
+
+                    // pag nag return dito, and not yet finished yung post-test, dapat walang next Button
+                    // else, if tapos na, pero mostly yon wala na siya sa lesson e noh hahah
+
+
+                } else if (currentFragment instanceof f_0_lesson_pre_test) {
+
+                    // ano gagawin by default? pwede namang wala, kasi wala naman talaga tong code na to nung una..
+
+                    // pero pano pag tapos na??
+                    if (isPreTestComplete) {
+
+                        // disable tong next button??
+                        nextButton.setVisibility(View.GONE);
+                        nextButton.setEnabled(false);
+
+                        // Create a dialog to show the user's score
+                        AlertDialog.Builder builder = new AlertDialog.Builder(d_Lesson_container.this);
+                        builder.setTitle("Test Result");
+
+                        String message = "ge, mag pre-test kalang hanggang magsawa ka," +
+                                "pag nag sawa ka, edi tumigil ka, pake ko sayo? sino ka ba?" +
+                                "tanginamo pala e, kupal abno burikot";
+
+                        builder.setMessage(message);
+
+                        // Add a button to dismiss the dialog
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss(); // Close the dialog
+                            }
+                        });
+
+                        // Create and show the dialog
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+
+                        // or simply disable the whole pre-test??
+                        // how??
+                        // ewan ko tanginamo
+                    }
+
                 }
 
                 pagerAdapter.notifyDataSetChanged();
@@ -223,12 +279,15 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
         Log.e(TAG, "returnStep: " + returnStep);
         Log.e(TAG, "store it to stepIndex...");
 
-        returnStep -= 1;
+        returnStep--;
 
         // set current item of the viewPager
         viewPager.setCurrentItem(returnStep);
-        nextButton.setEnabled(true);
-        nextButton.setVisibility(View.VISIBLE);
+
+        if (viewPager.getCurrentItem() != 0) {
+            nextButton.setEnabled(true);
+            nextButton.setVisibility(View.VISIBLE);
+        }
 
         // if returnStep == (currentStep - 1),
         // nextButton lang..
@@ -357,7 +416,7 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
         // check para di na mag increment anymores :D
         if (currentStep < numberOfSteps) {
             currentStep++;
-            returnStep++;
+            returnStep = currentStep;
         }
 
         if (currentStep > furthestStep) {
@@ -380,6 +439,8 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
 
     public void onNextButtonClicked() {
         Log.e("onNextButtonClicked()", "currentStep: " + currentStep);
+
+//        returnStep = currentStep;
 
         // Update the progress and move to the next step
         updateProgressAndMoveToNextStep();
@@ -432,12 +493,42 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
 
 
     @Override
-    public void onPreTestComplete(boolean isCorrect) {
+    public void onPreTestComplete(boolean isCorrect, int score) {
+        // Log the result
         Log.d("onPreTestComplete", "isCorrect: " + isCorrect);
-        onNextButtonClicked(); // Proceed to the next step if the test is passed
 
-        // call feedback for pre-test
+        // Create a dialog to show the user's score
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Test Result");
+
+        // Set the message based on whether the answer was correct or not
+        String message = isCorrect ?
+                "Congratulations! You passed the pre-test." : // Correct
+                "Unfortunately, you did not pass the pre-test. Please try again."; // Incorrect
+
+        String scoreMessage = " Your score for Pre-Test is: " + score;
+
+        builder.setMessage(message + scoreMessage);
+
+        // Add a button to dismiss the dialog
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss(); // Close the dialog
+                onNextButtonClicked(); // Proceed to the next step if the test is passed
+            }
+        });
+
+        // Create and show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Call feedback for pre-test
         c_Lesson_feedback.printResult("Pre-Test");
+
+
+        isPreTestComplete = true;
+
     }
 
     @Override
@@ -489,6 +580,8 @@ public class d_Lesson_container extends AppCompatActivity implements f_0_lesson_
         updateProgressAndMoveToNextStep();
 
         c_Lesson_feedback.printResult("Post-Test");
+
+        isPostTestComplete = true;
 
     }
 

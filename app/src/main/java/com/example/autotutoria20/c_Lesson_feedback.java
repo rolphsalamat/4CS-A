@@ -134,20 +134,29 @@ public class c_Lesson_feedback {
             Log.e("LessonFeedback", "feedbackScore += score;");
             Log.e("LessonFeedback", "feedbackScore: " + feedbackScore);
 
+            // this is from the x_bkt_algorithm
+//            // Floats for rating
+//            float very_bad = .20F;
+//            float bad = .30F;
+//            float neutral = .50F;
+//            float good = .60F;
+//            float very_good = .70F;
+
             String feedback;
-            if (score < algo_feedback.very_bad) {
+
+            if (score < algo_feedback.very_bad) { // < .20
                 showFeedbackDialog(algo_feedback.very_bad_string);
                 feedback = algo_feedback.very_bad_string;
-            } else if (score >= algo_feedback.very_bad && score < algo_feedback.bad) {
+            } else if (score >= algo_feedback.very_bad && score < algo_feedback.bad) { // [20 ~> 29]
                 showFeedbackDialog(algo_feedback.bad_string);
                 feedback = algo_feedback.bad_string;
-            } else if (score >= algo_feedback.bad && score < algo_feedback.neutral) {
+            } else if (score >= algo_feedback.bad && score < algo_feedback.neutral) { // [30 ~> 49]
                 showFeedbackDialog(algo_feedback.neutral_string);
                 feedback = algo_feedback.neutral_string;
-            } else if (score >= algo_feedback.neutral && score < algo_feedback.good) {
+            } else if (score >= algo_feedback.neutral && score < algo_feedback.good) { // [50 ~> 59]
                 showFeedbackDialog(algo_feedback.good_string);
                 feedback = algo_feedback.good_string;
-            } else if (score >= algo_feedback.good) {
+            } else if (score >= algo_feedback.good) { // >= 60
                 showFeedbackDialog(algo_feedback.very_good_string);
                 feedback = algo_feedback.very_good_string;
             } else {

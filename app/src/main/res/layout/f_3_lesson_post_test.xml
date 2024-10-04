@@ -1,62 +1,71 @@
-<!-- fragment_pre_test.xml -->
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/plain_background"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/autotutoria_background_color"
+    android:padding="16dp">
 
-    <!-- EXIT BUTTON AND TEXT NEXT TO IT -->
-    <LinearLayout
+    <!-- Add your post-test layout components here -->
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="20dp">
+        android:gravity="center"
+        android:fontFamily="@font/mouldy_cheese"
+        android:text="Post-Test"
+        android:textColor="#87CEEB"
+        android:textSize="30dp"
+        android:textStyle="bold" />
 
-        <!-- Arrow Button -->
-        <Button
-            android:id="@+id/exitButton"
-            android:layout_width="30dp"
-            android:layout_height="23dp"
-            android:background="@drawable/arrow_left"
-            android:backgroundTint="#0FFFFF" />
-
-        <!-- TextView Next to Arrow -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="Post-Test"
-            android:fontFamily="@font/mouldy_cheese"
-            android:textColor="#87CEEB"
-            android:textSize="30dp"
-            android:textStyle="bold" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/post_test_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="What did you learn from this lesson?"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" />
 
     <RadioGroup
         android:id="@+id/choices_group"
-        android:layout_width="344dp"
-        android:layout_height="655dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp"
-        android:padding="8dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:orientation="vertical"
+        android:paddingVertical="8dp"
+        android:paddingStart="8dp"
+        />
 
-        <TextView
-            android:id="@+id/question_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Question will appear here"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+    <!-- EditText for Identification type question, collapsed by default -->
+    <EditText
+        android:id="@+id/identification_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Type your answer here"
+        android:layout_marginTop="10dp"
+        android:padding="12dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:visibility="gone"
+        />
 
-        <Button
-            android:id="@+id/submit_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:text="Submit" />
-    </RadioGroup>
+    <!-- Spacer view to push the button to the bottom -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/submit_post_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:textColor="#FFFFFF"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="50dp" />
+
+<!--    android:background="@drawable/tutorial_button"-->
 
 </LinearLayout>

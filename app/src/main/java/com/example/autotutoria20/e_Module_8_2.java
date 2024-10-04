@@ -1,9 +1,5 @@
 package com.example.autotutoria20;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class e_Module_8_2 {
 
     /*
@@ -15,13 +11,13 @@ public class e_Module_8_2 {
 
     public static e_Question[] get_PreTest_Lesson2_Questions() {
         return e_Module_8.getPreTestQuestions(
-                pre_test_lesson_8_2_questions,
-                pre_test_lesson_8_2_choices,
-                pre_test_lesson_8_2_answers
+                pre_test_lesson_2_questions,
+                pre_test_lesson_2_choices,
+                pre_test_lesson_2_answers
         );
     }
 
-    public static final String[] pre_test_lesson_8_2_questions = {
+    public static final String[] pre_test_lesson_2_questions = {
             /*1*/    "What is parsing?",
             /*2*/    "Which of the following is not a type of parsing?",
             /*3*/    "What is the goal of top-down parsing?",
@@ -39,7 +35,7 @@ public class e_Module_8_2 {
             /*15*/   "Which symbol in a CFG grammar represents an empty string?"
     };
 
-    public static final String[][] pre_test_lesson_8_2_choices = {
+    public static final String[][] pre_test_lesson_2_choices = {
             /*1*/    {"The process of analyzing a string of symbols to determine its grammatical structure", "A way of storing data in a file", "A mathematical operation", "A search algorithm"},
             /*2*/    {"Top-down parsing", "Bottom-up parsing", "Inside-out parsing", "Left-to-right parsing"},
             /*3*/    {"To build a parse tree from the input and work up to the start symbol", "To build a parse tree from the start symbol and work down to the input", "To scan the input from right to left", "To remove recursion from the grammar"},
@@ -57,7 +53,7 @@ public class e_Module_8_2 {
             /*15*/   {"ε", "λ", "∅", "*"}
     };
 
-    public static final int[] pre_test_lesson_8_2_answers = {
+    public static final int[] pre_test_lesson_2_answers = {
             /*1*/    0,  // "The process of analyzing a string of symbols to determine its grammatical structure"
             /*2*/    2,  // "Inside-out parsing"
             /*3*/    1,  // "To build a parse tree from the start symbol and work down to the input"

@@ -45,5 +45,11 @@ public class e_Module_2 {
         return questionList.toArray(new e_Question[0]);
     }
 
+    static int getPreTestCount(String module) {
+        if (module.equals("M1")) {
+            return e_Module_2_1.pre_test_lesson_1_answers.length;
+        }
+        return 0;
+    }
 
 }

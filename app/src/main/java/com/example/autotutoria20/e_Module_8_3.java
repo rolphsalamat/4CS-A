@@ -1,9 +1,5 @@
 package com.example.autotutoria20;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 public class e_Module_8_3 {
 
     /*
@@ -15,13 +11,13 @@ public class e_Module_8_3 {
 
     public static e_Question[] get_PreTest_Lesson3_Questions() {
         return e_Module_8.getPreTestQuestions(
-                pre_test_lesson_8_3_questions,
-                pre_test_lesson_8_3_choices,
-                pre_test_lesson_8_3_answers
+                pre_test_lesson_3_questions,
+                pre_test_lesson_3_choices,
+                pre_test_lesson_3_answers
         );
     }
 
-    public static final String[] pre_test_lesson_8_3_questions = {
+    public static final String[] pre_test_lesson_3_questions = {
             /*1*/    "What is the primary role of bottom-up parsing?",
             /*2*/    "What does shift-reduce parsing use to hold grammar symbols?",
             /*3*/    "In shift-reduce parsing, what is the function of 'shifting'?",
@@ -39,7 +35,7 @@ public class e_Module_8_3 {
             /*15*/   "What is the final step of the shift-reduce parsing process?"
     };
 
-    public static final String[][] pre_test_lesson_8_3_choices = {
+    public static final String[][] pre_test_lesson_3_choices = {
             /*1*/    {"To analyze the structure of the parse tree from top to bottom", "To start from the input symbols and work towards the start symbol", "To build the parse tree from the root to the leaves", "To work only with terminal symbols"},
             /*2*/    {"A table", "A queue", "A stack", "An array"},
             /*3*/    {"Adding an input symbol to the stack", "Removing a handle from the stack", "Applying a production rule", "Looking ahead at the next symbol"},
@@ -57,7 +53,7 @@ public class e_Module_8_3 {
             /*15*/   {"Shifting all symbols from the stack", "Reducing all symbols to a start symbol", "Accepting the input", "Rejecting the input"}
     };
 
-    public static final int[] pre_test_lesson_8_3_answers = {
+    public static final int[] pre_test_lesson_3_answers = {
             /*1*/    1,  // "To start from the input symbols and work towards the start symbol"
             /*2*/    2,  // "A stack"
             /*3*/    0,  // "Adding an input symbol to the stack"

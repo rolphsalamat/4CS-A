@@ -494,7 +494,7 @@ public class f_2_lesson_text extends Fragment {
 
         // 0 -
         // n -
-        int level = 3; // Default to High School Student
+        int level = 10; // Default to High School Student
 
         // Adjust the multiplier based on the educational level
         double multiplier;
