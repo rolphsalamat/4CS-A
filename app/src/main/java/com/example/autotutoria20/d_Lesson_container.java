@@ -23,6 +23,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -31,8 +32,8 @@ import java.util.Arrays;
 
 public class d_Lesson_container extends AppCompatActivity implements
         f_0_lesson_pre_test.PreTestCompleteListener,
-        f_2_lesson_text.OnNextButtonClickListener,
-        f_2_lesson_text.TextLessonCompleteListener,
+        f_1_lesson_text.OnNextButtonClickListener,
+        f_1_lesson_text.TextLessonCompleteListener,
         f_3_lesson_post_test.PostTestCompleteListener
 {
 
@@ -40,11 +41,11 @@ public class d_Lesson_container extends AppCompatActivity implements
     public static boolean isPostTestComplete = false;
 
     private static final String TAG = "Module3Steps";
-    public int pageNumber = 1;
+    public int pageNumber = 1; // 1 sya originally
     private GridLayout gridLayout;
     private AlertDialog dialog;
     private int numberOfTextLessons = 0; // Declare here
-    private int currentStep = 0;
+    static int currentStep = 0;
     private int returnStep = 0;
     private int numberOfSteps = 0;
     private FirebaseFirestore db;
@@ -54,7 +55,9 @@ public class d_Lesson_container extends AppCompatActivity implements
     private int furthestStep = 0; // Track the furthest step reached
 
     private Boolean isCompleted;
-    private Button nextButton, backButton;
+    public static Button nextButton;
+    private Button backButton;
+    private ShapeableImageView currentButton;
     private f_2_lesson_video videoLesson;
     private L_lesson_sequence.StepType[] stepSequence;
     private static ViewPager viewPager;
@@ -70,6 +73,10 @@ public class d_Lesson_container extends AppCompatActivity implements
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.d_lesson_container);
+
+        currentStep = 0;
+        returnStep = 0;
+        numberOfSteps = 0;
 
         // Reset the pre-test and post-test counter??
         c_Lesson_feedback.resetResult();
@@ -117,7 +124,12 @@ public class d_Lesson_container extends AppCompatActivity implements
         Log.e("pagerAdapter", "LessonPagerAdapter(" + getSupportFragmentManager() + ", " + Arrays.toString(stepSequence) + ", " + currentModule + "_" + currentLesson + ");");
 
         // dapat kasi eto may nag c-call din dito somewhere, kasi pag ganto lagi talaga syang Page 1
-        pagerAdapter = new L_lesson_handler(getSupportFragmentManager(), stepSequence, currentModule + "_" + currentLesson, learningMode, pageNumber);
+        pagerAdapter = new L_lesson_handler(
+                getSupportFragmentManager(),
+                stepSequence,
+                currentModule + "_" + currentLesson,
+                learningMode,
+                pageNumber);
         viewPager.setAdapter(pagerAdapter);
 
 
@@ -132,8 +144,8 @@ public class d_Lesson_container extends AppCompatActivity implements
 
             @Override
             public void onPageSelected(int position) {
-                Log.e(TAG, "Displayed fragment position: " + position);
 
+                Log.e(TAG, "Displayed fragment position: " + position);
 
                 // Adjust the bottom margin of the ViewPager
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) viewPager.getLayoutParams();
@@ -150,53 +162,20 @@ public class d_Lesson_container extends AppCompatActivity implements
                 if (videoLesson != null && !(currentFragment instanceof f_2_lesson_video)) {
                     Log.d(TAG, "Stopping video playback as we're leaving the video lesson.");
                     videoLesson.stopVideoPlayback();
-                    videoLesson = null;  // Clear reference after stopping the video
                 }
 
-                // Update the reference if we're now on a video lesson
-                if (currentFragment instanceof f_2_lesson_video) {
-
-                    // click in the middle one time to auto-play the video..
-                    // sa onCreate nalang ng video class??
-//                    simulateClicksInCenter();
-
-                    videoLesson = (f_2_lesson_video) currentFragment;
-
-                    params.bottomMargin = 200;  // Adjust this value as needed
-                    viewPager.setLayoutParams(params);
-
-//                  kung ilang seconds ang delay bago ipakita yung next button
-                    int delayInSeconds = 5;
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            nextButton.setVisibility(View.VISIBLE);
-                        }
-                    }, delayInSeconds * 1000);
-                }
-                else {
-                    videoLesson = null; // Clear the videoLesson reference when not on a video lesson
-                }
-
-                // Handle other fragment-specific logic
-                if (currentFragment instanceof f_2_lesson_text) {
-                    f_2_lesson_text textLessonFragment = (f_2_lesson_text) currentFragment;
-
-                    // auto-next??
-                    clickCenter(1);
-
-                } else if (currentFragment instanceof f_3_lesson_post_test) {
-
-                    // pag nag return dito, and not yet finished yung post-test, dapat walang next Button
-                    // else, if tapos na, pero mostly yon wala na siya sa lesson e noh hahah
-
-
-                } else if (currentFragment instanceof f_0_lesson_pre_test) {
+                if (currentFragment instanceof f_0_lesson_pre_test) {
 
                     // ano gagawin by default? pwede namang wala, kasi wala naman talaga tong code na to nung una..
+                    Log.e(TAG, "Pre Test");
 
                     // pero pano pag tapos na??
                     if (isPreTestComplete) {
+
+                        f_0_lesson_pre_test.currentButton.setEnabled(true);
+                        f_0_lesson_pre_test.currentButton.setVisibility(View.VISIBLE);
+
+                        Log.e(TAG, "Pre Test, isPreTestComplete = true");
 
                         // disable tong next button??
                         nextButton.setVisibility(View.GONE);
@@ -220,6 +199,8 @@ public class d_Lesson_container extends AppCompatActivity implements
                             }
                         });
 
+                        builder.setCancelable(false);
+
                         // Create and show the dialog
                         AlertDialog dialog = builder.create();
                         dialog.show();
@@ -230,6 +211,66 @@ public class d_Lesson_container extends AppCompatActivity implements
                     }
 
                 }
+                else if (currentFragment instanceof f_1_lesson_text) {
+                        f_1_lesson_text textLessonFragment = (f_1_lesson_text) currentFragment;
+
+                        // auto-next??
+                        clickCenter(1);
+
+                } else if (currentFragment instanceof f_2_lesson_video) {
+
+                        // click in the middle one time to auto-play the video..
+                        // sa onCreate nalang ng video class??
+//                    simulateClicksInCenter();
+
+                        videoLesson = (f_2_lesson_video) currentFragment;
+
+                        params.bottomMargin = 200;  // Adjust this value as needed
+                        viewPager.setLayoutParams(params);
+
+//                  kung ilang seconds ang delay bago ipakita yung next button
+                        int delayInSeconds = 5;
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                nextButton.setVisibility(View.VISIBLE);
+                            }
+                        }, delayInSeconds * 1000);
+
+                }
+                else if (currentFragment instanceof f_3_lesson_post_test) {
+
+                    // Create a dialog to show the user's score
+                    AlertDialog.Builder builder = new AlertDialog.Builder(d_Lesson_container.this);
+                    builder.setTitle("Pre Test");
+
+                    String message = "GUMANA KA NAMAN PLEASE";
+
+                    builder.setMessage(message);
+
+                    // Add a button to dismiss the dialog
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss(); // Close the dialog
+                        }
+                    });
+
+                    builder.setCancelable(false);
+
+                    // Create and show the dialog
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                    // pag nag return dito, and not yet finished yung post-test, dapat walang next Button
+                    // else, if tapos na, pero mostly yon wala na siya sa lesson e noh hahah
+
+                }
+
+                // else case eto sa if currentFragment ay video lesson
+//                else {
+//                    videoLesson = null; // Clear the videoLesson reference when not on a video lesson
+//                }
 
                 pagerAdapter.notifyDataSetChanged();
             }
@@ -245,6 +286,7 @@ public class d_Lesson_container extends AppCompatActivity implements
 
         nextButton = findViewById(R.id.nextButton);
         backButton = findViewById(R.id.backButton);
+
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -385,8 +427,10 @@ public class d_Lesson_container extends AppCompatActivity implements
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            nextButton.setVisibility(View.VISIBLE);
-                            nextButton.setEnabled(true);
+                            if (viewPager.getCurrentItem() != 0) {
+                                nextButton.setVisibility(View.VISIBLE);
+                                nextButton.setEnabled(true);
+                            }
                         }
                     }, 3000); // show after 3 seconds
                 }
@@ -436,6 +480,20 @@ public class d_Lesson_container extends AppCompatActivity implements
         }
     }
 
+    public static void onGoToCurrent() {
+
+        viewPager.setCurrentItem(currentStep);
+        // re-show nextButton
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (viewPager.getCurrentItem() != 0) {
+                    nextButton.setVisibility(View.VISIBLE);
+                    nextButton.setEnabled(true);
+                }
+            }
+        }, 3000); // show after 3 seconds
+    }
 
     public void onNextButtonClicked() {
         Log.e("onNextButtonClicked()", "currentStep: " + currentStep);
@@ -460,14 +518,6 @@ public class d_Lesson_container extends AppCompatActivity implements
             } else {
                 Log.d("onNextButtonClicked()", "Current Fragment: null");
             }
-
-//            Log.d("onNextButtonClicked()", "Checking if the current fragment is f_text_lesson");
-//
-//            // Increment pageNumber only if the current fragment is an instance of f_text_lesson
-//            if (currentFragment instanceof f_text_lesson) {
-//                Log.d("onNextButtonClicked()", "Current fragment is f_text_lesson; incrementing pageNumber");
-//                pageNumber++;
-//            }
 
             Log.e(TAG, "Before increment | Page Number: " + pageNumber);
             // ETO LATEST TESTING
@@ -510,14 +560,17 @@ public class d_Lesson_container extends AppCompatActivity implements
 
         builder.setMessage(message + scoreMessage);
 
+        builder.setCancelable(false);
+
         // Add a button to dismiss the dialog
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss(); // Close the dialog
-                onNextButtonClicked(); // Proceed to the next step if the test is passed
+//                onNextButtonClicked(); // Proceed to the next step if the test is passed
             }
         });
+
 
         // Create and show the dialog
         AlertDialog dialog = builder.create();
@@ -526,8 +579,8 @@ public class d_Lesson_container extends AppCompatActivity implements
         // Call feedback for pre-test
         c_Lesson_feedback.printResult("Pre-Test");
 
-
         isPreTestComplete = true;
+        onNextButtonClicked(); // Proceed to the next step if the test is passed
 
     }
 

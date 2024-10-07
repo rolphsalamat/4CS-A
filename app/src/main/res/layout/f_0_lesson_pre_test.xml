@@ -1,12 +1,27 @@
- <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
+
+    <!-- Total Answers -->
+    <TextView
+        android:id="@+id/answers_total"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="10dp"
+        android:text="Score: 0/0"
+        android:textColor="#FFF"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/question_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
         android:text="Question will appear here"
         android:textColor="@color/white"
         android:textSize="24sp"
@@ -23,27 +38,17 @@
         android:paddingVertical="8dp"
         android:paddingStart="8dp"
         android:layout_below="@id/question_text"
-        android:layout_marginTop="20dp"
-        />
+        android:layout_marginTop="20dp"/>
 
-
-<!--    android:paddingStart="16dp"-->
-
-
-<!--    <Button-->
-<!--        android:id="@+id/submit_pre_test"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="SUBMIT"-->
-<!--        android:background="@drawable/rounded_button"-->
-<!--        android:textColor="@android:color/white"-->
-<!--        android:textSize="18sp"-->
-<!--        android:padding="12dp"-->
-<!--        android:layout_marginTop="20dp"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_centerHorizontal="true"-->
-<!--        android:elevation="4dp"-->
-<!--        />-->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/currentButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/back"
+        android:layout_above="@id/submit_pre_test"
+        android:layout_alignEnd="@+id/submit_pre_test"
+    />
 
     <Button
         android:id="@+id/submit_pre_test"
@@ -52,6 +57,6 @@
         android:text="Submit"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginHorizontal="10dp"/>
+        />
 
 </RelativeLayout>

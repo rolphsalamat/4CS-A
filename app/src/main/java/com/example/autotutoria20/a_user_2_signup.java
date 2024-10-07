@@ -212,6 +212,8 @@ public class a_user_2_signup extends AppCompatActivity {
 
             Log.d(TAG, "User data populated");
 
+            String tanginamo = "awdawd";
+
             // Initialize Firebase Authentication
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
 

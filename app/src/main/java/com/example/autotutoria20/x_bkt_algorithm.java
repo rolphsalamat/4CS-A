@@ -6,8 +6,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -223,35 +228,196 @@ public class x_bkt_algorithm {
         return instance;
     }
 
-    // RECOMMENDED BY ChatGPT 4o Plus
-    public void initializeBKTScores(String collectionPath, String documentName, BKTCallback callback) {
-        Log.d(TAG, "Attempting to retrieve document from path: " + collectionPath + "/" + documentName);
+//    public void initializeBKTScores(String collectionPath, String documentName, String module, BKTCallback callback) {
+//        Log.d(TAG, "initializeBKTScores: Start - Attempting to retrieve document from path: " + collectionPath + "/" + documentName);
+//
+//        Log.d(TAG, "collectionPath: " + collectionPath);
+//        Log.d(TAG, "documentName: " + documentName);
+//        Log.d(TAG, "module: " + module);
+//        Log.d(TAG, "callback: " + callback);
+//
+//
+//        Log.d(TAG, "path: " + "users/"+userId+"/"+collectionPath+"/"+documentName+"/"+module+"/BKT Score");
+//
+////        FirebaseFirestore.setLoggingEnabled(true);
+//
+//        db.collection("users") // Mother Folder
+//                .document(userId) // Unique ID
+//                .collection(collectionPath) // Learning Mode
+//                .document(documentName) // Lesson [1 -> 8]
+//                .get()
+//                .addOnSuccessListener(documentSnapshot -> {
+//
+//                    Log.d(TAG, "Document retrieved successfully: " + documentSnapshot.getData());
+//
+//                    if (documentSnapshot.exists()) {
+//                        Log.d(TAG, "Document Data: " + documentSnapshot.getData());
+//                        Map<String, Object> moduleMap = (Map<String, Object>) documentSnapshot.get(module);
+//                        if (moduleMap != null) {
+//                            Log.d(TAG, "Module found: " + moduleMap);
+//                            if (moduleMap.containsKey("BKT Score")) {
+//
+//                                Object bktScoreObject = moduleMap.get("BKT Score");
+//
+//                                Double bktScore = null;
+//                                if (bktScoreObject instanceof Long) {
+//                                    bktScore = ((Long) bktScoreObject).doubleValue();  // Convert Long to Double
+//                                } else if (bktScoreObject instanceof Double) {
+//                                    bktScore = (Double) bktScoreObject;
+//                                }
+//                                Log.d(TAG, "BKT Score for " + module + ": " + bktScore);
+//                            } else {
+//                                Log.e(TAG, "No BKT Score found in module " + module);
+//                            }
+//                        } else {
+//                            Log.e(TAG, "Module map is null for module: " + module);
+//                        }
+//                    } else {
+//                        Log.e(TAG, "Document does not exist at path: " + collectionPath + "/" + documentName);
+//                    }
+//
+//                })
+//                .addOnFailureListener(e -> {
+//                    Log.e(TAG, "Error retrieving document from path: " + collectionPath + "/" + documentName, e);
+//                    callback.onBKTRetrieved(null);
+//                });
+//
+//
+//        Log.d(TAG, "initializeBKTScores: End - Firestore request has been initiated, waiting for callback.");
+//    }
 
-        db.collection("users").document(userId).collection(collectionPath).document(documentName)
+    public void initializeBKTScores(String collectionPath, String documentName, String module, BKTCallback callback) {
+        String TAG = "WARNING";
+
+        db.collection("users")
+                .document(userId)
+                .collection(collectionPath) // This should be "Progressive Mode"
+                .document(documentName) // This should be "Lesson 1"
                 .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        // Retrieve the BKT Scores as a Map
-                        Map<String, Double> bktScoresMap = (Map<String, Double>) documentSnapshot.get("BKT Scores");
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                // Retrieve all data from the document as a Map
+                                Map<String, Object> lessonData = document.getData();
 
-                        if (bktScoresMap != null) {
-                            // Convert the map to a list
-                            bktScores = new ArrayList<>(bktScoresMap.values());
+                                if (lessonData != null) {
+                                    // Check if the specific module exists in the lesson data
+                                    if (lessonData.containsKey(module)) {
+                                        Object moduleValue = lessonData.get(module);
+
+                                        // Check if the value is a Map
+                                        if (moduleValue instanceof Map) {
+                                            Map<String, Object> moduleData = (Map<String, Object>) moduleValue;
+
+                                            // Check for "BKT Score" in the module data
+                                            if (moduleData.containsKey("BKT Score")) {
+                                                Object bktScoreValue = moduleData.get("BKT Score");
+
+                                                List<Double> bktScores;
+                                                if (bktScoreValue instanceof Double) {
+                                                    // If it's a single Double, convert it to a List
+                                                    bktScores = new ArrayList<>();
+                                                    bktScores.add((Double) bktScoreValue);
+                                                } else if (bktScoreValue instanceof List<?>) {
+                                                    // If it's already a List, cast it appropriately
+                                                    bktScores = new ArrayList<>((List<Double>) bktScoreValue);
+                                                } else {
+                                                    Log.e(TAG, "Unexpected type for BKT Score: " + bktScoreValue.getClass().getName());
+                                                    callback.onBKTRetrieved(null);
+                                                    return;
+                                                }
+
+                                                Log.d(TAG, "Module: " + module + " | BKT Scores: " + bktScores);
+                                                callback.onBKTRetrieved(bktScores); // Pass the list of scores
+                                            } else {
+                                                Log.e(TAG, "No BKT Score found for module: " + module);
+                                                callback.onBKTRetrieved(null);
+                                            }
+                                        } else {
+                                            Log.e(TAG, "Value for module is not a Map: " + module);
+                                            callback.onBKTRetrieved(null);
+                                        }
+                                    } else {
+                                        Log.e(TAG, "Module does not exist in lesson data: " + module);
+                                        callback.onBKTRetrieved(null);
+                                    }
+                                } else {
+                                    Log.e(TAG, "Lesson data is null.");
+                                    callback.onBKTRetrieved(null);
+                                }
+                            } else {
+                                Log.e(TAG, "Document does not exist at path: " + collectionPath + "/" + documentName);
+                                callback.onBKTRetrieved(null);
+                            }
                         } else {
-                            bktScores = new ArrayList<>();  // Initialize an empty list if null
+                            Log.e(TAG, "Failed to retrieve document: ", task.getException());
+                            callback.onBKTRetrieved(null);
                         }
-
-                        callback.onBKTRetrieved(bktScores);
-                    } else {
-                        Log.e(TAG, "Document does not exist at path: " + collectionPath + "/" + documentName);
-                        callback.onBKTRetrieved(null);
                     }
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error retrieving BKT Scores", e);
-                    callback.onBKTRetrieved(null);
                 });
     }
+
+    // RECOMMENDED BY ChatGPT 4o Plus
+//    public void initializeBKTScores(String collectionPath, String documentName, String module, BKTCallback callback) {
+//        Log.d(TAG, "Attempting to retrieve document from path: " +
+//                "users/" + userId + "/" + collectionPath + "/" + documentName);
+//
+//        Log.e(TAG, "MARJON");
+//
+//        // Testing ko
+////        db.collection("users")
+////                .document(userId)
+////                .collection(collectionPath)
+////                .document(documentName)
+////                .get()
+////                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+////                    @Override
+////                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+////                        String TAG = "WARNING";
+////                        if (task.isSuccessful()) {
+////                            DocumentSnapshot document = task.getResult();
+////                            if (document.exists()) {
+////                                if ()
+////                            }
+////                        }
+////                    }
+////                })
+//
+//
+//
+//
+//                // Original code
+////                .addOnSuccessListener(documentSnapshot -> {
+////                    if (documentSnapshot.exists()) {
+////                        // Retrieve the BKT Scores as a Map
+////                        Map<String, Double> bktScoresMap = (Map<String, Double>) documentSnapshot
+////                                .get(module + ".BKT Scores"); // walang tuldok talaga to?
+////
+////                        if (bktScoresMap != null) {
+////                            // Convert the map to a list
+////                            bktScores = new ArrayList<>(bktScoresMap.values());
+////                            Log.e(TAG, "YEHEY I GOT IT!");
+////                            Log.e(TAG, "bktScores: " + bktScores);
+////                        } else {
+////                            bktScores = new ArrayList<>();  // Initialize an empty list if null
+////                            Log.e(TAG, "I failed to retrieve it :(");
+////                            Log.e(TAG, "bktScores: " + bktScores);
+////                        }
+////
+////                        callback.onBKTRetrieved(bktScores);
+////                    } else {
+////                        Log.e(TAG, "Document does not exist at path: " + collectionPath + "/" + documentName);
+////                        callback.onBKTRetrieved(null);
+////                    }
+////                })
+////                .addOnFailureListener(e -> {
+////                    Log.e(TAG, "Error retrieving BKT Scores", e);
+////                    callback.onBKTRetrieved(null);
+////                });
+//    }
 
 
     public void updateScore(int moduleIndex, int lessonIndex,
@@ -263,9 +429,15 @@ public class x_bkt_algorithm {
 
         updateKnowledge(isCorrect); // Call to update knowledge based on correctness
 
-        if (bktScores == null || moduleIndex < 0 || lessonIndex < 0) {
-            Log.e(TAG, "Invalid BKT score update request");
-            return;
+        if (
+//                bktScores == null ||
+            moduleIndex < 0 ||
+            lessonIndex < 0) {
+                Log.e(TAG, "Invalid BKT score update request");
+                Log.e(TAG, "bktScores: " + bktScores);
+                Log.e(TAG, "moduleIndex: " + moduleIndex);
+                Log.e(TAG, "lessonIndex: " + lessonIndex);
+                return;
         }
 
         Log.e("updateScore", "Category: " + category);
@@ -287,15 +459,23 @@ public class x_bkt_algorithm {
         Log.e(TAG, "Field path for update: " + moduleFieldPath + " | Lesson " + lessonIndex);
 
         Map<String, Object> updates = new HashMap<>();
-        updates.put(moduleFieldPath, newScore); // Update only the specific field
+        // My own code:
+        updates.put(moduleFieldPath, knowledgeProbability);
+
+
+//        // Original Code
+//        updates.put(moduleFieldPath, newScore); // Update only the specific field
+
+        Log.e(TAG, "ABDUL path: users/"+userId+"/"+collectionPath+"/"+documentName+"/"+updates);
 
         int finalModuleIndex = moduleIndex;
+
         db.collection("users").document(userId)
                 .collection(collectionPath)
                 .document(documentName)
                 .update(updates)
-                .addOnSuccessListener(aVoid -> Log.d(TAG, "M" + finalModuleIndex + " Ma fields successfully updated"))
-                .addOnFailureListener(e -> Log.e(TAG, "Error updating M" + finalModuleIndex + " Ma fields", e));
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "M" + finalModuleIndex + " M fields successfully updated"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error updating M" + finalModuleIndex + " M fields", e));
     }
 
     public static void updateTestScore(boolean learningMode,
@@ -383,6 +563,9 @@ public class x_bkt_algorithm {
 
         // Ensure knowledgeProbability stays within bounds [0, 1]
         knowledgeProbability = Math.max(0, Math.min(1, knowledgeProbability));
+
+        Log.e("updateKnowledge", "knowledgeProbability: " + knowledgeProbability);
+
     }
 
     public double getKnowledgeProbability() {
