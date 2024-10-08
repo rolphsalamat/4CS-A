@@ -169,6 +169,7 @@ public class x_bkt_algorithm {
     }
 
     public static void setBKTCategory(String category) {
+
         switch (category) {
             case "Novice":
                 learnRate = 0.3;
@@ -186,12 +187,10 @@ public class x_bkt_algorithm {
                 learnRate = 0.7;
                 slipRate = 0.05;
                 break;
-            case "Expert":
-                learnRate = 0.9;
-                slipRate = 0.01;
-                break;
+
             default:
                 throw new IllegalArgumentException("Invalid category: " + category);
+
         }
 
         String TAG = "Set BKT Category";
@@ -199,6 +198,7 @@ public class x_bkt_algorithm {
         Log.d(TAG, "Category: " + category);
         Log.d(TAG, "Learn Rate: " + learnRate);
         Log.d(TAG, "Slip Rate: " + slipRate);
+
     }
 
     public void setBKTParameters(e_Question.Difficulty difficulty) {
