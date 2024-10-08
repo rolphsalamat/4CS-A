@@ -34,7 +34,8 @@ public class f_0_lesson_pre_test extends Fragment {
     private int questionsAnswered = 1;
     private int preTestQuestions = 5;
     private Button submitButton;
-    private TextView correct, mistake, total;
+    private TextView correct, mistake;
+    private TextView total;
     private boolean isCorrect = false;
     public static ShapeableImageView currentButton;
     private boolean isProgressiveMode = true; // Default to Progressive Mode
@@ -186,7 +187,7 @@ public class f_0_lesson_pre_test extends Fragment {
 
         submitButton.setOnClickListener(v -> {
 
-            Log.e("HEY!", "Submit Button Clicked!");
+//            Log.e("HEY!", "Submit Button Clicked!");
 
 //            if (d_Lesson_container.isPreTestComplete)
 //                d_Lesson_container.onGoToCurrent();
@@ -217,7 +218,8 @@ public class f_0_lesson_pre_test extends Fragment {
                     double knowledgeProb = bktModel.getKnowledgeProbability();
                     bktModel.updateScore(moduleIndex, lessonIndex, knowledgeProb, isProgressiveMode, correctAnswer);
 
-                    Log.d("TESTING", "Answer: " + correctAnswer);
+//                    Log.d("TESTING", "Answer: " + correctAnswer);
+//
 
                     // Check if we need to move to the next question based on attempts or correctness.
                     if (answerAttempt >= attemptChances || correctAnswer) {
@@ -227,31 +229,32 @@ public class f_0_lesson_pre_test extends Fragment {
                         c_Lesson_feedback.preTestAttemptAnswers++;
 
                         // Move to next question or reset if all have been answered.
-                        Log.d(TAG, "currentQuestionInddex["+currentQuestionIndex+"] < questions.length-1["+(questions.length-1)+"])");
+//                        Log.d(TAG, "currentQuestionInddex["+currentQuestionIndex+"] < questions.length-1["+(questions.length-1)+"])");
                         if (currentQuestionIndex < questions.length - 1) {
                             currentQuestionIndex++;
-                            Log.e(TAG, "currentQuestionIndex++; ["+currentQuestionIndex+"]");
+//                            Log.e(TAG, "currentQuestionIndex++; ["+currentQuestionIndex+"]");
                         } else {
                             currentQuestionIndex = 0; // Reset for new round
                             bktModel.logScores(); // Log scores at reset point
-                            Log.e(TAG, "reset currentQuestionIndex["+currentQuestionIndex+"]");
+//                            Log.e(TAG, "reset currentQuestionIndex["+currentQuestionIndex+"]");
                         }
 
                         questionsAnswered++; // Increment answered count
-                        Log.e(TAG, "increment questionsAnswered["+questionsAnswered+"]");
+//                        Log.e(TAG, "increment questionsAnswered["+questionsAnswered+"]");
 
                         // Load next question only if still within pre-test limits.
-                        Log.d(TAG, "if (correctAnswer["+correctAnswer+"] || currentQuestionIndex["+currentQuestionIndex
-                        + "] < preTestQuestions["+preTestQuestions+"] && answerAttempt["+answerAttempt+"] >= attemptChances["+attemptChances+"]");
+//                        Log.d(TAG, "if (correctAnswer["+correctAnswer+"] || currentQuestionIndex["+currentQuestionIndex
+//                        + "] < preTestQuestions["+preTestQuestions+"] && answerAttempt["+answerAttempt+"] >= attemptChances["+attemptChances+"]");
                         if (correctAnswer || currentQuestionIndex < preTestQuestions && answerAttempt >= attemptChances) {
                             loadQuestion(); // Load next question
-                            Log.e(TAG, "loadQuestion();");
+//                            Log.e(TAG, "loadQuestion();");
                             answerAttempt = 0; // Reset attempts for new question
-                            Log.e(TAG, "reset answerAttempt["+answerAttempt+"]");
+//                            Log.e(TAG, "reset answerAttempt["+answerAttempt+"]");
                         }
+
                     } else {
 
-                        Log.d("TESTING", "Not moving to next question yet.");
+//                        Log.d("TESTING", "Not moving to next question yet.");
 
                         int mistakes = 0;
                         mistakes = c_Lesson_feedback.preTestAttemptAnswers - c_Lesson_feedback.preTestCorrectAnswers;
@@ -407,6 +410,7 @@ public class f_0_lesson_pre_test extends Fragment {
                 Toast.makeText(getContext(), "Incorrect answer.", Toast.LENGTH_SHORT).show();
 //                mistake.setText("Incorrect Answers: " + incorrect);
             }
+            Toast.makeText(getContext(), "Correct answer!", Toast.LENGTH_SHORT).show();
             return isCorrect;  // Return if the answer is correct
         } else {
             Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();

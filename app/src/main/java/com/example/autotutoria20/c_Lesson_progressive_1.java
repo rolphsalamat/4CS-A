@@ -30,6 +30,8 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
     private boolean[] cardCompletionStatus = {false, false, false, false}; // Track completion status of each card
     private CustomLoadingDialog loadingDialog; // Loading dialog instance
     private int[] moduleProgress;
+    private double passingGrade;
+    private double bktscore;
     private c_Lesson_feedback feedback;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,17 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
         setCardClickListener(card2, 2, numberOfStepsForCard2);
         setCardClickListener(card3, 3, numberOfStepsForCard3);
         setCardClickListener(card4, 4, numberOfStepsForCard4);
+
+        c_Lesson_a_retrieveScore.fetchModuleProgress(
+                "Progressive Mode", "Lesson 1");
+
+        passingGrade = b_main_0_menu_categorize_user.passingGrade;
+
+        Log.e("TANGINAMO HANS", "call fetchProgressData");
+
+//        passingGrade = b_main_0_menu_categorize_user.passingCategory(
+//                b_main_0_menu_categorize_user.category
+//        );
 
         Button exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
@@ -262,50 +275,76 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
 
         String newText;
 
-        card1LockedOverlay.setVisibility(View.GONE);
+        card1LockedOverlay.setVisibility(View.GONE); // Default behavior of each module
+
+        String TAG = "TANGINA PRE";
 
         switch (key) {
             case 1:
                 newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M1_Lesson 1");
                 module1ProgressText.setText(newText);
 
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 1")) {
+                double M1_Score = c_Lesson_a_retrieveScore.bktScores.get(0); // Accessing first module's score
+
+                Log.e(TAG, "M1_Score["+M1_Score+"] < passingGrade["+passingGrade+"]");
+                // Check if progress meets the number of steps and if the score is below passing grade
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 1")
+                        && M1_Score < passingGrade) {
                     card2LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
                 }
                 break;
+
             case 2:
                 newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M2_Lesson 1");
                 module2ProgressText.setText(newText);
 
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M2_Lesson 1")) {
+                double M2_Score = c_Lesson_a_retrieveScore.bktScores.get(1); // Accessing first module's score
+
+                Log.e(TAG, "M1_Score["+M2_Score+"] < passingGrade["+passingGrade+"]");
+                // Additional condition for case 2
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M2_Lesson 1")
+                        && M2_Score < passingGrade) {
                     card3LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
                 }
                 break;
+
             case 3:
                 newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M3_Lesson 1");
                 module3ProgressText.setText(newText);
 
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M3_Lesson 1")) {
+                double M3_Score = c_Lesson_a_retrieveScore.bktScores.get(2); // Accessing first module's score
+
+                Log.e(TAG, "M1_Score["+M3_Score+"] < passingGrade["+passingGrade+"]");
+                // Additional condition for case 3
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M3_Lesson 1")
+                        && M3_Score < passingGrade) {
                     card4LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
                 }
                 break;
+
             case 4:
                 newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M4_Lesson 1");
                 module4ProgressText.setText(newText);
 
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M4_Lesson 1")) {
+
+                double M4_Score = c_Lesson_a_retrieveScore.bktScores.get(3); // Accessing first module's score
+
+                Log.e(TAG, "M1_Score["+M4_Score+"] < passingGrade["+passingGrade+"]");
+                // Additional condition for case 4
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M4_Lesson 1")
+                        && M4_Score < passingGrade) {
                     setCardCompletionStatus(key, true);
                     Log.d("Completed Lesson!", "Lesson 1 Completed! :D");
 
-                    Log.e("Comleted Lesson!", "Calling Feedback Class");
+                    Log.e("Completed Lesson!", "Calling Feedback Class");
                     feedback = new c_Lesson_feedback(this); // Initialize feedback object
                     feedback.retrieveBKTScore("Progressive Mode", "Lesson 1");
-
                 }
                 break;
+
             default:
                 Log.d("updateUI", "Invalid module number: " + key);
                 break;

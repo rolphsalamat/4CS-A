@@ -112,6 +112,11 @@ public class b_main_0_menu extends AppCompatActivity {
                 if (category != null) {
                     Log.d("MainActivity", "User Category: " + category);
                     // You can now use the category for further processing
+
+                    b_main_0_menu_categorize_user.category = category;
+                    b_main_0_menu_categorize_user.passingCategory(category);
+                    x_bkt_algorithm.setBKTCategory(category);
+
                 } else {
                     Log.d("MainActivity", "Failed to retrieve user category.");
                 }

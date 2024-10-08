@@ -28,10 +28,10 @@ public class x_bkt_algorithm {
     private FirebaseFirestore db;
     private String userId;
     private List<Double> bktScores;
-    private double knowledgeProbability;
-    private double learnRate;
-    private double forgetRate;
-    private double slipRate;
+    private static double knowledgeProbability;
+    private static double learnRate;
+    private static double forgetRate;
+    private static double slipRate;
 
     // Feedback ranges
     double hard = 0.67;
@@ -53,6 +53,7 @@ public class x_bkt_algorithm {
     String undefined_string = "Undefined";
 
     String category;
+
 
     // Singleton instance (if you need it to be a singleton)
     private static x_bkt_algorithm instance;
@@ -165,6 +166,39 @@ public class x_bkt_algorithm {
             // negative infinity ~ 0.33
             return e_Question.Difficulty.EASY;
 
+    }
+
+    public static void setBKTCategory(String category) {
+        switch (category) {
+            case "Novice":
+                learnRate = 0.3;
+                slipRate = 0.3;
+                break;
+            case "Beginner":
+                learnRate = 0.4;
+                slipRate = 0.2;
+                break;
+            case "Intermediate":
+                learnRate = 0.5;
+                slipRate = 0.1;
+                break;
+            case "Advanced":
+                learnRate = 0.7;
+                slipRate = 0.05;
+                break;
+            case "Expert":
+                learnRate = 0.9;
+                slipRate = 0.01;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid category: " + category);
+        }
+
+        String TAG = "Set BKT Category";
+
+        Log.d(TAG, "Category: " + category);
+        Log.d(TAG, "Learn Rate: " + learnRate);
+        Log.d(TAG, "Slip Rate: " + slipRate);
     }
 
     public void setBKTParameters(e_Question.Difficulty difficulty) {
@@ -566,6 +600,11 @@ public class x_bkt_algorithm {
 
         Log.e("updateKnowledge", "knowledgeProbability: " + knowledgeProbability);
 
+    }
+
+    public static double getKnowledge() {
+        Log.e("getKnowledge()", "knowledgeProbability: " + knowledgeProbability);
+        return knowledgeProbability;
     }
 
     public double getKnowledgeProbability() {

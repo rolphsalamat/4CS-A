@@ -31,6 +31,7 @@ public class f_3_lesson_post_test extends Fragment {
     private TextView questionText;
     private RadioGroup choicesGroup;
     private EditText identificationAnswer;
+    private TextView total;
     private Button submitButton;
     private e_Question.Difficulty difficultyLevel;
     private int answerAttempt = 0;
@@ -99,6 +100,7 @@ public class f_3_lesson_post_test extends Fragment {
         choicesGroup = view.findViewById(R.id.choices_group);
         submitButton = view.findViewById(R.id.submit_post_test);
         identificationAnswer = view.findViewById(R.id.identification_answer);
+        total = view.findViewById(R.id.answers_total);
 
 //        // DAPAT MAG-IBA TO DEPENDE SA DIFFICULTY...
 //        // Initialize BKT Model instance with appropriate parameters
@@ -132,50 +134,84 @@ public class f_3_lesson_post_test extends Fragment {
 //                Log.e(TAG, "ABDUL POST TEST INITIALIZE BKT SCORE YEHEY");
 //            });
 
-            bktModel.initializeBKTScores(collectionPath, documentName, mod, bktScores -> {
-                Log.e(TAG, "NAKAPASOK AKO");
+//            try {
+//                bktModel.initializeBKTScores(collectionPath, documentName, mod, bktScores -> {
+//                    Log.e(TAG, "NAKAPASOK AKO");
+//
+//                    // Extract the module number from the string (M1, M2, etc.)
+//                    char moduleChar = module.charAt(1);  // Get the second character, e.g., '1' from "M1"
+//                    Log.e(TAG, "moduleChar: " + moduleChar);
+//
+//                    // Convert it to an integer and decrement by 1 to get the zero-based index
+//                    int moduleIndex = Character.getNumericValue(moduleChar) - 1; // Adjust for zero-based index
+//                    Log.e(TAG, "moduleIndex: " + moduleIndex);
+//
+//                    // Ensure the moduleIndex is within valid range
+//                    if (moduleIndex >= 0 && moduleIndex < bktScores.size()) {
+//                        double userScore = bktScores.get(moduleIndex);  // Use the moduleIndex to get the correct score
+//                        Log.e("f_post_test", "bktScores: " + bktScores.toString());
+//                        Log.d("f_post_test", "User BKT Score for Module " + module + ": " + userScore);
+//
+//                        // Determine difficulty based on score
+//                        difficultyLevel = bktModel.getDifficultyLevel(userScore);
+//                        Log.d("f_post_test", "Determined Difficulty Level: " + difficultyLevel);
+//
+//                        // Set attempt chances based on difficulty level
+//                        if (difficultyLevel == e_Question.Difficulty.EASY)
+//                            attemptChances = 1;
+//                        else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+//                            attemptChances = 2;
+//                        else if (difficultyLevel == e_Question.Difficulty.HARD)
+//                            attemptChances = 3;
+//
+//                        Log.e("f_post_test", "dahil " + difficultyLevel + " ang difficulty, gawin nating " + attemptChances + " ang chances");
+//
+//                        bktModel.setBKTParameters(difficultyLevel);
+//
+//                        Log.e(TAG, "I will pass these:");
+//                        Log.e(TAG, "module: " + module);
+//                        Log.e(TAG, "lesson: " + lesson);
+//
+//                        // Retrieve post-test questions based on difficulty level
+//                        questions = getPostTestQuestionsBasedOnDifficulty(module, lesson, difficultyLevel);
+//                        loadQuestion();
+//                    } else {
+//                        Log.e("f_post_test", "Invalid moduleIndex: " + moduleIndex + ", cannot retrieve BKT score.");
+//                    }
+//                });
+//
+//            } catch (Exception e) {
 
-                // Extract the module number from the string (M1, M2, etc.)
-                char moduleChar = module.charAt(1);  // Get the second character, e.g., '1' from "M1"
-                Log.e(TAG, "moduleChar: " + moduleChar);
+                double userScore = x_bkt_algorithm.getKnowledge();
 
-                // Convert it to an integer and decrement by 1 to get the zero-based index
-                int moduleIndex = Character.getNumericValue(moduleChar) - 1; // Adjust for zero-based index
-                Log.e(TAG, "moduleIndex: " + moduleIndex);
+                // Determine difficulty based on score
+                difficultyLevel = bktModel.getDifficultyLevel(userScore);
+                Log.d("f_post_test", "Determined Difficulty Level: " + difficultyLevel);
 
-                // Ensure the moduleIndex is within valid range
-                if (moduleIndex >= 0 && moduleIndex < bktScores.size()) {
-                    double userScore = bktScores.get(moduleIndex);  // Use the moduleIndex to get the correct score
-                    Log.e("f_post_test", "bktScores: " + bktScores.toString());
-                    Log.d("f_post_test", "User BKT Score for Module " + module + ": " + userScore);
+                // Set attempt chances based on difficulty level
+                if (difficultyLevel == e_Question.Difficulty.EASY)
+                    attemptChances = 1;
+                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                    attemptChances = 2;
+                else if (difficultyLevel == e_Question.Difficulty.HARD)
+                    attemptChances = 3;
 
-                    // Determine difficulty based on score
-                    difficultyLevel = bktModel.getDifficultyLevel(userScore);
-                    Log.d("f_post_test", "Determined Difficulty Level: " + difficultyLevel);
+                Log.e("f_post_test", "dahil " + difficultyLevel + " ang difficulty, gawin nating " + attemptChances + " ang chances");
 
-                    // Set attempt chances based on difficulty level
-                    if (difficultyLevel == e_Question.Difficulty.EASY)
-                        attemptChances = 1;
-                    else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-                        attemptChances = 2;
-                    else if (difficultyLevel == e_Question.Difficulty.HARD)
-                        attemptChances = 3;
+                bktModel.setBKTParameters(difficultyLevel);
 
-                    Log.e("f_post_test", "dahil " + difficultyLevel + " ang difficulty, gawin nating " + attemptChances + " ang chances");
+                Log.e(TAG, "I will pass these:");
+                Log.e(TAG, "module: " + module);
+                Log.e(TAG, "lesson: " + lesson);
 
-                    bktModel.setBKTParameters(difficultyLevel);
+                // Retrieve post-test questions based on difficulty level
+                questions = getPostTestQuestionsBasedOnDifficulty(module, lesson, difficultyLevel);
+                loadQuestion();
 
-                    Log.e(TAG, "I will pass these:");
-                    Log.e(TAG, "module: " + module);
-                    Log.e(TAG, "lesson: " + lesson);
+//                throw new RuntimeException(e);
+//            }
 
-                    // Retrieve post-test questions based on difficulty level
-                    questions = getPostTestQuestionsBasedOnDifficulty(module, lesson, difficultyLevel);
-                    loadQuestion();
-                } else {
-                    Log.e("f_post_test", "Invalid moduleIndex: " + moduleIndex + ", cannot retrieve BKT score.");
-                }
-            });
+
 
             Log.e(TAG, "wala :( loadQuestion nalang :(");
             loadQuestion();
@@ -210,12 +246,12 @@ public class f_3_lesson_post_test extends Fragment {
 
                     // Update feedback and scores based on correctness
                     if (correctAnswer) {
-                        c_Lesson_feedback.preTestCorrectAnswers++;
+                        c_Lesson_feedback.postTestCorrectAnswers++;
                         x_bkt_algorithm.updateTestScore(
                                 isProgressiveMode,
                                 moduleIndex, lessonIndex,
                                 "Pre-Test",
-                                c_Lesson_feedback.preTestCorrectAnswers);
+                                c_Lesson_feedback.postTestCorrectAnswers);
                     }
 
                     // Update knowledge probability and score based on current answer.
@@ -239,6 +275,7 @@ public class f_3_lesson_post_test extends Fragment {
                         } else {
                             currentQuestionIndex = 0; // Reset for new round
                             bktModel.logScores(); // Log scores at reset point
+                            Log.e(TAG, "reset currentQuestionIndex["+currentQuestionIndex+"]");
                             Log.e(TAG, "reset currentQuestionIndex["+currentQuestionIndex+"]");
                         }
 
@@ -277,6 +314,11 @@ public class f_3_lesson_post_test extends Fragment {
 
                 choicesGroup.clearCheck(); // Clear selected choices at the end of processing.
             }
+
+            total.setText("Score: " + c_Lesson_feedback.postTestCorrectAnswers
+                    + "/"
+                    + c_Lesson_feedback.postTestAttemptAnswers);
+
         });
 
 //        submitButton.setOnClickListener(v -> {
