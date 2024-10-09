@@ -286,10 +286,10 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
 
                 double M1_Score = c_Lesson_a_retrieveScore.bktScores.get(0); // Accessing first module's score
 
-                Log.e(TAG, "M1_Score["+M1_Score+"] < passingGrade["+passingGrade+"]");
+                Log.e(TAG, "M1_Score["+M1_Score+"] >     passingGrade["+passingGrade+"]");
                 // Check if progress meets the number of steps and if the score is below passing grade
                 if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 1")
-                        && M1_Score < passingGrade) {
+                        && M1_Score > passingGrade) {
                     card2LockedOverlay.setVisibility(View.GONE);
                     setCardCompletionStatus(key, true);
                 }

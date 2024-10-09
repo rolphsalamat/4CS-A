@@ -262,6 +262,7 @@ public class f_0_lesson_pre_test extends Fragment {
 //                        mistake.setText("Incorrect Answers: " + mistakes);
                     }
 
+                    // may plus 1 to kanina
                     if (questionsAnswered == (preTestQuestions+1)) {
                         Log.d("TESTING", "Pre-test complete!");
 

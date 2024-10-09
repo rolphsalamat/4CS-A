@@ -32,7 +32,7 @@ public class x_bkt_algorithm {
     private static double learnRate;
     private static double forgetRate;
     private static double slipRate;
-
+    private static double guessRate;
     // Feedback ranges
     double hard = 0.67;
     double medium = 0.34;
@@ -105,6 +105,7 @@ public class x_bkt_algorithm {
                     if (documentSnapshot.exists()) {
 
                         category = documentSnapshot.getString("User Category");
+
                         Log.d(TAG, "User Category retrieved: " + category);
                         callback.onCategoryFetched(category);
                         updateKnowledgeProbability();
@@ -129,16 +130,20 @@ public class x_bkt_algorithm {
 
     public void updateKnowledgeProbability() {
 
-        // Level 1 [0.0 - 0.1] Novice
-        knowledgeProbability = 0.0 + (0.1 - 0.0) * Math.random();
-        // Level 2 [0.1 - 0.3] Beginner
-        knowledgeProbability = 0.1 + (0.3 - 0.1) * Math.random();
-        // Level 3 [0.3 - 0.5] Intermediate
-        knowledgeProbability = 0.3 + (0.5 - 0.3) * Math.random();
-        // Level 4 [0.5 - 0.7] Advanced
-        knowledgeProbability = 0.5 + (0.7 - 0.5) * Math.random();
-        // Level 5 [0.7 - 0.9] Expert
-        knowledgeProbability = 0.7 + (0.9 - 0.7) * Math.random();
+
+        switch (category) {
+
+            case "Novice": // Level 1 [0.0 - 0.1] Novice
+                knowledgeProbability = 0.0 + (0.1 - 0.0) * Math.random(); break;
+            case "Beginner":  // Level 2 [0.1 - 0.3] Beginner
+                knowledgeProbability = 0.1 + (0.3 - 0.1) * Math.random(); break;
+            case "Intermediate": // Level 3 [0.3 - 0.5] Intermediate
+                knowledgeProbability = 0.3 + (0.5 - 0.3) * Math.random(); break;
+            case "Advanced": // Level 4 [0.5 - 0.7] Advanced
+                knowledgeProbability = 0.5 + (0.7 - 0.5) * Math.random(); break;
+            case "Expert": // Level 5 [0.7 - 0.9] Expert
+                knowledgeProbability = 0.7 + (0.9 - 0.7) * Math.random(); break;
+        }
 
         Log.e("User Category", "Category: " + category);
         Log.e("User Category", "pKnow: " + knowledgeProbability);
@@ -174,23 +179,40 @@ public class x_bkt_algorithm {
             case "Novice":
                 learnRate = 0.3;
                 slipRate = 0.3;
+                guessRate = 0.3;
+                forgetRate = 0.1;
+                knowledgeProbability = 0.1;  // Initial probability for Novice
                 break;
             case "Beginner":
                 learnRate = 0.4;
                 slipRate = 0.2;
+                guessRate = 0.2;
+                forgetRate = 0.05;
+                knowledgeProbability = 0.3;  // Initial probability for Beginner
                 break;
             case "Intermediate":
                 learnRate = 0.5;
                 slipRate = 0.1;
+                guessRate = 0.1;
+                forgetRate = 0.03;
+                knowledgeProbability = 0.5;  // Initial probability for Intermediate
                 break;
             case "Advanced":
                 learnRate = 0.7;
                 slipRate = 0.05;
+                guessRate = 0.05;
+                forgetRate = 0.02;
+                knowledgeProbability = 0.7;  // Initial probability for Advanced
                 break;
-
+            case "Expert":
+                learnRate = 0.9;
+                slipRate = 0.05;
+                guessRate = 0.05;
+                forgetRate = 0.01;  // Experts rarely forget
+                knowledgeProbability = 0.9;  // Initial probability for Expert
+                break;
             default:
                 throw new IllegalArgumentException("Invalid category: " + category);
-
         }
 
         String TAG = "Set BKT Category";
@@ -581,26 +603,33 @@ public class x_bkt_algorithm {
 
     // optimized version daw??
     public void updateKnowledge(boolean correct) {
-
         Log.e("updateKnowledge", "Answer: " + correct);
         Log.e("updateKnowledge", "Category: " + category);
-        Log.e("updateKnowledge", "pKnow: " + knowledgeProbability);
+        Log.e("updateKnowledge", "Initial pKnow: " + knowledgeProbability);
+
+        double newKnowledgeProbability;
 
         if (correct) {
-            knowledgeProbability = knowledgeProbability * (1 - forgetRate) + (1 - knowledgeProbability) * learnRate;
+            // Update probability of knowing the skill after a correct answer
+            newKnowledgeProbability = (knowledgeProbability * (1 - slipRate)) /
+                    (knowledgeProbability * (1 - slipRate) + (1 - knowledgeProbability) * guessRate);
         } else {
-            knowledgeProbability = knowledgeProbability * forgetRate * slipRate;
+            // Update probability of knowing the skill after an incorrect answer
+            newKnowledgeProbability = (knowledgeProbability * slipRate) /
+                    (knowledgeProbability * slipRate + (1 - knowledgeProbability) * (1 - guessRate));
         }
 
-        Log.e("updateKnowledge", "pKnow is: " + knowledgeProbability
-                                         + "because Answer is: " + correct);
+        // Apply learning rate to update knowledge probability
+        knowledgeProbability = newKnowledgeProbability + (1 - newKnowledgeProbability) * learnRate;
+
+        Log.e("updateKnowledge", "Updated pKnow is: " + knowledgeProbability + " because Answer is: " + correct);
 
         // Ensure knowledgeProbability stays within bounds [0, 1]
         knowledgeProbability = Math.max(0, Math.min(1, knowledgeProbability));
 
-        Log.e("updateKnowledge", "knowledgeProbability: " + knowledgeProbability);
-
+        Log.e("updateKnowledge", "Final knowledgeProbability: " + knowledgeProbability);
     }
+
 
     public static double getKnowledge() {
         Log.e("getKnowledge()", "knowledgeProbability: " + knowledgeProbability);

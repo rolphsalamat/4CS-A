@@ -188,13 +188,25 @@ public class f_3_lesson_post_test extends Fragment {
                 difficultyLevel = bktModel.getDifficultyLevel(userScore);
                 Log.d("f_post_test", "Determined Difficulty Level: " + difficultyLevel);
 
-                // Set attempt chances based on difficulty level
-                if (difficultyLevel == e_Question.Difficulty.EASY)
+                // Set attempt chances and number of questions based on difficulty level
+                if (difficultyLevel == e_Question.Difficulty.EASY) {
                     attemptChances = 1;
-                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
+                    postTestQuestions = 10;
+                }
+                else if (difficultyLevel == e_Question.Difficulty.MEDIUM) {
                     attemptChances = 2;
-                else if (difficultyLevel == e_Question.Difficulty.HARD)
+                    postTestQuestions = 5;
+                }
+                else if (difficultyLevel == e_Question.Difficulty.HARD) {
                     attemptChances = 3;
+                    postTestQuestions = 3;
+                }
+
+                // ang inaalam mo ngayon, kung ilang questions itatanong base on difficulty??
+
+                // tapos, yung post-test na identification, hindi nagpo-process ng answer na nandon sa identification
+
+            // dapat merong if statement, para nakabukod yung pag-process ng easy, medium, and hard
 
                 Log.e("f_post_test", "dahil " + difficultyLevel + " ang difficulty, gawin nating " + attemptChances + " ang chances");
 
@@ -224,7 +236,11 @@ public class f_3_lesson_post_test extends Fragment {
 //            if (d_Lesson_container.isPreTestComplete)
 //                d_Lesson_container.onGoToCurrent();
 
-            if (!(choicesGroup.getCheckedRadioButtonId() == -1)) {
+            // Easy | Medium
+            if (!(choicesGroup.getCheckedRadioButtonId() == -1)
+                ||
+            // Hard
+                !identificationAnswer.getText().toString().trim().isEmpty()) {
 
                 // Dito originally yung answerAttempt++;
                 answerAttempt++;
@@ -825,8 +841,12 @@ public class f_3_lesson_post_test extends Fragment {
         Log.e(TAG, "checkAnswer() method is CALLED");
 
         // Check if choicesGroup is null
-        if (choicesGroup == null) {
+        if (choicesGroup == null
+        ||
+        identificationAnswer.getText().toString().trim().isEmpty()) {
+
             Log.e(TAG, "choicesGroup is null!");
+            Log.e(TAG, "identification answer is null");
             Context context = getContext();
             if (context != null) {
                 Toast.makeText(context, "Error: Choices group is missing.", Toast.LENGTH_SHORT).show();

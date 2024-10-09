@@ -45,7 +45,8 @@ public class a_user_1_login extends AppCompatActivity {
     private boolean isPasswordVisible = false;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private TextView loginButton, forgotPassword;
+    private TextView loginButton;
+    private TextView forgotPassword;
     private LinearLayout signupButton, signWithGoogleButton;
     private EditText
         emailAddressTextView,
@@ -97,11 +98,14 @@ public class a_user_1_login extends AppCompatActivity {
             public void onClick(View v) {
 
                 // this is modified to use Username and Password for logging in.
-                String email = emailAddressTextView.getText().toString().trim();
+                String email = usernameTextView.getText().toString().trim();
 
 //                String username = usernameTextView.getText().toString().trim();
                 String password = passwordTextView.getText().toString().trim();
 
+                Log.e("Login", "Login");
+                Log.e("Login", "Username: " + email);
+                Log.e("Login", "Password: " + password);
                 loginUser(email, password);
             }
         });
@@ -222,6 +226,8 @@ public class a_user_1_login extends AppCompatActivity {
     } // Method
 
     private void loginUser(String username, String enteredPassword) {
+
+        Log.e("loginUser", "Binhi : We're here!");
 
         // Query Firestore for the email associated with this username
         db.collection("users")
@@ -442,7 +448,7 @@ public class a_user_1_login extends AppCompatActivity {
         Button resetButton = dialogView.findViewById(R.id.btn_reset);
         Button cancelButton = dialogView.findViewById(R.id.btn_cancel);
 //        Button createAccount = dialogView.findViewById(R.id.btn_create_new_account);
-//        TextView loginButton = dialogView.findViewById(R.id.btn_login);`
+//        TextView loginButton = dialogView.findViewById(R.id.btn_login);
 
         // Create AlertDialog Builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -482,12 +488,12 @@ public class a_user_1_login extends AppCompatActivity {
 //            }
 //        });
 
-        loginButton.setOnClickListener(new View.OnClickListener() { // Set click listener for LinearLayout
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+//        loginButton.setOnClickListener(new View.OnClickListener() { // Set click listener for LinearLayout
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
 
         // Show the dialog
         dialog.show();
