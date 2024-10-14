@@ -183,11 +183,10 @@ public class d_Lesson_container extends AppCompatActivity implements
 
                         // Create a dialog to show the user's score
                         AlertDialog.Builder builder = new AlertDialog.Builder(d_Lesson_container.this);
-                        builder.setTitle("Test Result");
+                        builder.setTitle("Pre-Test Complete!");
 
-                        String message = "ge, mag pre-test kalang hanggang magsawa ka," +
-                                "pag nag sawa ka, edi tumigil ka, pake ko sayo? sino ka ba?" +
-                                "tanginamo pala e, kupal abno burikot";
+                        String message = "You may answer the pre-test and your score will not be affected," +
+                                " feel free to return to the lesson iteration any time you want :)";
 
                         builder.setMessage(message);
 
@@ -240,30 +239,30 @@ public class d_Lesson_container extends AppCompatActivity implements
                 }
                 else if (currentFragment instanceof f_3_lesson_post_test) {
 
-                    // Create a dialog to show the user's score
-                    AlertDialog.Builder builder = new AlertDialog.Builder(d_Lesson_container.this);
-                    builder.setTitle("Pre Test");
-
-                    String message = "GUMANA KA NAMAN PLEASE";
-
-                    builder.setMessage(message);
-
-                    // Add a button to dismiss the dialog
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss(); // Close the dialog
-                        }
-                    });
-
-                    builder.setCancelable(false);
-
-                    // Create and show the dialog
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-
-                    // pag nag return dito, and not yet finished yung post-test, dapat walang next Button
-                    // else, if tapos na, pero mostly yon wala na siya sa lesson e noh hahah
+//                    // Create a dialog to show the user's score
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(d_Lesson_container.this);
+//                    builder.setTitle("Pre Test");
+//
+//                    String message = "GUMANA KA NAMAN PLEASE";
+//
+//                    builder.setMessage(message);
+//
+//                    // Add a button to dismiss the dialog
+//                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            dialog.dismiss(); // Close the dialog
+//                        }
+//                    });
+//
+//                    builder.setCancelable(false);
+//
+//                    // Create and show the dialog
+//                    AlertDialog dialog = builder.create();
+//                    dialog.show();
+//
+//                    // pag nag return dito, and not yet finished yung post-test, dapat walang next Button
+//                    // else, if tapos na, pero mostly yon wala na siya sa lesson e noh hahah
 
                 }
 
@@ -476,7 +475,7 @@ public class d_Lesson_container extends AppCompatActivity implements
         if (isLessonFinished) {
             // Clear the video preferences once the lesson is completed
             f_2_lesson_video.clearVideoPreferences(this);
-            finish();
+//            finish();
         }
     }
 
@@ -628,6 +627,34 @@ public class d_Lesson_container extends AppCompatActivity implements
     @Override
     public void onPostTestComplete(boolean isCorrect, double score) {
         Log.d("onPostTestComplete", "isCorrect: " + isCorrect);
+
+//      Create a dialog to show the user's score
+        AlertDialog.Builder builder = new AlertDialog.Builder(d_Lesson_container.this);
+        builder.setTitle("Post Test Completed!");
+
+        double bktScore = x_bkt_algorithm.getKnowledge();
+
+        String message = "Congratulations! you got:" +
+                "\nPre-Test: " + c_Lesson_feedback.preTestCorrectAnswers + "/" + c_Lesson_feedback.preTestAttemptAnswers +
+                "\nPost-Test: " + c_Lesson_feedback.postTestCorrectAnswers + "/" + c_Lesson_feedback.postTestAttemptAnswers +
+                "\nBKT Score: " + bktScore;
+
+        builder.setMessage(message);
+
+        // Add a button to dismiss the dialog
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss(); // Close the dialog
+                finish();
+            }
+        });
+
+        builder.setCancelable(false);
+
+        // Create and show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
 
         isLessonFinished = true;
         updateProgressAndMoveToNextStep();

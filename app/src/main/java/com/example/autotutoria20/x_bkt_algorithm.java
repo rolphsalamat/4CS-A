@@ -108,7 +108,8 @@ public class x_bkt_algorithm {
 
                         Log.d(TAG, "User Category retrieved: " + category);
                         callback.onCategoryFetched(category);
-                        updateKnowledgeProbability();
+
+//                        updateKnowledgeProbability();
 
                         // Pag di mapagana to putanginamo wag nalang
 //                        // SharedPreferences nalang
@@ -128,27 +129,41 @@ public class x_bkt_algorithm {
                 });
     }
 
-    public void updateKnowledgeProbability() {
+    public void updateKnowledgeProbability(boolean answeredCorrectly) {
+        double pKnow = knowledgeProbability;
 
-
-        switch (category) {
-
-            case "Novice": // Level 1 [0.0 - 0.1] Novice
-                knowledgeProbability = 0.0 + (0.1 - 0.0) * Math.random(); break;
-            case "Beginner":  // Level 2 [0.1 - 0.3] Beginner
-                knowledgeProbability = 0.1 + (0.3 - 0.1) * Math.random(); break;
-            case "Intermediate": // Level 3 [0.3 - 0.5] Intermediate
-                knowledgeProbability = 0.3 + (0.5 - 0.3) * Math.random(); break;
-            case "Advanced": // Level 4 [0.5 - 0.7] Advanced
-                knowledgeProbability = 0.5 + (0.7 - 0.5) * Math.random(); break;
-            case "Expert": // Level 5 [0.7 - 0.9] Expert
-                knowledgeProbability = 0.7 + (0.9 - 0.7) * Math.random(); break;
+        if (answeredCorrectly) {
+            // Update with guess rate
+            knowledgeProbability = pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate);
+        } else {
+            // Update with slip rate
+            knowledgeProbability = pKnow * (1 - forgetRate) * slipRate;
         }
 
-        Log.e("User Category", "Category: " + category);
-        Log.e("User Category", "pKnow: " + knowledgeProbability);
-
+        Log.d(TAG, "Updated Knowledge Probability: " + knowledgeProbability);
     }
+
+//    public void updateKnowledgeProbability() {
+//
+//
+//        switch (category) {
+//
+//            case "Novice": // Level 1 [0.0 - 0.1] Novice
+//                knowledgeProbability = 0.0 + (0.1 - 0.0) * Math.random(); break;
+//            case "Beginner":  // Level 2 [0.1 - 0.3] Beginner
+//                knowledgeProbability = 0.1 + (0.3 - 0.1) * Math.random(); break;
+//            case "Intermediate": // Level 3 [0.3 - 0.5] Intermediate
+//                knowledgeProbability = 0.3 + (0.5 - 0.3) * Math.random(); break;
+//            case "Advanced": // Level 4 [0.5 - 0.7] Advanced
+//                knowledgeProbability = 0.5 + (0.7 - 0.5) * Math.random(); break;
+//            case "Expert": // Level 5 [0.7 - 0.9] Expert
+//                knowledgeProbability = 0.7 + (0.9 - 0.7) * Math.random(); break;
+//        }
+//
+//        Log.e("User Category", "Category: " + category);
+//        Log.e("User Category", "pKnow: " + knowledgeProbability);
+//
+//    }
 
 
     public e_Question.Difficulty getDifficultyLevel(double bktScore) {
@@ -477,13 +492,13 @@ public class x_bkt_algorithm {
 
 
     public void updateScore(int moduleIndex, int lessonIndex,
-                            double newScore,
                             boolean isProgressiveMode,
                             boolean isCorrect) {
 
         String TAG = "BKT | updateScore()";
 
-        updateKnowledge(isCorrect); // Call to update knowledge based on correctness
+//        updateKnowledge(isCorrect); // Call to update knowledge based on correctness
+        updateKnowledgeProbability(isCorrect); // eto ba dapat??
 
         if (
 //                bktScores == null ||
@@ -515,6 +530,9 @@ public class x_bkt_algorithm {
         Log.e(TAG, "Field path for update: " + moduleFieldPath + " | Lesson " + lessonIndex);
 
         Map<String, Object> updates = new HashMap<>();
+
+        Log.e(TAG, "Knowledge Probability: " + knowledgeProbability);
+
         // My own code:
         updates.put(moduleFieldPath, knowledgeProbability);
 
@@ -603,9 +621,14 @@ public class x_bkt_algorithm {
 
     // optimized version daw??
     public void updateKnowledge(boolean correct) {
-        Log.e("updateKnowledge", "Answer: " + correct);
-        Log.e("updateKnowledge", "Category: " + category);
-        Log.e("updateKnowledge", "Initial pKnow: " + knowledgeProbability);
+
+        String TAG = "updateKnowledge";
+
+        Log.e(TAG, "Answer: " + correct);
+        Log.e(TAG, "Category: " + category);
+        Log.e(TAG, "Knowledge Probability: " + knowledgeProbability);
+        Log.e(TAG, "Slip Rate: " + slipRate);
+        Log.e(TAG, "Guess Rate: " + guessRate);
 
         double newKnowledgeProbability;
 

@@ -83,13 +83,33 @@ public class b_main_0_menu_categorize_user extends AppCompatActivity {
 //        Advanced: Requires 65%.
 //        Expert: Requires 60%.
 
+//        switch (category) {
+//            case "Novice": passingGrade = 0.80; break;
+//            case "Beginner": passingGrade = .75; break;
+//            case "Intermediate": passingGrade = .70; break;
+//            case "Advanced": passingGrade = 0.65; break;
+//            case "Expert": passingGrade = 0.60; break;
+//        }
+
         switch (category) {
-            case "Novice": passingGrade = 0.80; break;
-            case "Beginner": passingGrade = .75; break;
-            case "Intermediate": passingGrade = .70; break;
-            case "Advanced": passingGrade = 0.65; break;
-            case "Expert": passingGrade = 0.60; break;
+            case "Novice":
+                passingGrade = 0.85;  // Novices have a higher threshold due to easier learning parameters
+                break;
+            case "Beginner":
+                passingGrade = 0.80;  // Beginners are also held to a high standard
+                break;
+            case "Intermediate":
+                passingGrade = 0.75;  // Intermediate learners need a solid understanding
+                break;
+            case "Advanced":
+                passingGrade = 0.70;  // Advanced learners have more leniency in passing
+                break;
+            case "Expert":
+                passingGrade = 0.65;  // Experts need to show strong mastery, but the passing grade can be lower
+                break;
         }
+
+
 
         Log.d("category", "Category: " + category);
         Log.d("category", "Passing Grade: " + passingGrade);

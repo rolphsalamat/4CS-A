@@ -35,7 +35,7 @@ public class f_3_lesson_post_test extends Fragment {
     private Button submitButton;
     private e_Question.Difficulty difficultyLevel;
     private int answerAttempt = 0;
-    private int attemptChances = 2;
+    private int attemptChances = 0;
     private int questionsAnswered = 1;
     private int postTestQuestions = 10;
     private boolean isCorrect = false;
@@ -258,7 +258,7 @@ public class f_3_lesson_post_test extends Fragment {
 
                 Log.e("HEY!", "questionsAnswered("+questionsAnswered+") < preTestQuestions("+(postTestQuestions)+")");
                 // Ensure that questions answered does not exceed total pre-test questions.
-                if (questionsAnswered < (postTestQuestions)) {
+                if (questionsAnswered <= (postTestQuestions)) {
 
                     // Update feedback and scores based on correctness
                     if (correctAnswer) {
@@ -270,9 +270,7 @@ public class f_3_lesson_post_test extends Fragment {
                                 c_Lesson_feedback.postTestCorrectAnswers);
                     }
 
-                    // Update knowledge probability and score based on current answer.
-                    double knowledgeProb = bktModel.getKnowledgeProbability();
-                    bktModel.updateScore(moduleIndex, lessonIndex, knowledgeProb, isProgressiveMode, correctAnswer);
+                    bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer);
 
                     Log.d("TESTING", "Answer: " + correctAnswer);
 
@@ -291,7 +289,6 @@ public class f_3_lesson_post_test extends Fragment {
                         } else {
                             currentQuestionIndex = 0; // Reset for new round
                             bktModel.logScores(); // Log scores at reset point
-                            Log.e(TAG, "reset currentQuestionIndex["+currentQuestionIndex+"]");
                             Log.e(TAG, "reset currentQuestionIndex["+currentQuestionIndex+"]");
                         }
 
@@ -312,9 +309,9 @@ public class f_3_lesson_post_test extends Fragment {
                     }
 
                      if (questionsAnswered == (postTestQuestions+1)) {
-                        Log.d("TESTING", "Pre-test complete!");
+                        Log.d("TESTING", "Post-test complete!");
 
-                        c_Lesson_feedback.postTestAttemptAnswers++;
+//                        c_Lesson_feedback.postTestAttemptAnswers++;
 
                         // Handle completion of pre-test.
                         if (postTestCompleteListener != null) {
@@ -596,15 +593,15 @@ public class f_3_lesson_post_test extends Fragment {
         }
     }
 
-    private e_Question.Difficulty getDifficultyLevel(double bktScore) {
-        if (bktScore >= 0.67) {
-            return e_Question.Difficulty.HARD;
-        } else if (bktScore >= 0.34) {
-            return e_Question.Difficulty.MEDIUM;
-        } else {
-            return e_Question.Difficulty.EASY;
-        }
-    }
+//    private e_Question.Difficulty getDifficultyLevel(double bktScore) {
+//        if (bktScore >= 0.67) {
+//            return e_Question.Difficulty.HARD;
+//        } else if (bktScore >= 0.34) {
+//            return e_Question.Difficulty.MEDIUM;
+//        } else {
+//            return e_Question.Difficulty.EASY;
+//        }
+//    }
 
     private e_Question[] getPostTestQuestionsBasedOnDifficulty(String module, String lesson, e_Question.Difficulty difficulty) {
 
@@ -703,188 +700,62 @@ public class f_3_lesson_post_test extends Fragment {
         }
     }
 
-
-//    private void loadQuestion() {
-//
-//        String TAG = "loadQuestion";
-//
-//        Log.e(TAG, "54545454545454545454545454545454545454545454545454545454");
-//
-//        // Reset isCorrect before loading a new question
-//        isCorrect = false;
-//
-//        // Clear previous selection
-//        choicesGroup.clearCheck();
-//        identificationAnswer.setText("");
-//
-//        Log.e(TAG, "currentQuestionIndex: " + currentQuestionIndex);
-//
-//        // Get the current question
-//        e_Question currentQuestion = questions[currentQuestionIndex];
-//
-//        Log.e(TAG, "PAG DI LUMABAS TO, ETONG NASA TAAS ANG ERROR..");
-//
-//        questionText.setText(currentQuestion.getQuestion());
-//
-//        // Clear previous views
-//        choicesGroup.removeAllViews();
-//
-//        // HINDI NAG LO-LOG TO, PATI SA CURRENT FRAGMENT.. BALIKAN KO TOMORROW
-//
-////        // Determine the difficulty level of the current question
-////        e_Question.Difficulty difficultyLevel = currentQuestion.getDifficulty();
-////        Log.e(TAG, "difficulty: " + difficultyLevel);
-//
-//        if (difficultyLevel == e_Question.Difficulty.EASY || difficultyLevel == e_Question.Difficulty.MEDIUM) {
-//            // Load multiple-choice options for EASY and MEDIUM questions
-//            String[] choices = currentQuestion.getChoices();
-//            for (int i = 0; i < choices.length; i++) {
-//                RadioButton choiceButton = new RadioButton(getContext());
-//                choiceButton.setId(i);
-//                choiceButton.setPadding(16, 0, 0, 0);
-//                choiceButton.setText(choices[i]);
-//                choiceButton.setTextColor(getResources().getColor(R.color.white));  // Set text color to white
-//                choiceButton.setTextSize(18);  // Set text size to 18sp
-//
-//                RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
-//                        RadioGroup.LayoutParams.WRAP_CONTENT,
-//                        RadioGroup.LayoutParams.WRAP_CONTENT
-//                );
-//                params.setMargins(0, 8, 0, 8);  // Set margins
-//
-//                choiceButton.setLayoutParams(params);  // Apply the margins to the RadioButton
-//                choicesGroup.addView(choiceButton);  // Add the choice to the RadioGroup
-//            }
-//
-//            // Show the choicesGroup and hide the EditText
-//            choicesGroup.setVisibility(View.VISIBLE);
-//            identificationAnswer.setVisibility(View.GONE);
-//
-//        } else if (difficultyLevel == e_Question.Difficulty.HARD) {
-//            // Load input field for HARD questions
-//            identificationAnswer.setVisibility(View.VISIBLE);
-//            choicesGroup.setVisibility(View.GONE);
-//
-//            // Clear the EditText for new input
-//            identificationAnswer.setText("");
-//        }
-//    }
-
-
-//    private void loadQuestion() {
-//        // Reset isCorrect before loading a new question
-//        isCorrect = false;
-//
-//        // Clear previous selection
-//        choicesGroup.clearCheck();
-//        identificationAnswer.setText("");
-//
-//        e_Question currentQuestion = questions[currentQuestionIndex];
-//        questionText.setText(currentQuestion.getQuestion());
-//
-//        choicesGroup.removeAllViews();
-//        String[] choices = currentQuestion.getChoices();
-//        for (int i = 0; i < choices.length; i++) {
-//            RadioButton choiceButton = new RadioButton(getContext());
-//            choiceButton.setId(i);
-//            choiceButton.setText(choices[i]);
-//            choiceButton.setTextColor(getResources().getColor(R.color.white));  // Set text color to white
-//            choiceButton.setTextSize(18);  // Set text size to 18sp
-//
-//            RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
-//                    RadioGroup.LayoutParams.WRAP_CONTENT,
-//                    RadioGroup.LayoutParams.WRAP_CONTENT
-//            );
-//            params.setMargins(0, 8, 0, 8);  // Set margins
-//
-//            choiceButton.setLayoutParams(params);  // Apply the margins to the RadioButton
-//            choicesGroup.addView(choiceButton);
-//        }
-//    }
-
-//    private void loadQuestion() {
-//        // Reset isCorrect before loading a new question
-//        isCorrect = false;
-//
-//        // Clear previous selection
-//        choicesGroup.clearCheck();
-//        identificationAnswer.setText("");
-//
-//        e_Question currentQuestion = questions[currentQuestionIndex];
-//        questionText.setText(currentQuestion.getQuestion());
-//
-//        choicesGroup.removeAllViews();
-//        String[] choices = currentQuestion.getChoices();
-//        for (int i = 0; i < choices.length; i++) {
-//            RadioButton choiceButton = new RadioButton(getContext());
-//            choiceButton.setId(i);
-//            choiceButton.setText(choices[i]);
-//            choiceButton.setTextColor(getResources().getColor(R.color.white));  // Set text color to white
-//            choiceButton.setTextSize(18);  // Set text size to 18sp (you can adjust this size)
-//
-//            // Create LayoutParams for margin settings
-//            RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
-//                    RadioGroup.LayoutParams.WRAP_CONTENT,
-//                    RadioGroup.LayoutParams.WRAP_CONTENT
-//            );
-//            params.setMargins(0, 8, 0, 8);  // Set margins (left, top, right, bottom) in pixels
-//
-//            choiceButton.setLayoutParams(params);  // Apply the margins to the RadioButton
-//
-//            choicesGroup.addView(choiceButton);
-//        }
-//    }
-
     public boolean checkAnswer() {
         String TAG = "checkAnswer()";
 
         Log.e(TAG, "checkAnswer() method is CALLED");
 
-        // Check if choicesGroup is null
-        if (choicesGroup == null
-        ||
-        identificationAnswer.getText().toString().trim().isEmpty()) {
-
-            Log.e(TAG, "choicesGroup is null!");
-            Log.e(TAG, "identification answer is null");
-            Context context = getContext();
-            if (context != null) {
-                Toast.makeText(context, "Error: Choices group is missing.", Toast.LENGTH_SHORT).show();
-            } else {
-                Log.e(TAG, "Context is null, cannot show Toast.");
-            }
-            return false;  // Exit early to avoid crash
-        }
+//        // Check if choicesGroup is null
+//        if (choicesGroup == null
+//        ||
+//        identificationAnswer.getText().toString().trim().isEmpty()) {
+//
+//            Log.e(TAG, "identification answer is null");
+//            Context context = getContext();
+//            if (context != null) {
+//                Toast.makeText(context, "Error: Choices group is missing.", Toast.LENGTH_SHORT).show();
+//            } else {
+//                Log.e(TAG, "Context is null, cannot show Toast.");
+//            }
+//
+//        }
 
         Log.e(TAG, "Difficulty: " + difficultyLevel);
 
         // Handling EASY and MEDIUM difficulty levels
         if (difficultyLevel == e_Question.Difficulty.EASY || difficultyLevel == e_Question.Difficulty.MEDIUM) {
 
-            int selectedId = choicesGroup.getCheckedRadioButtonId();
-            if (selectedId != -1) {
-                e_Question currentQuestion = questions[currentQuestionIndex];
-                if (selectedId == currentQuestion.getCorrectAnswer_EASY_MEDIUM()) {
-                    isCorrect = true;
-                    Log.e(TAG, "Answer is Correct! | isCorrect: " + isCorrect);
-                    return true;  // Correct answer
+            if (choicesGroup == null) {
+                Log.e(TAG, "choicesGroup is null!");
+                return false;  // Exit early to avoid crash
+            } else {
+                int selectedId = choicesGroup.getCheckedRadioButtonId();
+                if (selectedId != -1) {
+                    e_Question currentQuestion = questions[currentQuestionIndex];
+                    if (selectedId == currentQuestion.getCorrectAnswer_EASY_MEDIUM()) {
+                        isCorrect = true;
+                        Log.e(TAG, "Answer is Correct! | isCorrect: " + isCorrect);
+                        return true;  // Correct answer
+                    } else {
+                        Context context = getContext();
+                        if (context != null) {
+                            Toast.makeText(context, "Incorrect! Try again.", Toast.LENGTH_SHORT).show();
+                        }
+                        isCorrect = false;
+                        Log.e(TAG, "Answer is Incorrect! | isCorrect: " + isCorrect);
+                        return false;  // Incorrect answer
+                    }
                 } else {
                     Context context = getContext();
                     if (context != null) {
-                        Toast.makeText(context, "Incorrect! Try again.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Please select an answer.", Toast.LENGTH_SHORT).show();
                     }
-                    isCorrect = false;
-                    Log.e(TAG, "Answer is Incorrect! | isCorrect: " + isCorrect);
-                    return false;  // Incorrect answer
+                    Log.e(TAG, "No answer selected | isCorrect: " + isCorrect);
+                    return false;  // No answer selected
                 }
-            } else {
-                Context context = getContext();
-                if (context != null) {
-                    Toast.makeText(context, "Please select an answer.", Toast.LENGTH_SHORT).show();
-                }
-                Log.e(TAG, "No answer selected | isCorrect: " + isCorrect);
-                return false;  // No answer selected
             }
+
+
         }
         // Handling HARD difficulty level
         else if (difficultyLevel == e_Question.Difficulty.HARD) {
@@ -900,7 +771,8 @@ public class f_3_lesson_post_test extends Fragment {
                     } else {
                         Context context = getContext();
                         if (context != null) {
-                            Toast.makeText(context, "Incorrect! Try again.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Incorrect! Chance: " + answerAttempt + "/" + attemptChances, Toast.LENGTH_SHORT).show();
+                            identificationAnswer.setText("");
                         }
                         isCorrect = false;
                         Log.e(TAG, "Answer is Incorrect! | isCorrect: " + isCorrect);

@@ -280,16 +280,13 @@ public class L_lesson_sequence {
         lessonVideoLinks.put("M2_Lesson 4", "IEMrT4SkqwY");
 //        lessonVideoLinks.put("M3_Lesson 4", "");
 
-        lessonVideoLinks.put("M1_Lesson 5", "");
-        lessonVideoLinks.put("M2_Lesson 5", "");
-        lessonVideoLinks.put("M3_Lesson 5", "");
+        lessonVideoLinks.put("M1_Lesson 5", "EYKJTsDwITk");
+        lessonVideoLinks.put("M2_Lesson 5", "0uu2Bc0fDUQ");
+        lessonVideoLinks.put("M3_Lesson 5", "8Zb8-ba8HOI");
 
-//        79cIoa6J3O8
-        lessonVideoLinks.put("M1_Lesson 6", "");
-//        GGbYfum8vUM
-        lessonVideoLinks.put("M2_Lesson 6", "");
-//        dCVcWztylLs
-        lessonVideoLinks.put("M3_Lesson 6", "");
+        lessonVideoLinks.put("M1_Lesson 6", "Dj0UzRJ6VkU");
+        lessonVideoLinks.put("M2_Lesson 6", "b7Xr0L4cFgc");
+        lessonVideoLinks.put("M3_Lesson 6", "zfFXEpd7Ow4");
 
         lessonVideoLinks.put("M1_Lesson 7", "");
 

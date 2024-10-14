@@ -214,9 +214,7 @@ public class f_0_lesson_pre_test extends Fragment {
 //                        correct.setText("Correct Answers: " + c_Lesson_feedback.preTestCorrectAnswers);
                     }
 
-                    // Update knowledge probability and score based on current answer.
-                    double knowledgeProb = bktModel.getKnowledgeProbability();
-                    bktModel.updateScore(moduleIndex, lessonIndex, knowledgeProb, isProgressiveMode, correctAnswer);
+                    bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer);
 
 //                    Log.d("TESTING", "Answer: " + correctAnswer);
 //
@@ -406,17 +404,20 @@ public class f_0_lesson_pre_test extends Fragment {
 
             if (!isCorrect) {
 
-                if (answerAttempt == attemptChances) incorrect++;
+                if (answerAttempt >= attemptChances) incorrect++;
 
                 Toast.makeText(getContext(), "Incorrect answer.", Toast.LENGTH_SHORT).show();
 //                mistake.setText("Incorrect Answers: " + incorrect);
+            } else {
+                Toast.makeText(getContext(), "Correct answer!", Toast.LENGTH_SHORT).show();
+                return isCorrect;  // Return if the answer is correct
             }
-            Toast.makeText(getContext(), "Correct answer!", Toast.LENGTH_SHORT).show();
-            return isCorrect;  // Return if the answer is correct
+
         } else {
             Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
             return false;  // No answer selected
         }
+        return false;
     }
 
     // Helper methods to get module and lesson indices

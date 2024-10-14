@@ -1,5 +1,6 @@
 package com.example.autotutoria20;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -277,7 +278,7 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
 
         card1LockedOverlay.setVisibility(View.GONE); // Default behavior of each module
 
-        String TAG = "TANGINA PRE";
+        String TAG = "BKT Score";
 
         switch (key) {
             case 1:
@@ -286,27 +287,48 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
 
                 double M1_Score = c_Lesson_a_retrieveScore.bktScores.get(0); // Accessing first module's score
 
-                Log.e(TAG, "M1_Score["+M1_Score+"] >     passingGrade["+passingGrade+"]");
-                // Check if progress meets the number of steps and if the score is below passing grade
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 1")
-                        && M1_Score > passingGrade) {
-                    card2LockedOverlay.setVisibility(View.GONE);
-                    setCardCompletionStatus(key, true);
+                // Check if the lesson is finished
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 1")) {
+                    if (M1_Score < passingGrade) {
+                        showToast("BKT Score did not pass the passing grade:" +
+                                "\nBKT Score: " + M1_Score +
+                                "\nPassing Grade: " + passingGrade);
+
+                        showDialog(
+                                "You Failed",
+                                "You did not reach the minimum passing grade," +
+                                        "\nBKT Score: " + M1_Score +
+                                        "\nPassing Grade: " + passingGrade
+                        );
+                    } else {
+                        card2LockedOverlay.setVisibility(View.GONE);
+                        setCardCompletionStatus(key, true);
+                    }
                 }
                 break;
-
             case 2:
                 newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M2_Lesson 1");
                 module2ProgressText.setText(newText);
 
                 double M2_Score = c_Lesson_a_retrieveScore.bktScores.get(1); // Accessing first module's score
 
-                Log.e(TAG, "M1_Score["+M2_Score+"] < passingGrade["+passingGrade+"]");
-                // Additional condition for case 2
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M2_Lesson 1")
-                        && M2_Score < passingGrade) {
-                    card3LockedOverlay.setVisibility(View.GONE);
-                    setCardCompletionStatus(key, true);
+                // Check if the lesson is finished
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M2_Lesson 1")) {
+                    if (M2_Score < passingGrade) {
+                        showToast("BKT Score did not pass the passing grade:" +
+                                "\nBKT Score: " + M2_Score +
+                                "\nPassing Grade: " + passingGrade);
+                        showDialog(
+                                "You Failed",
+                                "You did not reach the minimum passing grade," +
+                                        "\nBKT Score: " + M2_Score +
+                                        "\nPassing Grade: " + passingGrade
+                        );
+                    } else {
+                        card3LockedOverlay.setVisibility(View.GONE);
+                        setCardCompletionStatus(key, true);
+
+                    }
                 }
                 break;
 
@@ -316,12 +338,22 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
 
                 double M3_Score = c_Lesson_a_retrieveScore.bktScores.get(2); // Accessing first module's score
 
-                Log.e(TAG, "M1_Score["+M3_Score+"] < passingGrade["+passingGrade+"]");
-                // Additional condition for case 3
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M3_Lesson 1")
-                        && M3_Score < passingGrade) {
-                    card4LockedOverlay.setVisibility(View.GONE);
-                    setCardCompletionStatus(key, true);
+                // Check if the lesson is finished
+                if (progress >= L_lesson_sequence.getNumberOfSteps("M3_Lesson 1")) {
+                    if (M3_Score < passingGrade) {
+                        showToast("BKT Score did not pass the passing grade:" +
+                                "\nBKT Score: " + M3_Score +
+                                "\nPassing Grade: " + passingGrade);
+                        showDialog(
+                                "You Failed",
+                                "You did not reach the minimum passing grade," +
+                                        "\nBKT Score: " + M3_Score +
+                                        "\nPassing Grade: " + passingGrade
+                        );
+                    } else {
+                        card4LockedOverlay.setVisibility(View.GONE);
+                        setCardCompletionStatus(key, true);
+                    }
                 }
                 break;
 
@@ -332,16 +364,26 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
 
                 double M4_Score = c_Lesson_a_retrieveScore.bktScores.get(3); // Accessing first module's score
 
-                Log.e(TAG, "M1_Score["+M4_Score+"] < passingGrade["+passingGrade+"]");
-                // Additional condition for case 4
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M4_Lesson 1")
-                        && M4_Score < passingGrade) {
-                    setCardCompletionStatus(key, true);
-                    Log.d("Completed Lesson!", "Lesson 1 Completed! :D");
+                // Check if the lesson is finished
+                if (progress < L_lesson_sequence.getNumberOfSteps("M3_Lesson 1")) {
+                    if (M4_Score < passingGrade) {
+                        showToast("BKT Score did not pass the passing grade:" +
+                                "\nBKT Score: " + M4_Score +
+                                "\nPassing Grade: " + passingGrade);
+                        showDialog(
+                                "You Failed",
+                                "You did not reach the minimum passing grade," +
+                                        "\nBKT Score: " + M4_Score +
+                                        "\nPassing Grade: " + passingGrade
+                        );
+                    } else {
+//                    card4LockedOverlay.setVisibility(View.GONE);
+                        setCardCompletionStatus(key, true);
 
-                    Log.e("Completed Lesson!", "Calling Feedback Class");
-                    feedback = new c_Lesson_feedback(this); // Initialize feedback object
-                    feedback.retrieveBKTScore("Progressive Mode", "Lesson 1");
+                        Log.e("Completed Lesson!", "Calling Feedback Class");
+                        feedback = new c_Lesson_feedback(this); // Initialize feedback object
+                        feedback.retrieveBKTScore("Progressive Mode", "Lesson 1");
+                    }
                 }
                 break;
 
@@ -349,6 +391,30 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                 Log.d("updateUI", "Invalid module number: " + key);
                 break;
         }
+    }
+
+
+    private void showDialog(String title, String message) {
+
+//      Create a dialog to show the user's score
+        AlertDialog.Builder builder = new AlertDialog.Builder(c_Lesson_progressive_1.this);
+        builder.setTitle(title);
+
+        builder.setMessage(message);
+
+        // Add a button to dismiss the dialog
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss(); // Close the dialog
+            }
+        });
+
+        builder.setCancelable(false);
+
+        // Create and show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void setCardCompletionStatus(int cardIndex, boolean isCompleted) {
