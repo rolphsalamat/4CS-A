@@ -158,7 +158,7 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
                 Log.d("checkProgress", "Module " + (i + 1) + " is not completed. Progress: " + progress + "/" + maxSteps);
             } else {
                 Log.d("checkProgress", "Module " + (i + 1) + " is completed. Progress: " + progress + "/" + maxSteps);
-                setCardCompletionStatus(i + 1, true); // Update the completion status for the card
+//                setCardCompletionStatus(i + 1, true); // Update the completion status for the card
             }
         }
     }

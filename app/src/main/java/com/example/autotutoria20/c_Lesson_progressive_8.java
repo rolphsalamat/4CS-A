@@ -169,7 +169,7 @@ public class c_Lesson_progressive_8 extends AppCompatActivity {
                 Log.d("checkProgress", "Module " + (i + 1) + " is not completed. Progress: " + progress + "/" + maxSteps);
             } else {
                 Log.d("checkProgress", "Module " + (i + 1) + " is completed. Progress: " + progress + "/" + maxSteps);
-                setCardCompletionStatus(i + 1, true);
+//                setCardCompletionStatus(i + 1, true);
             }
         }
     }

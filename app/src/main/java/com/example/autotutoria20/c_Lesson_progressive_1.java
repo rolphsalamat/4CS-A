@@ -252,7 +252,7 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                 Log.d("checkProgress", "Module " + (i + 1) + " is not completed. Progress: " + progress + "/" + maxSteps);
             } else {
                 Log.d("checkProgress", "Module " + (i + 1) + " is completed. Progress: " + progress + "/" + maxSteps);
-                setCardCompletionStatus(i + 1, true); // Update the completion status for the card
+//                setCardCompletionStatus(i + 1, true); // Update the completion status for the card
             }
         }
     }
@@ -293,7 +293,6 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                         showToast("BKT Score did not pass the passing grade:" +
                                 "\nBKT Score: " + M1_Score +
                                 "\nPassing Grade: " + passingGrade);
-
 //                        showDialog(
 //                                "You Failed",
 //                                "You did not reach the minimum passing grade in Lesson 1," +

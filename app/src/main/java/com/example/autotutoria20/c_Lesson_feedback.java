@@ -87,9 +87,9 @@ public class c_Lesson_feedback {
 
 
         // Find views within the inflated layout
-        TextView message = view.findViewById(R.id.lesson_text);
+        TextView message = view.findViewById(R.id.failed_lesson);
         TextView bktScore = view.findViewById(R.id.bkt_score);
-        TextView passingScore = view.findViewById(R.id.passing_score);
+        TextView passingScore = view.findViewById(R.id.passing_grade);
         Button okayButton = view.findViewById(R.id.okay_button);
 
         score *= 100;
