@@ -194,12 +194,13 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
                         showToast("BKT Score did not pass the passing grade:" +
                                 "\nBKT Score: " + M1_Score +
                                 "\nPassing Grade: " + passingGrade);
-                        showDialog(
-                                "You Failed",
-                                "You did not reach the minimum passing grade," +
-                                        "\nBKT Score: " + M1_Score +
-                                        "\nPassing Grade: " + passingGrade
-                        );
+//                        showDialog(
+//                                "You Failed",
+//                                "You did not reach the minimum passing grade," +
+//                                        "\nBKT Score: " + M1_Score +
+//                                        "\nPassing Grade: " + passingGrade
+//                        );
+                        c_Lesson_feedback.showDialog(this, M1_Score, passingGrade, "Lesson 1");
                     } else {
 //                    card4LockedOverlay.setVisibility(View.GONE);
                         setCardCompletionStatus(key, true);

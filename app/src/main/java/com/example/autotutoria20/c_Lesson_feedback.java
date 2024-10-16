@@ -1,8 +1,10 @@
 package com.example.autotutoria20;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -32,7 +34,7 @@ public class c_Lesson_feedback {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance(); // FirebaseAuth instance
     private x_bkt_algorithm algo_feedback;
-    private Context context; // Add context field
+    private static Context context; // Add context field
 
     // for result:
     public static int preTestCorrectAnswers = 0;
@@ -66,6 +68,43 @@ public class c_Lesson_feedback {
         else if (mode.equals("Post-Test"))
             Log.e(TAG, "Post-Test: " + postTestCorrectAnswers + "/" + postTestAttemptAnswers);
 
+    }
+
+    public static void showDialog(Context context, double score, double passingGrade, String lesson) {
+
+        // Create a new dialog
+        Dialog dialog = new Dialog(context);
+
+        // Inflate the custom layout
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View view = inflater.inflate(R.layout.c_lesson_failed_dialog, null);
+
+        // Set the dialog content view to the inflated layout
+        dialog.setContentView(view);
+        dialog.getWindow().setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT, // Width
+                ViewGroup.LayoutParams.WRAP_CONTENT); // Height
+
+
+        // Find views within the inflated layout
+        TextView message = view.findViewById(R.id.lesson_text);
+        TextView bktScore = view.findViewById(R.id.bkt_score);
+        TextView passingScore = view.findViewById(R.id.passing_score);
+        Button okayButton = view.findViewById(R.id.okay_button);
+
+        score *= 100;
+        passingGrade *= 100;
+
+        // Set text or any other properties for the views with 2 decimal places
+        message.setText("You did not pass " + lesson);
+        bktScore.setText(String.format("BKT Score: %.2f%%", score));
+        passingScore.setText(String.format("Passing Grade: %.2f%%", passingGrade));
+
+        // Set up the 'Okay' button click listener
+        okayButton.setOnClickListener(v -> dialog.dismiss());
+
+        // Show the dialog
+        dialog.show();
     }
 
     // Retrieve BKTScore from the database

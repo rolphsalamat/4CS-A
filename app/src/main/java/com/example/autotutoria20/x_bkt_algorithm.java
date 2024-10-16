@@ -34,8 +34,8 @@ public class x_bkt_algorithm {
     private static double slipRate;
     private static double guessRate;
     // Feedback ranges
-    double hard = 0.67;
-    double medium = 0.34;
+    double hard = 0.63;
+    double medium = 0.28;
     double easy = 0.00;
 
     // Floats for rating
@@ -131,6 +131,9 @@ public class x_bkt_algorithm {
 
     public void updateKnowledgeProbability(boolean answeredCorrectly) {
         double pKnow = knowledgeProbability;
+
+        // bat sobrang taas mag kaltas ano yon kelangan perfect??
+        // tanginang yan.
 
         if (answeredCorrectly) {
             // Update with guess rate
@@ -490,6 +493,60 @@ public class x_bkt_algorithm {
 ////                });
 //    }
 
+    public static void resetScore(int moduleIndex, int lessonIndex,
+                            boolean isProgressiveMode) {
+
+        String TAG = "BKT | resetScore()";
+
+        if (
+//                bktScores == null ||
+                moduleIndex < 0 ||
+                lessonIndex < 0) {
+            Log.e(TAG, "Invalid BKT score update request");
+            Log.e(TAG, "moduleIndex: " + moduleIndex);
+            Log.e(TAG, "lessonIndex: " + lessonIndex);
+            return;
+        }
+
+        // wala to sa Reset Score method, kasi direct na yung values na fini-feed dito.
+//        moduleIndex += 1;
+//        lessonIndex += 1;
+
+        // Determine the correct collection based on the learning mode
+        String collectionPath = isProgressiveMode ? "Progressive Mode" : "Free Use Mode";
+        String documentName = "Lesson " + lessonIndex;
+
+        Log.e(TAG, "moduleIndex: " + moduleIndex);
+        Log.e(TAG, "lessonIndex: " + lessonIndex);
+
+        // Construct the field path using dot notation
+        String moduleFieldPath = "M" + moduleIndex + ".BKT Score";
+        String progressFieldPath = "M" + moduleIndex + ".Progress";
+
+        Log.e(TAG, "Field path for update: " + moduleFieldPath + " | Lesson " + lessonIndex);
+
+        Map<String, Object> updates = new HashMap<>();
+
+        // My own code:
+        updates.put(moduleFieldPath, 0);
+        updates.put(progressFieldPath, 0);
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        Log.e(TAG, "ABDUL path: users/"+userId+"/"+collectionPath+"/"+documentName+"/"+updates);
+
+        int finalModuleIndex = moduleIndex;
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("users").document(userId)
+                .collection(collectionPath)
+                .document(documentName)
+                .update(updates)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "M" + finalModuleIndex + " M fields successfully updated"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error updating M" + finalModuleIndex + " M fields", e));
+    }
+
 
     public void updateScore(int moduleIndex, int lessonIndex,
                             boolean isProgressiveMode,
@@ -585,8 +642,6 @@ public class x_bkt_algorithm {
             Log.e(TAG, "Invalid test mode");
             return; // Exit if the test mode is invalid
         }
-
-
 
         // Construct the field path using dot notation
         String moduleFieldPath = "M" + moduleIndex + "." + testField;

@@ -97,6 +97,23 @@ public class d_Lesson_container extends AppCompatActivity implements
         currentModule = sharedPreferences.getString("currentModule", null);
         isCompleted = sharedPreferences.getBoolean("isCompleted", false);
 
+        int moduleIndex = Integer.parseInt(String.valueOf(currentModule.charAt(1)));
+        int lessonIndex = Integer.parseInt(String.valueOf(currentLesson.charAt(7)));
+
+        boolean isProgressiveMode = true;
+
+        if (learningMode.equalsIgnoreCase("Progressive Mode"))
+            isProgressiveMode = true;
+        else
+            isProgressiveMode = false;
+
+
+        x_bkt_algorithm.resetScore(
+                moduleIndex,
+                lessonIndex,
+                isProgressiveMode
+        );
+
         Log.e("onCreate", "currentModule: " + currentModule + " | currentLesson: " + currentLesson);
 
         // Retrieve the lesson sequence
@@ -239,30 +256,9 @@ public class d_Lesson_container extends AppCompatActivity implements
                 }
                 else if (currentFragment instanceof f_3_lesson_post_test) {
 
-//                    // Create a dialog to show the user's score
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(d_Lesson_container.this);
-//                    builder.setTitle("Pre Test");
-//
-//                    String message = "GUMANA KA NAMAN PLEASE";
-//
-//                    builder.setMessage(message);
-//
-//                    // Add a button to dismiss the dialog
-//                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.dismiss(); // Close the dialog
-//                        }
-//                    });
-//
-//                    builder.setCancelable(false);
-//
-//                    // Create and show the dialog
-//                    AlertDialog dialog = builder.create();
-//                    dialog.show();
-//
-//                    // pag nag return dito, and not yet finished yung post-test, dapat walang next Button
-//                    // else, if tapos na, pero mostly yon wala na siya sa lesson e noh hahah
+                    // wala nang nextButton dito, last na to eh. abnormal kaba??
+                    nextButton.setVisibility(View.GONE);
+                    nextButton.setEnabled(false);
 
                 }
 
@@ -309,6 +305,32 @@ public class d_Lesson_container extends AppCompatActivity implements
             }
         });
     }
+
+//    public static void showDialog(String title, String message) {
+//
+////      Create a dialog to show the user's score
+//        AlertDialog.Builder builder = new AlertDialog.Builder(d_Lesson_container.this);
+//        builder.setTitle(title);
+//
+//        builder.setMessage(message);
+//
+//        // Add a button to dismiss the dialog
+//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss(); // Close the dialog
+//            }
+//        });
+//
+//        builder.setCancelable(false);
+//
+//        // Create and show the dialog
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+//
+//        Log.e("Generate Hint", "Generate Hint");
+//
+//    }
 
     private void onBackButtonClicked() {
         String TAG = "onBackButtonClicked";

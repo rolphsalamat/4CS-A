@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/autotutoria_background_color"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/module_3"
+        android:layout_gravity="center"
+        android:layout_margin="30dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="You Failed"
+        android:textColor="@color/white"
+        android:textSize="26sp"
+        android:gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/lesson_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="You did not meet the minimum passing grade in Lesson 1"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:padding="16sp"
+        android:gravity="center_horizontal"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp">
+
+        <TextView
+            android:id="@+id/bkt_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BKT Score:"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:paddingStart="30sp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"/>
+
+        <TextView
+            android:id="@+id/passing_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Passing Grade:"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:paddingStart="30sp"
+            android:layout_below="@id/bkt_score"
+            android:layout_alignStart="@id/bkt_score"/>
+
+        <Button
+            android:id="@+id/okay_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:text="Okay"
+            android:layout_alignParentEnd="true"
+            />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

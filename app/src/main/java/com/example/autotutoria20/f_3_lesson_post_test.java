@@ -1,7 +1,9 @@
 package com.example.autotutoria20;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +17,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class f_3_lesson_post_test extends Fragment {
 
@@ -30,6 +35,8 @@ public class f_3_lesson_post_test extends Fragment {
     private e_Question[] questions;
     private TextView questionText;
     private RadioGroup choicesGroup;
+    public static String hint;
+    public static String correctAnswer;
     private EditText identificationAnswer;
     private TextView total;
     private Button submitButton;
@@ -634,7 +641,9 @@ public class f_3_lesson_post_test extends Fragment {
     private void loadQuestion() {
         String TAG = "loadQuestion";
 
-        // ang problema mo nalang dito, bakit null yung questions?
+        hint = ""; // reset hint
+
+        Log.e("Generate Hint", "Cleared Hint: " + hint);
 
         // Check if questions array is null or empty
         if (questions == null) {
@@ -759,12 +768,52 @@ public class f_3_lesson_post_test extends Fragment {
         }
         // Handling HARD difficulty level
         else if (difficultyLevel == e_Question.Difficulty.HARD) {
+
+            e_Question currentQuestion = questions[currentQuestionIndex];
+
+            // get answer
+            correctAnswer = currentQuestion.getCorrectAnswer_HARD();
+
+            if (answerAttempt == (attemptChances-1)) {
+                Log.e("Generate Hint", "Correct Answer: " + correctAnswer);
+
+                hint = generateHint(correctAnswer, b_main_0_menu_categorize_user.category);
+
+//                d_Lesson_container.showDialog(
+//                        "Answer Hint",
+//                        "The Answer is: " + hint
+//                );
+
+
+//      Create a dialog to show the user's score
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+                builder.setTitle("Answer Hint");
+
+                builder.setMessage("Answer is: " + hint);
+
+                // Add a button to dismiss the dialog
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss(); // Close the dialog
+                    }
+                });
+
+                builder.setCancelable(false);
+
+                // Create and show the dialog
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                Log.e("Generate Hint", "Hint: " + hint);
+            }
+
             if (identificationAnswer != null) {
                 String inputAnswer = String.valueOf(identificationAnswer.getText()).trim();
                 if (!inputAnswer.isEmpty()) {
-                    e_Question currentQuestion = questions[currentQuestionIndex];
+
                     // Use .equals() to compare String values
-                    if (inputAnswer.equals(currentQuestion.getCorrectAnswer_HARD())) {
+                    if (inputAnswer.equalsIgnoreCase(correctAnswer)) {
                         isCorrect = true;
                         Log.e(TAG, "Answer is Correct! | isCorrect: " + isCorrect);
                         return true;  // Correct answer
@@ -793,6 +842,101 @@ public class f_3_lesson_post_test extends Fragment {
         }
 
         return false;  // Default return in case of unhandled difficulty
+    }
+
+    public static String generateHint(String originalString, String category) {
+        // Define the number of underscores based on the category
+        // Define the number of underscores based on the category
+        if (originalString == null) {
+            Log.e("Error", "originalString is null");
+            // Handle the error (e.g., return, throw an exception, or show a message)
+            return originalString; // or handle accordingly
+        }
+        int answerLength = originalString.length(); // Now it's safe to call length()
+        if (category == null) {
+            Log.e("Error", "category is null");
+            return originalString;
+        }
+        Log.e("Generate Hint", "Category: " + category);
+
+        int replaceChar;
+        String TAG = "Generate Hint";
+        switch (category) {
+            case "Beginner":
+                replaceChar = (int) (answerLength * 0.3); // Cast to int
+                Log.e(TAG, "Beginner | replaceChar["+replaceChar+"] = answerLength["+answerLength+"] * 0.8");
+                break;
+            case "Novice":
+                replaceChar = (int) (answerLength * 0.4); // Cast to int
+                Log.e(TAG, "Novice | replaceChar["+replaceChar+"] = answerLength["+answerLength+"] * 0.6");
+                break;
+            case "Intermediate":
+                replaceChar = (int) (answerLength * 0.5); // Cast to int
+                Log.e(TAG, "Intermediate | replaceChar["+replaceChar+"] = answerLength["+answerLength+"] * 0.4");
+                break;
+            case "Advanced":
+                replaceChar = (int) (answerLength * 0.7); // Cast to int
+                Log.e(TAG, "Advanced | replaceChar["+replaceChar+"] = answerLength["+answerLength+"] * 0.3");
+                break;
+            case "Expert":
+                replaceChar = (int) (answerLength * 0.9); // Cast to int
+                Log.e(TAG, "Expert | replaceChar["+replaceChar+"] = answerLength["+answerLength+"] * 0.2");
+                break;
+            default:
+                replaceChar = 1; // Default to 1 if category is not recognized
+        }
+        Log.e("Generate Hint", "Characters to replace part 1: " + replaceChar);
+
+        // Ensure replaceChar is at least 1
+        replaceChar = Math.max(replaceChar, 1);
+        Log.e("Generate Hint", "Characters to replace part 2: " + replaceChar);
+
+        String[] parts = originalString.split(" ");
+
+        // Create a new ArrayList
+        List<String> stringList = new ArrayList<>();
+        List<Integer> intList = new ArrayList<>();
+        for (int i = 0; i < parts.length; i++) {
+            stringList.add(parts[i]);
+            Log.e("Seperate Answer Parts[" + i + "]:", stringList.get(i));
+            // Add the length of each part to intList
+            intList.add(parts[i].length());
+        }
+
+        // Perplexity
+//        int replacePerWord = replaceChar / parts.length;
+
+        // Copilot
+        int replacePerWord = Math.max(1, replaceChar / parts.length);
+
+        Log.e("Replace per word:", replacePerWord + "");
+
+// To store the final modified string
+        StringBuilder sampleStringName = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < stringList.size(); i++) {
+            StringBuilder modifiedWord = new StringBuilder(stringList.get(i));
+            int countReplacements = Math.min(replacePerWord, modifiedWord.length());
+            Log.e("Count replacements for word[" + i + "]:", countReplacements + "");
+
+            for (int j = 0; j < countReplacements; j++) {
+                int indexToReplace;
+                do {
+                    indexToReplace = random.nextInt(modifiedWord.length());
+                } while (modifiedWord.charAt(indexToReplace) == '_'); // Avoid replacing already replaced characters
+                modifiedWord.setCharAt(indexToReplace, '_'); // Replace character with underscore
+            }
+            sampleStringName.append(modifiedWord);
+            if (i < stringList.size() - 1) {
+                sampleStringName.append(" "); // Add space between words
+            }
+        }
+
+        Log.e("Final modified string:", sampleStringName.toString());
+
+        // this method still returns a not perfect String..
+        return sampleStringName.toString();
+
     }
 
 

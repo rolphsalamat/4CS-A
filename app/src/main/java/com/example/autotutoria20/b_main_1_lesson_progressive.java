@@ -215,24 +215,24 @@ public class b_main_1_lesson_progressive extends Fragment {
 
     private void initializeViews() {
         // Progress Bar
-        progressBarCard1 = view.findViewById(R.id.progressBar_card_1);
-        progressBarCard2 = view.findViewById(R.id.progressBar_card_2);
-        progressBarCard3 = view.findViewById(R.id.progressBar_card_3);
-        progressBarCard4 = view.findViewById(R.id.progressBar_card_4);
-        progressBarCard5 = view.findViewById(R.id.progressBar_card_5);
-        progressBarCard6 = view.findViewById(R.id.progressBar_card_6);
-        progressBarCard7 = view.findViewById(R.id.progressBar_card_7);
-        progressBarCard8 = view.findViewById(R.id.progressBar_card_8);
+        progressBarCard1 = view.findViewById(R.id.progressive_progressbar_lesson_1);
+        progressBarCard2 = view.findViewById(R.id.progressive_progressbar_lesson_2);
+        progressBarCard3 = view.findViewById(R.id.progressive_progressbar_lesson_3);
+        progressBarCard4 = view.findViewById(R.id.progressive_progressbar_lesson_4);
+        progressBarCard5 = view.findViewById(R.id.progressive_progressbar_lesson_5);
+        progressBarCard6 = view.findViewById(R.id.progressive_progressbar_lesson_6);
+        progressBarCard7 = view.findViewById(R.id.progressive_progressbar_lesson_7);
+        progressBarCard8 = view.findViewById(R.id.progressive_progressbar_lesson_8);
 
         // Progress Text
-        progressTextCard1 = view.findViewById(R.id.progressText_card_1);
-        progressTextCard2 = view.findViewById(R.id.progressText_card_2);
-        progressTextCard3 = view.findViewById(R.id.progressText_card_3);
-        progressTextCard4 = view.findViewById(R.id.progressText_card_4);
-        progressTextCard5 = view.findViewById(R.id.progressText_card_5);
-        progressTextCard6 = view.findViewById(R.id.progressText_card_6);
-        progressTextCard7 = view.findViewById(R.id.progressText_card_7);
-        progressTextCard8 = view.findViewById(R.id.progressText_card_8);
+        progressTextCard1 = view.findViewById(R.id.progressive_progresstext_lesson_1);
+        progressTextCard2 = view.findViewById(R.id.progressive_progresstext_lesson_2);
+        progressTextCard3 = view.findViewById(R.id.progressive_progresstext_lesson_3);
+        progressTextCard4 = view.findViewById(R.id.progressive_progresstext_lesson_4);
+        progressTextCard5 = view.findViewById(R.id.progressive_progresstext_lesson_5);
+        progressTextCard6 = view.findViewById(R.id.progressive_progresstext_lesson_6);
+        progressTextCard7 = view.findViewById(R.id.progressive_progresstext_lesson_7);
+        progressTextCard8 = view.findViewById(R.id.progressive_progresstext_lesson_8);
 
         // Locked Overlay
         lockedOverlayCard1 = view.findViewById(R.id.card1_locked_overlay);

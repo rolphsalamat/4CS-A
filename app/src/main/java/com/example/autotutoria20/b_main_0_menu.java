@@ -572,6 +572,7 @@ public class b_main_0_menu extends AppCompatActivity {
 
 
     private void switchMode() {
+
         Log.d("switchMode()", "Switching mode...");
 
         if (isProgressiveMode) {
@@ -579,7 +580,8 @@ public class b_main_0_menu extends AppCompatActivity {
             learningModeIcon.setImageResource(R.drawable.progressive_mode);
             pagerAdapter.setFragmentList(progressiveFragmentList);
             viewPager.setCurrentItem(progressiveFragmentList.indexOf(new b_main_1_lesson_progressive()));
-        } else {
+        }
+        else {
             learningModeText.setText("Free Use Mode");
             learningModeIcon.setImageResource(R.drawable.free_use_mode);
             pagerAdapter.setFragmentList(freeUseFragmentList);
@@ -590,6 +592,7 @@ public class b_main_0_menu extends AppCompatActivity {
         drawerLayout.closeDrawer(GravityCompat.START);
 //        pagerAdapter.notifyDataSetChanged();
         Log.d("switchMode()", "Mode switched.");
+
     }
 
     private void showSwitchModeDialog(final String mode) {
@@ -614,11 +617,15 @@ public class b_main_0_menu extends AppCompatActivity {
         positiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (mode.equals("Progressive Mode")) {
                     isProgressiveMode = true;
-                } else if (mode.equals("Free Use Mode")) {
+                }
+
+                else if (mode.equals("Free Use Mode")) {
                     isProgressiveMode = false;
                 }
+
                 switchMode();
                 dialog.dismiss();
             }
