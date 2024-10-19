@@ -59,6 +59,9 @@ public class c_Lesson_a_retrieveScore {
                                             Log.e(TAG, "BKT Score value is neither Long nor Double for module: " + moduleKey);
                                         }
                                     }
+
+                                    printBKTScores();
+
                                 } else {
                                     Log.e(TAG, "No BKT Score key found for module: " + moduleKey);
                                 }
@@ -85,6 +88,14 @@ public class c_Lesson_a_retrieveScore {
         }
 
         bktScores.set(index, score); // Store score in the corresponding index
+    }
+
+    private static void printBKTScores() {
+        for (double s : bktScores) {
+            Log.e("printBKTScores", "Score: " + s);
+        }
+
+        Log.e("printBKTScores", "bktScores: " + bktScores.toString());
     }
 
 }

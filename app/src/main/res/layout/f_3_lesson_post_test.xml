@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/autotutoria_background_color"
     android:padding="16dp">
 
     <!-- Total Answers -->
@@ -76,7 +75,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/navy_blue"
+        android:background="@drawable/rounded_corners"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         />

@@ -33,6 +33,7 @@ public class x_bkt_algorithm {
     private static double forgetRate;
     private static double slipRate;
     private static double guessRate;
+    private static double softeningRate;
     // Feedback ranges
     double hard = 0.63;
     double medium = 0.28;
@@ -132,19 +133,82 @@ public class x_bkt_algorithm {
     public void updateKnowledgeProbability(boolean answeredCorrectly) {
         double pKnow = knowledgeProbability;
 
-        // bat sobrang taas mag kaltas ano yon kelangan perfect??
-        // tanginang yan.
+        String TAG = "updateKnowledgeProbability";
+
+        Log.e(TAG, "Answer: " + answeredCorrectly);
+        Log.e(TAG, "knowledgeProbability: " + knowledgeProbability);
+        Log.e(TAG, "Learn Rate: " + learnRate);
+        Log.e(TAG, "Guess Rate: " + guessRate);
+        Log.e(TAG, "Slip Rate: "  + slipRate);
+        Log.e(TAG, "Softening Rate: " + softeningRate);
 
         if (answeredCorrectly) {
             // Update with guess rate
+            // Formula: pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate)
             knowledgeProbability = pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate);
         } else {
-            // Update with slip rate
-            knowledgeProbability = pKnow * (1 - forgetRate) * slipRate;
+            // Adjusted formula for incorrect answers
+            // Instead of a drastic reduction, we decrease it by a smaller factor
+            // Formula: pKnow * (1 - slipRate)
+            // This reduces the score but not drastically
+            knowledgeProbability = pKnow * (1 - slipRate);
+
+            // Optionally include a small adjustment for forget rate to soften the impact
+            knowledgeProbability *= (1 - forgetRate);
         }
+
+        // Ensure knowledgeProbability stays within [0, 1]
+        knowledgeProbability = Math.max(0.0, Math.min(1.0, knowledgeProbability));
 
         Log.d(TAG, "Updated Knowledge Probability: " + knowledgeProbability);
     }
+
+//    public void updateKnowledgeProbability(boolean answeredCorrectly) {
+//        double pKnow = knowledgeProbability;
+//
+//        String TAG = "updateKnowledgeProbability";
+//
+//        Log.e(TAG, "Answer: " + answeredCorrectly);
+//        Log.e(TAG, "knowledgeProbability: " + knowledgeProbability);
+//        Log.e(TAG, "Learn Rate: " + learnRate);
+//        Log.e(TAG, "Guess Rate: " + guessRate);
+//        Log.e(TAG, "Slip Rate: "  + slipRate);
+//        Log.e(TAG, "Softening Rate: " + softeningRate);
+//
+////        case "Expert":
+////        learnRate = 0.9;
+////        slipRate = 0.05;
+////        guessRate = 0.05;
+////        forgetRate = 0.01;  // Experts rarely forget
+////        softeningRate = 0.4;
+////        knowledgeProbability = 0.9;  // Initial probability for Expert
+////        break;
+//
+//        if (answeredCorrectly) {
+//            // Update with guess rate
+//            // Formula: pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate)
+//            // Example Calculation:
+//            // 0.9 + (0.9 * (1 - 0.9)) * (1 - 0.05)
+//            // 0.9 + (0.09) * (0.95)
+//            // 0.9 + 0.0855
+//
+//            // Result: 0.9855
+//            knowledgeProbability = pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate);
+////            Log.e(TAG, "Score = (" + pKnow + " + (" + (learnRate*(1 - pKnow)) + " * " + (1-guessRate) + ")");
+//        } else {
+//            // Update with slip rate and forget rate
+//            // Formula: pKnow + (1 - forgetRate) * slipRate * softeningRate
+//            // Example Calculation:
+//            // 0.9 * (1 - 0.01) * 0.05 * 0.4
+//            // 0.9 * 0.99 * 0.02
+//
+//            // Result: 0.03588
+//            knowledgeProbability = pKnow + (1 - forgetRate) * slipRate * softeningRate;
+////            Log.e(TAG, "Score = (" + pKnow + " * (" + (1-forgetRate) + " * "  + slipRate + " * " + softeningRate + ")");
+//        }
+//
+//        Log.d(TAG, "Updated Knowledge Probability: " + knowledgeProbability);
+//    }
 
 //    public void updateKnowledgeProbability() {
 //
@@ -199,6 +263,7 @@ public class x_bkt_algorithm {
                 slipRate = 0.3;
                 guessRate = 0.3;
                 forgetRate = 0.1;
+                softeningRate = 0.8;
                 knowledgeProbability = 0.1;  // Initial probability for Novice
                 break;
             case "Beginner":
@@ -206,6 +271,7 @@ public class x_bkt_algorithm {
                 slipRate = 0.2;
                 guessRate = 0.2;
                 forgetRate = 0.05;
+                softeningRate = 0.7;
                 knowledgeProbability = 0.3;  // Initial probability for Beginner
                 break;
             case "Intermediate":
@@ -213,6 +279,7 @@ public class x_bkt_algorithm {
                 slipRate = 0.1;
                 guessRate = 0.1;
                 forgetRate = 0.03;
+                softeningRate = 0.6;
                 knowledgeProbability = 0.5;  // Initial probability for Intermediate
                 break;
             case "Advanced":
@@ -220,6 +287,7 @@ public class x_bkt_algorithm {
                 slipRate = 0.05;
                 guessRate = 0.05;
                 forgetRate = 0.02;
+                softeningRate = 0.5;
                 knowledgeProbability = 0.7;  // Initial probability for Advanced
                 break;
             case "Expert":
@@ -227,6 +295,7 @@ public class x_bkt_algorithm {
                 slipRate = 0.05;
                 guessRate = 0.05;
                 forgetRate = 0.01;  // Experts rarely forget
+                softeningRate = 0.4;
                 knowledgeProbability = 0.9;  // Initial probability for Expert
                 break;
             default:
@@ -522,6 +591,8 @@ public class x_bkt_algorithm {
         // Construct the field path using dot notation
         String moduleFieldPath = "M" + moduleIndex + ".BKT Score";
         String progressFieldPath = "M" + moduleIndex + ".Progress";
+        String preTestFieldPath = "M" + moduleIndex + ".Pre-Test Score";
+        String postTestFieldPath = "M" + moduleIndex + ".Post-Test Score";
 
         Log.e(TAG, "Field path for update: " + moduleFieldPath + " | Lesson " + lessonIndex);
 
@@ -530,6 +601,8 @@ public class x_bkt_algorithm {
         // My own code:
         updates.put(moduleFieldPath, 0);
         updates.put(progressFieldPath, 0);
+        updates.put(preTestFieldPath, 0);
+        updates.put(postTestFieldPath, 0);
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -548,9 +621,11 @@ public class x_bkt_algorithm {
     }
 
 
-    public void updateScore(int moduleIndex, int lessonIndex,
-                            boolean isProgressiveMode,
-                            boolean isCorrect) {
+    public void updateScore(
+            int moduleIndex, int lessonIndex,
+            boolean isProgressiveMode,
+            boolean isCorrect
+    ) {
 
         String TAG = "BKT | updateScore()";
 

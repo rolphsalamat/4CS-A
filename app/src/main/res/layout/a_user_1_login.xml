@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="300dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/autotutoria_logo" /> <!-- Make sure your logo is added to the drawable folder -->
+        android:src="@drawable/new_autotutoria_logo" /> <!-- Make sure your logo is added to the drawable folder -->
 
     <!-- AUTOTUTORIA TEXT -->
     <TextView
@@ -38,25 +38,24 @@
         android:textSize="25sp"
         android:textStyle="bold" />
 
-    <!-- DON'T HAVE AN ACCOUNT? -->
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_serif"
-        android:gravity="center_horizontal"
-        android:text="Don't have an account?"
-        android:textColor="@color/white"
-        android:textSize="14sp" />
-
-    <!-- SIGN UP LAYER -->
     <LinearLayout
         android:id="@+id/btnSignup"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:orientation="horizontal">
+        >
+
+        <!-- DON'T HAVE AN ACCOUNT? -->
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_serif"
+            android:gravity="center_horizontal"
+            android:text="Don't have an account? "
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
         <!-- Signup button or other views can go here -->
         <TextView
@@ -65,7 +64,22 @@
             android:text="Sign Up!"
             android:textColor="#b5e6fa"
             android:textSize="16sp" />
+
     </LinearLayout>
+
+<!--    -->
+
+<!--    &lt;!&ndash; SIGN UP LAYER &ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:id="@+id/btnSignup"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="horizontal">-->
+
+
+<!--    </LinearLayout>-->
 
     <!-- CARD VIEW CONTAINING USERNAME, PASSWORD, AND LOGIN BUTTON -->
     <androidx.cardview.widget.CardView
@@ -147,6 +161,7 @@
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginEnd="15dp"
                     android:background="@drawable/show_password" /> <!-- Reference your show/hide password icon in drawable -->
+
             </FrameLayout>
 
             <!-- SIGN IN BUTTON -->
@@ -181,6 +196,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginTop="30dp"
         android:gravity="center">
 
         <ImageView

@@ -39,6 +39,11 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.c_lesson_progressive_1);
 
+        c_Lesson_a_retrieveScore.fetchModuleProgress(
+                "Progressive Mode", "Lesson 1");
+
+        passingGrade = b_main_0_menu_categorize_user.passingGrade;
+
         FrameLayout card1 = findViewById(R.id.card1);
         FrameLayout card2 = findViewById(R.id.card2);
         FrameLayout card3 = findViewById(R.id.card3);
@@ -54,11 +59,6 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
         setCardClickListener(card2, 2, numberOfStepsForCard2);
         setCardClickListener(card3, 3, numberOfStepsForCard3);
         setCardClickListener(card4, 4, numberOfStepsForCard4);
-
-        c_Lesson_a_retrieveScore.fetchModuleProgress(
-                "Progressive Mode", "Lesson 1");
-
-        passingGrade = b_main_0_menu_categorize_user.passingGrade;
 
         Log.e("TANGINAMO HANS", "call fetchProgressData");
 
@@ -81,10 +81,19 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         Log.e("onResume()", "I has returned");
+
+        c_Lesson_a_retrieveScore.fetchModuleProgress(
+                "Progressive Mode", "Lesson 1");
+
+        passingGrade = b_main_0_menu_categorize_user.passingGrade;
+
+        Log.e("onResume()", "Passing Grade: " + passingGrade);
 
         // Fetch the latest progress data
         fetchProgressData();
+
     }
 
     // Perplexity AI

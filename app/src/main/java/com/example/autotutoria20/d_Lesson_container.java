@@ -79,6 +79,8 @@ public class d_Lesson_container extends AppCompatActivity implements
         numberOfSteps = 0;
 
         // Reset the pre-test and post-test counter??
+
+        // kelan ba ito irereset??
         c_Lesson_feedback.resetResult();
 
         // e kasi ibang lesson na to :D
@@ -172,6 +174,9 @@ public class d_Lesson_container extends AppCompatActivity implements
                 viewPager.setLayoutParams(params);
                 nextButton.setVisibility(View.GONE);
 
+                backButton.setVisibility(View.VISIBLE);
+                backButton.setEnabled(true);
+
                 // Get the current fragment
                 Fragment currentFragment = getCurrentFragment();
 
@@ -185,6 +190,9 @@ public class d_Lesson_container extends AppCompatActivity implements
 
                     // ano gagawin by default? pwede namang wala, kasi wala naman talaga tong code na to nung una..
                     Log.e(TAG, "Pre Test");
+
+                    backButton.setVisibility(View.GONE);
+                    backButton.setEnabled(false);
 
                     // pero pano pag tapos na??
                     if (isPreTestComplete) {
@@ -241,7 +249,7 @@ public class d_Lesson_container extends AppCompatActivity implements
 
                         videoLesson = (f_2_lesson_video) currentFragment;
 
-                        params.bottomMargin = 200;  // Adjust this value as needed
+                        params.bottomMargin = 225;  // Adjust this value as needed
                         viewPager.setLayoutParams(params);
 
 //                  kung ilang seconds ang delay bago ipakita yung next button
@@ -259,6 +267,17 @@ public class d_Lesson_container extends AppCompatActivity implements
                     // wala nang nextButton dito, last na to eh. abnormal kaba??
                     nextButton.setVisibility(View.GONE);
                     nextButton.setEnabled(false);
+
+                    // I think magiging permanent na to??
+                    nextButton.setText("Go to Post-Test");
+
+                    // hide back button??
+                    // or hayaan sila mag back, pero dapat mag decrement din yung sa next button
+                    // kasi natatapos yung module eh.
+
+//                    backButton.setVisibility(View.GONE);
+//                    backButton.setEnabled(false);
+
 
                 }
 
@@ -342,6 +361,13 @@ public class d_Lesson_container extends AppCompatActivity implements
         Log.e(TAG, "returnStep: " + returnStep);
         Log.e(TAG, "store it to stepIndex...");
 
+        if (currentStep == (numberOfSteps-1)) {
+            showToast("nasa last step kana");
+
+            // currentStep should always be set to (numberOfSteps-1)
+            currentStep = (numberOfSteps-2);
+        }
+
         returnStep--;
 
         // set current item of the viewPager
@@ -377,6 +403,19 @@ public class d_Lesson_container extends AppCompatActivity implements
             else {
                 stepView.setBackgroundResource(R.drawable.rounded_corners);
             }
+
+//            // Determine the background based on the step's position relative to the selected step
+//            if (i < (currentStep)) {
+////                Log.e(TAG, i + " < " + (currentStep) + ", so setting to completed (transparent) background");
+//                stepView.setBackgroundResource(R.drawable.rounded_corners_completed);
+//            } else if (i == (currentStep)) {
+////                Log.e(TAG, i + " == " + (currentStep) + ", so setting to current step (highlighted) background");
+//                stepView.setBackgroundResource(R.drawable.rounded_corners_current_step); // Highlight the current step
+//            } else {
+////                Log.e(TAG, i + " > " + (currentStep - 1) + ", so setting to transparent background");
+//                stepView.setBackgroundResource(R.drawable.rounded_corners);
+//            }
+
         } // end of for loop
     }
 
@@ -497,7 +536,7 @@ public class d_Lesson_container extends AppCompatActivity implements
         if (isLessonFinished) {
             // Clear the video preferences once the lesson is completed
             f_2_lesson_video.clearVideoPreferences(this);
-//            finish();
+            finish();
         }
     }
 
@@ -528,7 +567,7 @@ public class d_Lesson_container extends AppCompatActivity implements
             // ahmmm wag ilagay dito yung finish??
                 finish();
             Log.e("onNextBUttonClicked()", "tapos na dapat, pero dapat sa post-test to i-call");
-            showToast("tapos na dapat, pero dapat sa post-test to i-call");
+//            showToast("tapos na dapat, pero dapat sa post-test to i-call");
         } else {
             // Use the updated helper method to get the current fragment
             Fragment currentFragment = getCurrentFragment();
@@ -564,38 +603,54 @@ public class d_Lesson_container extends AppCompatActivity implements
 
 
     @Override
-    public void onPreTestComplete(boolean isCorrect, int score) {
+    public void onPreTestComplete(
+//            boolean isCorrect,
+//            double preTestScores,
+            int score) {
         // Log the result
-        Log.d("onPreTestComplete", "isCorrect: " + isCorrect);
+//        Log.d("onPreTestComplete", "isCorrect: " + isCorrect);
 
-        // Create a dialog to show the user's score
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Test Result");
-
-        // Set the message based on whether the answer was correct or not
-        String message = isCorrect ?
-                "Congratulations! You passed the pre-test." : // Correct
-                "Unfortunately, you did not pass the pre-test. Please try again."; // Incorrect
-
-        String scoreMessage = " Your score for Pre-Test is: " + score;
-
-        builder.setMessage(message + scoreMessage);
-
-        builder.setCancelable(false);
-
-        // Add a button to dismiss the dialog
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss(); // Close the dialog
-//                onNextButtonClicked(); // Proceed to the next step if the test is passed
-            }
-        });
-
-
-        // Create and show the dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
+//        // Create a dialog to show the user's score
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("Test Result");
+//
+//        String message;
+//
+//
+//        if (score >= c_Lesson_feedback.preTestAttemptAnswers)
+//            message = "Congratulations! You passed the pre-test.";
+//        else
+//            message = "Unfortunately, you did not pass the pre-test. Please try again."; // Incorrect
+//
+//
+//
+//        // Set the message based on whether the answer was correct or not
+////        String message = isCorrect ?
+////                "Congratulations! You passed the pre-test." : // Correct
+////                "Unfortunately, you did not pass the pre-test. Plea
+////                se try again."; // Incorrect
+//
+//        String scoreMessage = " Your score for Pre-Test is: " + score;
+//
+//        builder.setMessage(
+//                message +
+//                scoreMessage);
+//
+//        builder.setCancelable(false);
+//
+//        // Add a button to dismiss the dialog
+//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss(); // Close the dialog
+////                onNextButtonClicked(); // Proceed to the next step if the test is passed
+//            }
+//        });
+//
+//
+//        // Create and show the dialog
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
 
         // Call feedback for pre-test
         c_Lesson_feedback.printResult("Pre-Test");
@@ -650,33 +705,33 @@ public class d_Lesson_container extends AppCompatActivity implements
     public void onPostTestComplete(boolean isCorrect, double score) {
         Log.d("onPostTestComplete", "isCorrect: " + isCorrect);
 
-//      Create a dialog to show the user's score
-        AlertDialog.Builder builder = new AlertDialog.Builder(d_Lesson_container.this);
-        builder.setTitle("Post Test Completed!");
-
-        double bktScore = x_bkt_algorithm.getKnowledge();
-
-        String message = "Congratulations! you got:" +
-                "\nPre-Test: " + c_Lesson_feedback.preTestCorrectAnswers + "/" + c_Lesson_feedback.preTestAttemptAnswers +
-                "\nPost-Test: " + c_Lesson_feedback.postTestCorrectAnswers + "/" + c_Lesson_feedback.postTestAttemptAnswers +
-                "\nBKT Score: " + bktScore;
-
-        builder.setMessage(message);
-
-        // Add a button to dismiss the dialog
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss(); // Close the dialog
-                finish();
-            }
-        });
-
-        builder.setCancelable(false);
-
-        // Create and show the dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
+////      Create a dialog to show the user's score
+//        AlertDialog.Builder builder = new AlertDialog.Builder(d_Lesson_container.this);
+//        builder.setTitle("Post Test Completed!");
+//
+//        double bktScore = x_bkt_algorithm.getKnowledge();
+//
+//        String message = "Congratulations! you got:" +
+//                "\nPre-Test: " + c_Lesson_feedback.preTestCorrectAnswers + "/" + c_Lesson_feedback.preTestAttemptAnswers +
+//                "\nPost-Test: " + c_Lesson_feedback.postTestCorrectAnswers + "/" + c_Lesson_feedback.postTestAttemptAnswers +
+//                "\nBKT Score: " + bktScore;
+//
+//        builder.setMessage(message);
+//
+//        // Add a button to dismiss the dialog
+//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss(); // Close the dialog
+//                finish();
+//            }
+//        });
+//
+//        builder.setCancelable(false);
+//
+//        // Create and show the dialog
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
 
         isLessonFinished = true;
         updateProgressAndMoveToNextStep();

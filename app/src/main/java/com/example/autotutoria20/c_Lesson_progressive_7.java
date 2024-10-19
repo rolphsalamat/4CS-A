@@ -46,11 +46,6 @@ public class c_Lesson_progressive_7 extends AppCompatActivity {
 
         setCardClickListener(card1, 1, numberOfStepsForCard1);
 
-        c_Lesson_a_retrieveScore.fetchModuleProgress(
-                "Progressive Mode", "Lesson 7");
-
-        passingGrade = b_main_0_menu_categorize_user.passingGrade;
-
         fetchProgressData();
 
         Button exitButton = findViewById(R.id.exitButton);
@@ -68,8 +63,15 @@ public class c_Lesson_progressive_7 extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.e("onResume()", "I has returned");
+
+        c_Lesson_a_retrieveScore.fetchModuleProgress(
+                "Progressive Mode", "Lesson 7");
+
+        passingGrade = b_main_0_menu_categorize_user.passingGrade;
+
         // Fetch the latest progress data
         fetchProgressData();
+
     }
 
     private void fetchProgressData() {
@@ -156,16 +158,15 @@ public class c_Lesson_progressive_7 extends AppCompatActivity {
     }
 
     private void checkProgress() {
-        for (int i = 0; i < moduleProgress.length; i++) {
-            int progress = moduleProgress[i];
-            int maxSteps = z_Lesson_steps.lesson_7_steps[i];
-            if (progress < maxSteps) {
-                Log.d("checkProgress", "Module " + (i + 1) + " is not completed. Progress: " + progress + "/" + maxSteps);
-            } else {
-                Log.d("checkProgress", "Module " + (i + 1) + " is completed. Progress: " + progress + "/" + maxSteps);
-//                setCardCompletionStatus(i + 1, true);
-            }
+
+        int progress = moduleProgress[0];
+        int maxSteps = z_Lesson_steps.lesson_7_steps[0];
+        if (progress < maxSteps) {
+            Log.d("checkProgress", "Module 1 is not completed. Progress: " + progress + "/" + maxSteps);
+        } else {
+            Log.d("checkProgress", "Module 1 is completed. Progress: " + progress + "/" + maxSteps);
         }
+
     }
 
     private void updateUI(int key, int progress) {

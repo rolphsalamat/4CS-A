@@ -52,11 +52,6 @@ public class c_Lesson_progressive_8 extends AppCompatActivity {
         setCardClickListener(card2, 2, numberOfStepsForCard2);
         setCardClickListener(card3, 3, numberOfStepsForCard3);
 
-        c_Lesson_a_retrieveScore.fetchModuleProgress(
-                "Progressive Mode", "Lesson 8");
-
-        passingGrade = b_main_0_menu_categorize_user.passingGrade;
-
         fetchProgressData();
 
         Button exitButton = findViewById(R.id.exitButton);
@@ -74,8 +69,15 @@ public class c_Lesson_progressive_8 extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.e("onResume()", "I has returned");
+
+        c_Lesson_a_retrieveScore.fetchModuleProgress(
+                "Progressive Mode", "Lesson 8");
+
+        passingGrade = b_main_0_menu_categorize_user.passingGrade;
+
         // Fetch the latest progress data
         fetchProgressData();
+
     }
 
     private void fetchProgressData() {

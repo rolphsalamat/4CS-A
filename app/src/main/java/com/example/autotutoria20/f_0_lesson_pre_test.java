@@ -48,7 +48,10 @@ public class f_0_lesson_pre_test extends Fragment {
     // Interface to notify the container activity when pre-test is complete
     public interface PreTestCompleteListener {
 //        void onPreTestComplete(boolean isCorrect);
-        void onPreTestComplete(boolean isCorrect, int score);
+        void onPreTestComplete(
+//                boolean isCorrect,
+//                double preTestScore,
+                int score);
     }
 
     public static f_0_lesson_pre_test newInstance(String module, String lesson, String mode) {
@@ -201,7 +204,7 @@ public class f_0_lesson_pre_test extends Fragment {
 
                 Log.e("HEY!", "questionsAnswered("+questionsAnswered+") < preTestQuestions("+(preTestQuestions)+")");
                 // Ensure that questions answered does not exceed total pre-test questions.
-                if (questionsAnswered <= preTestQuestions) {
+                if (questionsAnswered <= preTestQuestions) { // <= talaga to
 
                     // Update feedback and scores based on correctness
                     if (correctAnswer) {
@@ -266,7 +269,9 @@ public class f_0_lesson_pre_test extends Fragment {
 
                         // Handle completion of pre-test.
                         if (preTestCompleteListener != null) {
-                            preTestCompleteListener.onPreTestComplete(correctAnswer, c_Lesson_feedback.preTestCorrectAnswers);
+                            preTestCompleteListener.onPreTestComplete(
+//                                    correctAnswer,
+                                    c_Lesson_feedback.preTestCorrectAnswers);
                             c_Lesson_feedback.printResult("Pre-Test");
                             d_Lesson_container.isPreTestComplete = true;
 
@@ -274,7 +279,28 @@ public class f_0_lesson_pre_test extends Fragment {
                         }
                     }
 
+                } else {
+
+                    String feedback = correctAnswer ? "Correct!" : "Incorrect :(";
+
+                    // Logic for after pre-test is complete
+                    Toast.makeText(getContext(), feedback, Toast.LENGTH_SHORT).show();
+
+                    // Allow answering questions without changing scores
+                    if (answerAttempt >= attemptChances || correctAnswer) {
+                        if (currentQuestionIndex < questions.length - 1) {
+                            currentQuestionIndex++;
+                        } else {
+                            currentQuestionIndex = 0; // Reset for new round
+                        }
+
+                        // Load next question without affecting score
+                        loadQuestion();
+                        answerAttempt = 0; // Reset attempts for new question
+                    }
                 }
+
+
 
                 choicesGroup.clearCheck(); // Clear selected choices at the end of processing.
             }
@@ -402,19 +428,24 @@ public class f_0_lesson_pre_test extends Fragment {
             e_Question currentQuestion = questions[currentQuestionIndex];
             isCorrect = (selectedId == currentQuestion.getCorrectAnswer_preTest());
 
+//            if (questionsAnswered <= preTestQuestions) {
+//
+//            }
+
             if (!isCorrect) {
 
-                if (answerAttempt >= attemptChances) incorrect++;
+                if (answerAttempt >= attemptChances)
+                    incorrect++;
 
-                Toast.makeText(getContext(), "Incorrect answer.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "Incorrect answer.", Toast.LENGTH_SHORT).show();
 //                mistake.setText("Incorrect Answers: " + incorrect);
             } else {
-                Toast.makeText(getContext(), "Correct answer!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "Correct answer!", Toast.LENGTH_SHORT).show();
                 return isCorrect;  // Return if the answer is correct
             }
 
         } else {
-            Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
             return false;  // No answer selected
         }
         return false;

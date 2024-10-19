@@ -52,6 +52,7 @@ public class z_Lesson_steps
     public static final int[] steps_per_module = {4, 1, 3, 3, 3, 3, 1, 3};
 
     public static final int total_module_count = 8; // Kung ilang cards sa main menu
+
     public static final int[] lesson_1_steps = {
             L_lesson_sequence.getNumberOfSteps("M1_Lesson 1"),
             L_lesson_sequence.getNumberOfSteps("M2_Lesson 1"),

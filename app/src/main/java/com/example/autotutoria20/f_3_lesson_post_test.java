@@ -234,6 +234,7 @@ public class f_3_lesson_post_test extends Fragment {
 
             Log.e(TAG, "wala :( loadQuestion nalang :(");
             loadQuestion();
+
         }
 
         submitButton.setOnClickListener(v -> {
@@ -273,7 +274,7 @@ public class f_3_lesson_post_test extends Fragment {
                         x_bkt_algorithm.updateTestScore(
                                 isProgressiveMode,
                                 moduleIndex, lessonIndex,
-                                "Pre-Test",
+                                "Post-Test",
                                 c_Lesson_feedback.postTestCorrectAnswers);
                     }
 
@@ -315,14 +316,18 @@ public class f_3_lesson_post_test extends Fragment {
                         Log.d("TESTING", "Not moving to next question yet.");
                     }
 
-                     if (questionsAnswered == (postTestQuestions+1)) {
+                    //                     == to dapat.. ginawa ko lang >=
+                     if (questionsAnswered >= (postTestQuestions+1)) {
                         Log.d("TESTING", "Post-test complete!");
 
 //                        c_Lesson_feedback.postTestAttemptAnswers++;
 
                         // Handle completion of pre-test.
                         if (postTestCompleteListener != null) {
-                            postTestCompleteListener.onPostTestComplete(correctAnswer, c_Lesson_feedback.postTestCorrectAnswers);
+                            postTestCompleteListener.onPostTestComplete(
+                                    correctAnswer,
+                                    c_Lesson_feedback.postTestCorrectAnswers
+                            );
                             c_Lesson_feedback.printResult("Post-Test");
                             d_Lesson_container.isPostTestComplete = true;
 
@@ -743,15 +748,15 @@ public class f_3_lesson_post_test extends Fragment {
                     e_Question currentQuestion = questions[currentQuestionIndex];
                     if (selectedId == currentQuestion.getCorrectAnswer_EASY_MEDIUM()) {
                         isCorrect = true;
-                        Log.e(TAG, "Answer is Correct! | isCorrect: " + isCorrect);
+//                        Log.e(TAG, "Answer is Correct! | isCorrect: " + isCorrect);
                         return true;  // Correct answer
                     } else {
                         Context context = getContext();
                         if (context != null) {
-                            Toast.makeText(context, "Incorrect! Try again.", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(context, "Incorrect! Try again.", Toast.LENGTH_SHORT).show();
                         }
                         isCorrect = false;
-                        Log.e(TAG, "Answer is Incorrect! | isCorrect: " + isCorrect);
+//                        Log.e(TAG, "Answer is Incorrect! | isCorrect: " + isCorrect);
                         return false;  // Incorrect answer
                     }
                 } else {
@@ -774,40 +779,6 @@ public class f_3_lesson_post_test extends Fragment {
             // get answer
             correctAnswer = currentQuestion.getCorrectAnswer_HARD();
 
-            if (answerAttempt == (attemptChances-1)) {
-                Log.e("Generate Hint", "Correct Answer: " + correctAnswer);
-
-                hint = generateHint(correctAnswer, b_main_0_menu_categorize_user.category);
-
-//                d_Lesson_container.showDialog(
-//                        "Answer Hint",
-//                        "The Answer is: " + hint
-//                );
-
-
-//      Create a dialog to show the user's score
-                AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-                builder.setTitle("Answer Hint");
-
-                builder.setMessage("Answer is: " + hint);
-
-                // Add a button to dismiss the dialog
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss(); // Close the dialog
-                    }
-                });
-
-                builder.setCancelable(false);
-
-                // Create and show the dialog
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
-                Log.e("Generate Hint", "Hint: " + hint);
-            }
-
             if (identificationAnswer != null) {
                 String inputAnswer = String.valueOf(identificationAnswer.getText()).trim();
                 if (!inputAnswer.isEmpty()) {
@@ -823,9 +794,45 @@ public class f_3_lesson_post_test extends Fragment {
                             Toast.makeText(context, "Incorrect! Chance: " + answerAttempt + "/" + attemptChances, Toast.LENGTH_SHORT).show();
                             identificationAnswer.setText("");
                         }
+
+                        if (answerAttempt == (attemptChances-1)) {
+                            Log.e("Generate Hint", "Correct Answer: " + correctAnswer);
+
+                            hint = generateHint(correctAnswer, b_main_0_menu_categorize_user.category);
+
+//                d_Lesson_container.showDialog(
+//                        "Answer Hint",
+//                        "The Answer is: " + hint
+//                );
+
+
+//      Create a dialog to show the user's score
+                            AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+                            builder.setTitle("Answer Hint");
+
+                            builder.setMessage("Answer is: " + hint);
+
+                            // Add a button to dismiss the dialog
+                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss(); // Close the dialog
+                                }
+                            });
+
+                            builder.setCancelable(false);
+
+                            // Create and show the dialog
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+
+                            Log.e("Generate Hint", "Hint: " + hint);
+                        }
+
                         isCorrect = false;
                         Log.e(TAG, "Answer is Incorrect! | isCorrect: " + isCorrect);
                         return false;  // Incorrect answer
+
                     }
                 } else {
                     Context context = getContext();
