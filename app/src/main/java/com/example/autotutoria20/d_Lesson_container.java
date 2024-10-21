@@ -629,11 +629,9 @@ public class d_Lesson_container extends AppCompatActivity implements
 
             if (lessonPassed)
                 showPassedDialog(currentLesson);
-
-            double score = x_bkt_algorithm.getKnowledge();
-
-            if (score >= b_main_0_menu_categorize_user.passingGrade)
-                showPassedDialog(currentLesson);
+            else {
+                finish();
+            }
 
         }
     }

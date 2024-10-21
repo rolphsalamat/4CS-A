@@ -327,19 +327,11 @@ public class f_3_lesson_post_test extends Fragment {
 
                             double bktscore = x_bkt_algorithm.getKnowledge();
 
-                            if (bktscore >= b_main_0_menu_categorize_user.passingGrade)
-                                postTestCompleteListener.onPostTestComplete(
-                                        correctAnswer,
-                                        c_Lesson_feedback.postTestCorrectAnswers,
-                                        true
-                                );
-                            else {
-                                postTestCompleteListener.onPostTestComplete(
-                                        correctAnswer,
-                                        c_Lesson_feedback.postTestCorrectAnswers,
-                                        false
-                                );
-                            }
+                            postTestCompleteListener.onPostTestComplete(
+                                    correctAnswer,
+                                    c_Lesson_feedback.postTestCorrectAnswers,
+                                    bktscore >= b_main_0_menu_categorize_user.passingGrade
+                            );
                             c_Lesson_feedback.printResult("Post-Test");
                             d_Lesson_container.isPostTestComplete = true;
 

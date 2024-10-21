@@ -494,7 +494,7 @@ public class f_1_lesson_text extends Fragment {
 
         // 0 -
         // n -
-        int level = 10; // Default to High School Student
+        int level = 6; // Default to High School Student
 
         // Adjust the multiplier based on the educational level
         double multiplier;
@@ -579,12 +579,11 @@ public class f_1_lesson_text extends Fragment {
 //    }
 
     public void loadTextContentForKey(String key, int pageNumber) {
-
         String TAG = "LOAD TEXT LESSON TEXTS";
         Log.d(TAG, "Page Number: " + pageNumber);
-
         Log.e(TAG, "key: " + key);
 
+        // Construct resource names
         String title = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_title";
         String context1 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_1";
         String context2 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_2";
@@ -610,34 +609,22 @@ public class f_1_lesson_text extends Fragment {
         int text9ResId = getResources().getIdentifier(context9, "string", getContext().getPackageName());
         int text10ResId = getResources().getIdentifier(context10, "string", getContext().getPackageName());
 
+        // Log errors for missing resources
         String TEG = "auto resource ID generator";
 
-        // pang check lang, ewan baka kasi may mali sa strings resource ko
-        if (titleResId == 0)
-            Log.e(TEG, "Title is  wrong: " + title);
-        if (text1ResId == 0)
-            Log.e(TEG, "Text 1 is wrong: " + context1);
-        if (text2ResId == 0)
-            Log.e(TEG, "Text 2 is wrong: " + context2);
-        if (text3ResId == 0)
-            Log.e(TEG, "Text 3 is wrong: " + context3);
-        if (text4ResId == 0)
-            Log.e(TEG, "Text 4 is wrong: " + context4);
-        if (text5ResId == 0)
-            Log.e(TEG, "Text 5 is wrong: " + context5);
-        if (text6ResId == 0)
-            Log.e(TEG, "Text 6 is wrong: " + context6);
-        if (text7ResId == 0)
-            Log.e(TEG, "Text 7 is wrong: " + context7);
-        if (text8ResId == 0)
-            Log.e(TEG, "Text 8 is wrong: " + context8);
-        if (text9ResId == 0)
-            Log.e(TEG, "Text 9 is wrong: " + context9);
-        if (text10ResId == 0)
-            Log.e(TEG, "Text 10 is wrong: " + context10);
+        if (titleResId == 0) Log.e(TEG, "Title is wrong: " + title);
+        if (text1ResId == 0) Log.e(TEG, "Text 1 is wrong: " + context1);
+        if (text2ResId == 0) Log.e(TEG, "Text 2 is wrong: " + context2);
+        if (text3ResId == 0) Log.e(TEG, "Text 3 is wrong: " + context3);
+        if (text4ResId == 0) Log.e(TEG, "Text 4 is wrong: " + context4);
+        if (text5ResId == 0) Log.e(TEG, "Text 5 is wrong: " + context5);
+        if (text6ResId == 0) Log.e(TEG, "Text 6 is wrong: " + context6);
+        if (text7ResId == 0) Log.e(TEG, "Text 7 is wrong: " + context7);
+        if (text8ResId == 0) Log.e(TEG, "Text 8 is wrong: " + context8);
+        if (text9ResId == 0) Log.e(TEG, "Text 9 is wrong: " + context9);
+        if (text10ResId == 0) Log.e(TEG, "Text 10 is wrong: " + context10);
 
-
-        // Set the text content
+        // Clear previous content
         titleTextView.setText("");
         contentTextView_01.setText("");
         contentTextView_02.setText("");
@@ -650,19 +637,39 @@ public class f_1_lesson_text extends Fragment {
         contentTextView_09.setText("");
         contentTextView_10.setText("");
 
-        // Set the text content
-        titleTextView.setText(titleResId);
-        contentTextView_01.setText(text1ResId);
-        contentTextView_02.setText(text2ResId);
-        contentTextView_03.setText(text3ResId);
-        contentTextView_04.setText(text4ResId);
-        contentTextView_05.setText(text5ResId);
-        contentTextView_06.setText(text6ResId);
-        contentTextView_07.setText(text7ResId);
-        contentTextView_08.setText(text8ResId);
-        contentTextView_09.setText(text8ResId);
-        contentTextView_10.setText(text8ResId);
+        // Set the text content with try-catch for safety
+        try {
+            if (titleResId != 0) {
+                titleTextView.setText(titleResId);
+            } else {
+                titleTextView.setText("Default Title"); // Fallback in case of missing title
+            }
 
+            // Set each content TextView with validation
+            setContentWithFallback(contentTextView_01, text1ResId);
+            setContentWithFallback(contentTextView_02, text2ResId);
+            setContentWithFallback(contentTextView_03, text3ResId);
+            setContentWithFallback(contentTextView_04, text4ResId);
+            setContentWithFallback(contentTextView_05, text5ResId);
+            setContentWithFallback(contentTextView_06, text6ResId);
+            setContentWithFallback(contentTextView_07, text7ResId);
+            setContentWithFallback(contentTextView_08, text8ResId);
+            setContentWithFallback(contentTextView_09, text9ResId);
+            setContentWithFallback(contentTextView_10, text10ResId);
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error setting text content: ", e); // Log any exceptions
+        }
     }
+
+    // Helper method to set TextViews with fallback
+    private void setContentWithFallback(TextView textView, int resId) {
+        if (resId != 0) {
+            textView.setText(resId);
+        } else {
+            textView.setText(""); // Fallback in case of missing content
+        }
+    }
+
 
 }

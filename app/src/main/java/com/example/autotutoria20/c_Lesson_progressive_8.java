@@ -52,8 +52,6 @@ public class c_Lesson_progressive_8 extends AppCompatActivity {
         setCardClickListener(card2, 2, numberOfStepsForCard2);
         setCardClickListener(card3, 3, numberOfStepsForCard3);
 
-        fetchProgressData();
-
         Button exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override

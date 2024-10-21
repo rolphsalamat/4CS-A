@@ -229,7 +229,7 @@ public class b_main_1_lesson_progressive extends Fragment {
                                 // Iteration in this part of code is incremented already by 1..
                                 // so deduct by 2..
                                 cardCompletionStatus[iteration-2] = true;
-
+                                hideLockedOverlay(iteration);
                             }
 
 
@@ -318,15 +318,15 @@ public class b_main_1_lesson_progressive extends Fragment {
         String TAG = "updateCardProgress()";
         cardProgress[cardId] = Math.min(progress, 100);
 
-        if (cardProgress[cardId] >= 100
-//                && isModuleComplete(cardId)
-        ) {
-            Log.e("cardCompletionStatus[]", "cardProgress[" + (cardId-1) + "]: " + cardProgress[cardId] + " >= 100, so TRUE na to");
-            cardCompletionStatus[cardId] = true;
-            if (cardId < cardCompletionStatus.length && cardCompletionStatus[cardId]) {
-                hideLockedOverlay(cardId + 2);
-            }
-        }
+//        if (cardProgress[cardId] >= 100
+////                && isModuleComplete(cardId)
+//        ) {
+//            Log.e("cardCompletionStatus[]", "cardProgress[" + (cardId-1) + "]: " + cardProgress[cardId] + " >= 100, so TRUE na to");
+//            cardCompletionStatus[cardId] = true;
+//            if (cardId < cardCompletionStatus.length && cardCompletionStatus[cardId]) {
+//                hideLockedOverlay(cardId + 2);
+//            }
+//        }
 
         cardId += 1;
         ProgressBar progressBar = view.findViewById(getProgressBarId(cardId));
