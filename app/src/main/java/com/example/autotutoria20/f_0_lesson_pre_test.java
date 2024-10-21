@@ -93,6 +93,7 @@ public class f_0_lesson_pre_test extends Fragment {
         // Get the Singleton instance
         bktModel = x_bkt_algorithm.getInstance(0.3, 0.2, 0.1, 0.4);
 
+
         // Determine if it's Progressive Mode
         if (getArguments() != null) {
             isProgressiveMode = getArguments().getString(ARG_MODE).equals("Progressive Mode");
@@ -102,6 +103,57 @@ public class f_0_lesson_pre_test extends Fragment {
         String collectionPath = isProgressiveMode ? "Progressive Mode" : "Free Use Mode";
         String documentName = "Lesson " + (getLessonIndex(getArguments().getString(ARG_LESSON)) + 1);
         String module = "M" + (getModuleIndex(getArguments().getString(ARG_MODULE)) + 1);
+//        bktModel.getBKTScore(module, documentName, collectionPath,);
+
+        int moduleIndex = Integer.parseInt(String.valueOf(module.charAt(1)));
+        int lessonIndex = Integer.parseInt(String.valueOf(documentName.charAt(7)));
+
+        x_bkt_algorithm.getBKTScore(moduleIndex, lessonIndex, isProgressiveMode, new x_bkt_algorithm.ScoreCallback() {
+            @Override
+            public void onScoreRetrieved(float score) {
+                Log.d("TAG", "The BKT Score is: " + score);
+                // Handle the retrieved score here
+
+                // Reset only if di pa tapos yung lesson..
+                // kelangan completed sya, pero dapat pasado din
+                // Case 1: Completed, not Passed - RETAKE
+                // Case 2: Completed, Passed - OK (do not reset)
+                // Case 3: InComplete, not Passed - RETAKE
+                // Case 4: InComplete, Passed - RETAKE (pwede kasi siyang passed if mataas ang Pre-Test)
+
+                Boolean lessonPassed = score < b_main_0_menu_categorize_user.passingGrade;
+
+                Log.d("TAG", "Lesson Complete? " + d_Lesson_container.isCompleted);
+                Log.d("TAG", "Lesson Passed? " + lessonPassed);
+
+                Log.e("TAG", "Let's Check Case...");
+
+                // Reset logic based on completion and passing status
+                if (d_Lesson_container.isCompleted) {
+                    if (!lessonPassed) {
+                        // Case 1: Completed, not Passed - RETAKE
+                        Log.e("TAG", "Case 1: Completed, not Passed - RETAKE");
+                        c_Lesson_feedback.resetResult();
+                        x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, isProgressiveMode);
+                    }
+                    Log.e("TAG", "Case 2: Completed, Passed - OK (do nothing)");
+                    // Case 2: Completed, Passed - OK (do nothing)
+                } else {
+                    // If the lesson is incomplete
+                    if (!lessonPassed) {
+                        Log.e("TAG", "Case 3: Incomplete, not Passed - RETAKE");
+                        // Case 3: Incomplete, not Passed - RETAKE
+                        c_Lesson_feedback.resetResult();
+                        x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, isProgressiveMode);
+                    } else {
+                        Log.e("TAG", "Case 4: Incomplete, Passed - RETAKE (possible because of high Pre-Test)");
+                        // Case 4: Incomplete, Passed - RETAKE (possible because of high Pre-Test)
+                        c_Lesson_feedback.resetResult();
+                        x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, isProgressiveMode);
+                    }
+                }
+            }
+        });
 
 //        bktModel.initializeBKTScores(collectionPath, documentName, bktScores -> {
 //            if (bktScores != null) {

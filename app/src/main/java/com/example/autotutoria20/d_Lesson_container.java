@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.Space;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -52,9 +54,11 @@ public class d_Lesson_container extends AppCompatActivity implements
     private String learningMode;
     static String currentLesson;
     static String currentModule;
+    private boolean lessonPassed;
     private int furthestStep = 0; // Track the furthest step reached
 
-    private Boolean isCompleted;
+    public static Boolean isCompleted;
+//    private Boolean isLessonPassed;
     public static Button nextButton;
     private Button backButton;
     private ShapeableImageView currentButton;
@@ -78,11 +82,6 @@ public class d_Lesson_container extends AppCompatActivity implements
         returnStep = 0;
         numberOfSteps = 0;
 
-        // Reset the pre-test and post-test counter??
-
-        // kelan ba ito irereset??
-        c_Lesson_feedback.resetResult();
-
         // e kasi ibang lesson na to :D
         isPreTestComplete = false;
         isPostTestComplete = false;
@@ -98,6 +97,7 @@ public class d_Lesson_container extends AppCompatActivity implements
         currentLesson = sharedPreferences.getString("currentLesson", null);
         currentModule = sharedPreferences.getString("currentModule", null);
         isCompleted = sharedPreferences.getBoolean("isCompleted", false);
+//        isLessonPassed = sharedPreferences.getBoolean("isLessonPassed", false);
 
         int moduleIndex = Integer.parseInt(String.valueOf(currentModule.charAt(1)));
         int lessonIndex = Integer.parseInt(String.valueOf(currentLesson.charAt(7)));
@@ -109,12 +109,100 @@ public class d_Lesson_container extends AppCompatActivity implements
         else
             isProgressiveMode = false;
 
+        boolean finalIsProgressiveMode = isProgressiveMode;
 
-        x_bkt_algorithm.resetScore(
-                moduleIndex,
-                lessonIndex,
-                isProgressiveMode
-        );
+//        String collectionPath = learningMode;
+//        String documentName = currentLesson;
+//        String module = currentModule;
+
+        bktAlgo = new x_bkt_algorithm();
+
+        Log.e(TAG, "Learning Mode: " + learningMode);
+        Log.e(TAG, "Lesson: " + currentLesson);
+        Log.e(TAG, "Module: " + currentModule);
+
+        // Get the Singleton instance
+        bktAlgo = x_bkt_algorithm.getInstance(0.3, 0.2, 0.1, 0.4);
+
+        bktAlgo.initializeBKTScores(learningMode, currentLesson, currentModule, bktScores -> {
+                    if (bktScores != null) {
+
+                        Log.d("d_lesson_container", "et ba yon!:!: BKT Scores initialized: " + bktScores);
+
+                        double passingGrade = b_main_0_menu_categorize_user.passingGrade;
+                        Boolean lessonPassed = bktScores.get(0) > passingGrade;
+
+                        Log.d("TAG", "Lesson Complete? " + isCompleted);
+                        Log.e("TAG", "Score["+bktScores.get(0)+"] > PassingGrade["+passingGrade+"]");
+
+                        Log.d("TAG", "Lesson Passed? " + lessonPassed);
+
+                        // Reset only if di pa tapos yung lesson..
+                        // kelangan completed sya, pero dapat pasado din
+                        // Case 1: Completed, not Passed - RETAKE
+                        // Case 2: Completed, Passed - OK (do not reset)
+                        // Case 3: InComplete, not Passed - RETAKE
+                        // Case 4: InComplete, Passed - RETAKE (pwede kasi siyang passed if mataas ang Pre-Test)
+
+                        Log.e("TAG", "Let's Check Case...");
+
+                        // Reset logic based on completion and passing status
+                        if (isCompleted) {
+                            if (!lessonPassed) {
+                                // Case 1: Completed, not Passed - RETAKE
+                                Log.e("TAG", "Case 1: Completed, not Passed - RETAKE");
+                                c_Lesson_feedback.resetResult();
+                                x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, finalIsProgressiveMode);
+                            }
+                            Log.e("TAG", "Case 2: Completed, Passed - OK (do nothing)");
+                            // Case 2: Completed, Passed - OK (do nothing)
+                        } else {
+                            // If the lesson is incomplete
+                            if (!lessonPassed) {
+                                Log.e("TAG", "Case 3: Incomplete, not Passed - RETAKE");
+                                // Case 3: Incomplete, not Passed - RETAKE
+                                c_Lesson_feedback.resetResult();
+                                x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, finalIsProgressiveMode);
+                            } else {
+                                Log.e("TAG", "Case 4: Incomplete, Passed - RETAKE (possible because of high Pre-Test)");
+                                // Case 4: Incomplete, Passed - RETAKE (possible because of high Pre-Test)
+                                c_Lesson_feedback.resetResult();
+                                x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, finalIsProgressiveMode);
+                            }
+                        }
+
+                    } else {
+                        Log.e("d_lesson_container", "Failed to retrieve BKT Scores");
+                    }
+                });
+
+        x_bkt_algorithm.getBKTScore(moduleIndex, lessonIndex, isProgressiveMode, new x_bkt_algorithm.ScoreCallback() {
+            @Override
+            public void onScoreRetrieved(float score) {
+                Log.d("TAG", "The BKT Score is: " + score);
+                // Handle the retrieved score here
+
+
+
+                Boolean lessonPassed = score < b_main_0_menu_categorize_user.passingGrade;
+
+                Log.d("TAG", "Lesson Complete? " + isCompleted);
+                Log.d("TAG", "Lesson Passed? " + lessonPassed);
+
+                if (!isCompleted
+                &&
+                score < b_main_0_menu_categorize_user.passingGrade
+                ) {
+                    c_Lesson_feedback.resetResult();
+
+                    x_bkt_algorithm.resetScore(
+                            moduleIndex,
+                            lessonIndex,
+                            finalIsProgressiveMode
+                    );
+                }
+            }
+        });
 
         Log.e("onCreate", "currentModule: " + currentModule + " | currentLesson: " + currentLesson);
 
@@ -536,7 +624,17 @@ public class d_Lesson_container extends AppCompatActivity implements
         if (isLessonFinished) {
             // Clear the video preferences once the lesson is completed
             f_2_lesson_video.clearVideoPreferences(this);
-            finish();
+
+            showToast("TAPOS NA");
+
+            if (lessonPassed)
+                showPassedDialog(currentLesson);
+
+            double score = x_bkt_algorithm.getKnowledge();
+
+            if (score >= b_main_0_menu_categorize_user.passingGrade)
+                showPassedDialog(currentLesson);
+
         }
     }
 
@@ -607,50 +705,43 @@ public class d_Lesson_container extends AppCompatActivity implements
 //            boolean isCorrect,
 //            double preTestScores,
             int score) {
+
         // Log the result
 //        Log.d("onPreTestComplete", "isCorrect: " + isCorrect);
 
-//        // Create a dialog to show the user's score
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle("Test Result");
-//
-//        String message;
-//
-//
-//        if (score >= c_Lesson_feedback.preTestAttemptAnswers)
-//            message = "Congratulations! You passed the pre-test.";
-//        else
-//            message = "Unfortunately, you did not pass the pre-test. Please try again."; // Incorrect
-//
-//
-//
-//        // Set the message based on whether the answer was correct or not
-////        String message = isCorrect ?
-////                "Congratulations! You passed the pre-test." : // Correct
-////                "Unfortunately, you did not pass the pre-test. Plea
-////                se try again."; // Incorrect
-//
-//        String scoreMessage = " Your score for Pre-Test is: " + score;
-//
-//        builder.setMessage(
-//                message +
-//                scoreMessage);
-//
-//        builder.setCancelable(false);
-//
-//        // Add a button to dismiss the dialog
-//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss(); // Close the dialog
-////                onNextButtonClicked(); // Proceed to the next step if the test is passed
-//            }
-//        });
-//
-//
-//        // Create and show the dialog
-//        AlertDialog dialog = builder.create();
-//        dialog.show();
+        // Create a dialog to show the user's score
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Test Result");
+
+        String message;
+
+
+        if (score >= c_Lesson_feedback.preTestAttemptAnswers)
+            message = "Congratulations! You passed the pre-test.";
+        else
+            message = "Unfortunately, you did not pass the pre-test."; // Incorrect
+
+        String scoreMessage = "\nYour score for Pre-Test is: " + score;
+
+        builder.setMessage(
+                message +
+                scoreMessage);
+
+        builder.setCancelable(false);
+
+        // Add a button to dismiss the dialog
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss(); // Close the dialog
+//                onNextButtonClicked(); // Proceed to the next step if the test is passed
+            }
+        });
+
+
+        // Create and show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
 
         // Call feedback for pre-test
         c_Lesson_feedback.printResult("Pre-Test");
@@ -702,36 +793,10 @@ public class d_Lesson_container extends AppCompatActivity implements
     }
 
     @Override
-    public void onPostTestComplete(boolean isCorrect, double score) {
+    public void onPostTestComplete(boolean isCorrect, double score, boolean isPassed) {
         Log.d("onPostTestComplete", "isCorrect: " + isCorrect);
 
-////      Create a dialog to show the user's score
-//        AlertDialog.Builder builder = new AlertDialog.Builder(d_Lesson_container.this);
-//        builder.setTitle("Post Test Completed!");
-//
-//        double bktScore = x_bkt_algorithm.getKnowledge();
-//
-//        String message = "Congratulations! you got:" +
-//                "\nPre-Test: " + c_Lesson_feedback.preTestCorrectAnswers + "/" + c_Lesson_feedback.preTestAttemptAnswers +
-//                "\nPost-Test: " + c_Lesson_feedback.postTestCorrectAnswers + "/" + c_Lesson_feedback.postTestAttemptAnswers +
-//                "\nBKT Score: " + bktScore;
-//
-//        builder.setMessage(message);
-//
-//        // Add a button to dismiss the dialog
-//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss(); // Close the dialog
-//                finish();
-//            }
-//        });
-//
-//        builder.setCancelable(false);
-//
-//        // Create and show the dialog
-//        AlertDialog dialog = builder.create();
-//        dialog.show();
+        lessonPassed = isPassed;
 
         isLessonFinished = true;
         updateProgressAndMoveToNextStep();
@@ -742,6 +807,44 @@ public class d_Lesson_container extends AppCompatActivity implements
 
     }
 
+    private void showPassedDialog(String lesson) {
+        // Create a dialog using the custom layout
+        AlertDialog.Builder builder = new AlertDialog.Builder(d_Lesson_container.this);
+
+        // Inflate the custom layout
+        LayoutInflater inflater = getLayoutInflater();
+        View customDialogView = inflater.inflate(R.layout.c_lesson_passed_dialog, null);
+
+        // Set the custom layout parameters for width and height
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, // Width: Match Parent
+//                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 392, getResources().getDisplayMetrics()) // Height: 392dp
+                ViewGroup.LayoutParams.WRAP_CONTENT // Height: Wrap Content
+
+        );
+        customDialogView.setLayoutParams(params);
+
+        // Set the custom layout to the dialog builder
+        builder.setView(customDialogView);
+
+        TextView dialogMessage = customDialogView.findViewById(R.id.message);
+        Button okButton = customDialogView.findViewById(R.id.okay_passed_button);
+
+        dialogMessage.setText("You passed " + lesson);
+
+        // Show the dialog when OK button is clicked
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // Optionally finish the activity
+            }
+        });
+
+        // Create and show the dialog
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false); // Prevent dismissing by tapping outside
+        dialog.show();
+    }
 
     private void updateCurrentModuleInDatabase() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);

@@ -28,7 +28,7 @@ import java.util.Map;
 public class c_Lesson_progressive_2 extends AppCompatActivity {
 
     private AlertDialog dialog;
-    private boolean[] cardCompletionStatus = {false}; // Track completion status of each card
+    public static boolean[] cardCompletionStatus = {false}; // Track completion status of each card
     private CustomLoadingDialog loadingDialog; // Loading dialog instance
     private int[] moduleProgress;
     private double passingGrade;
@@ -201,6 +201,8 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
 //                                        "\nPassing Grade: " + passingGrade
 //                        );
                         c_Lesson_feedback.showDialog(this, M1_Score, passingGrade, "Lesson 1");
+                        b_main_1_lesson_progressive.cardCompletionStatus[1] = false;
+
                     } else {
 //                    card4LockedOverlay.setVisibility(View.GONE);
                         setCardCompletionStatus(key, true);

@@ -51,7 +51,7 @@ public class b_main_1_lesson_progressive extends Fragment {
     private int[] cardProgress = new int[z_Lesson_steps.total_module_count]; // refer to the assigned value
 
     // Track completion status of each card
-    private boolean[] cardCompletionStatus = {false, false, false, false, false, false, false, false}; // Default is false for all cards
+    public static boolean[] cardCompletionStatus = {false, false, false, false, false, false, false, false}; // Default is false for all cards
 
     private n_Network network;
     public interface ProgressUpdateListener {
@@ -86,14 +86,45 @@ public class b_main_1_lesson_progressive extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.b_main_3_lesson_progressive, container, false);
 
+//        initializeModules();
+
         // Initialize views
         initializeViews();
 
         // Show loading dialog
         showLoadingDialog();
 
+
         return view;
     }
+
+//    private void initializeModules() {
+//
+//        c_Lesson_progressive_1 mod1 = new c_Lesson_progressive_1();
+//        mod1.onResume();
+//
+//        c_Lesson_progressive_2 mod2 = new c_Lesson_progressive_2();
+//        mod2.onResume();
+//
+//        c_Lesson_progressive_3 mod3 = new c_Lesson_progressive_3();
+//        mod3.onResume();
+//
+//        c_Lesson_progressive_4 mod4 = new c_Lesson_progressive_4();
+//        mod4.onResume();
+//
+//        c_Lesson_progressive_5 mod5 = new c_Lesson_progressive_5();
+//        mod5.onResume();
+//
+//        c_Lesson_progressive_6 mod6 = new c_Lesson_progressive_6();
+//        mod6.onResume();
+//
+//        c_Lesson_progressive_7 mod7 = new c_Lesson_progressive_7();
+//        mod7.onResume();
+//
+//        c_Lesson_progressive_8 mod8 = new c_Lesson_progressive_8();
+//        mod8.onResume();
+//
+//    }
 
     private void showLoadingDialog() {
         loadingDialog = new CustomLoadingDialog(getActivity());
@@ -118,6 +149,8 @@ public class b_main_1_lesson_progressive extends Fragment {
     public void onResume() {
         super.onResume();
         fetchAllProgressData();
+
+//        initializeModules();
     }
 
     private void fetchAllProgressData() {
@@ -142,6 +175,8 @@ public class b_main_1_lesson_progressive extends Fragment {
 
                     int moduleCounter = 0;
 
+                    int iteration = 1;
+
                     for (DocumentSnapshot lessonDoc : task.getResult()) {
                         String lesson = lessonDoc.getId();
                         int totalProgress = 0;
@@ -149,17 +184,55 @@ public class b_main_1_lesson_progressive extends Fragment {
                         int lessonNumber = Integer.parseInt(lesson.substring(7).trim());
                         int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
 
+                        Log.e(TAG, "Module[" + (iteration) + "]");
+                        iteration++;
+
+                        Log.e(TAG, "maxProgressValues.length: " + maxProgressValues.length);
+                        int completeCounter = 0;
                         for (int i = 0; i < maxProgressValues.length; i++) {
-                            String key = "M" + (i + 1) + ".Progress";
-                            Long moduleProgress = lessonDoc.getLong(key);
+                            String keyProgress = "M" + (i + 1) + ".Progress";
+                            String keyScore = "M" + (i + 1) + ".BKT Score";
+
+                            Long moduleProgress = lessonDoc.getLong(keyProgress);
+
                             if (moduleProgress != null) {
                                 totalProgress += moduleProgress;
                                 totalMaxProgress += maxProgressValues[i];
                             }
 
+                            Double moduleScore = lessonDoc.getDouble(keyScore); // Change this line
+//                            if (moduleProgress != null) {
+//
+//                            }
+
+                            Log.e(TAG, "Lesson["+(i+1)+"] BKT Score: " + moduleScore);
+
+
+                            // if moduleScore >= passingGrade
+                            if (moduleScore >= b_main_0_menu_categorize_user.passingGrade) {
+//                                cardCompletionStatus[i] = true; // eh buong module yan e wag yan
+
+                                completeCounter++;
+                                Log.e(TAG, "Lesson["+(i+1)+"] Passed | completeCounter: " + completeCounter);
+
+                            }
+
                             moduleCounter++;
                             final int progress = (int) ((moduleCounter / (float) totalModules) * 100);
                             updateProgress(progress);
+
+                            if (completeCounter == maxProgressValues.length) {
+                                Log.e("TAG", "Module["+(iteration-1)+"] is Complete!");
+
+                                // Array starts at 0..
+                                // Iteration started at 1..
+                                // Iteration in this part of code is incremented already by 1..
+                                // so deduct by 2..
+                                cardCompletionStatus[iteration-2] = true;
+
+                            }
+
+
                         }
 
                         if (totalMaxProgress > 0) {
@@ -186,9 +259,58 @@ public class b_main_1_lesson_progressive extends Fragment {
     }
 
     private void resetCardProgress() {
-        for (int i = 0; i < cardProgress.length; i++) {
-            cardProgress[i] = 0; // Reset all progress to 0
+        // Reset all progress to 0
+        Arrays.fill(cardProgress, 0);
+    }
+
+    private boolean isModuleComplete(int cardId) {
+        // Adjust cardId to match array index (1-based to 0-based)
+//        cardId -= 1;
+
+        Log.e("isModuleComplete", "checked Module[" + (cardId+1) + "]");
+
+        switch (cardId) {
+            case 0: // c_Lesson_progressive_1
+                return areAllTrue(c_Lesson_progressive_1.cardCompletionStatus);
+            case 1: // c_Lesson_progressive_2
+                return areAllTrue(c_Lesson_progressive_2.cardCompletionStatus);
+            case 2: // c_Lesson_progressive_3
+                return areAllTrue(c_Lesson_progressive_3.cardCompletionStatus);
+            case 3: // c_Lesson_progressive_4
+                return areAllTrue(c_Lesson_progressive_4.cardCompletionStatus);
+            case 4: // c_Lesson_progressive_5
+                return areAllTrue(c_Lesson_progressive_5.cardCompletionStatus);
+            case 5: // c_Lesson_progressive_6
+                return areAllTrue(c_Lesson_progressive_6.cardCompletionStatus);
+            case 6: // c_Lesson_progressive_7
+                return areAllTrue(c_Lesson_progressive_7.cardCompletionStatus);
+            case 7: // c_Lesson_progressive_8
+                return areAllTrue(c_Lesson_progressive_8.cardCompletionStatus);
+            default:
+                return false; // Invalid cardId
         }
+
+    }
+
+    // Helper method to check if all values in the array are true
+    private boolean areAllTrue(boolean[] completionStatus) {
+
+        if (completionStatus == null) {
+            return false; // Handle null case if necessary
+        }
+
+        int iteration = 1;
+        for (boolean status : completionStatus) {
+            Log.e("areAllTrue", "Lesson " + iteration + ": " + status);
+            if (!status) {
+                return false; // Return false if any status is false
+            }
+            iteration++;
+        }
+
+        Log.e("areAllTrue", "Card " + completionStatus + " are all true");
+
+        return true; // All statuses are true
     }
 
     private void updateCardProgress(int cardId, int progress) {
@@ -196,10 +318,12 @@ public class b_main_1_lesson_progressive extends Fragment {
         String TAG = "updateCardProgress()";
         cardProgress[cardId] = Math.min(progress, 100);
 
-        if (cardProgress[cardId] >= 100) {
-            Log.e("cardCompletionStatus[]", "cardProgress[" + cardId + "]: " + cardProgress[cardId] + " >= 100, so TRUE na to");
+        if (cardProgress[cardId] >= 100
+//                && isModuleComplete(cardId)
+        ) {
+            Log.e("cardCompletionStatus[]", "cardProgress[" + (cardId-1) + "]: " + cardProgress[cardId] + " >= 100, so TRUE na to");
             cardCompletionStatus[cardId] = true;
-            if (cardId < cardCompletionStatus.length) {
+            if (cardId < cardCompletionStatus.length && cardCompletionStatus[cardId]) {
                 hideLockedOverlay(cardId + 2);
             }
         }

@@ -28,7 +28,7 @@ import java.util.Map;
 public class c_Lesson_progressive_8 extends AppCompatActivity {
 
     private AlertDialog dialog;
-    private boolean[] cardCompletionStatus = {false, false, false}; // Track completion status of each card
+    public static  boolean[] cardCompletionStatus = {false, false, false}; // Track completion status of each card
     private CustomLoadingDialog loadingDialog;
     private int[] moduleProgress;
     private double passingGrade;
@@ -100,7 +100,7 @@ public class c_Lesson_progressive_8 extends AppCompatActivity {
                         Map<String, Object> progressData = document.getData();
                         if (progressData != null) {
                             // Initialize the array with the length of the lesson steps
-                            moduleProgress = new int[z_Lesson_steps.lesson_1_steps.length];
+                            moduleProgress = new int[z_Lesson_steps.lesson_8_steps.length];
 
                             String TEST = "HERE!";
                             Log.e(TEST, "Entering for loop");

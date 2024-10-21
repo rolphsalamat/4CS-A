@@ -620,6 +620,67 @@ public class x_bkt_algorithm {
                 .addOnFailureListener(e -> Log.e(TAG, "Error updating M" + finalModuleIndex + " M fields", e));
     }
 
+    public interface ScoreCallback {
+        void onScoreRetrieved(float score);
+    }
+
+    public static void getBKTScore(
+            int moduleIndex, int lessonIndex,
+            boolean isProgressiveMode,
+            ScoreCallback callback
+    ) {
+        String TAG = "BKT | getBKTScore()";
+
+        if (
+                moduleIndex < 0 ||
+                        lessonIndex < 0) {
+            Log.e(TAG, "Invalid BKT score update request");
+            Log.e(TAG, "moduleIndex: " + moduleIndex);
+            Log.e(TAG, "lessonIndex: " + lessonIndex);
+            callback.onScoreRetrieved(0); // Return 0 via callback
+            return;
+        }
+
+        moduleIndex += 1;
+
+        // Determine the correct collection based on the learning mode
+        String collectionPath = isProgressiveMode ? "Progressive Mode" : "Free Use Mode";
+        String documentName = "Lesson " + lessonIndex;
+
+        Log.e(TAG, "moduleIndex: " + moduleIndex);
+        Log.e(TAG, "lessonIndex: " + lessonIndex);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // Construct the field path using dot notation
+        String moduleFieldPath = "M" + moduleIndex + ".BKT Score";
+
+        Log.e(TAG, "Field path for update: " + moduleFieldPath + " | Lesson " + lessonIndex);
+
+
+        Log.e(TAG, "Path: " + "users/"+userId+"/"+collectionPath+"/"+documentName+"/"+moduleFieldPath);
+
+        db.collection("users").document(userId)
+                .collection(collectionPath)
+                .document(documentName)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Double scoreValue = documentSnapshot.getDouble(moduleFieldPath);
+                        float score = (scoreValue != null) ? scoreValue.floatValue() : 0f;
+                        Log.d(TAG, "Retrieved BKT Score: " + score);
+                        callback.onScoreRetrieved(score); // Return score via callback
+                    } else {
+                        Log.e(TAG, "Document does not exist");
+                        callback.onScoreRetrieved(0f); // Return 0 if document doesn't exist
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error getting document", e);
+                    callback.onScoreRetrieved(0f); // Return 0 on error
+                });
+    }
 
     public void updateScore(
             int moduleIndex, int lessonIndex,

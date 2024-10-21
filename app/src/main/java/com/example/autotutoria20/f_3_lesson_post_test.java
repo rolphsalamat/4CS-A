@@ -55,7 +55,7 @@ public class f_3_lesson_post_test extends Fragment {
 
     // Interface to notify the container activity when post-test is complete
     public interface PostTestCompleteListener {
-        void onPostTestComplete(boolean isCorrect, double knowledgeProb);
+        void onPostTestComplete(boolean isCorrect, double knowledgeProb, boolean isPassed);
     }
 
     public static f_3_lesson_post_test newInstance(String module, String lesson, String mode) {
@@ -324,10 +324,22 @@ public class f_3_lesson_post_test extends Fragment {
 
                         // Handle completion of pre-test.
                         if (postTestCompleteListener != null) {
-                            postTestCompleteListener.onPostTestComplete(
-                                    correctAnswer,
-                                    c_Lesson_feedback.postTestCorrectAnswers
-                            );
+
+                            double bktscore = x_bkt_algorithm.getKnowledge();
+
+                            if (bktscore >= b_main_0_menu_categorize_user.passingGrade)
+                                postTestCompleteListener.onPostTestComplete(
+                                        correctAnswer,
+                                        c_Lesson_feedback.postTestCorrectAnswers,
+                                        true
+                                );
+                            else {
+                                postTestCompleteListener.onPostTestComplete(
+                                        correctAnswer,
+                                        c_Lesson_feedback.postTestCorrectAnswers,
+                                        false
+                                );
+                            }
                             c_Lesson_feedback.printResult("Post-Test");
                             d_Lesson_container.isPostTestComplete = true;
 

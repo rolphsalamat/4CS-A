@@ -1,5 +1,6 @@
 package com.example.autotutoria20;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,7 +29,7 @@ import java.util.Map;
 public class c_Lesson_progressive_1 extends AppCompatActivity {
 
     private AlertDialog dialog;
-    private boolean[] cardCompletionStatus = {false, false, false, false}; // Track completion status of each card
+    public static boolean[] cardCompletionStatus = {false, false, false, false}; // Track completion status of each card
     private CustomLoadingDialog loadingDialog; // Loading dialog instance
     private int[] moduleProgress;
     private double passingGrade;
@@ -311,6 +312,7 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                         c_Lesson_feedback.showDialog(this, M1_Score, passingGrade, "Lesson 1");
                     } else {
                         card2LockedOverlay.setVisibility(View.GONE);
+                        Log.e(TAG, "Lesson " + key + ": TRUE");
                         setCardCompletionStatus(key, true);
                     }
                 }
@@ -336,6 +338,7 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                         c_Lesson_feedback.showDialog(this, M2_Score, passingGrade, "Lesson 2");
                     } else {
                         card3LockedOverlay.setVisibility(View.GONE);
+                        Log.e(TAG, "Lesson " + key + ": TRUE");
                         setCardCompletionStatus(key, true);
 
                     }
@@ -363,6 +366,7 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                         c_Lesson_feedback.showDialog(this, M3_Score, passingGrade, "Lesson 3");
                     } else {
                         card4LockedOverlay.setVisibility(View.GONE);
+                        Log.e(TAG, "Lesson " + key + ": TRUE");
                         setCardCompletionStatus(key, true);
                     }
                 }
@@ -390,6 +394,7 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                         c_Lesson_feedback.showDialog(this, M4_Score, passingGrade, "Lesson 4");
                     } else {
 //                    card4LockedOverlay.setVisibility(View.GONE);
+                        Log.e(TAG, "Lesson " + key + ": TRUE");
                         setCardCompletionStatus(key, true);
 
                         Log.e("Completed Lesson!", "Calling Feedback Class");
@@ -431,7 +436,7 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
 
     private void setCardCompletionStatus(int cardIndex, boolean isCompleted) {
         cardIndex -= 1; // Because Card starts at 0 :>
-        Log.d("setCardStatus", "Card " + cardIndex + " Completed!");
+        Log.d("setCardStatus", "Card " + (cardIndex+1) + " Completed!");
         if (cardIndex >= 0 && cardIndex < cardCompletionStatus.length) {
             Log.d("setCardStatus", "Lemme set it");
             cardCompletionStatus[cardIndex] = isCompleted;
@@ -485,6 +490,7 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
             Log.e("navigateToModuleActivity", "moduleProgress is null or cardNumber is out of bounds.");
         }
     }
+
 
     private void setCardClickListener(FrameLayout card, int cardNumber, int numberOfSteps) {
         if (n_Network.isNetworkAvailable(getBaseContext())) {
