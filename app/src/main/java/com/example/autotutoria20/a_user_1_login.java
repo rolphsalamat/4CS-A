@@ -375,7 +375,7 @@ public class a_user_1_login extends AppCompatActivity {
 
                     if (!usernameFound) {
                         Log.d(TAG, "Username does not exist: " + username);
-                        Toast.makeText(a_user_1_login.this, "Username does not exist HAHA", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(a_user_1_login.this, "Username does not exist", Toast.LENGTH_SHORT).show();
                         return;
                     }
 

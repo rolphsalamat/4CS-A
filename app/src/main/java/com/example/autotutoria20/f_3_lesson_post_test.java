@@ -217,7 +217,7 @@ public class f_3_lesson_post_test extends Fragment {
 
                 Log.e("f_post_test", "dahil " + difficultyLevel + " ang difficulty, gawin nating " + attemptChances + " ang chances");
 
-                bktModel.setBKTParameters(difficultyLevel);
+//                bktModel.setBKTParameters(difficultyLevel);
 
                 Log.e(TAG, "I will pass these:");
                 Log.e(TAG, "module: " + module);
@@ -751,16 +751,14 @@ public class f_3_lesson_post_test extends Fragment {
                 if (selectedId != -1) {
                     e_Question currentQuestion = questions[currentQuestionIndex];
                     if (selectedId == currentQuestion.getCorrectAnswer_EASY_MEDIUM()) {
+                        Toast.makeText(getContext(), "Correct!", Toast.LENGTH_SHORT).show();
                         isCorrect = true;
-//                        Log.e(TAG, "Answer is Correct! | isCorrect: " + isCorrect);
+                        Log.e(TAG, "Answer is Correct! | isCorrect: " + isCorrect);
                         return true;  // Correct answer
                     } else {
-                        Context context = getContext();
-                        if (context != null) {
-//                            Toast.makeText(context, "Incorrect! Try again.", Toast.LENGTH_SHORT).show();
-                        }
+                        Toast.makeText(getContext(), "Incorrect, Try Again.", Toast.LENGTH_SHORT).show();
                         isCorrect = false;
-//                        Log.e(TAG, "Answer is Incorrect! | isCorrect: " + isCorrect);
+                        Log.e(TAG, "Answer is Incorrect! | isCorrect: " + isCorrect);
                         return false;  // Incorrect answer
                     }
                 } else {

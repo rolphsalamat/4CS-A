@@ -27,7 +27,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="20dp"
                 android:textSize="20sp"
-                android:text="Settings"/>
+                android:text="Settings"
+                android:textColor="@color/black"/>
 
         </LinearLayout>
 
@@ -52,7 +53,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily=""
-                android:text="App Update Notification" />
+                android:text="App Update Notification"
+                android:textColor="@color/black"/>
             <!-- Toggle Switch -->
             <Switch
                 android:id="@+id/switch_app_update"
@@ -72,7 +74,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="New Course Available Notification" />
+                android:text="New Course Available Notification"
+                android:textColor="@color/black"/>
             <!-- Toggle Switch -->
             <Switch
                 android:id="@+id/switch_new_course"
@@ -92,7 +95,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Reminder Notification" />
+                android:text="Reminder Notification"
+                android:textColor="@color/black"/>
             <!-- Toggle Switch -->
             <Switch
                 android:id="@+id/switch_reminder"

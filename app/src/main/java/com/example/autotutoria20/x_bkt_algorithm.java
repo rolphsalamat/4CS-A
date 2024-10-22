@@ -130,6 +130,7 @@ public class x_bkt_algorithm {
                 });
     }
 
+
     public void updateKnowledgeProbability(boolean answeredCorrectly) {
         double pKnow = knowledgeProbability;
 
@@ -143,18 +144,17 @@ public class x_bkt_algorithm {
         Log.e(TAG, "Softening Rate: " + softeningRate);
 
         if (answeredCorrectly) {
-            // Update with guess rate
+            // Update with guess rate when answered correctly
             // Formula: pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate)
             knowledgeProbability = pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate);
         } else {
-            // Adjusted formula for incorrect answers
-            // Instead of a drastic reduction, we decrease it by a smaller factor
-            // Formula: pKnow * (1 - slipRate)
-            // This reduces the score but not drastically
-            knowledgeProbability = pKnow * (1 - slipRate);
+            // Softened adjustment for incorrect answers
+            // Rather than a drastic reduction, use a milder decrease by incorporating the softening rate
+            // Formula: pKnow * (1 - slipRate * softeningRate)
+            knowledgeProbability = pKnow * (1 - slipRate * softeningRate);
 
-            // Optionally include a small adjustment for forget rate to soften the impact
-            knowledgeProbability *= (1 - forgetRate);
+//            // Optionally include a forget rate to ensure the knowledge doesn't hold at maximum indefinitely
+//            knowledgeProbability *= (1 - forgetRate);
         }
 
         // Ensure knowledgeProbability stays within [0, 1]
@@ -162,6 +162,41 @@ public class x_bkt_algorithm {
 
         Log.d(TAG, "Updated Knowledge Probability: " + knowledgeProbability);
     }
+
+
+    // Original Code
+//    public void updateKnowledgeProbability(boolean answeredCorrectly) {
+//        double pKnow = knowledgeProbability;
+//
+//        String TAG = "updateKnowledgeProbability";
+//
+//        Log.e(TAG, "Answer: " + answeredCorrectly);
+//        Log.e(TAG, "knowledgeProbability: " + knowledgeProbability);
+//        Log.e(TAG, "Learn Rate: " + learnRate);
+//        Log.e(TAG, "Guess Rate: " + guessRate);
+//        Log.e(TAG, "Slip Rate: "  + slipRate);
+//        Log.e(TAG, "Softening Rate: " + softeningRate);
+//
+//        if (answeredCorrectly) {
+//            // Update with guess rate
+//            // Formula: pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate)
+//            knowledgeProbability = pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate);
+//        } else {
+//            // Adjusted formula for incorrect answers
+//            // Instead of a drastic reduction, we decrease it by a smaller factor
+//            // Formula: pKnow * (1 - slipRate)
+//            // This reduces the score but not drastically
+//            knowledgeProbability = pKnow * (1 - slipRate);
+//
+//            // Optionally include a small adjustment for forget rate to soften the impact
+//            knowledgeProbability *= (1 - forgetRate);
+//        }
+//
+//        // Ensure knowledgeProbability stays within [0, 1]
+//        knowledgeProbability = Math.max(0.0, Math.min(1.0, knowledgeProbability));
+//
+//        Log.d(TAG, "Updated Knowledge Probability: " + knowledgeProbability);
+//    }
 
 //    public void updateKnowledgeProbability(boolean answeredCorrectly) {
 //        double pKnow = knowledgeProbability;
@@ -255,60 +290,116 @@ public class x_bkt_algorithm {
 
     }
 
+//    public static void setBKTCategory(String category) {
+//
+//        switch (category) {
+//            case "Novice":
+//                learnRate = 0.3;
+//                slipRate = 0.3;
+//                guessRate = 0.3;
+//                forgetRate = 0.1;
+//                softeningRate = 0.9;
+//                knowledgeProbability = 0.1;  // Initial probability for Novice
+//                break;
+//            case "Beginner":
+//                learnRate = 0.4;
+//                slipRate = 0.2;
+//                guessRate = 0.2;
+//                forgetRate = 0.05;
+//                softeningRate = 0.8;
+//                knowledgeProbability = 0.3;  // Initial probability for Beginner
+//                break;
+//            case "Intermediate":
+//                learnRate = 0.5;
+//                slipRate = 0.1;
+//                guessRate = 0.1;
+//                forgetRate = 0.03;
+//                softeningRate = 0.7;
+//                knowledgeProbability = 0.5;  // Initial probability for Intermediate
+//                break;
+//            case "Advanced":
+//                learnRate = 0.7;
+//                slipRate = 0.05;
+//                guessRate = 0.05;
+//                forgetRate = 0.02;
+//                softeningRate = 0.6;
+//                knowledgeProbability = 0.7;  // Initial probability for Advanced
+//                break;
+//            case "Expert":
+//                learnRate = 0.9;
+//                slipRate = 0.05;
+//                guessRate = 0.05;
+//                forgetRate = 0.01;  // Experts rarely forget
+//                softeningRate = 0.5;
+//                knowledgeProbability = 0.9;  // Initial probability for Expert
+//                break;
+//            default:
+//                throw new IllegalArgumentException("Invalid category: " + category);
+//        }
+//
+//        String TAG = "Set BKT Category";
+//
+//        Log.d(TAG, "Category: " + category);
+//        Log.d(TAG, "Learn Rate: " + learnRate);
+//        Log.d(TAG, "Slip Rate: " + slipRate);
+//
+//    }
+
     public static void setBKTCategory(String category) {
 
         switch (category) {
             case "Novice":
-                learnRate = 0.3;
-                slipRate = 0.3;
-                guessRate = 0.3;
-                forgetRate = 0.1;
-                softeningRate = 0.8;
-                knowledgeProbability = 0.1;  // Initial probability for Novice
+                // Increase learn rate and reduce slip rate for easier learning
+                learnRate = 0.4;  // Increased learn rate for better progress
+                slipRate = 0.25;  // Lower slip rate to prevent forgetting too quickly
+                guessRate = 0.3;  // Maintain guessing rate
+                forgetRate = 0.1; // Keep forget rate for Novice, slightly higher
+                softeningRate = 0.8; // Reduced softening to allow some error correction
+                knowledgeProbability = 0.1;  // Start with low knowledge probability
                 break;
             case "Beginner":
-                learnRate = 0.4;
-                slipRate = 0.2;
-                guessRate = 0.2;
-                forgetRate = 0.05;
-                softeningRate = 0.7;
-                knowledgeProbability = 0.3;  // Initial probability for Beginner
+                // Increase learn rate and adjust slip rate for smoother progress
+                learnRate = 0.5;  // Increase learn rate for better knowledge gain
+                slipRate = 0.2;   // Moderate slip rate to balance learning and forgetting
+                guessRate = 0.25; // Reduce guessing rate to ensure more accurate answers
+                forgetRate = 0.07; // Reduce forget rate slightly
+                softeningRate = 0.75; // Moderate softening for more forgiving incorrect answers
+                knowledgeProbability = 0.3;  // Start with a higher initial probability
                 break;
             case "Intermediate":
-                learnRate = 0.5;
-                slipRate = 0.1;
-                guessRate = 0.1;
-                forgetRate = 0.03;
-                softeningRate = 0.6;
-                knowledgeProbability = 0.5;  // Initial probability for Intermediate
+                learnRate = 0.5;  // Maintain a moderate learning rate
+                slipRate = 0.1;   // Low slip rate for stable retention
+                guessRate = 0.1;  // Keep low guess rate for more accurate answers
+                forgetRate = 0.03; // Low forget rate for Intermediate level
+                softeningRate = 0.7; // Maintain moderate softening rate
+                knowledgeProbability = 0.5;  // Higher probability as user progresses
                 break;
             case "Advanced":
-                learnRate = 0.7;
-                slipRate = 0.05;
-                guessRate = 0.05;
-                forgetRate = 0.02;
-                softeningRate = 0.5;
-                knowledgeProbability = 0.7;  // Initial probability for Advanced
+                learnRate = 0.7;  // Keep high learning rate for faster mastery
+                slipRate = 0.05;  // Very low slip rate for minimal forgetting
+                guessRate = 0.05; // Low guess rate, expert-level accuracy
+                forgetRate = 0.02; // Very low forget rate for advanced users
+                softeningRate = 0.6; // Gentle softening for minor errors
+                knowledgeProbability = 0.7;  // High initial knowledge probability
                 break;
             case "Expert":
-                learnRate = 0.9;
-                slipRate = 0.05;
-                guessRate = 0.05;
+                learnRate = 0.9;  // Maximal learning rate for expert learners
+                slipRate = 0.05;  // Minimal slip rate
+                guessRate = 0.05; // Minimal guess rate for near-perfect knowledge
                 forgetRate = 0.01;  // Experts rarely forget
-                softeningRate = 0.4;
-                knowledgeProbability = 0.9;  // Initial probability for Expert
+                softeningRate = 0.5; // Least softening for expert learners
+                knowledgeProbability = 0.9;  // Near-max probability for experts
                 break;
             default:
                 throw new IllegalArgumentException("Invalid category: " + category);
         }
 
         String TAG = "Set BKT Category";
-
         Log.d(TAG, "Category: " + category);
         Log.d(TAG, "Learn Rate: " + learnRate);
         Log.d(TAG, "Slip Rate: " + slipRate);
-
     }
+
 
     public void setBKTParameters(e_Question.Difficulty difficulty) {
         // Adjust BKT Model parameters based on difficulty level
@@ -811,38 +902,38 @@ public class x_bkt_algorithm {
     // Level 5 [0.7 - 0.9] Expert
 
     // optimized version daw??
-    public void updateKnowledge(boolean correct) {
-
-        String TAG = "updateKnowledge";
-
-        Log.e(TAG, "Answer: " + correct);
-        Log.e(TAG, "Category: " + category);
-        Log.e(TAG, "Knowledge Probability: " + knowledgeProbability);
-        Log.e(TAG, "Slip Rate: " + slipRate);
-        Log.e(TAG, "Guess Rate: " + guessRate);
-
-        double newKnowledgeProbability;
-
-        if (correct) {
-            // Update probability of knowing the skill after a correct answer
-            newKnowledgeProbability = (knowledgeProbability * (1 - slipRate)) /
-                    (knowledgeProbability * (1 - slipRate) + (1 - knowledgeProbability) * guessRate);
-        } else {
-            // Update probability of knowing the skill after an incorrect answer
-            newKnowledgeProbability = (knowledgeProbability * slipRate) /
-                    (knowledgeProbability * slipRate + (1 - knowledgeProbability) * (1 - guessRate));
-        }
-
-        // Apply learning rate to update knowledge probability
-        knowledgeProbability = newKnowledgeProbability + (1 - newKnowledgeProbability) * learnRate;
-
-        Log.e("updateKnowledge", "Updated pKnow is: " + knowledgeProbability + " because Answer is: " + correct);
-
-        // Ensure knowledgeProbability stays within bounds [0, 1]
-        knowledgeProbability = Math.max(0, Math.min(1, knowledgeProbability));
-
-        Log.e("updateKnowledge", "Final knowledgeProbability: " + knowledgeProbability);
-    }
+//    public void updateKnowledge(boolean correct) {
+//
+//        String TAG = "updateKnowledge";
+//
+//        Log.e(TAG, "Answer: " + correct);
+//        Log.e(TAG, "Category: " + category);
+//        Log.e(TAG, "Knowledge Probability: " + knowledgeProbability);
+//        Log.e(TAG, "Slip Rate: " + slipRate);
+//        Log.e(TAG, "Guess Rate: " + guessRate);
+//
+//        double newKnowledgeProbability;
+//
+//        if (correct) {
+//            // Update probability of knowing the skill after a correct answer
+//            newKnowledgeProbability = (knowledgeProbability * (1 - slipRate)) /
+//                    (knowledgeProbability * (1 - slipRate) + (1 - knowledgeProbability) * guessRate);
+//        } else {
+//            // Update probability of knowing the skill after an incorrect answer
+//            newKnowledgeProbability = (knowledgeProbability * slipRate) /
+//                    (knowledgeProbability * slipRate + (1 - knowledgeProbability) * (1 - guessRate));
+//        }
+//
+//        // Apply learning rate to update knowledge probability
+//        knowledgeProbability = newKnowledgeProbability + (1 - newKnowledgeProbability) * learnRate;
+//
+//        Log.e("updateKnowledge", "Updated pKnow is: " + knowledgeProbability + " because Answer is: " + correct);
+//
+//        // Ensure knowledgeProbability stays within bounds [0, 1]
+//        knowledgeProbability = Math.max(0, Math.min(1, knowledgeProbability));
+//
+//        Log.e("updateKnowledge", "Final knowledgeProbability: " + knowledgeProbability);
+//    }
 
 
     public static double getKnowledge() {

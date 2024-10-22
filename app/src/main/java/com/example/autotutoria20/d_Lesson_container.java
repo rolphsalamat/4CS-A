@@ -714,15 +714,15 @@ public class d_Lesson_container extends AppCompatActivity implements
         String message;
 
 
-        if (score >= c_Lesson_feedback.preTestAttemptAnswers)
-            message = "Congratulations! You passed the pre-test.";
-        else
-            message = "Unfortunately, you did not pass the pre-test."; // Incorrect
+//        if (score >= c_Lesson_feedback.preTestAttemptAnswers)
+//            message = "Congratulations! You passed the pre-test.";
+//        else
+//            message = "Unfortunately, you did not pass the pre-test."; // Incorrect
 
         String scoreMessage = "\nYour score for Pre-Test is: " + score;
 
         builder.setMessage(
-                message +
+//                message +
                 scoreMessage);
 
         builder.setCancelable(false);
