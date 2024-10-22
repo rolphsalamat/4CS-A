@@ -127,19 +127,21 @@ public class b_main_1_lesson_progressive extends Fragment {
 //    }
 
     private void showLoadingDialog() {
-        loadingDialog = new CustomLoadingDialog(getActivity());
-        loadingDialog.setCancelable(false); // Prevent closing the dialog
-        loadingDialog.show();
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            loadingDialog = new CustomLoadingDialog(getActivity());
+            loadingDialog.setCancelable(false); // Prevent closing the dialog
+            loadingDialog.show();
+        }
     }
 
     private void updateProgress(int progress) {
-        if (loadingDialog != null) {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
             loadingDialog.setProgress(progress);
         }
     }
 
     private void hideLoadingDialog() {
-        if (loadingDialog != null && loadingDialog.isShowing()) {
+        if (loadingDialog != null && loadingDialog.isShowing() && getActivity() != null && !getActivity().isFinishing()) {
             loadingDialog.dismiss();
         }
     }
@@ -247,6 +249,9 @@ public class b_main_1_lesson_progressive extends Fragment {
                     incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
                         @Override
                         public void run() {
+                            if (!n_Network.isNetworkAvailable2(getContext())) {
+                                Toast.makeText(getContext(), "No Internet", Toast.LENGTH_SHORT).show();
+                            }
                             hideLoadingDialog();
                         }
                     });

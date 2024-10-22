@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -22,7 +25,7 @@ import java.util.Map;
 
 public class b_main_0_menu_tutorial extends AppCompatActivity {
 
-    private WebView webView;
+    private static WebView webView;
     private static final String TAG = "TutorialActivity";
     private View youtubeButton;
     private View googleDriveButton;
@@ -30,7 +33,7 @@ public class b_main_0_menu_tutorial extends AppCompatActivity {
     private Map<String, Object> userData;
 
     // Known publicly available YouTube video
-    String videoUrl = "0MJAYH7o5fs";
+    String videoUrl = "NF765WOy5Vk";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,15 @@ public class b_main_0_menu_tutorial extends AppCompatActivity {
 
         Log.d(TAG, "onCreate: WebView initialized");
 
+
+        // if no internet, show a prompt na walang internet
+        // else, loadVideo();
+
+
+//        if (!(n_Network.isNetworkAvailable(getBaseContext()))) {
+//            Toast.makeText(b_main_0_menu_tutorial.this, "Please connect to a network.", Toast.LENGTH_SHORT).show();
+//        }
+
         // Load the video
         loadVideo(videoUrl);
 
@@ -104,8 +116,22 @@ public class b_main_0_menu_tutorial extends AppCompatActivity {
         } else {
             Log.d(TAG, "Detected YouTube video ID");
             // YouTube video ID
-            iframeHtml = "<html><body style='margin:0;padding:0;'><iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/"
-                    + videoUrl + "?modestbranding=1&rel=0&showinfo=0\" frameborder=\"0\" allowfullscreen></iframe></body></html>";
+            iframeHtml = "<html><body style='margin:0;padding:0;'>" +
+                    "<div style='width: 100%; height: 100%; overflow: hidden; position: relative;'>" +
+                    "<iframe style='width: 250%; height: 100%; margin-left: -75%;' " +
+                    "src=\"https://www.youtube.com/embed/" + videoUrl + "?modestbranding=1&rel=0&showinfo=0\" " +
+                    "frameborder=\"0\" allowfullscreen></iframe>" +
+                    "</div></body></html>";
+
+//            // how to view youtube na nasa middle/??!?!?!
+//            iframeHtml = "<html><body style='margin:0;padding:0;'>" +
+//                    "<div style='justify-content: center;'>" +
+//                    "<div style='justify-content: center;'>" +
+//                    "<iframe width=\"250%\" height=\"100%\"" +
+//                    "src=\"https://www.youtube.com/embed/" + videoUrl +
+//                    "?modestbranding=1&rel=0&showinfo=0\" frameborder=\"0\" allowfullscreen></iframe></body></html>";
+
+
         }
         webView.loadData(iframeHtml, "text/html", "utf-8");
 
@@ -130,6 +156,42 @@ public class b_main_0_menu_tutorial extends AppCompatActivity {
         });
 
         Log.d(TAG, "Video loaded in WebView");
+
+        simulateClicksInCenter();
+
+    }
+
+    public static void simulateClicksInCenter() {
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Get the center coordinates of the screen
+                int x = webView.getWidth() / 2;
+                int y = webView.getHeight() / 2;
+
+//                // Number of clicks
+//                int clickCount = 1;
+//
+//                for (int i=0;i<clickCount;i++) {
+                // Simulate click
+                simulateClick(x, y);
+//                }
+                Log.e("simulateClicksInCenter", "Click!");
+            }
+        }, 1000);  // Convert seconds to milliseconds
+    }
+
+    public static  void simulateClick(int x, int y) {
+        long downTime = System.currentTimeMillis();
+        long eventTime = System.currentTimeMillis() + 10; // Delay between down and up events
+
+        // Simulate touch down event
+        MotionEvent motionEventDown = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, x, y, 0);
+        webView.dispatchTouchEvent(motionEventDown);
+
+        // Simulate touch up event
+        MotionEvent motionEventUp = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_UP, x, y, 0);
+        webView.dispatchTouchEvent(motionEventUp);
     }
 
     private void openInYouTube(String videoUrl) {
@@ -152,11 +214,11 @@ public class b_main_0_menu_tutorial extends AppCompatActivity {
                     .addOnSuccessListener(aVoid -> {
                         Log.d("Tutorial", "Tutorial completion updated in Firestore");
 
-                        // Update SharedPreferences
-                        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean("isTutorialCompleted", true);
-                        editor.apply();
+//                        // Update SharedPreferences
+//                        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+//                        SharedPreferences.Editor editor = sharedPreferences.edit();
+//                        editor.putBoolean("isTutorialCompleted", true);
+//                        editor.apply();
 
                         // Move to the main menu or next activity
 //                        moveToMainMenu();

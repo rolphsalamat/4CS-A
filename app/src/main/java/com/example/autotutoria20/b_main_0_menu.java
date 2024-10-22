@@ -99,6 +99,10 @@ public class b_main_0_menu extends AppCompatActivity {
         Log.d("hello", "word");
         setContentView(R.layout.b_main_0_menu);
 
+        if (!n_Network.isNetworkAvailable(this)) {
+            Toast.makeText(b_main_0_menu.this, "No Internet", Toast.LENGTH_SHORT).show();
+        }
+
 //        showLoadingDialog();
 
         // Instantiate x_bkt_algorithm
@@ -132,7 +136,7 @@ public class b_main_0_menu extends AppCompatActivity {
 
         if (isLoggedIn) {
             Log.e(TAG, "isLoggedIn: " + isLoggedIn);
-            FirebaseUser currentUser = mAuth.getCurrentUser();
+//            FirebaseUser currentUser = mAuth.getCurrentUser();
             // Check if the tutorial is completed
             a_user_1_login_handler.checkTutorialCompletion(new a_user_1_login_handler.TutorialCompletionCallback() {
                 @Override

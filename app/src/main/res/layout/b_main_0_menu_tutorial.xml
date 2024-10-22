@@ -12,22 +12,27 @@
         android:id="@+id/tvTutorialTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:text="Welcome to the Tutorial"
-        android:textSize="24sp"
+        android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
+        android:fontFamily="@font/milk_cream"
+        android:textColor="#87CEEB"
         android:layout_marginBottom="24dp" />
 
     <!-- Tutorial Content -->
     <TextView
         android:id="@+id/tvTutorialContent"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/tutorial"
+        android:layout_marginHorizontal="16dp"
+        android:text="Check out this video tutorial to learn how to use the application effectively!"
         android:justificationMode="inter_word"
         android:textSize="16sp"
-        android:textColor="@color/white"
-        android:layout_marginBottom="24dp" />
+        android:fontFamily="@font/milk_cream"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="16dp"
+        />
 
     <!-- WebView ba or ViewPager?? tapos parang TextLesson yung iteration?? -->
 
@@ -42,7 +47,8 @@
         <WebView
             android:id="@+id/webView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            />
 
         <!-- Transparent view to cover the top area -->
         <View
@@ -69,7 +75,6 @@
             android:layout_width="65dp"
             android:layout_height="100dp"
             android:layout_gravity="bottom|end"
-            android:background="@color/current_step"
             android:clickable="true"/>
 
     </FrameLayout>

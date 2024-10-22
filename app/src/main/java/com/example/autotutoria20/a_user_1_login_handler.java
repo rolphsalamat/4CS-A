@@ -7,11 +7,13 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,10 +27,19 @@ public class a_user_1_login_handler extends AppCompatActivity {
     private static FirebaseAuth mAuth;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "a_user_1_login_handler";
+    public static boolean tutorialCompleted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (!n_Network.isNetworkAvailable3(this)) {
+//            Toast.makeText(a_user_1_login_handler.this, "No Internet", Toast.LENGTH_SHORT).show();
+
+            Intent loginIntent = new Intent(this, b_main_0_menu.class);
+            startActivity(loginIntent);
+
+        }
 
         // Initialize Firebase
         FirebaseApp.initializeApp(this);
@@ -50,32 +61,53 @@ public class a_user_1_login_handler extends AppCompatActivity {
         if (isLoggedIn && mAuth.getCurrentUser() != null) {
             Log.e(TAG, "You are already logged in!");
 
-            // Call the checkTutorialCompletion method
-            checkTutorialCompletion(new TutorialCompletionCallback() {
-                @Override
-                public void onTutorialChecked(boolean isComplete) {
-                    if (isComplete) {
-                        Log.e(TAG, "Tutorial has been completed.");
-                        // User has completed the tutorial, redirect to main menu
-                        Intent mainMenuIntent = new Intent(a_user_1_login_handler.this, b_main_0_menu.class);
-                        startActivity(mainMenuIntent);
-                    } else {
-                        Log.e(TAG, "Tutorial has not been completed.");
-                        // User is logged in but has not completed the tutorial, redirect to tutorial
-                        Intent tutorialIntent = new Intent(a_user_1_login_handler.this, b_main_0_menu_tutorial.class);
-                        startActivity(tutorialIntent);
-                    }
-                }
-            });
+            checkTutorial();
+
+
+
         } else {
+
             // User is not logged in, redirect to login screen
             Log.e(TAG, "User is not logged in, redirecting to login.");
             Intent loginIntent = new Intent(this, a_user_1_login.class);
             startActivity(loginIntent);
+
         }
 
         createNotificationChannel();
         finish();
+    }
+
+    private void checkTutorial() {
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        String userId = user.getUid();
+
+        db.collection("users")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                // User's Personal Information
+                                tutorialCompleted = document.getBoolean("Tutorial");
+
+                                if (tutorialCompleted) Log.e(TAG, "Tutorial is already finished! | GWEN");
+                                else Log.e(TAG, "Tutorial is not yet finished. | GWEN");
+                            }
+                        }
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "I failed");
+                    }
+                });
     }
 
     // Move the checkTutorialCompletion method outside the onCreate method

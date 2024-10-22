@@ -3,36 +3,110 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/autotutoria_background_color"
     android:padding="16dp">
 
-    <Button
-        android:id="@+id/buttonNovice"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Novice" />
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/buttonBeginner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Beginner" />
+        <!-- TextView Next to Arrow -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Welcome to AutoTutoria"
+            android:fontFamily="@font/mouldy_cheese"
+            android:textColor="#87CEEB"
+            android:textSize="30dp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/buttonIntermediate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Intermediate" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="38dp"
+            android:layout_marginHorizontal="20dp"
+            android:fontFamily="@font/milk_cream"
+            android:gravity="center_horizontal"
+            android:text="Please tell us about your background in Context-Free Grammar..."
+            android:textAlignment="center"
+            android:textColor="#87CEEB"
+            android:textSize="18dp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/buttonAdvanced"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Advanced" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:fontFamily="@font/milk_cream"
+            android:gravity="center_horizontal"
+            android:text="Are you a?"
+            android:textAlignment="center"
+            android:textColor="#87CEEB"
+            android:textSize="36dp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/buttonExpert"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Expert" />
+        <Button
+            android:id="@+id/buttonNovice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:fontFamily="@font/roboto_italic"
+            android:textStyle="bold"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/rounded_edit_text_with_border_blue"
+            android:backgroundTint="#FFF"
+            android:text="Novice" />
+
+        <Button
+            android:id="@+id/buttonBeginner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_italic"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="11dp"
+            android:background="@drawable/rounded_edit_text_with_border_blue"
+            android:backgroundTint="#FFF"
+            android:text="Beginner" />
+
+        <Button
+            android:id="@+id/buttonIntermediate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_italic"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="11dp"
+            android:background="@drawable/rounded_edit_text_with_border_blue"
+            android:backgroundTint="#FFF"
+            android:text="Intermediate" />
+
+        <Button
+            android:id="@+id/buttonAdvanced"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_italic"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="11dp"
+            android:background="@drawable/rounded_edit_text_with_border_blue"
+            android:backgroundTint="#FFF"
+            android:text="Advanced" />
+
+        <Button
+            android:id="@+id/buttonExpert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:fontFamily="@font/roboto_italic"
+            android:textStyle="bold"
+            android:layout_marginTop="11dp"
+            android:background="@drawable/rounded_edit_text_with_border_blue"
+            android:backgroundTint="#FFF"
+            android:text="Expert" />
+
+    </LinearLayout>
 
 </LinearLayout>

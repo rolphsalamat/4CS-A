@@ -101,15 +101,17 @@ public class a_user_1_login extends AppCompatActivity {
 
                 // this is modified to use Username and Password for logging in.
                 String email = usernameTextView.getText().toString().trim();
-
-//                String username = usernameTextView.getText().toString().trim();
                 String password = passwordTextView.getText().toString().trim();
 
                 Log.e("Login", "Login");
                 Log.e("Login", "Username: " + email);
                 Log.e("Login", "Password: " + password);
 
-                loginUser(email, password); // original code
+//                if (!(n_Network.isNetworkAvailable(getBaseContext()))) {
+//                    Toast.makeText(a_user_1_login.this, "Please connect to a network.", Toast.LENGTH_SHORT).show();
+//                } else {
+                    loginUser(email, password); // original code
+//                }
 
 //                login(email, password);
             }
@@ -230,109 +232,110 @@ public class a_user_1_login extends AppCompatActivity {
         } // Catch no Facebook Application
     } // Method
 
-    private void login(String username, String password) {
-        String TAG = "login method";
-
-        // Check if a user is currently logged in
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null) {
-            Log.e(TAG, "No user is currently logged in.");
-            return; // Handle user not logged in
-        }
-
-        // Retrieve all users from the Firestore database
-        db.collection("users")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    boolean usernameFound = false;
-                    String email = null;
-                    String storedHashedPassword = null;
-
-                    for (DocumentSnapshot document : queryDocumentSnapshots) {
-                        // Check if the document exists and compare the User Category
-                        if (document.exists() && document.getString("User Category").equals(username)) {
-                            usernameFound = true;
-                            email = document.getString("Email Address");
-                            storedHashedPassword = document.getString("Password");
-                            break; // Exit loop if username is found
-                        }
-                    }
-
-                    if (!usernameFound) {
-                        Log.d(TAG, "Username does not exist: " + username);
-                        Toast.makeText(a_user_1_login.this, "Username does not exist", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    // Log retrieved email and password
-                    Log.d(TAG, "Retrieved email: " + email);
-                    Log.d(TAG, "Retrieved hashed password: " + storedHashedPassword);
-
-                    // Validate retrieved email and password
-                    if (email == null || email.isEmpty()) {
-                        Log.e(TAG, "Email is missing for username: " + username);
-                        Toast.makeText(a_user_1_login.this, "Email is missing for this username", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (storedHashedPassword == null || storedHashedPassword.isEmpty()) {
-                        Log.e(TAG, "Password is missing for username: " + username);
-                        Toast.makeText(a_user_1_login.this, "Password is missing for this username", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    // Verify the entered password against the stored hash
-                    boolean passwordMatch = a_user_3_password_encryption.checkPassword(password, storedHashedPassword);
-                    Log.d(TAG, "Password match status: " + passwordMatch);
-
-                    if (!passwordMatch) {
-                        Log.e(TAG, "Password does not match for username: " + username);
-                        Toast.makeText(a_user_1_login.this, "Incorrect password", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    Log.d(TAG, "Password matches, attempting Firebase authentication");
-
-                    // Proceed with Firebase authentication using the retrieved email
-                    mAuth.signInWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    if (user != null) {
-                                        if (user.isEmailVerified()) {  // Check if the email is verified
-                                            String userId = user.getUid();
-                                            Log.d(TAG, "Login successful. User ID: " + userId);
-                                            fetchUserInfo(userId); // Fetch additional user info
-                                        } else {
-                                            Log.d(TAG, "Email not verified");
-                                            Toast.makeText(a_user_1_login.this,
-                                                    "Please verify your email before logging in.",
-                                                    Toast.LENGTH_SHORT).show();
-                                            user.sendEmailVerification();  // Optionally resend the verification email
-                                        }
-                                    } else {
-                                        Log.d(TAG, "User login failed: User object is null");
-                                        Toast.makeText(a_user_1_login.this,
-                                                "Account does not exist",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    Log.e(TAG, "Authentication failed: " + task.getException().getMessage());
-                                    Toast.makeText(a_user_1_login.this,
-                                            "Authentication failed: " + task.getException().getMessage(),
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                })
-                .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error retrieving users", e);
-                });
-    }
+//    private void login(String username, String password) {
+//        String TAG = "login method";
+//
+//        // Check if a user is currently logged in
+//        FirebaseUser currentUser = mAuth.getCurrentUser();
+//        if (currentUser == null) {
+//            Log.e(TAG, "No user is currently logged in.");
+//            return; // Handle user not logged in
+//        }
+//
+//        // Retrieve all users from the Firestore database
+//        db.collection("users")
+//                .get()
+//                .addOnSuccessListener(queryDocumentSnapshots -> {
+//                    boolean usernameFound = false;
+//                    String email = null;
+//                    String storedHashedPassword = null;
+//
+//                    for (DocumentSnapshot document : queryDocumentSnapshots) {
+//                        // Check if the document exists and compare the User Category
+//                        if (document.exists() && document.getString("Username").equals(username)) {
+//                            usernameFound = true;
+//                            email = document.getString("Email Address");
+//                            storedHashedPassword = document.getString("Password");
+//                            break; // Exit loop if username is found
+//                        }
+//                    }
+//
+//                    if (!usernameFound) {
+//                        Log.d(TAG, "Username does not exist: " + username);
+//                        Toast.makeText(a_user_1_login.this, "Username does not exist", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//
+//                    // Log retrieved email and password
+//                    Log.d(TAG, "Retrieved email: " + email);
+//                    Log.d(TAG, "Retrieved hashed password: " + storedHashedPassword);
+//
+//                    // Validate retrieved email and password
+//                    if (email == null || email.isEmpty()) {
+//                        Log.e(TAG, "Email is missing for username: " + username);
+//                        Toast.makeText(a_user_1_login.this, "Email is missing for this username", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//
+//                    if (storedHashedPassword == null || storedHashedPassword.isEmpty()) {
+//                        Log.e(TAG, "Password is missing for username: " + username);
+//                        Toast.makeText(a_user_1_login.this, "Password is missing for this username", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//
+//                    // Verify the entered password against the stored hash
+//                    boolean passwordMatch = a_user_3_password_encryption.checkPassword(password, storedHashedPassword);
+//                    Log.d(TAG, "Password match status: " + passwordMatch);
+//
+//                    if (!passwordMatch) {
+//                        Log.e(TAG, "Password does not match for username: " + username);
+//                        Toast.makeText(a_user_1_login.this, "Incorrect password", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//
+//                    Log.d(TAG, "Password matches, attempting Firebase authentication");
+//
+//                    // Proceed with Firebase authentication using the retrieved email
+//                    mAuth.signInWithEmailAndPassword(email, password)
+//                            .addOnCompleteListener(task -> {
+//                                if (task.isSuccessful()) {
+//                                    FirebaseUser user = mAuth.getCurrentUser();
+//                                    if (user != null) {
+//                                        if (user.isEmailVerified()) {  // Check if the email is verified
+//                                            String userId = user.getUid();
+//                                            Log.d(TAG, "Login successful. User ID: " + userId);
+//                                            fetchUserInfo(userId); // Fetch additional user info
+//                                        } else {
+//                                            Log.d(TAG, "Email not verified");
+//                                            Toast.makeText(a_user_1_login.this,
+//                                                    "Please verify your email before logging in.",
+//                                                    Toast.LENGTH_SHORT).show();
+//                                            user.sendEmailVerification();  // Optionally resend the verification email
+//                                        }
+//                                    } else {
+//                                        Log.d(TAG, "User login failed: User object is null");
+//                                        Toast.makeText(a_user_1_login.this,
+//                                                "Account does not exist",
+//                                                Toast.LENGTH_SHORT).show();
+//                                    }
+//                                } else {
+//                                    Log.e(TAG, "Authentication failed: " + task.getException().getMessage());
+//                                    Toast.makeText(a_user_1_login.this,
+//                                            "Authentication failed: " + task.getException().getMessage(),
+//                                            Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+//
+//                })
+//                .addOnFailureListener(e -> {
+//                    Log.e(TAG, "Error retrieving users", e);
+//                });
+//    }
 
     private void loginUser(String username, String password) {
         String TAG = "login method";
 
+        Log.e(TAG, "loginUser("+username+","+password+");");
 //        // Check if a user is currently logged in
 //        FirebaseUser currentUser = mAuth.getCurrentUser();
 //        if (currentUser == null) {
@@ -344,25 +347,35 @@ public class a_user_1_login extends AppCompatActivity {
         db.collection("users")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
+
                     boolean usernameFound = false;
                     String email = null;
                     String storedHashedPassword = null;
 
+                    Log.e(TAG, "I am inside onSuccess()");
+                    Log.e(TAG, "User ID: " + queryDocumentSnapshots.getDocuments());
+
                     for (DocumentSnapshot document : queryDocumentSnapshots) {
+
+                         Log.e(TAG, "Is your username: " + document.getString("Username") + "?");
+
                         // Check if the document exists and compare the User Category
-                        if (document.exists() && Objects.equals(document.getString("Username"), username)) {
-                            usernameFound = true;
-                            email = document.getString("Email Address");
-                            storedHashedPassword = document.getString("Password");
-                            break; // Exit loop if username is found
-                        } else {
-                            Log.e(TAG, "email: " + email);
+                        if (document.exists()) {
+                            String dbUsername = document.getString("Username");
+                            if (dbUsername.equals(username)) {
+                                usernameFound = true;
+                                email = document.getString("Email Address");
+                                storedHashedPassword = document.getString("Password");
+                                break; // Exit loop if username is found
+                            }
                         }
                     }
 
+                    Log.e(TAG, "Done na sa for each loop :/");
+
                     if (!usernameFound) {
                         Log.d(TAG, "Username does not exist: " + username);
-                        Toast.makeText(a_user_1_login.this, "Username does not exist", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(a_user_1_login.this, "Username does not exist HAHA", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -430,6 +443,9 @@ public class a_user_1_login extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Error retrieving users", e);
                 });
+
+        Log.e(TAG, "loginUser("+username+","+password+"); DONE");
+
     }
 
     private void fetchUserInfo(String userId) {
