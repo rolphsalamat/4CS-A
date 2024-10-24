@@ -107,11 +107,14 @@ public class a_user_1_login extends AppCompatActivity {
                 Log.e("Login", "Username: " + email);
                 Log.e("Login", "Password: " + password);
 
-//                if (!(n_Network.isNetworkAvailable(getBaseContext()))) {
-//                    Toast.makeText(a_user_1_login.this, "Please connect to a network.", Toast.LENGTH_SHORT).show();
-//                } else {
+//                loginUser(email, password); // original code
+
+                if (!(n_Network.isNetworkAvailable(a_user_1_login.this))) {
+                    Toast.makeText(a_user_1_login.this, "Please connect to a network.", Toast.LENGTH_SHORT).show();
+                } else {
+//                    Toast.makeText(a_user_1_login.this, "May INTERNET KA!", Toast.LENGTH_SHORT).show();
                     loginUser(email, password); // original code
-//                }
+                }
 
 //                login(email, password);
             }

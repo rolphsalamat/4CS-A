@@ -70,6 +70,7 @@ public class n_Network {
     }
 
     public static boolean isNetworkAvailable2(Context context) {
+
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         String TAG = "n_Network";

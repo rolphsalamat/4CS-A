@@ -86,6 +86,8 @@ public class b_main_1_lesson_progressive extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.b_main_3_lesson_progressive, container, false);
 
+//        n_Context = getContext();
+
 //        initializeModules();
 
         // Initialize views
@@ -249,9 +251,15 @@ public class b_main_1_lesson_progressive extends Fragment {
                     incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
                         @Override
                         public void run() {
-                            if (!n_Network.isNetworkAvailable2(getContext())) {
-                                Toast.makeText(getContext(), "No Internet", Toast.LENGTH_SHORT).show();
-                            }
+
+                            // Use:
+                            // 1. requireContext()
+                            // 2. getActivity()
+
+//                            if (!n_Network.isNetworkAvailable2(requireContext())) {
+//                                Toast.makeText(getContext(), "No Internet", Toast.LENGTH_SHORT).show();
+//                            }
+
                             hideLoadingDialog();
                         }
                     });
