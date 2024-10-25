@@ -3,6 +3,7 @@ package com.example.autotutoria20;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class a_user_1_login_handler extends AppCompatActivity {
 
+    private static final int MY_REQUEST_CODE = 100;
     private static FirebaseAuth mAuth;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "a_user_1_login_handler";
@@ -41,8 +48,15 @@ public class a_user_1_login_handler extends AppCompatActivity {
 
         }
 
+//        checkForAppUpdate();
+
         // Initialize Firebase
         FirebaseApp.initializeApp(this);
+        if (FirebaseApp.getApps(this).isEmpty()) {
+            Log.e(TAG, "Firebase initialization failed.");
+            return;
+        }
+
         mAuth = FirebaseAuth.getInstance();
 
         if (FirebaseApp.getInstance() != null) {
@@ -63,8 +77,6 @@ public class a_user_1_login_handler extends AppCompatActivity {
 
             checkTutorial();
 
-
-
         } else {
 
             // User is not logged in, redirect to login screen
@@ -75,40 +87,108 @@ public class a_user_1_login_handler extends AppCompatActivity {
         }
 
         createNotificationChannel();
-        finish();
+//        finish();
     }
+
+//    private void checkForAppUpdate() {
+//        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(a_user_1_login_handler.this);
+//
+//        // Returns an intent object that you use to check for an update.
+//        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+//
+//        // Checks that the platform will allow the specified type of update.
+//        appUpdateInfoTask.addOnSuccessListener((appUpdateInfo -> {
+//            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+//                    // This example applies an immediate update. To apply a flexible update
+//                    // instead, pass in AppUpdateType.FLEXIBLE
+//                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+//                // Request the update.
+//                try {
+//                    appUpdateManager.startUpdateFlowForResult(
+//                            // Pass the intent that is returned by 'getAppUpdateInfo()'.
+//                            appUpdateInfo,
+//                            // Or 'AppUpdateType.FLEXIBLE' for flexible udpates.
+//                            AppUpdateType.IMMEDIATE,
+//                            // The current activity making the update request.
+//                            this,
+//                            // Include a request code to later monitor this update request,
+//                            MY_REQUEST_CODE);
+//                } catch (IntentSender.SendIntentException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//        }));
+//    }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == MY_REQUEST_CODE) {
+//            if (resultCode != RESULT_OK) {
+//                Log.w(TAG, "Update flow failed! Result code: " + resultCode);
+//                // If the update is cancelled or fails,
+//                // you can request to start the update again.
+//            }
+//        }
+//    }
 
     private void checkTutorial() {
 
+        Log.e(TAG, "Let's do checkTutorial()");
+
         FirebaseUser user = mAuth.getCurrentUser();
-        String userId = user.getUid();
+        if (user != null) {
+            String userId = user.getUid();
+            Log.e(TAG, "Query na natin! | checkTutorial()");
 
-        db.collection("users")
-                .document(userId)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                // User's Personal Information
-                                tutorialCompleted = document.getBoolean("Tutorial");
+            db.collection("users")
+                    .document(userId)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document != null && document.exists()) {
+                                    if (document.contains("Tutorial")) {
+                                        tutorialCompleted = document.getBoolean("Tutorial");
+                                        Log.e(TAG, "Tutorial Completed: " + tutorialCompleted + " | checkTutorial()");
 
-                                if (tutorialCompleted) Log.e(TAG, "Tutorial is already finished! | GWEN");
-                                else Log.e(TAG, "Tutorial is not yet finished. | GWEN");
+                                        if (tutorialCompleted) {
+                                            Intent intent = new Intent(a_user_1_login_handler.this, b_main_0_menu.class);
+                                            startActivity(intent);
+                                        } else {
+                                            Intent intent = new Intent(a_user_1_login_handler.this, b_main_0_menu_tutorial.class);
+                                            startActivity(intent);
+                                        }
+
+
+                                    } else {
+                                        Log.e(TAG, "Tutorial field is missing in the document.");
+                                    }
+                                } else {
+                                    Log.e(TAG, "Document does not exist or user data is missing.");
+                                }
+                            } else {
+                                Log.e(TAG, "Task failed: ", task.getException());
                             }
-                        }
 
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "I failed");
-                    }
-                });
+                            Log.e(TAG, "Done Query | checkTutorial()"); // Moved inside onComplete
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e(TAG, "I failed", e);
+                        }
+                    });
+
+        } else {
+            Log.e(TAG, "Firebase user is null, cannot check tutorial.");
+        }
     }
+
+
+
 
     // Move the checkTutorialCompletion method outside the onCreate method
     static void checkTutorialCompletion(TutorialCompletionCallback callback) {

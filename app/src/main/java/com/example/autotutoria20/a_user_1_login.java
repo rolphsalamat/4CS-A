@@ -568,6 +568,8 @@ public class a_user_1_login extends AppCompatActivity {
         View dialogView = getLayoutInflater().inflate(R.layout.a_user_3_forgot_password, null);
 
         // Initialize views
+//        exitButton
+        Button exitButton = dialogView.findViewById(R.id.exitButton);
         EditText emailEditText = dialogView.findViewById(R.id.email_edittext);
         Button resetButton = dialogView.findViewById(R.id.btn_reset);
         Button cancelButton = dialogView.findViewById(R.id.btn_cancel);
@@ -581,6 +583,13 @@ public class a_user_1_login extends AppCompatActivity {
 
         // Create AlertDialog
         final AlertDialog dialog = builder.create();
+
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
 
         // Set click listener for Reset button
         resetButton.setOnClickListener(new View.OnClickListener() {

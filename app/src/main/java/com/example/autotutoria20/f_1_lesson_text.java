@@ -494,7 +494,7 @@ public class f_1_lesson_text extends Fragment {
 
         // 0 -
         // n -
-        int level = 6; // Default to High School Student
+        int level = 8; // Default to High School Student
 
         // Adjust the multiplier based on the educational level
         double multiplier;
@@ -522,6 +522,9 @@ public class f_1_lesson_text extends Fragment {
                 break;
             case 7: // Doctorate (PhD)
                 multiplier = 0.027; // Average of 0.0240 - 0.0300
+                break;
+            case 8: // Test User #1
+                multiplier = 0.02508; // Average of 0.0240 - 0.0300
                 break;
             case 10: // TESTING MODE
                 multiplier = 0.0009;

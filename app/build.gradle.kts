@@ -37,6 +37,9 @@ android {
 
 dependencies {
 
+    // In-App Update
+    implementation("com.google.android.play:app-update:2.1.0")
+
     // for Text Lesson
     implementation ("com.codesgood:justifiedtextview:1.1.0")
 

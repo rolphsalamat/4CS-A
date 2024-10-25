@@ -299,7 +299,7 @@ public class d_Lesson_container extends AppCompatActivity implements
                         builder.setTitle("Pre-Test Complete!");
 
                         String message = "You may answer the pre-test and your score will not be affected," +
-                                " feel free to return to the lesson iteration any time you want :)";
+                                " feel free to return to answer all pre-test questions ^_^";
 
                         builder.setMessage(message);
 
@@ -450,7 +450,7 @@ public class d_Lesson_container extends AppCompatActivity implements
         Log.e(TAG, "store it to stepIndex...");
 
         if (currentStep == (numberOfSteps-1)) {
-            showToast("nasa last step kana");
+//            showToast("nasa last step kana");
 
             // currentStep should always be set to (numberOfSteps-1)
             currentStep = (numberOfSteps-2);
@@ -625,7 +625,7 @@ public class d_Lesson_container extends AppCompatActivity implements
             // Clear the video preferences once the lesson is completed
             f_2_lesson_video.clearVideoPreferences(this);
 
-            showToast("TAPOS NA");
+//            showToast("TAPOS NA");
 
             if (lessonPassed)
                 showPassedDialog(currentLesson);
