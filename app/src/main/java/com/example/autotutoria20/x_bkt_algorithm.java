@@ -27,6 +27,7 @@ public class x_bkt_algorithm {
 
     private FirebaseFirestore db;
     private String userId;
+    public static boolean isLessonFinished;
     private List<Double> bktScores;
     private static double knowledgeProbability;
     private static double learnRate;
@@ -520,19 +521,20 @@ public class x_bkt_algorithm {
 //        Log.d(TAG, "initializeBKTScores: End - Firestore request has been initiated, waiting for callback.");
 //    }
 
-    public void initializeBKTScores(String collectionPath, String documentName, String module, BKTCallback callback) {
+    public void initializeBKTScores(String collectionPath, String documentName, String module) {
         String TAG = "WARNING";
 
         db.collection("users")
                 .document(userId)
                 .collection(collectionPath) // This should be "Progressive Mode"
-                .document(documentName) // This should be "Lesson 1"
+                .document(documentName) // This should be "Lesson n"
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
+
                             if (document.exists()) {
                                 // Retrieve all data from the document as a Map
                                 Map<String, Object> lessonData = document.getData();
@@ -546,52 +548,112 @@ public class x_bkt_algorithm {
                                         if (moduleValue instanceof Map) {
                                             Map<String, Object> moduleData = (Map<String, Object>) moduleValue;
 
-                                            // Check for "BKT Score" in the module data
-                                            if (moduleData.containsKey("BKT Score")) {
-                                                Object bktScoreValue = moduleData.get("BKT Score");
+                                            boolean isLessonPassed = false;
+                                            boolean isLessonCompleted = false;
 
-                                                List<Double> bktScores;
-                                                if (bktScoreValue instanceof Double) {
-                                                    // If it's a single Double, convert it to a List
-                                                    bktScores = new ArrayList<>();
-                                                    bktScores.add((Double) bktScoreValue);
-                                                } else if (bktScoreValue instanceof List<?>) {
-                                                    // If it's already a List, cast it appropriately
-                                                    bktScores = new ArrayList<>((List<Double>) bktScoreValue);
+                                            if (moduleData.containsKey("BKT Score") && moduleData.containsKey("Progress")) {
+
+                                                Double bktScore;
+                                                Object bktScoreObject = moduleData.get("BKT Score");
+                                                if (bktScoreObject instanceof Long) {
+                                                    bktScore = ((Long) bktScoreObject).doubleValue(); // Convert Long to Double
+                                                } else if (bktScoreObject instanceof Double) {
+                                                    bktScore = (Double) bktScoreObject; // Use Double directly
                                                 } else {
-                                                    Log.e(TAG, "Unexpected type for BKT Score: " + bktScoreValue.getClass().getName());
-                                                    callback.onBKTRetrieved(null);
-                                                    return;
+                                                    bktScore = 0.0; // Default or handle as needed
+                                                    Log.e(TAG, "Unexpected type for BKT Score: " + bktScoreObject.getClass().getName());
                                                 }
 
-                                                Log.d(TAG, "Module: " + module + " | BKT Scores: " + bktScores);
-                                                callback.onBKTRetrieved(bktScores); // Pass the list of scores
+                                                Double progress = moduleData.get("Progress") instanceof Number
+                                                        ? ((Number) moduleData.get("Progress")).doubleValue()
+                                                        : 0.0; // Use default if Progress is missing or not a number
+
+                                                String module_lesson = module + "_" + documentName;
+                                                int steps = L_lesson_sequence.getNumberOfSteps(module_lesson);
+
+                                                isLessonPassed = bktScore > b_main_0_menu_categorize_user.passingGrade;
+                                                isLessonCompleted = progress >= steps;
+
+                                                resetModule(isLessonCompleted, isLessonPassed);
+
+                                                Log.d(TAG, "Module: " + module + " | BKT Score: " + bktScore);
                                             } else {
                                                 Log.e(TAG, "No BKT Score found for module: " + module);
-                                                callback.onBKTRetrieved(null);
                                             }
+
                                         } else {
                                             Log.e(TAG, "Value for module is not a Map: " + module);
-                                            callback.onBKTRetrieved(null);
+//                                            callback.onBKTRetrieved(null);
                                         }
                                     } else {
                                         Log.e(TAG, "Module does not exist in lesson data: " + module);
-                                        callback.onBKTRetrieved(null);
+//                                        callback.onBKTRetrieved(null);
                                     }
                                 } else {
                                     Log.e(TAG, "Lesson data is null.");
-                                    callback.onBKTRetrieved(null);
+//                                    callback.onBKTRetrieved(null);
                                 }
                             } else {
                                 Log.e(TAG, "Document does not exist at path: " + collectionPath + "/" + documentName);
-                                callback.onBKTRetrieved(null);
+//                                callback.onBKTRetrieved(null);
                             }
                         } else {
                             Log.e(TAG, "Failed to retrieve document: ", task.getException());
-                            callback.onBKTRetrieved(null);
+//                            callback.onBKTRetrieved(null);
                         }
                     }
                 });
+    }
+
+    private void resetModule(boolean isLessonCompleted, boolean isLessonPassed) {
+
+        {
+
+
+            // Reset only if di pa tapos yung lesson..
+            // kelangan completed sya, pero dapat pasado din
+            // Case 1: Completed, not Passed - RETAKE
+            // Case 2: Completed, Passed - OK (do not reset)
+            // Case 3: InComplete, not Passed - RETAKE
+            // Case 4: InComplete, Passed - RETAKE (pwede kasi siyang passed if mataas ang Pre-Test)
+
+            int moduleIndex = Integer.parseInt(String.valueOf(d_Lesson_container.currentModule.charAt(1)));
+            int lessonIndex = Integer.parseInt(String.valueOf(d_Lesson_container.currentLesson.charAt(7)));
+
+            boolean isProgressiveMode = d_Lesson_container.learningMode.equalsIgnoreCase("Progressive Mode");
+
+            // Reset logic based on completion and passing status
+            if (isLessonCompleted) {
+                if (!isLessonPassed) {
+                    // Case 1: Completed, not Passed - RETAKE
+                    Log.e("TAG", "Case 1: Completed, not Passed - RETAKE");
+                    c_Lesson_feedback.resetResult();
+                    resetScore(moduleIndex, lessonIndex, isProgressiveMode);
+//                                showToast("You completed the lesson but did not pass, please retake the lesson");
+                } else {
+                    Log.e("TAG", "Case 2: Completed, Passed - OK (do nothing)");
+                    // Case 2: Completed, Passed - OK (do nothing)
+//                                showToast("You completed the lesson and passed! Great job!");
+                }
+            } else {
+                // If the lesson is incomplete
+                if (!isLessonPassed) {
+                    Log.e("TAG", "Case 3: Incomplete, not Passed - RETAKE");
+                    // Case 3: Incomplete, not Passed - RETAKE
+                    c_Lesson_feedback.resetResult();
+                    resetScore(moduleIndex, lessonIndex, isProgressiveMode);
+//                                showToast("you completed the lesson but failed, please retake it.");
+                } else {
+                    Log.e("TAG", "Case 4: Incomplete, Passed - RETAKE (possible because of high Pre-Test)");
+                    // Case 4: Incomplete, Passed - RETAKE (possible because of high Pre-Test)
+                    c_Lesson_feedback.resetResult();
+                    resetScore(moduleIndex, lessonIndex, isProgressiveMode);
+//                                showToast("You did not complete and failed the lesson, please retake it.");
+                }
+            }
+
+        }
+
     }
 
     // RECOMMENDED BY ChatGPT 4o Plus
@@ -657,6 +719,10 @@ public class x_bkt_algorithm {
                             boolean isProgressiveMode) {
 
         String TAG = "BKT | resetScore()";
+
+        Log.e(TAG, " resetScore() method is called!");
+
+        isLessonFinished = true;
 
         if (
 //                bktScores == null ||
@@ -732,7 +798,7 @@ public class x_bkt_algorithm {
             return;
         }
 
-        moduleIndex += 1;
+//        moduleIndex += 1;
 
         // Determine the correct collection based on the learning mode
         String collectionPath = isProgressiveMode ? "Progressive Mode" : "Free Use Mode";

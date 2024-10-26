@@ -269,7 +269,7 @@ public class f_3_lesson_post_test extends Fragment {
                 if (questionsAnswered <= (postTestQuestions)) {
 
                     // Update feedback and scores based on correctness
-                    if (correctAnswer) {
+                    if (correctAnswer && !x_bkt_algorithm.isLessonFinished) {
                         c_Lesson_feedback.postTestCorrectAnswers++;
                         x_bkt_algorithm.updateTestScore(
                                 isProgressiveMode,
@@ -278,7 +278,8 @@ public class f_3_lesson_post_test extends Fragment {
                                 c_Lesson_feedback.postTestCorrectAnswers);
                     }
 
-                    bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer);
+                    if (!x_bkt_algorithm.isLessonFinished)
+                        bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer);
 
                     Log.d("TESTING", "Answer: " + correctAnswer);
 

@@ -130,7 +130,7 @@ public class c_Lesson_feedback {
                                 DocumentSnapshot document = task.getResult();
                                 if (document.exists()) {
                                     // Retrieve BKT Scores map
-                                    Map<String, Object> bktScores = (Map<String, Object>) document.get("BKT Scores");
+                                    Map<String, Object> bktScores = (Map<String, Object>) document.get("BKT Score");
                                     if (bktScores != null) {
 //                                        while (bktScores != null) {
                                             // Analyze the BKTScore after all modules are retrieved

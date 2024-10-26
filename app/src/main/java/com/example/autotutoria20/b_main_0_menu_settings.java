@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
+
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -64,12 +66,12 @@ public class b_main_0_menu_settings extends AppCompatActivity {
 
         // Set listeners to show toast on toggle
         switchAppUpdate.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            showToast("App Update Notification toggled");
+//            showToast("App Update Notification toggled");
             updateDatabase("App Update Notification", isChecked);
         });
 
         switchNewCourse.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            showToast("New Course Available Notification toggled");
+//            showToast("New Course Available Notification toggled");
             updateDatabase("New Course Available Notification", isChecked);
         });
 
@@ -79,7 +81,7 @@ public class b_main_0_menu_settings extends AppCompatActivity {
                 // Reset the switch to its previous state since notifications are not enabled
                 switchReminder.setChecked(!isChecked);
             } else {
-                showToast("Reminder Notification toggled");
+//                showToast("Reminder Notification toggled");
                 updateDatabase("Reminder Notification", isChecked);
                 scheduleNotificationWorker();
             }
@@ -92,7 +94,7 @@ public class b_main_0_menu_settings extends AppCompatActivity {
         super.onResume();
         if (isNotificationsEnabled() && !switchReminder.isChecked()) {
             switchReminder.setChecked(true);
-            showToast("Reminder Notification enabled");
+//            showToast("Reminder Notification enabled");
             updateDatabase("Reminder Notification", true);
             scheduleNotificationWorker();
         }
@@ -196,8 +198,10 @@ public class b_main_0_menu_settings extends AppCompatActivity {
         String userId = mAuth.getCurrentUser().getUid();
         DocumentReference userRef = db.collection("users").document(userId);
         userRef.update(key, value)
-                .addOnSuccessListener(aVoid -> showToast("Database updated"))
-                .addOnFailureListener(e -> showToast("Failed to update database"));
+                // showToast("Database updated")
+                .addOnSuccessListener(aVoid -> Log.e("TAG", "Settings | Success"))
+                // showToast("Failed to update database")
+                .addOnFailureListener(e -> Log.e("TAG", "Settings | Failed"));
 
         Log.e("Settings.java", "updateDatabase(" + key + ", " + value + ");");
     }

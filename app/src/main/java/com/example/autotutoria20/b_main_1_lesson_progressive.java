@@ -157,119 +157,119 @@ public class b_main_1_lesson_progressive extends Fragment {
 //        initializeModules();
     }
 
-    private void fetchAllProgressData() {
-        Log.d("fetchAllProgressData", "Method called");
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        String TAG = "fetchAllProgressData()";
+        private void fetchAllProgressData() {
+            Log.d("fetchAllProgressData", "Method called");
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            String TAG = "fetchAllProgressData()";
 
-        CollectionReference progressRef = db.collection("users").document(userId).collection("Progressive Mode");
+            CollectionReference progressRef = db.collection("users").document(userId).collection("Progressive Mode");
 
-        progressRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    int totalModules = 0;
+            progressRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        int totalModules = 0;
 
-                    for (DocumentSnapshot lessonDoc : task.getResult()) {
-                        int lessonNumber = Integer.parseInt(lessonDoc.getId().substring(7).trim());
-                        int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
-                        totalModules += maxProgressValues.length;
+                        for (DocumentSnapshot lessonDoc : task.getResult()) {
+                            int lessonNumber = Integer.parseInt(lessonDoc.getId().substring(7).trim());
+                            int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
+                            totalModules += maxProgressValues.length;
+                        }
+
+                        int moduleCounter = 0;
+
+                        int iteration = 1;
+
+                        for (DocumentSnapshot lessonDoc : task.getResult()) {
+                            String lesson = lessonDoc.getId();
+                            int totalProgress = 0;
+                            int totalMaxProgress = 0;
+                            int lessonNumber = Integer.parseInt(lesson.substring(7).trim());
+                            int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
+
+                            Log.e(TAG, "Module[" + (iteration) + "]");
+                            iteration++;
+
+                            Log.e(TAG, "maxProgressValues.length: " + maxProgressValues.length);
+                            int completeCounter = 0;
+                            for (int i = 0; i < maxProgressValues.length; i++) {
+                                String keyProgress = "M" + (i + 1) + ".Progress";
+                                String keyScore = "M" + (i + 1) + ".BKT Score";
+
+                                Long moduleProgress = lessonDoc.getLong(keyProgress);
+
+                                if (moduleProgress != null) {
+                                    totalProgress += moduleProgress;
+                                    totalMaxProgress += maxProgressValues[i];
+                                }
+
+                                Double moduleScore = lessonDoc.getDouble(keyScore); // Change this line
+    //                            if (moduleProgress != null) {
+    //
+    //                            }
+
+                                Log.e(TAG, "Lesson["+(i+1)+"] BKT Score: " + moduleScore);
+
+
+                                // if moduleScore >= passingGrade
+                                if (moduleScore >= b_main_0_menu_categorize_user.passingGrade) {
+    //                                cardCompletionStatus[i] = true; // eh buong module yan e wag yan
+
+                                    completeCounter++;
+                                    Log.e(TAG, "Lesson["+(i+1)+"] Passed | completeCounter: " + completeCounter);
+
+                                }
+
+                                moduleCounter++;
+                                final int progress = (int) ((moduleCounter / (float) totalModules) * 100);
+                                updateProgress(progress);
+
+                                if (completeCounter == maxProgressValues.length) {
+                                    Log.e("TAG", "Module["+(iteration-1)+"] is Complete!");
+
+                                    // Array starts at 0..
+                                    // Iteration started at 1..
+                                    // Iteration in this part of code is incremented already by 1..
+                                    // so deduct by 2..
+                                    cardCompletionStatus[iteration-2] = true;
+                                    hideLockedOverlay(iteration);
+                                }
+
+
+                            }
+
+                            if (totalMaxProgress > 0) {
+                                double overallProgress = ((double) totalProgress / totalMaxProgress) * 100;
+                                int overallProgressInt = (int) Math.round(overallProgress);
+
+                                updateCardProgress(lessonNumber, overallProgressInt);
+                            }
+                        }
+
+                        // Add delay similar to progressive mode
+                        incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
+                            @Override
+                            public void run() {
+
+                                // Use:
+                                // 1. requireContext()
+                                // 2. getActivity()
+
+    //                            if (!n_Network.isNetworkAvailable2(requireContext())) {
+    //                                Toast.makeText(getContext(), "No Internet", Toast.LENGTH_SHORT).show();
+    //                            }
+
+                                hideLoadingDialog();
+                            }
+                        });
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                        hideLoadingDialog(); // Hide the dialog in case of failure as well
                     }
-
-                    int moduleCounter = 0;
-
-                    int iteration = 1;
-
-                    for (DocumentSnapshot lessonDoc : task.getResult()) {
-                        String lesson = lessonDoc.getId();
-                        int totalProgress = 0;
-                        int totalMaxProgress = 0;
-                        int lessonNumber = Integer.parseInt(lesson.substring(7).trim());
-                        int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
-
-                        Log.e(TAG, "Module[" + (iteration) + "]");
-                        iteration++;
-
-                        Log.e(TAG, "maxProgressValues.length: " + maxProgressValues.length);
-                        int completeCounter = 0;
-                        for (int i = 0; i < maxProgressValues.length; i++) {
-                            String keyProgress = "M" + (i + 1) + ".Progress";
-                            String keyScore = "M" + (i + 1) + ".BKT Score";
-
-                            Long moduleProgress = lessonDoc.getLong(keyProgress);
-
-                            if (moduleProgress != null) {
-                                totalProgress += moduleProgress;
-                                totalMaxProgress += maxProgressValues[i];
-                            }
-
-                            Double moduleScore = lessonDoc.getDouble(keyScore); // Change this line
-//                            if (moduleProgress != null) {
-//
-//                            }
-
-                            Log.e(TAG, "Lesson["+(i+1)+"] BKT Score: " + moduleScore);
-
-
-                            // if moduleScore >= passingGrade
-                            if (moduleScore >= b_main_0_menu_categorize_user.passingGrade) {
-//                                cardCompletionStatus[i] = true; // eh buong module yan e wag yan
-
-                                completeCounter++;
-                                Log.e(TAG, "Lesson["+(i+1)+"] Passed | completeCounter: " + completeCounter);
-
-                            }
-
-                            moduleCounter++;
-                            final int progress = (int) ((moduleCounter / (float) totalModules) * 100);
-                            updateProgress(progress);
-
-                            if (completeCounter == maxProgressValues.length) {
-                                Log.e("TAG", "Module["+(iteration-1)+"] is Complete!");
-
-                                // Array starts at 0..
-                                // Iteration started at 1..
-                                // Iteration in this part of code is incremented already by 1..
-                                // so deduct by 2..
-                                cardCompletionStatus[iteration-2] = true;
-                                hideLockedOverlay(iteration);
-                            }
-
-
-                        }
-
-                        if (totalMaxProgress > 0) {
-                            double overallProgress = ((double) totalProgress / totalMaxProgress) * 100;
-                            int overallProgressInt = (int) Math.round(overallProgress);
-
-                            updateCardProgress(lessonNumber, overallProgressInt);
-                        }
-                    }
-
-                    // Add delay similar to progressive mode
-                    incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
-                        @Override
-                        public void run() {
-
-                            // Use:
-                            // 1. requireContext()
-                            // 2. getActivity()
-
-//                            if (!n_Network.isNetworkAvailable2(requireContext())) {
-//                                Toast.makeText(getContext(), "No Internet", Toast.LENGTH_SHORT).show();
-//                            }
-
-                            hideLoadingDialog();
-                        }
-                    });
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                    hideLoadingDialog(); // Hide the dialog in case of failure as well
                 }
-            }
-        });
-    }
+            });
+        }
 
     private void resetCardProgress() {
         // Reset all progress to 0

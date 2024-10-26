@@ -121,37 +121,37 @@ public class f_0_lesson_pre_test extends Fragment {
                 // Case 3: InComplete, not Passed - RETAKE
                 // Case 4: InComplete, Passed - RETAKE (pwede kasi siyang passed if mataas ang Pre-Test)
 
-                Boolean lessonPassed = score < b_main_0_menu_categorize_user.passingGrade;
-
-                Log.d("TAG", "Lesson Complete? " + d_Lesson_container.isCompleted);
-                Log.d("TAG", "Lesson Passed? " + lessonPassed);
-
-                Log.e("TAG", "Let's Check Case...");
-
-                // Reset logic based on completion and passing status
-                if (d_Lesson_container.isCompleted) {
-                    if (!lessonPassed) {
-                        // Case 1: Completed, not Passed - RETAKE
-                        Log.e("TAG", "Case 1: Completed, not Passed - RETAKE");
-                        c_Lesson_feedback.resetResult();
-                        x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, isProgressiveMode);
-                    }
-                    Log.e("TAG", "Case 2: Completed, Passed - OK (do nothing)");
-                    // Case 2: Completed, Passed - OK (do nothing)
-                } else {
-                    // If the lesson is incomplete
-                    if (!lessonPassed) {
-                        Log.e("TAG", "Case 3: Incomplete, not Passed - RETAKE");
-                        // Case 3: Incomplete, not Passed - RETAKE
-                        c_Lesson_feedback.resetResult();
-                        x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, isProgressiveMode);
-                    } else {
-                        Log.e("TAG", "Case 4: Incomplete, Passed - RETAKE (possible because of high Pre-Test)");
-                        // Case 4: Incomplete, Passed - RETAKE (possible because of high Pre-Test)
-                        c_Lesson_feedback.resetResult();
-                        x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, isProgressiveMode);
-                    }
-                }
+//                Boolean lessonPassed = score < b_main_0_menu_categorize_user.passingGrade;
+//
+//                Log.d("TAG", "Lesson Complete? " + d_Lesson_container.isCompleted);
+//                Log.d("TAG", "Lesson Passed? " + lessonPassed);
+//
+//                Log.e("TAG", "Let's Check Case...");
+//
+//                // Reset logic based on completion and passing status
+//                if (d_Lesson_container.isCompleted) {
+//                    if (!lessonPassed) {
+//                        // Case 1: Completed, not Passed - RETAKE
+//                        Log.e("TAG", "Case 1: Completed, not Passed - RETAKE");
+//                        c_Lesson_feedback.resetResult();
+//                        x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, isProgressiveMode);
+//                    }
+//                    Log.e("TAG", "Case 2: Completed, Passed - OK (do nothing)");
+//                    // Case 2: Completed, Passed - OK (do nothing)
+//                } else {
+//                    // If the lesson is incomplete
+//                    if (!lessonPassed) {
+//                        Log.e("TAG", "Case 3: Incomplete, not Passed - RETAKE");
+//                        // Case 3: Incomplete, not Passed - RETAKE
+//                        c_Lesson_feedback.resetResult();
+//                        x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, isProgressiveMode);
+//                    } else {
+//                        Log.e("TAG", "Case 4: Incomplete, Passed - RETAKE (possible because of high Pre-Test)");
+//                        // Case 4: Incomplete, Passed - RETAKE (possible because of high Pre-Test)
+//                        c_Lesson_feedback.resetResult();
+//                        x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, isProgressiveMode);
+//                    }
+//                }
             }
         });
 
@@ -163,15 +163,15 @@ public class f_0_lesson_pre_test extends Fragment {
 //            }
 //        });
 
-        bktModel.initializeBKTScores(collectionPath, documentName,
-                module,
-                bktScores -> {
-            if (bktScores != null) {
-                Log.d("f_pre_test", "BKT Scores initialized: " + bktScores);
-            } else {
-                Log.e("f_pre_test", "Failed to retrieve BKT Scores");
-            }
-        });
+//        bktModel.initializeBKTScores(collectionPath, documentName,
+//                module,
+//                bktScores -> {
+//            if (bktScores != null) {
+//                Log.d("f_pre_test", "BKT Scores initialized: " + bktScores);
+//            } else {
+//                Log.e("f_pre_test", "Failed to retrieve BKT Scores");
+//            }
+//        });
 
     }
 
@@ -213,13 +213,21 @@ public class f_0_lesson_pre_test extends Fragment {
             return;
         }
 
-        x_bkt_algorithm.updateTestScore(
-                isProgressiveMode,
-                moduleIndex, lessonIndex,
-                "Pre-Test",
-                0); // reset the pre-test :D
+        // lipat ko na to sa d_Lesson_container para di na mag loko :>
 
-        c_Lesson_feedback.resetResult();
+//        Log.e("TAG", "pasado naba? kasi kung hindi i-reset kona to");
+//        // Reset Test Score only if not yet passed
+//        if (!d_Lesson_container.lessonPassed) {
+//            Log.e("TAG", "di pa :>");
+//            x_bkt_algorithm.updateTestScore(
+//                    isProgressiveMode,
+//                    moduleIndex, lessonIndex,
+//                    "Pre-Test",
+//                    0); // reset the pre-test :D
+//
+//            c_Lesson_feedback.resetResult();
+//        }
+
 
         currentButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -258,8 +266,10 @@ public class f_0_lesson_pre_test extends Fragment {
                 // Ensure that questions answered does not exceed total pre-test questions.
                 if (questionsAnswered <= preTestQuestions) { // <= talaga to
 
+                    Log.e("TAG", "ROP CHECK THIS: | isLessonFinished: " + x_bkt_algorithm.isLessonFinished);
+
                     // Update feedback and scores based on correctness
-                    if (correctAnswer) {
+                    if (correctAnswer && !x_bkt_algorithm.isLessonFinished) {
                         c_Lesson_feedback.preTestCorrectAnswers++;
                         x_bkt_algorithm.updateTestScore(
                                 isProgressiveMode,
@@ -269,7 +279,8 @@ public class f_0_lesson_pre_test extends Fragment {
 //                        correct.setText("Correct Answers: " + c_Lesson_feedback.preTestCorrectAnswers);
                     }
 
-                    bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer);
+                    if (!x_bkt_algorithm.isLessonFinished)
+                        bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer);
 
 //                    Log.d("TESTING", "Answer: " + correctAnswer);
 //
