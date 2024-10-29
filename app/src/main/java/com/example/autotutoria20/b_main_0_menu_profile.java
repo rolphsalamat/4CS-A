@@ -2,14 +2,15 @@ package com.example.autotutoria20;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,6 +25,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
+
+import java.util.Collections;
 
 
 public class b_main_0_menu_profile extends AppCompatActivity {
@@ -81,8 +84,13 @@ public class b_main_0_menu_profile extends AppCompatActivity {
         buttonChangeEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // open change email dialog
-//                changeEmailAddress(newEmailAddress);
+                // Open change email dialog
+                showChangeEmail(new EmailChangeListener() {
+                    @Override
+                    public void onEmailChanged(String newEmail) {
+                        changeEmailAddress(newEmail); // Call your method with new email
+                    }
+                });
             }
         });
 
@@ -96,30 +104,61 @@ public class b_main_0_menu_profile extends AppCompatActivity {
 
     }
 
+    public interface EmailChangeListener {
+        void onEmailChanged(String newEmail);
+    }
+
+    private void showChangeEmail(EmailChangeListener emailChangeListener) {
+        // Create an AlertDialog Builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.b_main_0_menu_profile_email, null);
+        builder.setView(dialogView);
+
+        // Find views in the dialog layout
+        EditText newEmailAddress = dialogView.findViewById(R.id.newEmailAddress);
+        Button exitButton = dialogView.findViewById(R.id.exitButton);
+        Button submitButton = dialogView.findViewById(R.id.submitButton);
+
+        // Create the dialog
+        AlertDialog dialog = builder.create();
+
+        // Set up exit button
+        exitButton.setOnClickListener(v -> {
+            // Dismiss the dialog
+            dialog.dismiss();
+        });
+
+        // Set up submit button
+        submitButton.setOnClickListener(v -> {
+            String email = newEmailAddress.getText().toString();
+            if (isValidEmail(email)) {
+                changeEmailAddress(email); // Call your method with new email
+                dialog.dismiss(); // Dismiss the dialog after submission
+            } else {
+                Toast.makeText(getApplicationContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialog.show(); // Show the dialog
+    }
+
+    // Helper method to validate email format
+    private boolean isValidEmail(String email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
     // Edit email
     private void changeEmailAddress(String newEmail) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user != null) {
-            // Get the user's UID
-            String uid = user.getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-            // Update email in Firebase Realtime Database
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(uid);
-            databaseReference.child("Email Address").setValue(newEmail)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            // Email updated successfully in the database
-                            Toast.makeText(getApplicationContext(), "Email address updated successfully", Toast.LENGTH_SHORT).show();
-                        } else {
-                            // Handle failure
-                            Toast.makeText(getApplicationContext(), "Error updating email: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } else {
-            // User is not logged in
-            Toast.makeText(getApplicationContext(), "No user is logged in", Toast.LENGTH_SHORT).show();
-        }
+        DocumentReference userRef = db.collection("users").document(userId);
+        userRef.update("Email Address", newEmail)
+                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Email Address updated successfully"))
+                .addOnFailureListener(e -> Log.e("Firestore", "Error updating email", e));
+
     }
 
     // change password
