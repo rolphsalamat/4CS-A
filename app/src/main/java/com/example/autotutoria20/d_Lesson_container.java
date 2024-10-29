@@ -30,6 +30,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import org.w3c.dom.Text;
+
 import java.util.Arrays;
 
 public class d_Lesson_container extends AppCompatActivity implements
@@ -48,6 +50,7 @@ public class d_Lesson_container extends AppCompatActivity implements
     private AlertDialog dialog;
     private int numberOfTextLessons = 0; // Declare here
     static int currentStep = 0;
+    static int currentReturnStep = 0;
     private int returnStep = 0;
     private int numberOfSteps = 0;
     private FirebaseFirestore db;
@@ -80,6 +83,7 @@ public class d_Lesson_container extends AppCompatActivity implements
         setContentView(R.layout.d_lesson_container);
 
         currentStep = 0;
+        currentReturnStep = 0;
         returnStep = 0;
         numberOfSteps = 0;
 
@@ -270,6 +274,9 @@ public class d_Lesson_container extends AppCompatActivity implements
 
                 Log.e(TAG, "Displayed fragment position: " + position);
 
+                backButton.setVisibility(View.GONE);
+                backButton.setEnabled(false);
+
                 // Adjust the bottom margin of the ViewPager
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) viewPager.getLayoutParams();
 
@@ -277,9 +284,6 @@ public class d_Lesson_container extends AppCompatActivity implements
                 params.bottomMargin = 0;  // Adjust this value as needed
                 viewPager.setLayoutParams(params);
                 nextButton.setVisibility(View.GONE);
-
-                backButton.setVisibility(View.VISIBLE);
-                backButton.setEnabled(true);
 
                 // Get the current fragment
                 Fragment currentFragment = getCurrentFragment();
@@ -339,13 +343,29 @@ public class d_Lesson_container extends AppCompatActivity implements
                     }
 
                 }
-                else if (currentFragment instanceof f_1_lesson_text) {
-                        f_1_lesson_text textLessonFragment = (f_1_lesson_text) currentFragment;
+                if (currentFragment instanceof f_1_lesson_text) {
 
-                        // auto-next??
-                        clickCenter(1);
+                    nextButton.setVisibility(View.VISIBLE);
+                    nextButton.setEnabled(true);
 
-                } else if (currentFragment instanceof f_2_lesson_video) {
+                    f_1_lesson_text textLessonFragment = (f_1_lesson_text) currentFragment;
+
+                    if (viewPager.getCurrentItem() == 1) {
+                        backButton.setVisibility(View.GONE);
+                        backButton.setEnabled(false);
+                    } else {
+                        backButton.setVisibility(View.VISIBLE);
+                        backButton.setEnabled(true);
+                    }
+
+                    // auto-next??
+                    clickCenter(1);
+
+                }
+                if (currentFragment instanceof f_2_lesson_video) {
+
+                    backButton.setVisibility(View.VISIBLE);
+                    backButton.setEnabled(true);
 
                         // click in the middle one time to auto-play the video..
                         // sa onCreate nalang ng video class??
@@ -366,11 +386,15 @@ public class d_Lesson_container extends AppCompatActivity implements
                         }, delayInSeconds * 1000);
 
                 }
-                else if (currentFragment instanceof f_3_lesson_post_test) {
+
+                if (currentFragment instanceof f_3_lesson_post_test) {
 
                     // wala nang nextButton dito, last na to eh. abnormal kaba??
                     nextButton.setVisibility(View.GONE);
                     nextButton.setEnabled(false);
+
+                    backButton.setVisibility(View.GONE);
+                    backButton.setEnabled(false);
 
                     // I think magiging permanent na to??
                     nextButton.setText("Go to Post-Test");
@@ -403,7 +427,7 @@ public class d_Lesson_container extends AppCompatActivity implements
         populateGridLayout();
 
         nextButton = findViewById(R.id.nextButton);
-        backButton = findViewById(R.id.backButton);
+        backButton = findViewById(R.id.backButtonLayout);
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -411,14 +435,15 @@ public class d_Lesson_container extends AppCompatActivity implements
                 onNextButtonClicked();
             }
         });
-
+        // nung naka-comment di na nawawala yung LAST Next button
+        nextButton.setVisibility(View.GONE);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { onBackButtonClicked(); }
         });
+        backButton.setVisibility(View.GONE);
 
-        // nung naka-comment di na nawawala yung LAST Next button
-        nextButton.setVisibility(View.GONE);
+
 
         Button exitButton = findViewById(R.id.exitButton);
         exitButton.setOnClickListener(new View.OnClickListener() {
@@ -512,25 +537,41 @@ public class d_Lesson_container extends AppCompatActivity implements
         Log.e(TAG, "Hi! I pressed back, what should we do??");
 
         // get the current step
-        Log.e(TAG, "currentStep: " + currentStep);
+//        Log.e(TAG, "currentStep: " + currentStep);
         Log.e(TAG, "returnStep: " + returnStep);
-        Log.e(TAG, "store it to stepIndex...");
+//        Log.e(TAG, "store it to stepIndex...");
 
         if (currentStep == (numberOfSteps-1)) {
 //            showToast("nasa last step kana");
 
             // currentStep should always be set to (numberOfSteps-1)
-            currentStep = (numberOfSteps-2);
+            returnStep = (numberOfSteps-2);
+            Log.e(TAG, "last step kana... | returnStep: " + returnStep);
         }
 
-        returnStep--;
+        returnStep = Math.max(0, returnStep - 1);  // Avoid negative steps
+        currentReturnStep = returnStep; // remove +1, since dun na sya i-increment
 
-        // set current item of the viewPager
+//        Log.e(TAG, "currentStep: " + currentStep);
+//        Log.e(TAG, "currentReturnStep: " + currentReturnStep);
+        Log.e(TAG, "returnStep: " + returnStep);
+
+        Log.e(TAG, "viewPager.setCurrentItem(returnStep["+returnStep+"]);");
         viewPager.setCurrentItem(returnStep);
 
-        if (viewPager.getCurrentItem() != 0) {
-            nextButton.setEnabled(true);
-            nextButton.setVisibility(View.VISIBLE);
+        // Original Code
+//        returnStep--;
+//        currentReturnStep = returnStep+1;
+//
+//        // set current item of the viewPager
+//        viewPager.setCurrentItem(returnStep);
+
+        if (viewPager.getCurrentItem() != 0
+                &&
+            viewPager.getCurrentItem() != numberOfSteps) {
+
+                nextButton.setEnabled(true);
+                nextButton.setVisibility(View.VISIBLE);
         }
 
         // if returnStep == (currentStep - 1),
@@ -552,7 +593,7 @@ public class d_Lesson_container extends AppCompatActivity implements
             if (i < (returnStep)) {
                 stepView.setBackgroundResource(R.drawable.rounded_corners_completed);
             }
-            else if (i == (returnStep) || i < currentStep) {
+            else if (i == (returnStep) || i < currentReturnStep) {
                 stepView.setBackgroundResource(R.drawable.rounded_corners_current_step); // Highlight the current step
             }
             else {
@@ -636,6 +677,7 @@ public class d_Lesson_container extends AppCompatActivity implements
                     } else {
                         Toast.makeText(d_Lesson_container.this, "You can't access this step yet!", Toast.LENGTH_SHORT).show();
                     }
+
                     currentStep = stepIndex;
 
                     // re-show nextButton
@@ -668,19 +710,39 @@ public class d_Lesson_container extends AppCompatActivity implements
     }
 
     private void updateProgressAndMoveToNextStep() {
-        String TAG = "updateProgressAndMoveToNextStep";
+        String TAG = "OKAY NEXT NA";
+
+//        Log.e(TAG, "updateProgressAndMoveToNextStep()");
+
+        Log.e(TAG, "currentStep: " + currentStep);
+        Log.e(TAG, "currentReturnStep: " + currentReturnStep);
+        Log.e(TAG, "returnStep: " + returnStep);
+
+//        // Ensuring currentReturnStep is returnStep + 1
+//        currentReturnStep = returnStep + 1;
+
+        if (currentStep < numberOfSteps) {
+            if (currentReturnStep < (currentStep)) {
+                Log.e(TAG, "currentReturnStep[" + currentReturnStep + "] < currentStep[" + currentStep + "]");
+                currentReturnStep++;
+                Log.e(TAG, "currentReturnStep++; | currentReturnStep: " + currentReturnStep);
+            } else if (currentReturnStep >= currentStep) {
+                Log.e(TAG, "currentReturnStep[" + currentReturnStep + "] >= currentStep[" + currentStep + "]");
+                currentReturnStep++;
+                currentStep++;
+                Log.e(TAG, "currentStep++; | currentStep: " + currentStep);
+                Log.e(TAG, "currentReturnStep++; | currentReturnStep: " + currentReturnStep);
+            }
+            returnStep = currentStep; // Sync returnStep with new currentStep
+        }
 
         Log.e(TAG, "updateProgressAndMoveToNextStep()");
+        Log.e(TAG, "currentStep: " + currentStep);
+        Log.e(TAG, "currentReturnStep: " + currentReturnStep);
+        Log.e(TAG, "returnStep: " + returnStep);
 
-        // check para di na mag increment anymores :D
-        if (currentStep < numberOfSteps) {
-            currentStep++;
-            returnStep = currentStep;
-        }
-
-        if (currentStep > furthestStep) {
-            furthestStep = currentStep;
-        }
+        // Update furthestStep if currentStep moved forward
+        furthestStep = Math.max(furthestStep, currentStep);
 
         if (!isCompleted) {
             updateCurrentModuleInDatabase();  // Update database with the new progress
@@ -689,23 +751,89 @@ public class d_Lesson_container extends AppCompatActivity implements
         populateGridLayout();  // Update the progress indicators
 
         if (isLessonFinished) {
-            // Clear the video preferences once the lesson is completed
+            // Clear video preferences once the lesson is completed
             f_2_lesson_video.clearVideoPreferences(this);
 
-//            showToast("TAPOS NA");
-
-            if (lessonPassed)
+            if (lessonPassed) {
                 showPassedDialog(String.valueOf(currentModule.charAt(1)));
-            else {
+            } else {
                 finish();
             }
-
         }
     }
 
+
+//    private void updateProgressAndMoveToNextStep() {
+//        String TAG = "OKAY NEXT NA";
+//
+//        Log.e(TAG, "updateProgressAndMoveToNextStep()");
+//
+//        Log.e(TAG, "currentStep: " + currentStep);
+//        Log.e(TAG, "currentReturnStep: " + currentReturnStep);
+//        Log.e(TAG, "returnStep: " + returnStep);
+//
+//        // check para di na mag increment anymores :D
+//        if (currentStep < numberOfSteps
+////                && currentReturnStep == currentStep // para di muna sya mag next
+//        ) {
+//
+//            if (currentReturnStep >= currentStep) {
+//                Log.e(TAG, "currentReturnStep["+currentReturnStep+"] >= currentStep["+currentStep+"]");
+////                currentReturnStep++;
+//                currentStep++;
+//                returnStep = currentStep;
+//            } else if (currentReturnStep < currentStep) {
+//                Log.e(TAG, "currentReturnStep["+currentReturnStep+"] < currentStep["+currentStep+"]");
+//                currentReturnStep++;
+//            }
+//
+//        }
+//
+//        // Update furthest step
+//        // Optimized version
+//        furthestStep = Math.max(furthestStep, currentStep);
+//
+////        if (currentStep > furthestStep) {
+////            furthestStep = currentStep;
+////        }
+//
+//        if (!isCompleted) {
+//            updateCurrentModuleInDatabase();  // Update database with the new progress
+//        }
+//
+//        populateGridLayout();  // Update the progress indicators
+//
+//        if (isLessonFinished) {
+//            // Clear the video preferences once the lesson is completed
+//            f_2_lesson_video.clearVideoPreferences(this);
+//
+////            showToast("TAPOS NA");
+//
+//            if (lessonPassed)
+//                showPassedDialog(String.valueOf(currentModule.charAt(1)));
+//            else {
+//                finish();
+//            }
+//
+//        }
+//    }
+
     public static void onGoToCurrent() {
 
-        viewPager.setCurrentItem(currentStep);
+        Log.e("SCALE", "SCALE | currentStep: " + currentStep);
+        Log.e("SCALE", "SCALE | currentReturnStep: " + currentReturnStep);
+
+
+        if (currentReturnStep < currentStep) {
+            viewPager.setCurrentItem(currentReturnStep);
+            Log.e("SCALE", "SCALE | currentReturnStep["+currentReturnStep+"] < currentStep["+currentStep+"]");
+        }
+
+        if (currentReturnStep == currentStep) {
+            viewPager.setCurrentItem(currentStep);
+            Log.e("SCALE", "SCALE | currentReturnStep["+currentReturnStep+"] == currentStep["+currentStep+"]");
+        }
+
         // re-show nextButton
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -720,8 +848,7 @@ public class d_Lesson_container extends AppCompatActivity implements
 
     public void onNextButtonClicked() {
         Log.e("onNextButtonClicked()", "currentStep: " + currentStep);
-
-//        returnStep = currentStep;
+        Log.e("onNextButtonClicked()", "currentReturnStep: " + currentReturnStep);
 
         // Update the progress and move to the next step
         updateProgressAndMoveToNextStep();
@@ -732,6 +859,7 @@ public class d_Lesson_container extends AppCompatActivity implements
             Log.e("onNextBUttonClicked()", "tapos na dapat, pero dapat sa post-test to i-call");
 //            showToast("tapos na dapat, pero dapat sa post-test to i-call");
         } else {
+
             // Use the updated helper method to get the current fragment
             Fragment currentFragment = getCurrentFragment();
 
@@ -742,18 +870,28 @@ public class d_Lesson_container extends AppCompatActivity implements
                 Log.d("onNextButtonClicked()", "Current Fragment: null");
             }
 
-            Log.e(TAG, "Before increment | Page Number: " + pageNumber);
-            // ETO LATEST TESTING
-//            pageNumber++;
-
             // yung sa mismong L_lesson_handler ang i-increment, kasi sya yung nag ha-handle..
             L_lesson_handler.pageNumber++;
             Log.e(TAG, "After increment | Page Number: " + pageNumber);
 
+        }
 
-            // Move to the next step
+        if (currentReturnStep < (currentStep)) {
+            Log.e("onNextButtonClicked()", "onNextButtonClicked() | currentReturnStep["+currentReturnStep+"] < currentStep["+currentStep+"]");
+            Log.e(TAG, "viewPager.setCurrentItem(["+currentReturnStep+"])");
+            viewPager.setCurrentItem(currentReturnStep);
+        } else if (currentReturnStep >= currentStep) {
+            Log.e("onNextButtonClicked()", "onNextButtonClicked() | currentReturnStep["+currentReturnStep+"] >= currentStep["+currentStep+"]");
+            Log.e(TAG, "viewPager.setCurrentItem(["+currentStep+"])");
+            viewPager.setCurrentItem(currentStep);
+        } else {
+            Log.e("onNextButtonClicked()", "else statement {: ");
+            Log.e("onNextButtonClicked()", "currentStep: " + currentStep);
+            Log.e("onNextButtonClicked()", "currentReturnStep: " + currentReturnStep);
+            Log.e(TAG, "viewPager.setCurrentItem(["+currentStep+"])");
             viewPager.setCurrentItem(currentStep);
         }
+
     }
 
 
@@ -786,7 +924,7 @@ public class d_Lesson_container extends AppCompatActivity implements
 //        else
 //            message = "Unfortunately, you did not pass the pre-test."; // Incorrect
 
-        String scoreMessage = "\nYour score for Pre-Test is: " + score;
+        String scoreMessage = "\nYour score for Pre-Test is: " + (score-1);
 
         builder.setMessage(
 //                message +
@@ -810,6 +948,8 @@ public class d_Lesson_container extends AppCompatActivity implements
 
         // Call feedback for pre-test
         c_Lesson_feedback.printResult("Pre-Test");
+
+//        currentStep = 1;
 
         isPreTestComplete = true;
         onNextButtonClicked(); // Proceed to the next step if the test is passed
@@ -898,6 +1038,20 @@ public class d_Lesson_container extends AppCompatActivity implements
         Button okButton = customDialogView.findViewById(R.id.okay_passed_button);
 
         dialogMessage.setText("You passed Lesson " + lesson + "!");
+
+        TextView preTestMessage = customDialogView.findViewById(R.id.pre_test_score);
+        preTestMessage.setText(
+                "Pre-Test Score: "
+                + c_Lesson_feedback.preTestCorrectAnswers
+                + "/"
+                + c_Lesson_feedback.preTestAttemptAnswers);
+
+        TextView postTestMessage = customDialogView.findViewById(R.id.post_test_score);
+        postTestMessage.setText(
+                "Post-Test Score: "
+                        + c_Lesson_feedback.postTestCorrectAnswers
+                        + "/"
+                        + c_Lesson_feedback.postTestAttemptAnswers);
 
         // Show the dialog when OK button is clicked
         okButton.setOnClickListener(new View.OnClickListener() {

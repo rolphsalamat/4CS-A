@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/plain_background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+
+        <!-- Exit Button -->
+        <Button
+            android:id="@+id/exit_profile"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginVertical="18dp"
+            android:background="@drawable/arrow_left"
+            android:backgroundTint="@color/backgroundColor" />
+
+        <!-- SIGN UP Text -->
+        <TextView
+            android:id="@+id/signUpText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginHorizontal="50dp"
+            android:gravity="center"
+            android:fontFamily="@font/mouldy_cheese"
+            android:letterSpacing="0.095"
+            android:text="PROFILE"
+            android:textColor="#B5E6FA"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        android:layout_marginStart="6dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:padding="60dp"-->
+<!--        android:background="@drawable/white_divider"-->
+<!--        android:layout_gravity="center">-->
+
+
+        <FrameLayout
+            android:id="@+id/profile_frame_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center"
+            >
+
+            <!-- Background layer ShapeableImageView -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/profile_background"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:padding="3dp"
+                android:src="#FFF"
+                android:scaleType="fitXY"
+                app:shapeAppearanceOverlay="@style/ImageViewCircle" />
+            <!-- Foreground ShapeableImageView with profile picture -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/user_profile_picture"
+                android:layout_width="145dp"
+                android:layout_height="145dp"
+                android:padding="3dp"
+                android:layout_gravity="center"
+                android:src="@drawable/default_male"
+                android:scaleType="fitXY"
+                app:shapeAppearanceOverlay="@style/ImageViewCircle" />
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:padding="4dp">
+                <!-- Gray circle background for camera icon -->
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/autotutoria_background_color"
+                    app:shapeAppearanceOverlay="@style/ImageViewCircle" />
+                <!-- Camera icon -->
+                <ImageView
+                    android:id="@+id/change_profile_icon"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/camera"
+                    app:tint="@color/white" />
+            </FrameLayout>
+        </FrameLayout>
+
+<!--        &lt;!&ndash; Profile Image Placeholder &ndash;&gt;-->
+<!--        <ImageView-->
+<!--            android:layout_width="80dp"-->
+<!--            android:layout_height="70dp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:src="@drawable/username"-->
+<!--            android:contentDescription="Profile Image" />-->
+
+        <!-- Name Field (Non-editable) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="Name:"
+            android:textSize="20sp"
+            android:fontFamily="@font/mouldy_cheese"
+            android:textColor="@color/white" />
+
+        <EditText
+            android:id="@+id/profile_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_edit_text_with_border"
+            android:textColor="@color/white"
+            android:gravity="center_vertical"
+            android:inputType="text"
+            android:textStyle="bold"
+            android:fontFamily="@font/roboto_serif"
+            android:textColorHint="#77FFFFFF"
+            android:paddingStart="20dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:textSize="20sp" />
+
+        <!-- Category Field (Non-editable) -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Category:"
+            android:textSize="20sp"
+            android:fontFamily="@font/mouldy_cheese"
+            android:textColor="@color/white" />
+
+        <EditText
+            android:id="@+id/profile_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_edit_text_with_border"
+            android:textColor="@color/white"
+            android:gravity="center_vertical"
+            android:inputType="text"
+            android:textStyle="bold"
+            android:fontFamily="@font/roboto_serif"
+            android:textColorHint="#77FFFFFF"
+            android:paddingStart="20dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:textSize="20sp" />
+
+<!--        &lt;!&ndash; Date of Birth Field (Non-editable) &ndash;&gt;-->
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="30dp"-->
+<!--            android:text="Date of Birth:"-->
+<!--            android:textSize="20sp"-->
+<!--            android:fontFamily="@font/mouldy_cheese"-->
+<!--            android:textColor="@color/white" />-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/profile_birthday"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/rounded_edit_text_with_border"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:inputType="text"-->
+<!--            android:textStyle="bold"-->
+<!--            android:fontFamily="@font/roboto_serif"-->
+<!--            android:textColorHint="#77FFFFFF"-->
+<!--            android:paddingStart="20dp"-->
+<!--            android:focusable="true"-->
+<!--            android:focusableInTouchMode="true"-->
+<!--            android:clickable="true"-->
+<!--            android:textSize="20sp" />-->
+
+        <!-- Username Field (Non-editable) -->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/mouldy_cheese"
+        android:text="Username:"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <EditText
+            android:id="@+id/profile_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_edit_text_with_border"
+            android:textColor="@color/white"
+            android:gravity="center_vertical"
+            android:inputType="text"
+            android:textStyle="bold"
+            android:fontFamily="@font/roboto_serif"
+            android:textColorHint="#77FFFFFF"
+            android:paddingStart="20dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:textSize="20sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/mouldy_cheese"
+        android:text="Email Address:"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/profile_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_edit_text_with_border"
+        android:textColor="@color/white"
+        android:gravity="center_vertical"
+        android:inputType="text"
+        android:textStyle="bold"
+        android:fontFamily="@font/roboto_serif"
+        android:textColorHint="#77FFFFFF"
+        android:paddingStart="20dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:clickable="true"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal"
+        >
+
+        <Button
+            android:id="@+id/button_change_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="5dp"
+            android:text="Change Email"
+            android:textColor="@color/navy_blue"
+            android:background="@drawable/rounded_corners"
+            />
+
+        <Button
+            android:id="@+id/button_change_password"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="5dp"
+            android:text="Change Password"
+            android:textColor="@color/navy_blue"
+            android:background="@drawable/rounded_corners"
+            />
+
+    </LinearLayout>
+
+<!--        &lt;!&ndash; Email Field (Editable) &ndash;&gt;-->
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Email Address:"-->
+<!--            android:textSize="20sp"-->
+<!--            android:fontFamily="@font/mouldy_cheese"-->
+<!--            android:textColor="@color/white" />-->
+
+<!--        &lt;!&ndash; PASSWORD &ndash;&gt;-->
+<!--        <FrameLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/rounded_edit_text_with_border"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:paddingHorizontal="20dp">-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/txtEmail"-->
+<!--                android:layout_width="260dp"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:background="@android:color/transparent"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:inputType="textEmailAddress"-->
+<!--                android:textStyle="bold"-->
+<!--                android:hint="EmailAdress"-->
+<!--                android:fontFamily="@font/roboto_serif"-->
+<!--                android:textColorHint="#77FFFFFF"-->
+<!--                android:textSize="20sp" />-->
+
+<!--            &lt;!&ndash; Show/Hide Password Button &ndash;&gt;-->
+<!--            <ImageButton-->
+<!--                android:id="@+id/btnShowPassword"-->
+<!--                android:layout_width="18dp"-->
+<!--                android:layout_height="18dp"-->
+<!--                android:layout_gravity="end|center_vertical"-->
+<!--                android:background="@drawable/file_edit" />-->
+
+<!--        </FrameLayout>-->
+
+<!--        &lt;!&ndash; Password Field (Editable) &ndash;&gt;-->
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Password:"-->
+<!--            android:textSize="20sp"-->
+<!--            android:fontFamily="@font/mouldy_cheese"-->
+<!--            android:textColor="@color/white" />-->
+
+<!--        &lt;!&ndash; PASSWORD &ndash;&gt;-->
+<!--        <FrameLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/rounded_edit_text_with_border"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:paddingHorizontal="20dp">-->
+
+<!--            <EditText-->
+<!--                android:id="@+id/txtPassword"-->
+<!--                android:layout_width="260dp"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:background="@android:color/transparent"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:inputType="textPassword"-->
+<!--                android:textStyle="bold"-->
+<!--                android:hint="Password"-->
+<!--                android:fontFamily="@font/roboto_serif"-->
+<!--                android:textColorHint="#77FFFFFF"-->
+<!--                android:textSize="20sp" />-->
+
+<!--            &lt;!&ndash; Show/Hide Password Button &ndash;&gt;-->
+<!--            <ImageButton-->
+<!--                android:layout_width="18dp"-->
+<!--                android:layout_height="18dp"-->
+<!--                android:layout_gravity="end|center_vertical"-->
+<!--                android:background="@drawable/file_edit" />-->
+
+<!--        </FrameLayout>-->
+    </LinearLayout>
+
+<!--</LinearLayout>-->

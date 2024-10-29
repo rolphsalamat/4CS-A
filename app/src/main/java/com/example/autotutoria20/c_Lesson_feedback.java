@@ -37,10 +37,10 @@ public class c_Lesson_feedback {
     private static Context context; // Add context field
 
     // for result:
-    public static int preTestCorrectAnswers = 0;
-    public static int preTestAttemptAnswers = 0;
-    public static int postTestCorrectAnswers = 0;
-    public static int postTestAttemptAnswers = 0;
+    public static int preTestCorrectAnswers = 1;
+    public static int preTestAttemptAnswers = 1;
+    public static int postTestCorrectAnswers = 1;
+    public static int postTestAttemptAnswers = 1;
 
     // Constructor
     public c_Lesson_feedback(Context context) {
@@ -53,10 +53,10 @@ public class c_Lesson_feedback {
     }
 
     public static void resetResult() {
-        preTestCorrectAnswers = 0;
-        preTestAttemptAnswers = 0;
-        postTestCorrectAnswers = 0;
-        postTestAttemptAnswers = 0;
+        preTestCorrectAnswers = 1;
+        preTestAttemptAnswers = 1;
+        postTestCorrectAnswers = 1;
+        postTestAttemptAnswers = 1;
     }
 
     public static void printResult(String mode) {

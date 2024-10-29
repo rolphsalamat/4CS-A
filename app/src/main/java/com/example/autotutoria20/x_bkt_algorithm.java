@@ -28,6 +28,9 @@ public class x_bkt_algorithm {
     private FirebaseFirestore db;
     private String userId;
     public static boolean isLessonFinished;
+    public static boolean isLessonPassed = false;
+    public static boolean isLessonCompleted = false;
+
     private List<Double> bktScores;
     private static double knowledgeProbability;
     private static double learnRate;
@@ -548,8 +551,8 @@ public class x_bkt_algorithm {
                                         if (moduleValue instanceof Map) {
                                             Map<String, Object> moduleData = (Map<String, Object>) moduleValue;
 
-                                            boolean isLessonPassed = false;
-                                            boolean isLessonCompleted = false;
+                                            isLessonPassed = false;
+                                            isLessonCompleted = false;
 
                                             if (moduleData.containsKey("BKT Score") && moduleData.containsKey("Progress")) {
 
@@ -722,7 +725,7 @@ public class x_bkt_algorithm {
 
         Log.e(TAG, " resetScore() method is called!");
 
-        isLessonFinished = true;
+//        isLessonFinished = true;
 
         if (
 //                bktScores == null ||

@@ -1,0 +1,21 @@
+<resources>
+    <string name="terms_conditions_title">Terms and Conditions</string>
+    <string name="terms_conditions_content">
+
+        1. Acceptance of Terms By using AutoTutoria, you agree to these terms. If you do not accept these terms, you should not use the platform.\n\n
+        2. AutoTutoria offers online tutoring services. We connect students with qualified tutors based on the subject area requested.\n\n
+        3. User Responsibilities\n\n
+
+        \t\t * Students: You are responsible for providing accurate information when booking a session. Payments must be made in accordance with the pricing structure provided.\n\n
+        \t\t * Tutors: You must ensure the accuracy of your qualifications and availability. Misrepresentation may result in suspension or termination of your account.\n\n
+
+        4. AutoTutoria is not liable for any disputes between tutors and students or for the outcome of tutoring sessions. We do not guarantee academic success.\n\n
+        5. Intellectual Property All content provided on the platform, including lessons and materials, is the property of AutoTutoria  or the respective tutors. You may not copy, distribute, or use this content without permission.\n\n
+        6. Account Suspension or Termination We reserve the right to suspend or terminate accounts for violation of these terms or misuse of the platform.\n\n
+        7. Governing Law These terms are governed by the laws of Cabuyao, Laguna. Any legal action must be brought in the courts of Cabuyao, Laguna.\n\n
+        8. AutoTutoria reserves the right to modify these terms at any time. Users will be notified of significant changes.\n\n
+
+
+    </string>
+
+</resources>

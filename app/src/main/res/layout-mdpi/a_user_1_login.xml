@@ -15,7 +15,7 @@
     <ImageView
         android:id="@+id/AutoTutoria_logo"
         android:layout_width="wrap_content"
-        android:layout_height="300dp"
+        android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/new_autotutoria_logo" /> <!-- Make sure your logo is added to the drawable folder -->
 
@@ -24,9 +24,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/getto_funky"
-        android:text="Autotutoria"
+        android:text="AutoTutoria"
         android:textColor="@color/white"
-        android:textSize="60sp" />
+        android:textSize="40sp" />
 
     <!-- MOTTO TEXT -->
     <TextView
@@ -35,7 +35,7 @@
         android:fontFamily="@font/honey_bread"
         android:text="Be your best self"
         android:textColor="#B5E6FA"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <LinearLayout
@@ -55,7 +55,7 @@
             android:gravity="center_horizontal"
             android:text="Don't have an account? "
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
         <!-- Signup button or other views can go here -->
         <TextView
@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:text="Sign Up!"
             android:textColor="#b5e6fa"
-            android:textSize="16sp" />
+            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -85,7 +85,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginHorizontal="20dp"
         android:padding="20dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="16dp">
@@ -101,7 +101,7 @@
             <!-- USERNAME FIELD -->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="35dp"
                 android:layout_marginVertical="5dp"
                 android:background="@drawable/rounded_edit_text_with_border">
 
@@ -116,12 +116,12 @@
                     android:paddingStart="50dp"
                     android:textColor="@color/navy_blue"
                     android:textColorHint="#ABABAB"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/usernameIcon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="start|center_vertical"
                     android:layout_marginStart="15dp"
                     android:src="@drawable/username" /> <!-- Reference your username icon in drawable -->
@@ -130,7 +130,7 @@
             <!-- PASSWORD FIELD -->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="35dp"
                 android:layout_marginVertical="5dp"
                 android:background="@drawable/rounded_edit_text_with_border">
 
@@ -145,12 +145,12 @@
                     android:paddingStart="50dp"
                     android:textColor="@color/black"
                     android:textColorHint="#ABABAB"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/passwordIcon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="start|center_vertical"
                     android:layout_marginStart="15dp"
                     android:src="@drawable/password" /> <!-- Reference your password icon in drawable -->
@@ -158,8 +158,8 @@
                 <!-- Show/Hide Password Button -->
                 <ImageButton
                     android:id="@+id/btnShowPassword"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_gravity="end|center_vertical"
                     android:layout_marginEnd="15dp"
                     android:background="@drawable/show_password" /> <!-- Reference your show/hide password icon in drawable -->
@@ -170,13 +170,13 @@
             <Button
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginTop="30dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="10dp"
                 android:backgroundTint="#1F46B5"
                 android:fontFamily="@font/roboto_serif"
                 android:text="Sign in"
                 android:textColor="#FFFFFF"
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -198,19 +198,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:gravity="center">
 
         <ImageView
             android:id="@+id/pnc_logo"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/pnc_logo" /> <!-- Reference your PNC logo in drawable -->
 
         <ImageView
             android:id="@+id/miniautotutoria_logo"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/autotutoria_logo" /> <!-- Reference your AutoTutoria logo in drawable -->
     </LinearLayout>
 

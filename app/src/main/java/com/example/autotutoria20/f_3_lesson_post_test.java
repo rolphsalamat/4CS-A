@@ -269,13 +269,15 @@ public class f_3_lesson_post_test extends Fragment {
                 if (questionsAnswered <= (postTestQuestions)) {
 
                     // Update feedback and scores based on correctness
-                    if (correctAnswer && !x_bkt_algorithm.isLessonFinished) {
+                    if (correctAnswer) {
+                        if (!x_bkt_algorithm.isLessonFinished) {
+                            x_bkt_algorithm.updateTestScore(
+                                    isProgressiveMode,
+                                    moduleIndex, lessonIndex,
+                                    "Post-Test",
+                                    c_Lesson_feedback.preTestCorrectAnswers);
+                        }
                         c_Lesson_feedback.postTestCorrectAnswers++;
-                        x_bkt_algorithm.updateTestScore(
-                                isProgressiveMode,
-                                moduleIndex, lessonIndex,
-                                "Post-Test",
-                                c_Lesson_feedback.postTestCorrectAnswers);
                     }
 
                     if (!x_bkt_algorithm.isLessonFinished)
@@ -345,9 +347,9 @@ public class f_3_lesson_post_test extends Fragment {
                 choicesGroup.clearCheck(); // Clear selected choices at the end of processing.
             }
 
-            total.setText("Score: " + c_Lesson_feedback.postTestCorrectAnswers
+            total.setText("Item: " + c_Lesson_feedback.postTestAttemptAnswers
                     + "/"
-                    + c_Lesson_feedback.postTestAttemptAnswers);
+                    + postTestQuestions);
 
         });
 

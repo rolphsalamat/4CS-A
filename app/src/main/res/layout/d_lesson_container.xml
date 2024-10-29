@@ -19,7 +19,7 @@
         />
 
     <Button
-        android:id="@+id/backButton"
+        android:id="@+id/backButtonLayout"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_margin="30dp"

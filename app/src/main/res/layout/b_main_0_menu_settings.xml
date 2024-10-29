@@ -39,49 +39,49 @@
             android:layout_marginTop="20dp"
             android:background="?attr/colorControlNormal" />
 
-        <!-- Row 2 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:paddingVertical="12dp"
-            android:gravity="center_vertical">
-            <!-- App Update Notification -->
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily=""
-                android:text="App Update Notification"
-                android:textColor="@color/black"/>
-            <!-- Toggle Switch -->
-            <Switch
-                android:id="@+id/switch_app_update"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+<!--        &lt;!&ndash; Row 2 &ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:paddingVertical="12dp"-->
+<!--            android:gravity="center_vertical">-->
+<!--            &lt;!&ndash; App Update Notification &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:fontFamily=""-->
+<!--                android:text="App Update Notification"-->
+<!--                android:textColor="@color/black"/>-->
+<!--            &lt;!&ndash; Toggle Switch &ndash;&gt;-->
+<!--            <Switch-->
+<!--                android:id="@+id/switch_app_update"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content" />-->
+<!--        </LinearLayout>-->
 
-        <!-- Row 3 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingVertical="12dp"
-            android:gravity="center_vertical">
-            <!-- New Course Available Notification -->
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="New Course Available Notification"
-                android:textColor="@color/black"/>
-            <!-- Toggle Switch -->
-            <Switch
-                android:id="@+id/switch_new_course"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+<!--        &lt;!&ndash; Row 3 &ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:paddingVertical="12dp"-->
+<!--            android:gravity="center_vertical">-->
+<!--            &lt;!&ndash; New Course Available Notification &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="New Course Available Notification"-->
+<!--                android:textColor="@color/black"/>-->
+<!--            &lt;!&ndash; Toggle Switch &ndash;&gt;-->
+<!--            <Switch-->
+<!--                android:id="@+id/switch_new_course"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content" />-->
+<!--        </LinearLayout>-->
 
         <!-- Row 4 -->
         <LinearLayout

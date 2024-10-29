@@ -87,6 +87,7 @@ public class f_1_lesson_text extends Fragment {
         Log.d("f_text_lesson", "onResume called");
         Log.e("f_text_lesson", "loadTextContentForKey(" + key + ");");
         loadTextContentForKey(key, pageNumber);
+
     }
 
     @Override
@@ -494,7 +495,10 @@ public class f_1_lesson_text extends Fragment {
 
         // 0 -
         // n -
-        int level = 8; // Default to High School Student
+
+        // use 8 on publish
+        // use 10 for testing
+        int level = 10; // Default to High School Student
 
         // Adjust the multiplier based on the educational level
         double multiplier;

@@ -50,11 +50,17 @@
         <activity android:name=".a_user_1_login" android:exported="true"/>
         <activity android:name=".a_user_2_signup" android:exported="true"/>
 
+        <!-- FAQ -->
+        <activity android:name=".a_user_4_FAQ" android:exported="true"/>
+        <activity android:name=".a_user_5_terms_and_conditions" android:exported="true"/>
+
+
         <!-- MAIN MENU -->
         <activity android:name=".b_main_0_menu" android:exported="true"/>
         <activity android:name=".b_main_0_menu_categorize_user" android:exported="true"/>
         <activity android:name=".b_main_0_menu_logout" android:exported="true"/>
         <activity android:name=".b_main_0_menu_rateUs" android:exported="true"/>
+        <activity android:name=".b_main_0_menu_profile" android:exported="true"/>
         <activity android:name=".b_main_0_menu_settings" android:exported="true"/>
         <activity android:name=".b_main_0_menu_tutorial" android:exported="true"/>
         <activity android:name=".b_main_1_lesson_progressive" android:exported="true"/>

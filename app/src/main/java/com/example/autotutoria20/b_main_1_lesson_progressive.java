@@ -181,6 +181,8 @@ public class b_main_1_lesson_progressive extends Fragment {
 
                         int iteration = 1;
 
+                        int completedModule = 0;
+
                         for (DocumentSnapshot lessonDoc : task.getResult()) {
                             String lesson = lessonDoc.getId();
                             int totalProgress = 0;
@@ -210,14 +212,24 @@ public class b_main_1_lesson_progressive extends Fragment {
     //                            }
 
                                 Log.e(TAG, "Lesson["+(i+1)+"] BKT Score: " + moduleScore);
+                                Log.e(TAG, "Lesson["+(i+1)+"] Progress: " + moduleProgress);
 
 
                                 // if moduleScore >= passingGrade
                                 if (moduleScore >= b_main_0_menu_categorize_user.passingGrade) {
-    //                                cardCompletionStatus[i] = true; // eh buong module yan e wag yan
 
-                                    completeCounter++;
-                                    Log.e(TAG, "Lesson["+(i+1)+"] Passed | completeCounter: " + completeCounter);
+                                    String module = "M" + (i+1);
+                                    String lesson_1 = "Lesson " + (iteration-1);
+
+                                    if (moduleProgress >= getLessonSteps(module, lesson_1)) {
+
+                                        Log.e("TAG", "HDMI | Module: M" + (i + 1));
+                                        Log.e("TAG", "HDMI | Lesson: Lesson " + (iteration - 1));
+
+                                        completeCounter++;
+                                        Log.e(TAG, "Lesson[" + (i + 1) + "] Passed | completeCounter: " + completeCounter);
+
+                                    }
 
                                 }
 
@@ -228,14 +240,17 @@ public class b_main_1_lesson_progressive extends Fragment {
                                 if (completeCounter == maxProgressValues.length) {
                                     Log.e("TAG", "Module["+(iteration-1)+"] is Complete!");
 
+
                                     // Array starts at 0..
                                     // Iteration started at 1..
                                     // Iteration in this part of code is incremented already by 1..
                                     // so deduct by 2..
                                     cardCompletionStatus[iteration-2] = true;
                                     hideLockedOverlay(iteration);
-                                }
 
+                                    completedModule++;
+
+                                }
 
                             }
 
@@ -245,6 +260,15 @@ public class b_main_1_lesson_progressive extends Fragment {
 
                                 updateCardProgress(lessonNumber, overallProgressInt);
                             }
+
+                        }
+
+                        Log.e("TAG", "WALTER | completedModule: " + completedModule);
+
+                        if (completedModule == 8) {
+                            // Progressive Mode is completed.
+                            Log.e("TAG", "WALTER | Progressive Mode is complete!");
+
                         }
 
                         // Add delay similar to progressive mode
@@ -270,6 +294,60 @@ public class b_main_1_lesson_progressive extends Fragment {
                 }
             });
         }
+
+    private int getLessonSteps(String module, String lesson) {
+
+        int getLesson = Integer.parseInt(String.valueOf(lesson.charAt(7)));
+        int getModule = Integer.parseInt(String.valueOf(module.charAt(1)));
+
+        switch (getLesson) {
+            case 1:
+                switch (getModule) {
+                    case 1: return L_lesson_sequence.getNumberOfSteps("M1_Lesson 1");
+                    case 2: return L_lesson_sequence.getNumberOfSteps("M2_Lesson 1");
+                    case 3: return L_lesson_sequence.getNumberOfSteps("M3_Lesson 1");
+                    case 4: return L_lesson_sequence.getNumberOfSteps("M4_Lesson 1");
+                }
+            case 2:
+                switch (getModule) {
+                    case 1: return L_lesson_sequence.getNumberOfSteps("M1_Lesson 2");
+                }
+            case 3:
+                switch (getModule) {
+                    case 1: return L_lesson_sequence.getNumberOfSteps("M1_Lesson 3");
+                    case 2: return L_lesson_sequence.getNumberOfSteps("M2_Lesson 3");
+                }
+            case 4:
+                switch (getModule) {
+                    case 1: return L_lesson_sequence.getNumberOfSteps("M1_Lesson 4");
+                    case 2: return L_lesson_sequence.getNumberOfSteps("M2_Lesson 4");
+                }
+            case 5:
+                switch (getModule) {
+                    case 1: return L_lesson_sequence.getNumberOfSteps("M1_Lesson 5");
+                    case 2: return L_lesson_sequence.getNumberOfSteps("M2_Lesson 5");
+                    case 3: return L_lesson_sequence.getNumberOfSteps("M3_Lesson 5");
+                }
+            case 6:
+                switch (getModule) {
+                    case 1: return L_lesson_sequence.getNumberOfSteps("M1_Lesson 6");
+                    case 2: return L_lesson_sequence.getNumberOfSteps("M2_Lesson 6");
+                    case 3: return L_lesson_sequence.getNumberOfSteps("M3_Lesson 6");
+                }
+            case 7:
+                switch (getModule) {
+                    case 1: return L_lesson_sequence.getNumberOfSteps("M1_Lesson 7");
+                }
+            case 8:
+                switch (getModule) {
+                    case 1: return L_lesson_sequence.getNumberOfSteps("M1_Lesson 8");
+                    case 2: return L_lesson_sequence.getNumberOfSteps("M2_Lesson 8");
+                    case 3: return L_lesson_sequence.getNumberOfSteps("M3_Lesson 8");
+                }
+        }
+
+        return 0;
+    }
 
     private void resetCardProgress() {
         // Reset all progress to 0

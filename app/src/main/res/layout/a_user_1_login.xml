@@ -15,7 +15,7 @@
     <ImageView
         android:id="@+id/AutoTutoria_logo"
         android:layout_width="wrap_content"
-        android:layout_height="300dp"
+        android:layout_height="200dp"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/new_autotutoria_logo" /> <!-- Make sure your logo is added to the drawable folder -->
 
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/getto_funky"
-        android:text="Autotutoria"
+        android:text="AutoTutoria"
         android:textColor="@color/white"
         android:textSize="60sp" />
 

@@ -12,9 +12,20 @@
         android:gravity="end"
         android:layout_marginStart="12dp"
         android:layout_marginTop="10dp"
-        android:text="Score: 0/0"
+        android:text="Item: 1/5"
         android:textColor="#FFF"
         android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:fontFamily="@font/mouldy_cheese"
+        android:text="Pre-Test"
+        android:textColor="#87CEEB"
+        android:textSize="30dp"
         android:textStyle="bold" />
 
     <TextView

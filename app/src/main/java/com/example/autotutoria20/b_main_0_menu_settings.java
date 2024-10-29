@@ -48,8 +48,8 @@ public class b_main_0_menu_settings extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         // Initialize switches
-        switchAppUpdate = findViewById(R.id.switch_app_update);
-        switchNewCourse = findViewById(R.id.switch_new_course);
+//        switchAppUpdate = findViewById(R.id.switch_app_update);
+//        switchNewCourse = findViewById(R.id.switch_new_course);
         switchReminder = findViewById(R.id.switch_reminder);
 
         // Initialize Back Button
@@ -65,15 +65,15 @@ public class b_main_0_menu_settings extends AppCompatActivity {
         loadSettingsFromFirestore();
 
         // Set listeners to show toast on toggle
-        switchAppUpdate.setOnCheckedChangeListener((buttonView, isChecked) -> {
-//            showToast("App Update Notification toggled");
-            updateDatabase("App Update Notification", isChecked);
-        });
-
-        switchNewCourse.setOnCheckedChangeListener((buttonView, isChecked) -> {
-//            showToast("New Course Available Notification toggled");
-            updateDatabase("New Course Available Notification", isChecked);
-        });
+//        switchAppUpdate.setOnCheckedChangeListener((buttonView, isChecked) -> {
+////            showToast("App Update Notification toggled");
+//            updateDatabase("App Update Notification", isChecked);
+//        });
+//
+//        switchNewCourse.setOnCheckedChangeListener((buttonView, isChecked) -> {
+////            showToast("New Course Available Notification toggled");
+//            updateDatabase("New Course Available Notification", isChecked);
+//        });
 
         switchReminder.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (!isNotificationsEnabled()) {
@@ -157,8 +157,8 @@ public class b_main_0_menu_settings extends AppCompatActivity {
                     }
 
                     // Set switches according to the saved values
-                    switchAppUpdate.setChecked(updateNotifValue);
-                    switchNewCourse.setChecked(newCourseValue);
+//                    switchAppUpdate.setChecked(updateNotifValue);
+//                    switchNewCourse.setChecked(newCourseValue);
                     switchReminder.setChecked(reminderNotifValue);
 
                     scheduleNotificationWorker();  // Schedule the worker based on the retrieved value
@@ -180,8 +180,8 @@ public class b_main_0_menu_settings extends AppCompatActivity {
                             .addOnSuccessListener(aVoid -> Log.d("Settings.java", "Default document created in Firestore"))
                             .addOnFailureListener(e -> Log.e("Settings.java", "Error creating default document", e));
 
-                    switchAppUpdate.setChecked(false);
-                    switchNewCourse.setChecked(false);
+//                    switchAppUpdate.setChecked(false);
+//                    switchNewCourse.setChecked(false);
                     switchReminder.setChecked(false);
 
                     scheduleNotificationWorker();

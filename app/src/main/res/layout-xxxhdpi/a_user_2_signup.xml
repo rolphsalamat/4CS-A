@@ -289,13 +289,15 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
+        android:layout_marginHorizontal="30dp"
         android:layout_marginTop="10dp">
 
         <!-- FEMALE -->
         <RadioButton
             android:id="@+id/rdoFemale"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:fontFamily="@font/roboto_serif"
             android:padding="10dp"
             android:background="@drawable/rounded_edit_text_with_border"
@@ -307,41 +309,54 @@
         <!-- MALE -->
         <RadioButton
             android:id="@+id/rdoMale"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:fontFamily="@font/roboto_serif"
             android:padding="10dp"
-            android:layout_marginHorizontal="5dp"
             android:background="@drawable/rounded_edit_text_with_border"
             android:text="Male"
             android:textColor="@color/white"
             android:textSize="12sp" />
 
-        <!-- MALE -->
-        <RadioButton
-            android:id="@+id/rdoRatherNoySay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:fontFamily="@font/roboto_serif"
-            android:background="@drawable/rounded_edit_text_with_border"
-            android:text="Rather not say"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+<!--        &lt;!&ndash; MALE &ndash;&gt;-->
+<!--        <RadioButton-->
+<!--            android:id="@+id/rdoRatherNoySay"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:padding="10dp"-->
+<!--            android:fontFamily="@font/roboto_serif"-->
+<!--            android:background="@drawable/rounded_edit_text_with_border"-->
+<!--            android:text="Rather not say"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="12sp" />-->
 
     </RadioGroup>
 
-
-    <TextView
-        android:layout_width="match_parent"
+    <CheckBox
+        android:id="@+id/terms_and_conditions"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="30dp"
-        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="50dp"
         android:fontFamily="@font/roboto_serif"
-        android:text="@string/signup_policy"
+        android:text="Terms and Conditions"
         android:textColor="@color/white"
-        android:textSize="10sp" />
+        android:textSize="12sp"
+        android:textStyle="bold"
+        />
+
+
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="15dp"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:gravity="center_horizontal"-->
+<!--        android:fontFamily="@font/roboto_serif"-->
+<!--        android:text="@string/signup_policy"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="10sp" />-->
 
     <!-- SIGN UP BUTTON -->
     <Button

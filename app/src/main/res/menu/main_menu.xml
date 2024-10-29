@@ -9,6 +9,15 @@
         <menu>
             <!-- Settings -->
             <item
+                android:id="@+id/profile"
+                android:icon="@drawable/username"
+                android:title="Profile"
+                android:fontFamily="@font/roboto_serif"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
+
+            <!-- Settings -->
+            <item
                 android:id="@+id/settings"
                 android:icon="@drawable/settings"
                 android:title="Settings"
@@ -51,7 +60,7 @@
     </item>
 
     <item
-        android:title="University of Cabuyao Community"
+        android:title="Community"
         android:fontFamily="@font/roboto_serif"
         android:textColor="#000000"
         android:textSize="18sp">
@@ -71,6 +80,15 @@
                 android:id="@+id/follow"
                 android:icon="@drawable/follow"
                 android:title="Follow Us"
+                android:fontFamily="@font/roboto_serif"
+                android:textColor="#000000"
+                android:textSize="18sp"/>
+
+            <!-- Frequently Asked Questions -->
+            <item
+                android:id="@+id/faq"
+                android:icon="@drawable/faq"
+                android:title="FAQ"
                 android:fontFamily="@font/roboto_serif"
                 android:textColor="#000000"
                 android:textSize="18sp"/>

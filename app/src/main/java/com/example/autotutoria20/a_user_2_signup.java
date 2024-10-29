@@ -8,6 +8,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -36,6 +37,7 @@ public class a_user_2_signup extends AppCompatActivity {
     private boolean isPasswordVisible = false;
     private boolean isRetypePasswordVisibile = false;
     private Map<String, Object> userData;
+    static CheckBox termsAndConditions;
     TextView firstNameEditText;
     TextView lastNameEditText;
     TextView emailEditText;
@@ -223,6 +225,13 @@ public class a_user_2_signup extends AppCompatActivity {
             validCounter += validatePassword(password);
             validCounter += validateRetypePassword(password, confirmPassword);
 
+            if (termsAndConditions.isChecked())
+                validCounter++;
+            else
+                Toast.makeText(a_user_2_signup.this,
+                "Please Agree to Terms and Conditions",
+                Toast.LENGTH_SHORT).show();
+
             // Now handle asynchronous validations for email and username
             validateEmail(email, () -> {
                 validateUsername(username, isValid -> {
@@ -231,8 +240,8 @@ public class a_user_2_signup extends AppCompatActivity {
 
                     Log.d(TAG, "Final validCounter: " + validCounter);
 
-//                    if (validCounter == 5) { // eto WITHOUT CONFIRM PASSWORD
-                    if (validCounter == 6) { // eto na kapag may CONFIRM PASSWORD na
+//                    if (validCounter == 6) { // eto na kapag may CONFIRM PASSWORD na
+                        if (validCounter == 7) { // eto na kapag may Terms and Conditions na
                         Log.d(TAG, "All validations passed. Proceeding with signup");
 
                         mAuth.createUserWithEmailAndPassword(email, password)
@@ -314,6 +323,16 @@ public class a_user_2_signup extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        termsAndConditions = findViewById(R.id.terms_and_conditions);
+        termsAndConditions.setOnClickListener(v -> {
+            termsAndConditions.setChecked(false);
+            startActivity(new Intent(
+                    a_user_2_signup.this,
+                    a_user_5_terms_and_conditions.class));
+        });
+
+
     }
 
     private int validateName(String name, String field) {

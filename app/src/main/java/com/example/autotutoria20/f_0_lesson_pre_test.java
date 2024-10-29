@@ -269,14 +269,15 @@ public class f_0_lesson_pre_test extends Fragment {
                     Log.e("TAG", "ROP CHECK THIS: | isLessonFinished: " + x_bkt_algorithm.isLessonFinished);
 
                     // Update feedback and scores based on correctness
-                    if (correctAnswer && !x_bkt_algorithm.isLessonFinished) {
+                    if (correctAnswer) {
+                        if (!x_bkt_algorithm.isLessonFinished) {
+                            x_bkt_algorithm.updateTestScore(
+                                    isProgressiveMode,
+                                    moduleIndex, lessonIndex,
+                                    "Pre-Test",
+                                    c_Lesson_feedback.preTestCorrectAnswers);
+                        }
                         c_Lesson_feedback.preTestCorrectAnswers++;
-                        x_bkt_algorithm.updateTestScore(
-                                isProgressiveMode,
-                                moduleIndex, lessonIndex,
-                                "Pre-Test",
-                                c_Lesson_feedback.preTestCorrectAnswers);
-//                        correct.setText("Correct Answers: " + c_Lesson_feedback.preTestCorrectAnswers);
                     }
 
                     if (!x_bkt_algorithm.isLessonFinished)
@@ -368,9 +369,9 @@ public class f_0_lesson_pre_test extends Fragment {
                 choicesGroup.clearCheck(); // Clear selected choices at the end of processing.
             }
 
-            total.setText("Score: " + c_Lesson_feedback.preTestCorrectAnswers
+            total.setText("Item: " + c_Lesson_feedback.preTestAttemptAnswers
                     + "/"
-                    + c_Lesson_feedback.preTestAttemptAnswers);
+                    +  preTestQuestions);
 
         });
     }

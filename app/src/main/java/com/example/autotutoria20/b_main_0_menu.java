@@ -56,6 +56,8 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.yalantis.ucrop.UCrop;
 
+import org.w3c.dom.Text;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -75,6 +77,7 @@ public class b_main_0_menu extends AppCompatActivity {
     private ViewPager viewPager;
     private CustomPagerAdapter pagerAdapter;
     private static TextView greetUserName;
+    private static TextView greetUserCategory;
     private List<Fragment> progressiveFragmentList;
     private List<Fragment> freeUseFragmentList;
     private long backPressedTime;
@@ -171,6 +174,7 @@ public class b_main_0_menu extends AppCompatActivity {
         navigationView = findViewById(R.id.navigation_view);
         View headerView = navigationView.getHeaderView(0);
         greetUserName = headerView.findViewById(R.id.user_firstName);
+        greetUserCategory = headerView.findViewById(R.id.user_category);
         profileImageView = headerView.findViewById(R.id.user_profile_picture); // Initialize profileImageView here
 
         // Initialize ViewPager
@@ -208,6 +212,17 @@ public class b_main_0_menu extends AppCompatActivity {
             }
         });
 
+
+//        TextView frequentlyAskedQuestions = findViewById(R.id.faq);
+//        frequentlyAskedQuestions.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.e("HELLO WORLD", "START FAQ");
+//                startActivity(new Intent(b_main_0_menu.this, a_user_4_FAQ.class));
+//                Log.e("HELLO WORLD", "FAQ | What happened!??!!");
+//            }
+//        });
+
         // NAVIGATION DRAWER BUTTONS
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigation_view);
@@ -226,7 +241,10 @@ public class b_main_0_menu extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                if (id == R.id.settings) {
+
+                if (id == R.id.profile) {
+                    startActivity(new Intent(b_main_0_menu.this, b_main_0_menu_profile.class));
+                } else if (id == R.id.settings) {
                     Log.e("NavigationView", "Let's open Settings");
                     Toast.makeText(b_main_0_menu.this, "Settings", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(b_main_0_menu.this, b_main_0_menu_settings.class));
@@ -238,7 +256,9 @@ public class b_main_0_menu extends AppCompatActivity {
                     showRateUsDialog();
                 } else if (id == R.id.follow) {
                     openFacebookPage();
-                } else if (id == R.id.log_out) {
+                } else if (id == R.id.faq) {
+                    startActivity(new Intent(b_main_0_menu.this, a_user_4_FAQ.class));
+                }else if (id == R.id.log_out) {
                     showLogoutDialog();
                 }
                 return false;
@@ -712,6 +732,7 @@ public class b_main_0_menu extends AppCompatActivity {
                         Boolean tutorial = document.getBoolean("Tutorial");
                         String firstName = document.getString("First Name");
                         String lastName = document.getString("Last Name");
+                        String category = document.getString("User Category");
                         String email = document.getString("Email Address");
                         String gender = document.getString("Gender");
                         Long age = document.getLong("Age");
@@ -733,6 +754,7 @@ public class b_main_0_menu extends AppCompatActivity {
                         Log.e(TAG, "Reminder Notification: " + reminderNotif);
 
                         greetUserName.setText("Hello, " + firstName);
+                        greetUserCategory.setText(category);
 
                         // Check if the user has a custom profile picture
                         Boolean hasCustomProfilePicture = document.getBoolean("hasCustomProfilePicture");
@@ -752,6 +774,8 @@ public class b_main_0_menu extends AppCompatActivity {
                                 } else if (gender.equalsIgnoreCase("female")) {
                                     // Apply female anonymous avatar
                                     profileImageView.setImageResource(R.drawable.default_female);
+                                } else {
+                                    profileImageView.setImageResource(R.drawable.default_generic);
                                 }
                             } else {
                                 // Handle case where gender is null

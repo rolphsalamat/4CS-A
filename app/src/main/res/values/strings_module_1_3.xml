@@ -20,7 +20,7 @@ and semantics that drive modern computing and language analysis.</string>
 
     <!-- Module 3 | Page 2 -->
     <!-- int[] module1_3_2 = {0, 0, 0, 0, 0, 0, 0, 0}; -->
-    <string name="module1_3_2_title"></string>
+    <string name="module1_3_2_title"> </string>
     <string name="module1_3_2_content_1">A formal language is a set of strings composed of symbols
 that follow specific grammatical rules. These languages are crucial in computer science, automata
 theory, and linguistics, as they define the syntax and semantics of programming languages, assist in
