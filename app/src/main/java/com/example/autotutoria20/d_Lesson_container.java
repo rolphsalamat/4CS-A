@@ -345,8 +345,9 @@ public class d_Lesson_container extends AppCompatActivity implements
                 }
                 if (currentFragment instanceof f_1_lesson_text) {
 
-                    nextButton.setVisibility(View.VISIBLE);
-                    nextButton.setEnabled(true);
+                    // di pwedeng ganto, ma s-speed run nila yung buong lesson
+//                    nextButton.setVisibility(View.VISIBLE);
+//                    nextButton.setEnabled(true);
 
                     f_1_lesson_text textLessonFragment = (f_1_lesson_text) currentFragment;
 

@@ -51,6 +51,7 @@ public class f_1_lesson_text extends Fragment {
             contentImageView_01, contentImageView_02, contentImageView_03, contentImageView_04, contentImageView_05,
             contentImageView_06, contentImageView_07, contentImageView_08, contentImageView_09, contentImageView_10
     };
+    private int numberOfTexts = 11;
     private LinearLayout nextButton;
     private Boolean isTextLessonDone = false;
     private Button tapToContinueButton;
@@ -87,6 +88,9 @@ public class f_1_lesson_text extends Fragment {
         Log.d("f_text_lesson", "onResume called");
         Log.e("f_text_lesson", "loadTextContentForKey(" + key + ");");
         loadTextContentForKey(key, pageNumber);
+
+        d_Lesson_container.nextButton.setVisibility(View.VISIBLE);
+        d_Lesson_container.nextButton.setEnabled(true);
 
     }
 
@@ -471,6 +475,8 @@ public class f_1_lesson_text extends Fragment {
                 contentTextViews[i].setVisibility(View.GONE);
             }
         }
+        nextButton.setVisibility(View.VISIBLE);
+        nextButton.setEnabled(true);
     }
 
     static int calculateDelayBasedOnLength(int length) {
@@ -619,17 +625,53 @@ public class f_1_lesson_text extends Fragment {
         // Log errors for missing resources
         String TEG = "auto resource ID generator";
 
-        if (titleResId == 0) Log.e(TEG, "Title is wrong: " + title);
-        if (text1ResId == 0) Log.e(TEG, "Text 1 is wrong: " + context1);
-        if (text2ResId == 0) Log.e(TEG, "Text 2 is wrong: " + context2);
-        if (text3ResId == 0) Log.e(TEG, "Text 3 is wrong: " + context3);
-        if (text4ResId == 0) Log.e(TEG, "Text 4 is wrong: " + context4);
-        if (text5ResId == 0) Log.e(TEG, "Text 5 is wrong: " + context5);
-        if (text6ResId == 0) Log.e(TEG, "Text 6 is wrong: " + context6);
-        if (text7ResId == 0) Log.e(TEG, "Text 7 is wrong: " + context7);
-        if (text8ResId == 0) Log.e(TEG, "Text 8 is wrong: " + context8);
-        if (text9ResId == 0) Log.e(TEG, "Text 9 is wrong: " + context9);
-        if (text10ResId == 0) Log.e(TEG, "Text 10 is wrong: " + context10);
+
+
+        if (titleResId == 0) {
+            Log.e(TEG, "Title is wrong: " + title);
+            numberOfTexts--;
+        }
+        if (text1ResId == 0) {
+            Log.e(TEG, "Text 1 is wrong: " + context1);
+            numberOfTexts--;
+        }
+        if (text2ResId == 0) {
+            Log.e(TEG, "Text 2 is wrong: " + context2);
+            numberOfTexts--;
+        }
+        if (text3ResId == 0) {
+            Log.e(TEG, "Text 3 is wrong: " + context3);
+            numberOfTexts--;
+        }
+        if (text4ResId == 0) {
+            Log.e(TEG, "Text 4 is wrong: " + context4);
+            numberOfTexts--;
+        }
+        if (text5ResId == 0) {
+            Log.e(TEG, "Text 5 is wrong: " + context5);
+            numberOfTexts--;
+        }
+        if (text6ResId == 0) {
+            Log.e(TEG, "Text 6 is wrong: " + context6);
+            numberOfTexts--;
+        }
+        if (text7ResId == 0) {
+            Log.e(TEG, "Text 7 is wrong: " + context7);
+            numberOfTexts--;
+        }
+        if (text8ResId == 0) {
+            Log.e(TEG, "Text 8 is wrong: " + context8);
+            numberOfTexts--;
+        }
+        if (text9ResId == 0) {
+            Log.e(TEG, "Text 9 is wrong: " + context9);
+            numberOfTexts--;
+        }
+        if (text10ResId == 0) {
+            Log.e(TEG, "Text 10 is wrong: " + context10);
+            numberOfTexts--;
+        }
+
 
         // Clear previous content
         titleTextView.setText("");
@@ -649,7 +691,7 @@ public class f_1_lesson_text extends Fragment {
             if (titleResId != 0) {
                 titleTextView.setText(titleResId);
             } else {
-                titleTextView.setText("Default Title"); // Fallback in case of missing title
+                titleTextView.setText(""); // Fallback in case of missing title
             }
 
             // Set each content TextView with validation
