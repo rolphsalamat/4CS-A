@@ -43,10 +43,11 @@
 
     <!-- New Email Input -->
     <TextView
+        android:id="@+id/email_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="60dp"
         android:text="New Email:"
         android:textColor="#FFFFFF"
         android:textSize="16sp" />
@@ -56,17 +57,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="84dp"
+        android:paddingStart="20dp"
         android:padding="10dp"
         android:background="@drawable/rounded_edit_text_with_border"
         android:hint="Enter new email address"
+        android:inputType="textEmailAddress" />
+
+    <!-- Password Input -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/email_text"
+        android:layout_marginTop="60dp"
+        android:text="Password:"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/new_email"
+        android:layout_marginTop="40dp"
+        android:paddingStart="20dp"
+        android:padding="10dp"
+        android:background="@drawable/rounded_edit_text_with_border"
+        android:hint="Enter password"
         android:inputType="textEmailAddress" />
 
     <!-- Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/new_email"
+        android:layout_below="@id/password"
         android:layout_marginTop="32dp"
         android:orientation="horizontal"
         android:gravity="center">

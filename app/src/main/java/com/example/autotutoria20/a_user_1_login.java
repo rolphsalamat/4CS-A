@@ -435,9 +435,9 @@ public class a_user_1_login extends AppCompatActivity {
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
-                                    Log.e(TAG, "Authentication failed: " + task.getException().getMessage());
+                                    Log.e(TAG, "HEY | Authentication failed: " + task.getException().getMessage());
                                     Toast.makeText(a_user_1_login.this,
-                                            "Authentication failed: " + task.getException().getMessage(),
+                                            "HEY | Authentication failed: " + task.getException().getMessage(),
                                             Toast.LENGTH_SHORT).show();
                                 }
                             });

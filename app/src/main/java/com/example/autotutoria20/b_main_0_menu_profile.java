@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -85,12 +86,7 @@ public class b_main_0_menu_profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Open change email dialog
-                showChangeEmail(new EmailChangeListener() {
-                    @Override
-                    public void onEmailChanged(String newEmail) {
-                        changeEmailAddress(newEmail); // Call your method with new email
-                    }
-                });
+                showChangeEmail();
             }
         });
 
@@ -109,7 +105,7 @@ public class b_main_0_menu_profile extends AppCompatActivity {
         void onEmailChanged(String newEmail);
     }
 
-    private void showChangeEmail(EmailChangeListener emailChangeListener) {
+    private void showChangeEmail() {
         // Create an AlertDialog Builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -118,11 +114,20 @@ public class b_main_0_menu_profile extends AppCompatActivity {
 
         // Find views in the dialog layout
         EditText newEmailAddress = dialogView.findViewById(R.id.new_email);
-        Button exitButton = dialogView.findViewById(R.id.close_button);
+        EditText passwordText = dialogView.findViewById(R.id.password);
+
+        ImageView exitButton = dialogView.findViewById(R.id.close_button);
+        Button cancelButton = dialogView.findViewById(R.id.cancel_button);
         Button submitButton = dialogView.findViewById(R.id.change_email_button);
 
         // Create the dialog
         AlertDialog dialog = builder.create();
+
+        // Set up cancel button
+        cancelButton.setOnClickListener(v -> {
+            // Dismiss the dialog
+            dialog.dismiss();
+        });
 
         // Set up exit button
         exitButton.setOnClickListener(v -> {
@@ -133,8 +138,9 @@ public class b_main_0_menu_profile extends AppCompatActivity {
         // Set up submit button
         submitButton.setOnClickListener(v -> {
             String email = newEmailAddress.getText().toString();
+            String password = passwordText.getText().toString();
             if (isValidEmail(email)) {
-                changeEmailAddress(email); // Call your method with new email
+                changeEmailAddress(email, password); // Call your method with new email
                 dialog.dismiss(); // Dismiss the dialog after submission
             } else {
                 Toast.makeText(getApplicationContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
@@ -149,20 +155,80 @@ public class b_main_0_menu_profile extends AppCompatActivity {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    // Edit email
-    private void changeEmailAddress(String newEmail) {
+    private void changeEmailAddress(String newEmail, String password) {
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        Toast.makeText(getApplicationContext(), "We're still working on this feature.", Toast.LENGTH_SHORT).show();
 
-        DocumentReference userRef = db.collection("users").document(userId);
-        userRef.update("Email Address", newEmail)
-                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Email Address updated successfully"))
-                .addOnFailureListener(e -> Log.e("Firestore", "Error updating email", e));
-
-        finish();
-
+//        FirebaseAuth auth = FirebaseAuth.getInstance();
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        String userId = auth.getCurrentUser().getUid();
+//
+//        // Get current user
+//        FirebaseUser user = auth.getCurrentUser();
+//
+//        // Re-authenticate the user
+//        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), password);
+//        user.reauthenticate(credential)
+//                .addOnCompleteListener(reauthTask -> {
+//                    if (reauthTask.isSuccessful()) {
+//                        Log.d("Auth", "Reauthentication successful");
+//
+//                        // Update email in Firebase Authentication
+//                        user.updateEmail(newEmail)
+//                                .addOnCompleteListener(updateTask -> {
+//                                    if (updateTask.isSuccessful()) {
+//                                        Log.d("Auth", "Email updated successfully in Authentication");
+//                                        Toast.makeText(getApplicationContext(), "Email updated successfully!", Toast.LENGTH_SHORT).show();
+//
+//                                        // Now update Firestore
+//                                        DocumentReference userRef = db.collection("users").document(userId);
+//                                        userRef.update("Email Address", newEmail)
+//                                                .addOnSuccessListener(aVoid -> {
+//                                                    Log.d("Firestore", "Email Address updated successfully in Firestore");
+//                                                    Toast.makeText(getApplicationContext(), "Email Address updated in Firestore!", Toast.LENGTH_SHORT).show();
+//                                                })
+//                                                .addOnFailureListener(e -> {
+//                                                    Log.e("Firestore", "Error updating email in Firestore", e);
+//                                                    Toast.makeText(getApplicationContext(), "Error updating email in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                                                });
+//                                    } else {
+//                                        Log.e("Auth", "Error updating email in Authentication", updateTask.getException());
+//                                        Toast.makeText(getApplicationContext(), "Error updating email: " + updateTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                                    }
+//                                });
+//                    } else {
+//                        Log.e("Auth", "Reauthentication failed.", reauthTask.getException());
+//                        Toast.makeText(getApplicationContext(), "Reauthentication failed: " + reauthTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                });
     }
+
+//    // Edit email
+//    private void changeEmailAddress(String newEmail) {
+//        FirebaseAuth auth = FirebaseAuth.getInstance();
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        String userId = auth.getCurrentUser().getUid();
+//
+//        // Update email in Firebase Authentication
+//        auth.getCurrentUser().updateEmail(newEmail)
+//                .addOnCompleteListener(task -> {
+//                    if (task.isComplete()) {
+//                        // Email updated successfully in Authentication
+//                        Log.d("Auth", "Email updated successfully in Authentication");
+//
+//                        // Now update Firestore
+//                        DocumentReference userRef = db.collection("users").document(userId);
+//                        userRef.update("Email Address", newEmail)
+//                                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Email Address updated successfully"))
+//                                .addOnFailureListener(e -> Log.e("Firestore", "Error updating email in Firestore", e));
+//                    } else {
+//                        Log.e("Auth", "Error updating email in Authentication", task.getException());
+//                    }
+//                });
+//
+//        // Optionally finish the activity here if you want to close it immediately
+//        // finish();
+//    }
 
     private void showChangePasswordDialog() {
         // Create an AlertDialog Builder
@@ -222,36 +288,43 @@ public class b_main_0_menu_profile extends AppCompatActivity {
 
     // change password
     private void changePassword(String currentPassword, String newPassword) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user != null) {
-            // Re-authenticate the user
-            AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPassword);
+        Toast.makeText(getApplicationContext(), "We're still working on this feature.", Toast.LENGTH_SHORT).show();
 
-            user.reauthenticate(credential).addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    // Now update the user's password
-                    user.updatePassword(newPassword).addOnCompleteListener(updateTask -> {
-                        if (updateTask.isSuccessful()) {
-                            // Password updated successfully
-                            String hashedNewPassword = a_user_3_password_encryption.hashPassword(newPassword);
-                            updateHashedPasswordInDatabase(user.getUid(), hashedNewPassword);
-                            Toast.makeText(getApplicationContext(), "Password updated successfully", Toast.LENGTH_SHORT).show();
-                        } else {
-                            // Handle failure
-                            Toast.makeText(getApplicationContext(), "Error updating password: " + updateTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    // Handle re-authentication failure
-                    Toast.makeText(getApplicationContext(), "Re-authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-        } else {
-            // User is not logged in
-            Toast.makeText(getApplicationContext(), "No user is logged in", Toast.LENGTH_SHORT).show();
-        }
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//
+//        if (user != null) {
+//            AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPassword);
+//
+//            // Re-authenticate the user
+//            user.reauthenticate(credential).addOnCompleteListener(task -> {
+//                if (task.isSuccessful()) {
+//                    // Update the password in Firebase Authentication
+//                    user.updatePassword(newPassword).addOnCompleteListener(updateTask -> {
+//                        if (updateTask.isSuccessful()) {
+//                            // Password updated successfully in Firebase Authentication
+//                            String hashedNewPassword = a_user_3_password_encryption.hashPassword(newPassword);
+//
+//                            // Store the hashed password in the database for reference
+//                            updateHashedPasswordInDatabase(user.getUid(), hashedNewPassword);
+//
+//                            Toast.makeText(getApplicationContext(), "Password updated successfully", Toast.LENGTH_SHORT).show();
+//                        } else {
+//                            // Handle failure in updating password
+//                            Toast.makeText(getApplicationContext(), "Error updating password: " + updateTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "Re-authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//        } else {
+//            Toast.makeText(getApplicationContext(), "No user is logged in", Toast.LENGTH_SHORT).show();
+//        }
     }
+
+
 
     // Helper method to update hashed password in Firebase Realtime Database
     private void updateHashedPasswordInDatabase(String uid, String hashedPassword) {
