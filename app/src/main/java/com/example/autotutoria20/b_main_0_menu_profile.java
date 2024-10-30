@@ -98,6 +98,7 @@ public class b_main_0_menu_profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // open change password dialog
+                showChangePasswordDialog();
 //                changePassword(currentPassword, newPassword);
             }
         });
@@ -116,9 +117,9 @@ public class b_main_0_menu_profile extends AppCompatActivity {
         builder.setView(dialogView);
 
         // Find views in the dialog layout
-        EditText newEmailAddress = dialogView.findViewById(R.id.newEmailAddress);
-        Button exitButton = dialogView.findViewById(R.id.exitButton);
-        Button submitButton = dialogView.findViewById(R.id.submitButton);
+        EditText newEmailAddress = dialogView.findViewById(R.id.new_email);
+        Button exitButton = dialogView.findViewById(R.id.close_button);
+        Button submitButton = dialogView.findViewById(R.id.change_email_button);
 
         // Create the dialog
         AlertDialog dialog = builder.create();
@@ -159,6 +160,64 @@ public class b_main_0_menu_profile extends AppCompatActivity {
                 .addOnSuccessListener(aVoid -> Log.d("Firestore", "Email Address updated successfully"))
                 .addOnFailureListener(e -> Log.e("Firestore", "Error updating email", e));
 
+        finish();
+
+    }
+
+    private void showChangePasswordDialog() {
+        // Create an AlertDialog Builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(b_main_0_menu_profile.this);
+
+        // Inflate the custom layout
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.b_main_0_menu_profile_password, null);
+        builder.setView(dialogView);
+
+        // Initialize input fields
+        EditText currentPasswordInput = dialogView.findViewById(R.id.current_password);
+        EditText newPasswordInput = dialogView.findViewById(R.id.new_password);
+        EditText repeatNewPasswordInput = dialogView.findViewById(R.id.repeat_new_password);
+
+        // Set up the buttons
+        Button cancelButton = dialogView.findViewById(R.id.cancel_button);
+        Button changePasswordButton = dialogView.findViewById(R.id.change_password_button);
+
+        // Show the dialog
+        AlertDialog dialog = builder.create();
+
+        // Handle the Cancel button click
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Dismiss the dialog
+                dialog.dismiss();
+            }
+        });
+
+        // Handle the Change Password button click
+        changePasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String currentPassword = currentPasswordInput.getText().toString();
+                String newPassword = newPasswordInput.getText().toString();
+                String repeatNewPassword = repeatNewPasswordInput.getText().toString();
+
+                // Validate input and process password change
+                if (validatePasswords(currentPassword, newPassword, repeatNewPassword)) {
+                    changePassword(currentPassword, newPassword);
+                    dialog.dismiss();  // Close the dialog after processing
+                } else {
+                    Toast.makeText(b_main_0_menu_profile.this, "Passwords do not match or are invalid.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        dialog.show();
+    }
+
+    // Method to validate passwords
+    private boolean validatePasswords(String current, String newPass, String repeat) {
+        return !current.isEmpty() && !newPass.isEmpty() && newPass.equals(repeat);
     }
 
     // change password
@@ -197,7 +256,7 @@ public class b_main_0_menu_profile extends AppCompatActivity {
     // Helper method to update hashed password in Firebase Realtime Database
     private void updateHashedPasswordInDatabase(String uid, String hashedPassword) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(uid);
-        databaseReference.child("hashed_password").setValue(hashedPassword)
+        databaseReference.child("Password").setValue(hashedPassword)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d("UpdateHashedPassword", "Hashed password updated successfully.");

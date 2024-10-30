@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -379,6 +380,8 @@ public class b_main_0_menu extends AppCompatActivity {
 //            loadingDialog.dismiss();
 //        }
 //    }
+
+
 
     private void showTutorial() {
         Log.d("b_main_0_menu", "Showing tutorial because loginAttempts is 0");

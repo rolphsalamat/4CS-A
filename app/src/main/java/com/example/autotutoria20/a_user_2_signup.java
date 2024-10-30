@@ -477,7 +477,7 @@ public class a_user_2_signup extends AppCompatActivity {
     }
 
     // Modified code base sa new structure..
-    private Map<String, Object> createModuleProgress(int moduleCount) {
+    public static Map<String, Object> createModuleProgress(int moduleCount) {
         Map<String, Object> moduleProgress = new HashMap<>();
 
         for (int i = 1; i <= moduleCount; i++) {
@@ -574,7 +574,7 @@ public class a_user_2_signup extends AppCompatActivity {
         genderRadioGroup.clearCheck();
     }
 
-    private int getLessonStepsLength(int lessonNumber) {
+    public static int getLessonStepsLength(int lessonNumber) {
         switch (lessonNumber) {
             case 1:
                 return z_Lesson_steps.lesson_1_steps.length;
