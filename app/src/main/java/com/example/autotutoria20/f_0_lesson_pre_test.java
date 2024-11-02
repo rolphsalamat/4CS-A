@@ -2,6 +2,7 @@ package com.example.autotutoria20;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,7 @@ public class f_0_lesson_pre_test extends Fragment {
     private int answerAttempt = 0;
     private int attemptChances = 2;
     private int questionsAnswered = 1;
-    private int preTestQuestions = 5;
+    static int preTestQuestions = 5;
     private Button submitButton;
     private TextView correct, mistake;
     private TextView total;
@@ -369,9 +370,10 @@ public class f_0_lesson_pre_test extends Fragment {
                 choicesGroup.clearCheck(); // Clear selected choices at the end of processing.
             }
 
-            total.setText("Item: " + c_Lesson_feedback.preTestAttemptAnswers
-                    + "/"
-                    +  preTestQuestions);
+            if (c_Lesson_feedback.preTestAttemptAnswers <= preTestQuestions)
+                total.setText("Item: " + c_Lesson_feedback.preTestAttemptAnswers
+                        + "/"
+                        +  preTestQuestions);
 
         });
     }
@@ -442,9 +444,13 @@ public class f_0_lesson_pre_test extends Fragment {
         }
     }
 
+
+
     private void loadQuestion() {
 
         //Log.e("loadQuestion", "loadQuestion();");
+
+        d_Lesson_container.startCountdown(requireContext());
 
         isCorrect = false;
 

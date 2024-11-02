@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#202f5a"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <!-- NestedScrollView for Terms and Conditions Text -->
+
+    <!-- Agree Button at the Bottom -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/terms_conditions_title"
+        android:textColor="#E4E2E2"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="9dp"
+        android:padding="16dp">
+
+        <!-- Container for Terms and Conditions content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- Title for Terms and Conditions -->
+
+            <!-- Terms and Conditions Content -->
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:justificationMode="inter_word"
+                android:text="@string/terms_conditions_content"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/agree_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#1e81ce"
+                android:text="AGREE" />
+
+            <!--            <Button-->
+            <!--                android:id="@+id/cancel_button"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:backgroundTint="#1e81ce"-->
+            <!--                android:text="CANCEL" />-->
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

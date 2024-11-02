@@ -23,9 +23,11 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -38,6 +40,7 @@ public class a_user_2_signup extends AppCompatActivity {
     private boolean isRetypePasswordVisibile = false;
     private Map<String, Object> userData;
     static CheckBox termsAndConditions;
+    static CheckBox privacyPolicy;
     TextView firstNameEditText;
     TextView lastNameEditText;
     TextView emailEditText;
@@ -82,7 +85,6 @@ public class a_user_2_signup extends AppCompatActivity {
         // Find the Button view
         Button signupButton = findViewById(R.id.btnSignup);
 
-        ;
         EditText passwordText = findViewById(R.id.txtPassword);
 
         Button exitSignup = findViewById(R.id.exit_signup);
@@ -167,6 +169,9 @@ public class a_user_2_signup extends AppCompatActivity {
             int age = calculateAge(datePicker);
             Log.d(TAG, "Calculated age: " + age);
 
+            String birthday = formatBirthday(datePicker);
+            Log.d(TAG, "Birthday: " + birthday);
+
             // PROGRESSIVE MODE and FREE USE MODE module progress data
             Map<String, Map<String, Object>> moduleProgressData = new HashMap<>();
 
@@ -208,6 +213,7 @@ public class a_user_2_signup extends AppCompatActivity {
             userData.put("Gender", gender);
             userData.put("Profile Picture", defaultProfilePicture);
             userData.put("Age", age);
+            userData.put("Birthday", birthday);
             userData.put("App Update Notification", true);
             userData.put("New Course Available Notification", true);
             userData.put("Reminder Notification", true);
@@ -231,6 +237,13 @@ public class a_user_2_signup extends AppCompatActivity {
                 Toast.makeText(a_user_2_signup.this,
                 "Please Agree to Terms and Conditions",
                 Toast.LENGTH_SHORT).show();
+
+//            if (privacyPolicy.isChecked())
+//                validCounter++;
+//            else
+//                Toast.makeText(a_user_2_signup.this,
+//                        "Please Agree to Privacy Policy",
+//                        Toast.LENGTH_SHORT).show();
 
             // Now handle asynchronous validations for email and username
             validateEmail(email, () -> {
@@ -331,6 +344,14 @@ public class a_user_2_signup extends AppCompatActivity {
                     a_user_2_signup.this,
                     a_user_5_terms_and_conditions.class));
         });
+
+//        privacyPolicy = findViewById(R.id.privacy_and_policy);
+//        privacyPolicy.setOnClickListener(v -> {
+//            privacyPolicy.setChecked(false);
+//            startActivity(new Intent(
+//                    a_user_2_signup.this,
+//                    a_user_6_privacy_and_policy.class));
+//        });
 
 
     }
@@ -460,6 +481,7 @@ public class a_user_2_signup extends AppCompatActivity {
     }
 
     private int calculateAge(DatePicker datePicker) {
+
         Calendar currentDate = Calendar.getInstance();
         int currentYear = currentDate.get(Calendar.YEAR);
         int currentMonth = currentDate.get(Calendar.MONTH) + 1;
@@ -474,6 +496,23 @@ public class a_user_2_signup extends AppCompatActivity {
             age = currentYear - year - 1;
         }
         return age;
+    }
+
+    private String formatBirthday(DatePicker datePicker) {
+        // Get the selected date from the DatePicker
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth(); // Note: January is 0
+        int year = datePicker.getYear();
+
+        // Create a Calendar instance and set the selected date
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+
+        // Create a SimpleDateFormat instance for formatting
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault());
+
+        // Format the date and return it as a string
+        return sdf.format(calendar.getTime());
     }
 
     // Modified code base sa new structure..

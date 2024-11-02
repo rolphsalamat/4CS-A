@@ -20,6 +20,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,7 +46,7 @@ public class f_3_lesson_post_test extends Fragment {
     private int answerAttempt = 0;
     private int attemptChances = 0;
     private int questionsAnswered = 1;
-    private int postTestQuestions = 10;
+    static int postTestQuestions = 10;
     private boolean isCorrect = false;
     private boolean isProgressiveMode = true; // Default to Progressive Mode
 
@@ -55,7 +57,7 @@ public class f_3_lesson_post_test extends Fragment {
 
     // Interface to notify the container activity when post-test is complete
     public interface PostTestCompleteListener {
-        void onPostTestComplete(boolean isCorrect, double knowledgeProb, boolean isPassed);
+        void onPostTestComplete(boolean isCorrect, int score, boolean isPassed);
     }
 
     public static f_3_lesson_post_test newInstance(String module, String lesson, String mode) {
@@ -103,6 +105,9 @@ public class f_3_lesson_post_test extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+//        TextView items = view.findViewById(R.id.answers_total);
+//
+//        items.setText();
         questionText = view.findViewById(R.id.post_test_question);
         choicesGroup = view.findViewById(R.id.choices_group);
         submitButton = view.findViewById(R.id.submit_post_test);
@@ -208,6 +213,10 @@ public class f_3_lesson_post_test extends Fragment {
                     attemptChances = 3;
                     postTestQuestions = 3;
                 }
+
+                TextView items = view.findViewById(R.id.answers_total);
+
+                items.setText("0/"+postTestQuestions);
 
                 // ang inaalam mo ngayon, kung ilang questions itatanong base on difficulty??
 
@@ -347,9 +356,10 @@ public class f_3_lesson_post_test extends Fragment {
                 choicesGroup.clearCheck(); // Clear selected choices at the end of processing.
             }
 
-            total.setText("Item: " + c_Lesson_feedback.postTestAttemptAnswers
-                    + "/"
-                    + postTestQuestions);
+            if (c_Lesson_feedback.postTestAttemptAnswers <= postTestQuestions)
+                total.setText("Item: " + c_Lesson_feedback.postTestAttemptAnswers
+                        + "/"
+                        + postTestQuestions);
 
         });
 
@@ -652,6 +662,8 @@ public class f_3_lesson_post_test extends Fragment {
 
     private void loadQuestion() {
         String TAG = "loadQuestion";
+
+        d_Lesson_container.startCountdown(requireContext());
 
         hint = ""; // reset hint
 

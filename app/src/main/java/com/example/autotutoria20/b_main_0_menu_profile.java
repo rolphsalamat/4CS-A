@@ -28,6 +28,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 
 public class b_main_0_menu_profile extends AppCompatActivity {
@@ -41,6 +44,7 @@ public class b_main_0_menu_profile extends AppCompatActivity {
     private Button buttonExitProfile;
     private Button buttonChangeEmail;
     private Button buttonChangePassword;
+    private Button buttonChangeUsername;
 
 
     private FirebaseAuth mAuth;
@@ -70,6 +74,7 @@ public class b_main_0_menu_profile extends AppCompatActivity {
         // Button
         buttonExitProfile = findViewById(R.id.exit_profile);
         buttonChangeEmail = findViewById(R.id.button_change_email);
+        buttonChangeUsername = findViewById(R.id.button_change_username);
         buttonChangePassword = findViewById(R.id.button_change_password);
 
         // ShapableImageView
@@ -90,6 +95,14 @@ public class b_main_0_menu_profile extends AppCompatActivity {
             }
         });
 
+        buttonChangeUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Open change email dialog
+                showChangeUsername();
+            }
+        });
+
         buttonChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,11 +114,76 @@ public class b_main_0_menu_profile extends AppCompatActivity {
 
     }
 
+    private void showChangeUsername() {
+        // Create an AlertDialog Builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.b_main_0_menu_profile_username, null);
+        builder.setView(dialogView);
+
+        // Find views in the dialog layout
+        EditText newUsername = dialogView.findViewById(R.id.new_username);
+
+        ImageView exitButton = dialogView.findViewById(R.id.close_button);
+        Button cancelButton = dialogView.findViewById(R.id.cancel_button);
+        Button submitButton = dialogView.findViewById(R.id.change_username_button);
+
+        // Create the dialog
+        AlertDialog dialog = builder.create();
+
+        // Set up cancel button
+        cancelButton.setOnClickListener(v -> {
+            // Dismiss the dialog
+            dialog.dismiss();
+        });
+
+        // Set up exit button
+        exitButton.setOnClickListener(v -> {
+            // Dismiss the dialog
+            dialog.dismiss();
+        });
+
+        // Set up submit button
+        submitButton.setOnClickListener(v -> {
+            String username = newUsername.getText().toString();
+
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+            // Construct the field path using dot notation
+            String usernamePath = "Username";
+
+            String TAG = "newUsername()";
+
+            Log.e(TAG, "Field path for update: " + usernamePath + " | New Username: " + username);
+
+            Map<String, Object> updates = new HashMap<>();
+            updates.put(usernamePath, username); // Update only the specific field
+
+            db.collection("users")
+                    .document(userId)
+                    .update(updates)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "Username successfully updated");
+                        finish(); // Finish the activity after successful update
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Error updating Username", e);
+                        Toast.makeText(b_main_0_menu_profile.this, "Error Updating Username", Toast.LENGTH_SHORT).show();
+                        finish();
+                    });
+
+        });
+
+        dialog.show(); // Show the dialog
+    }
+
     public interface EmailChangeListener {
         void onEmailChanged(String newEmail);
     }
 
     private void showChangeEmail() {
+
         // Create an AlertDialog Builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -268,22 +346,88 @@ public class b_main_0_menu_profile extends AppCompatActivity {
                 String newPassword = newPasswordInput.getText().toString();
                 String repeatNewPassword = repeatNewPasswordInput.getText().toString();
 
-                // Validate input and process password change
-                if (validatePasswords(currentPassword, newPassword, repeatNewPassword)) {
-                    changePassword(currentPassword, newPassword);
-                    dialog.dismiss();  // Close the dialog after processing
-                } else {
-                    Toast.makeText(b_main_0_menu_profile.this, "Passwords do not match or are invalid.", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(b_main_0_menu_profile.this, "We're still working on this feature.", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+
+//                validatePasswords(currentPassword, newPassword, repeatNewPassword, new PasswordValidationCallback() {
+//                    @Override
+//                    public void onValidationResult(boolean isValid) {
+//                        if (isValid) {
+//
+//                            Toast.makeText(b_main_0_menu_profile.this, "Passwords match! let's change it!", Toast.LENGTH_SHORT).show();
+//
+//                            changePassword(currentPassword, newPassword);
+//                            dialog.dismiss();  // Close the dialog after processing
+////
+//                        } else {
+//                            Toast.makeText(b_main_0_menu_profile.this, "Passwords do not match or are invalid.", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+
+//                boolean isValid = validatePasswords(currentPassword, newPassword, repeatNewPassword);
+//
+//                // Validate input and process password change
+//                if (isValid) {
+//
+//                    Toast.makeText(b_main_0_menu_profile.this, "Passwords match! let's change it!", Toast.LENGTH_SHORT).show();
+//
+//                    changePassword(currentPassword, newPassword);
+//                    dialog.dismiss();  // Close the dialog after processing
+//
+//                } else {
+//                    Toast.makeText(b_main_0_menu_profile.this, "Passwords do not match or are invalid.", Toast.LENGTH_SHORT).show();
+//                }
             }
         });
 
         dialog.show();
     }
 
-    // Method to validate passwords
-    private boolean validatePasswords(String current, String newPass, String repeat) {
-        return !current.isEmpty() && !newPass.isEmpty() && newPass.equals(repeat);
+    public interface PasswordValidationCallback {
+        void onValidationResult(boolean isValid);
+    }
+
+    private void validatePasswords(String current, String newPass, String repeat, PasswordValidationCallback callback) {
+
+        String TAG = "validatePasswords()";
+
+        Log.e(TAG, "ROP CHECK NATIN KUNG VALID HA");
+
+        // Check if any fields are empty or if new passwords do not match
+        if (current.isEmpty() || newPass.isEmpty() || !newPass.equals(repeat)) {
+            Log.e(TAG, "Validation failed: Empty fields or passwords do not match.");
+            callback.onValidationResult(false); // Notify failure via callback
+            return;
+        }
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // Retrieve the user's document from Firestore
+        db.collection("users")
+                .document(userId)
+                .get()
+                .addOnSuccessListener(document -> {
+                    // Check if the document exists
+                    if (document.exists()) {
+                        // Retrieve the stored hashed password
+                        String storedHashedPassword = document.getString("Password");
+
+                        // Verify the entered password against the stored hash
+                        boolean isMatch = a_user_3_password_encryption.checkPassword(current, storedHashedPassword);
+                        Log.d(TAG, "Password match status: " + isMatch);
+                        callback.onValidationResult(isMatch); // Notify result via callback
+                    } else {
+                        Log.e(TAG, "User document does not exist.");
+                        callback.onValidationResult(false); // Notify failure via callback
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error retrieving document", e);
+                    Toast.makeText(b_main_0_menu_profile.this, "Error retrieving user data", Toast.LENGTH_SHORT).show();
+                    callback.onValidationResult(false); // Notify failure via callback
+                });
     }
 
     // change password
@@ -292,51 +436,38 @@ public class b_main_0_menu_profile extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "We're still working on this feature.", Toast.LENGTH_SHORT).show();
 
 //        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        String userId = user.getUid();
 //
-//        if (user != null) {
-//            AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPassword);
+//        String TAG = "changePassword("+currentPassword+","+newPassword+");";
 //
-//            // Re-authenticate the user
-//            user.reauthenticate(credential).addOnCompleteListener(task -> {
-//                if (task.isSuccessful()) {
-//                    // Update the password in Firebase Authentication
-//                    user.updatePassword(newPassword).addOnCompleteListener(updateTask -> {
-//                        if (updateTask.isSuccessful()) {
-//                            // Password updated successfully in Firebase Authentication
-//                            String hashedNewPassword = a_user_3_password_encryption.hashPassword(newPassword);
+//        Log.e(TAG,"Original New Pasword: " + newPassword);
 //
-//                            // Store the hashed password in the database for reference
-//                            updateHashedPasswordInDatabase(user.getUid(), hashedNewPassword);
+//        String newHashedPassword = a_user_3_password_encryption.hashPassword(newPassword);
 //
-//                            Toast.makeText(getApplicationContext(), "Password updated successfully", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            // Handle failure in updating password
-//                            Toast.makeText(getApplicationContext(), "Error updating password: " + updateTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
+//        Log.e(TAG,"New Hashed Pasword: " + newHashedPassword);
 //
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "Re-authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//        } else {
-//            Toast.makeText(getApplicationContext(), "No user is logged in", Toast.LENGTH_SHORT).show();
-//        }
-    }
+//        // Construct the field path using dot notation
+//        String path = "Password";
+//
+//        Log.e(TAG, "Field path for update: " + path + " | New Password: " + newPassword);
+//
+//        Map<String, Object> updates = new HashMap<>();
+//        updates.put(path, newHashedPassword); // Update only the specific field
+//
+//        db.collection("users")
+//                .document(userId)
+//                .update(updates)
+//                .addOnSuccessListener(aVoid -> {
+//                    Log.d(TAG, "Password successfully updated");
+//                    finish(); // Finish the activity after successful update
+//                })
+//                .addOnFailureListener(e -> {
+//                    Log.e(TAG, "Error updating Username", e);
+//                    Toast.makeText(b_main_0_menu_profile.this, "Error Updating Username", Toast.LENGTH_SHORT).show();
+//                    finish();
+//                });
 
 
-
-    // Helper method to update hashed password in Firebase Realtime Database
-    private void updateHashedPasswordInDatabase(String uid, String hashedPassword) {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(uid);
-        databaseReference.child("Password").setValue(hashedPassword)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("UpdateHashedPassword", "Hashed password updated successfully.");
-                    } else {
-                        Log.e("UpdateHashedPassword", "Error updating hashed password: " + task.getException().getMessage());
-                    }
-                });
     }
 
     private void fetchUserData(String userId) {

@@ -37,6 +37,9 @@ android {
 
 dependencies {
 
+    // App Check
+    implementation ("com.google.firebase:firebase-appcheck:latest_version")
+
     // In-App Update
     implementation("com.google.android.play:app-update:2.1.0")
 

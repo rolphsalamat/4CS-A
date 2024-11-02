@@ -6,22 +6,24 @@
 
         Welcome to the FAQs section! Here, you’ll find quick answers to common questions about using our Intelligent Tutoring System (ITS) app designed for learning Automata Theory, especially the Context-Free Grammar (CFG) topic. We aim to make your learning journey smooth and enjoyable, so we\'ve compiled this guide to help with any initial questions you may have.\n\n
 
-        1. What is the Intelligent Tutoring System (ITS) for Automata?\n
-       \t\t * Our ITS is an advanced learning platform designed specifically to support Computer Science students in mastering challenging concepts in Automata Theory, particularly Context-Free Grammar. It personalizes your learning experience by providing adaptive content, real-time feedback, and engaging exercises tailored to your progress.\n\n
-        2. Who can use this app?\n
-        \t\t *This app is designed for Computer Science students, especially those enrolled in Automata Theory courses. However, anyone interested in deepening their understanding of Context-Free Grammar in automata is welcome to use it!\n\n
-        3. How does the adaptive learning feature work?\n
-        \t\t * The ITS uses the Bayesian Knowledge Tracing (BKT) algorithm to adjust the content based on your learning pace. As you complete lessons and quizzes, the system tracks your progress and provides feedback, customizing future content to your specific learning needs.\n\n
-        4. What are the main learning modes available?\n
-        \t\t * There are two modes: Progressive Mode, which guides you through modules sequentially, unlocking new topics as you progress, and Free Use Mode, allowing you to explore all modules in any order you prefer.\n\n
-        5. What can I expect in each module?\n
-        \t\t * Each module offers video tutorials, quizzes, and interactive exercises designed to simplify complex topics in CFG. Modules adapt as you go, providing more challenging content as you demonstrate understanding.\n\n
-        6. Can I track my learning progress?\n
-        \t\t * Yes! The app includes a dashboard where you can monitor your progress in real time, helping you see areas of strength and topics that might need more review.\n\n
-        7. What if I encounter technical issues?\n
-        \t\t * If you experience any issues, you may contact our research team CSA14. We’re here to assist you!\n\n
-        8. Is my data safe?\n
-        \t\t * Your privacy is our priority. All of your scores will be kept hidden in order for the data of our users will remain confidential.\n\n
+        1. WHAT IS INTELLIGENT TUTORING SYSTEM (ITS) FOR AUTOMATA?\n
+       \t\t • Our Intelligent Tutoring System (ITS) is an advanced learning platform tailored to support Computer Science students in mastering complex concepts in Automata Theory, with a particular focus on Context-Free Grammar. It personalizes the learning experience through adaptive content, real-time feedback, and interactive exercises that evolve with the learner’s progress. The platform guides students across five proficiency levels—Novice, Beginner, Intermediate, Advanced, and Expert—ensuring that each student receives targeted instruction appropriate to their current understanding and skill level.\n\n
+        2. WHO CAN USE THIS APP?\n
+        \t • This app is designed for Computer Science students, especially those enrolled in Automata Theory courses. However, anyone interested in deepening their understanding of Context-Free Grammar in automata is welcome to use it!\n\n
+        3. HOW DOES THE ADAPTIVE LEARNING FEATURE WORK?\n
+        \t\t • The ITS uses the Bayesian Knowledge Tracing (BKT) algorithm to adjust the content based on your learning pace. As you complete lessons and quizzes, the system tracks your progress and provides feedback, customizing future content to your specific learning needs.\n\n
+        4. WHAT ARE THE LEARNING MODES AVAILABLE?\n
+        \t\t There two modes available: Progressive Mode and Free Use Mode.\n\n
+        \t\t •Progressive Mode – guides users through modules sequentially, unlocking new topics as they advance, providing a structured learning path.\n\n
+        \t\t •Free Use Mode – allows users to explore all modules in any order they prefer, giving them the freedom to focus on topics of their choice.\n\n
+        5. WHAT CAN I EXPECT IN EACH MODULE?\n
+        \t\t • Each module offers video tutorials, quizzes, and interactive exercises designed to simplify complex topics in CFG. Modules adapt as you go, providing more challenging content as you demonstrate understanding.\n\n
+        6. CAN I TRACK MY LEARNING PROGRESS?\n
+        \t\t • Yes! The app includes a dashboard where you can monitor your progress in real time, helping you see areas of strength and topics that might need more review.\n\n
+        7. WHAT IF I ENCOUNTER TECHNICAL ISSUES?\n
+        \t\t • If you experience any issues, you may email our research team groupfourteenthesis@gmail.com or contact us at 09451437811. We’re here to assist you!\n\n
+        8. IS MY DATA SAFE?\n
+        \t\t • Yes! Based on Privacy Policy on AutoTutoria application, all data collected from user/s will be kept hidden and will remain confdential. \'Your privacy is our priority\'.\n\n
 
 
     </string>

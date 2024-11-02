@@ -253,12 +253,23 @@
         >
 
         <Button
+            android:id="@+id/button_change_username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="5dp"
+            android:text="Change \nUsername"
+            android:textColor="@color/navy_blue"
+            android:background="@drawable/rounded_corners"
+            />
+
+        <Button
             android:id="@+id/button_change_email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginHorizontal="5dp"
-            android:text="Change Email"
+            android:text="Change \nEmail"
             android:textColor="@color/navy_blue"
             android:background="@drawable/rounded_corners"
             />
@@ -269,7 +280,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginHorizontal="5dp"
-            android:text="Change Password"
+            android:text="Change \nPassword"
             android:textColor="@color/navy_blue"
             android:background="@drawable/rounded_corners"
             />

@@ -193,12 +193,14 @@ public class c_Lesson_progressive_8 extends AppCompatActivity {
 
         String TAG = "BKT Score";
 
+        double M1_Score = c_Lesson_a_retrieveScore.bktScores.get(0); // Accessing first module's score
+        double M2_Score = c_Lesson_a_retrieveScore.bktScores.get(1); // Accessing first module's score
+        double M3_Score = c_Lesson_a_retrieveScore.bktScores.get(2); // Accessing first module's score
+
         switch (key) {
             case 1:
                 newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M1_Lesson 8");
                 module1ProgressText.setText(newText);
-
-                double M1_Score = c_Lesson_a_retrieveScore.bktScores.get(0); // Accessing first module's score
 
                 // Check if the lesson is finished
                 if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 8")) {
@@ -225,11 +227,11 @@ public class c_Lesson_progressive_8 extends AppCompatActivity {
                 newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M2_Lesson 8");
                 module2ProgressText.setText(newText);
 
-                double M2_Score = c_Lesson_a_retrieveScore.bktScores.get(1); // Accessing first module's score
-
                 // Check if the lesson is finished
                 if (progress >= L_lesson_sequence.getNumberOfSteps("M2_Lesson 8")) {
-                    if (M2_Score < passingGrade) {
+                    if (M1_Score < passingGrade
+                        ||
+                        M2_Score < passingGrade) {
                         showToast("BKT Score did not pass the passing grade:" +
                                 "\nBKT Score: " + M2_Score +
                                 "\nPassing Grade: " + passingGrade);
@@ -252,11 +254,13 @@ public class c_Lesson_progressive_8 extends AppCompatActivity {
                 newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M3_Lesson 8");
                 module3ProgressText.setText(newText);
 
-                double M3_Score = c_Lesson_a_retrieveScore.bktScores.get(2); // Accessing first module's score
-
                 // Check if the lesson is finished
                 if (progress >= L_lesson_sequence.getNumberOfSteps("M3_Lesson 8")) {
-                    if (M3_Score < passingGrade) {
+                    if (M1_Score < passingGrade
+                        ||
+                        M2_Score < passingGrade
+                        ||
+                        M3_Score < passingGrade) {
                         showToast("BKT Score did not pass the passing grade:" +
                                 "\nBKT Score: " + M3_Score +
                                 "\nPassing Grade: " + passingGrade);

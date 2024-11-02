@@ -1,8 +1,10 @@
 package com.example.autotutoria20;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -12,7 +14,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -763,6 +767,17 @@ public class d_Lesson_container extends AppCompatActivity implements
         }
     }
 
+    public static void startCountdown(final Context context) {
+        new CountDownTimer(10000, 1000) { // 10 seconds countdown with 1-second interval
+            public void onTick(long millisUntilFinished) {
+                // You can update UI here if needed during the countdown
+            }
+
+            public void onFinish() {
+                Toast.makeText(context, "You haven't selected an answer yet", Toast.LENGTH_SHORT).show();
+            }
+        }.start();
+    }
 
 //    private void updateProgressAndMoveToNextStep() {
 //        String TAG = "OKAY NEXT NA";
@@ -895,7 +910,36 @@ public class d_Lesson_container extends AppCompatActivity implements
 
     }
 
+    public void showScoreDialog(String testMode, int score, int questionCount) {
+        // Create an AlertDialog Builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.c_lesson_feedback_score, null);
+        builder.setView(dialogView);
 
+        // Find views in the dialog layout
+        TextView titleText = dialogView.findViewById(R.id.title);
+        TextView messageText = dialogView.findViewById(R.id.message);
+        Button okayButton = dialogView.findViewById(R.id.okay);
+
+        // Create the dialog
+        AlertDialog dialog = builder.create();
+
+        titleText.setText(testMode + " Result");
+        messageText.setText("Your score for " + testMode + " is: " +
+                // Pre-Test = (score-1);
+                // Post-Test =
+                (score-1) + "/" + questionCount);
+
+        okayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show(); // Show the dialog
+    }
 
     private Fragment getCurrentFragment() {
         int position = viewPager.getCurrentItem();
@@ -910,42 +954,7 @@ public class d_Lesson_container extends AppCompatActivity implements
 //            double preTestScores,
             int score) {
 
-        // Log the result
-//        Log.d("onPreTestComplete", "isCorrect: " + isCorrect);
-
-        // Create a dialog to show the user's score
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Test Result");
-
-        String message;
-
-
-//        if (score >= c_Lesson_feedback.preTestAttemptAnswers)
-//            message = "Congratulations! You passed the pre-test.";
-//        else
-//            message = "Unfortunately, you did not pass the pre-test."; // Incorrect
-
-        String scoreMessage = "\nYour score for Pre-Test is: " + (score-1);
-
-        builder.setMessage(
-//                message +
-                scoreMessage);
-
-        builder.setCancelable(false);
-
-        // Add a button to dismiss the dialog
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss(); // Close the dialog
-//                onNextButtonClicked(); // Proceed to the next step if the test is passed
-            }
-        });
-
-
-        // Create and show the dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        showScoreDialog("Pre-Test", score, f_0_lesson_pre_test.preTestQuestions);
 
         // Call feedback for pre-test
         c_Lesson_feedback.printResult("Pre-Test");
@@ -999,10 +1008,12 @@ public class d_Lesson_container extends AppCompatActivity implements
     }
 
     @Override
-    public void onPostTestComplete(boolean isCorrect, double score, boolean isPassed) {
+    public void onPostTestComplete(boolean isCorrect, int score, boolean isPassed) {
         Log.d("onPostTestComplete", "isCorrect: " + isCorrect);
 
 //        Double new_pKnow = x_bkt_algorithm.getKnowledge();
+
+        showScoreDialog("Pre-Test", score, f_3_lesson_post_test.postTestQuestions);
 
         lessonPassed = isPassed;
 
@@ -1043,16 +1054,16 @@ public class d_Lesson_container extends AppCompatActivity implements
         TextView preTestMessage = customDialogView.findViewById(R.id.pre_test_score);
         preTestMessage.setText(
                 "Pre-Test Score: "
-                + c_Lesson_feedback.preTestCorrectAnswers
-                + "/"
-                + c_Lesson_feedback.preTestAttemptAnswers);
+                    + (c_Lesson_feedback.preTestCorrectAnswers-1)
+                    + "/"
+                    + (c_Lesson_feedback.preTestAttemptAnswers-1));
 
         TextView postTestMessage = customDialogView.findViewById(R.id.post_test_score);
         postTestMessage.setText(
                 "Post-Test Score: "
-                        + c_Lesson_feedback.postTestCorrectAnswers
-                        + "/"
-                        + c_Lesson_feedback.postTestAttemptAnswers);
+                    + (c_Lesson_feedback.postTestCorrectAnswers-1)
+                    + "/"
+                    + (c_Lesson_feedback.postTestAttemptAnswers-1));
 
         // Show the dialog when OK button is clicked
         okButton.setOnClickListener(new View.OnClickListener() {

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +28,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +40,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+// App Check
+import com.google.firebase.appcheck.FirebaseAppCheck;
+import com.google.firebase.appcheck.AppCheckProviderFactory;
+//import com.google.firebase.appcheck.PlayIntegrityAppCheckProviderFactory;
 
 import java.util.Map;
 import java.util.Objects;
@@ -61,6 +69,11 @@ public class a_user_1_login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a_user_1_login);
+
+        FirebaseApp.initializeApp(this);
+        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+        firebaseAppCheck.installAppCheckProviderFactory(
+                PlayIntegrityAppCheckProviderFactory.getInstance());
 
         // Initialize Firebase Auth and Firestore
         mAuth = FirebaseAuth.getInstance();
@@ -112,6 +125,7 @@ public class a_user_1_login extends AppCompatActivity {
                 if (!(n_Network.isNetworkAvailable(a_user_1_login.this))) {
                     Toast.makeText(a_user_1_login.this, "Please connect to a network.", Toast.LENGTH_SHORT).show();
                 } else {
+
 //                    Toast.makeText(a_user_1_login.this, "May INTERNET KA!", Toast.LENGTH_SHORT).show();
                     loginUser(email, password); // original code
                 }
@@ -190,6 +204,7 @@ public class a_user_1_login extends AppCompatActivity {
         } catch (ApiException e) {
             // Handle sign-in failure
         }
+
     }
 
     private void showPassword() {
@@ -387,8 +402,8 @@ public class a_user_1_login extends AppCompatActivity {
                     Log.d(TAG, "Retrieved hashed password: " + storedHashedPassword);
 
                     // Validate retrieved email and password
-                    if (email == null || email.isEmpty()) {
-                        Log.e(TAG, "Email is missing for username: " + username);
+                    if (email == null || email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                        Log.e(TAG, "Email is missing for username: " + username + " | or Email is invalid format");
                         Toast.makeText(a_user_1_login.this, "Email is missing for this username", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -414,12 +429,23 @@ public class a_user_1_login extends AppCompatActivity {
                     // Proceed with Firebase authentication using the retrieved email
                     mAuth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener(task -> {
+
+                                Log.e(TAG, "OnComplete!");
+
                                 if (task.isSuccessful()) {
+
+                                    Log.e(TAG, "isSuccessful!");
+
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     if (user != null) {
+
+                                        Log.e(TAG,"User is NOT NULL!");
+
                                         if (user.isEmailVerified()) {  // Check if the email is verified
                                             String userId = user.getUid();
                                             Log.d(TAG, "Login successful. User ID: " + userId);
+
+
                                             fetchUserInfo(userId); // Fetch additional user info
                                         } else {
                                             Log.d(TAG, "Email not verified");
@@ -435,9 +461,12 @@ public class a_user_1_login extends AppCompatActivity {
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 } else {
+
+                                    Log.e(TAG, "NOT isSuccessful");
+
                                     Log.e(TAG, "HEY | Authentication failed: " + task.getException().getMessage());
                                     Toast.makeText(a_user_1_login.this,
-                                            "HEY | Authentication failed: " + task.getException().getMessage(),
+                                            "Too many login attempts, try logging in later.",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             });
@@ -639,17 +668,20 @@ public class a_user_1_login extends AppCompatActivity {
 
     // Method to reset password
     private void resetPassword(String email) {
-        mAuth.sendPasswordResetEmail(email)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(a_user_1_login.this, "Password reset email sent", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(a_user_1_login.this, "Failed to send reset email", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+
+        Toast.makeText(a_user_1_login.this, "We're still working on this feature.", Toast.LENGTH_SHORT).show();
+
+//        mAuth.sendPasswordResetEmail(email)
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if (task.isSuccessful()) {
+//                            Toast.makeText(a_user_1_login.this, "Password reset email sent", Toast.LENGTH_SHORT).show();
+//                        } else {
+//                            Toast.makeText(a_user_1_login.this, "Failed to send reset email", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
     }
 
     // Callback interface for fetching data
