@@ -73,9 +73,9 @@ public class b_main_0_menu_profile extends AppCompatActivity {
 
         // Button
         buttonExitProfile = findViewById(R.id.exit_profile);
-        buttonChangeEmail = findViewById(R.id.button_change_email);
-        buttonChangeUsername = findViewById(R.id.button_change_username);
-        buttonChangePassword = findViewById(R.id.button_change_password);
+//        buttonChangeEmail = findViewById(R.id.button_change_email);
+//        buttonChangeUsername = findViewById(R.id.button_change_username);
+//        buttonChangePassword = findViewById(R.id.button_change_password);
 
         // ShapableImageView
         profileImageView = findViewById(R.id.user_profile_picture);
@@ -87,30 +87,30 @@ public class b_main_0_menu_profile extends AppCompatActivity {
             }
         });
 
-        buttonChangeEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Open change email dialog
-                showChangeEmail();
-            }
-        });
-
-        buttonChangeUsername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Open change email dialog
-                showChangeUsername();
-            }
-        });
-
-        buttonChangePassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // open change password dialog
-                showChangePasswordDialog();
-//                changePassword(currentPassword, newPassword);
-            }
-        });
+//        buttonChangeEmail.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Open change email dialog
+//                showChangeEmail();
+//            }
+//        });
+//
+//        buttonChangeUsername.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Open change email dialog
+//                showChangeUsername();
+//            }
+//        });
+//
+//        buttonChangePassword.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // open change password dialog
+//                showChangePasswordDialog();
+////                changePassword(currentPassword, newPassword);
+//            }
+//        });
 
     }
 

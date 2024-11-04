@@ -1,5 +1,6 @@
 package com.example.autotutoria20;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.util.Log;
@@ -70,7 +71,7 @@ public class c_Lesson_feedback {
 
     }
 
-    public static void showDialog(Context context, double score, double passingGrade, String lesson) {
+    public static void showModuleFailed(Context context, String module) {
 
         // Create a new dialog
         Dialog dialog = new Dialog(context);
@@ -92,6 +93,38 @@ public class c_Lesson_feedback {
         TextView passingScore = view.findViewById(R.id.passing_grade);
         Button okayButton = view.findViewById(R.id.okay_button);
 
+        // Set text or any other properties for the views with 2 decimal places
+        message.setText("You did not pass " + module);
+        bktScore.setText("");
+        passingScore.setText("");
+
+        // Set up the 'Okay' button click listener
+        okayButton.setOnClickListener(v -> dialog.dismiss());
+
+        // Show the dialog
+        dialog.show();
+    }
+
+    public static void showDialog(Activity activity, double score, double passingGrade, String lesson) {
+        // Create a new dialog
+        Dialog dialog = new Dialog(activity);
+
+        // Inflate the custom layout
+        LayoutInflater inflater = LayoutInflater.from(activity);
+        View view = inflater.inflate(R.layout.c_lesson_failed_dialog, null);
+
+        // Set the dialog content view to the inflated layout
+        dialog.setContentView(view);
+        dialog.getWindow().setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT, // Width
+                ViewGroup.LayoutParams.WRAP_CONTENT); // Height
+
+        // Find views within the inflated layout
+        TextView message = view.findViewById(R.id.failed_lesson);
+        TextView bktScore = view.findViewById(R.id.bkt_score);
+        TextView passingScore = view.findViewById(R.id.passing_grade);
+        Button okayButton = view.findViewById(R.id.okay_button);
+
         score *= 100;
         passingGrade *= 100;
 
@@ -101,11 +134,55 @@ public class c_Lesson_feedback {
         passingScore.setText(String.format("Passing Grade: %.2f%%", passingGrade));
 
         // Set up the 'Okay' button click listener
-        okayButton.setOnClickListener(v -> dialog.dismiss());
+        okayButton.setOnClickListener(v -> {
+            dialog.dismiss();
+            activity.finish(); // This will close/dismiss the activity
+        });
 
         // Show the dialog
         dialog.show();
     }
+
+//    public static void showDialog(Context context, double score, double passingGrade, String lesson) {
+//
+//        // Create a new dialog
+//        Dialog dialog = new Dialog(context);
+//
+//        // Inflate the custom layout
+//        LayoutInflater inflater = LayoutInflater.from(context);
+//        View view = inflater.inflate(R.layout.c_lesson_failed_dialog, null);
+//
+//        // Set the dialog content view to the inflated layout
+//        dialog.setContentView(view);
+//        dialog.getWindow().setLayout(
+//                ViewGroup.LayoutParams.MATCH_PARENT, // Width
+//                ViewGroup.LayoutParams.WRAP_CONTENT); // Height
+//
+//
+//        // Find views within the inflated layout
+//        TextView message = view.findViewById(R.id.failed_lesson);
+//        TextView bktScore = view.findViewById(R.id.bkt_score);
+//        TextView passingScore = view.findViewById(R.id.passing_grade);
+//        Button okayButton = view.findViewById(R.id.okay_button);
+//
+//        score *= 100;
+//        passingGrade *= 100;
+//
+//        // Set text or any other properties for the views with 2 decimal places
+//        message.setText("You did not pass " + lesson);
+//        bktScore.setText(String.format("BKT Score: %.2f%%", score));
+//        passingScore.setText(String.format("Passing Grade: %.2f%%", passingGrade));
+//
+//        // Set up the 'Okay' button click listener
+//        okayButton.setOnClickListener(v -> {
+//            dialog.dismiss();
+////            context.dismiss();
+//        });
+//
+//        // Show the dialog
+//        dialog.show();
+//    }
+
 
     // Retrieve BKTScore from the database
     public void retrieveBKTScore(String mode, String lesson) {
@@ -302,7 +379,7 @@ public class c_Lesson_feedback {
             Log.e("c_Lesson_feedback", "Layout: " + "very good");
             layoutId = R.layout.c_lesson_feedback_4_very_good;
         }
-        
+
         if (layoutId == 0) {
             Log.e("showDialog", "layoutId is 0?? :<");
         } else {

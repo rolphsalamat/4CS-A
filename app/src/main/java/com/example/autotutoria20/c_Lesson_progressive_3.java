@@ -246,7 +246,7 @@ public class c_Lesson_progressive_3 extends AppCompatActivity {
 
                         Log.e("Completed Lesson!", "Calling Feedback Class");
                         feedback = new c_Lesson_feedback(this); // Initialize feedback object
-                        feedback.retrieveBKTScore("Progressive Mode", "Lesson 3");
+                        feedback.retrieveBKTScore("Progressive Mode", "Lesson 2");
                     }
                 }
                 break;

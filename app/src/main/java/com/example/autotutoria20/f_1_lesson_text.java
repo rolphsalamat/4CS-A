@@ -504,7 +504,7 @@ public class f_1_lesson_text extends Fragment {
 
         // use 8 on publish
         // use 10 for testing
-        int level = 9; // Default to High School Student
+        int level = 10; // Default to High School Student
 
         // Adjust the multiplier based on the educational level
         double multiplier;
@@ -539,8 +539,8 @@ public class f_1_lesson_text extends Fragment {
             case 9: // Test User #2
                 multiplier = 0.02338; // Ewan kung anong average na to, kung di pa kayo makuntento dito ewan ko nalang
                 break;
-            case 10: // TESTING MODE
-                multiplier = 0.0009;
+            case 10: // Test User #3
+                multiplier = 0.02067; // please makuntento na kayo :)
                 break;
             default:
                 multiplier = 0.05; // Default value if no valid level is provided

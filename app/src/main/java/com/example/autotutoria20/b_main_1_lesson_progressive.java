@@ -230,9 +230,20 @@ public class b_main_1_lesson_progressive extends Fragment {
 
                         if (completeCounter == maxProgressValues.length) {
                             Log.e("TAG", "Module[" + lessonNumber + "] is Complete!");
-                            cardCompletionStatus[lessonNumber - 1] = true;
-                            hideLockedOverlay(lessonNumber - 1);
+
+//                            int moduleNumber = (lessonNumber-1);
+//                            unlockPreviousCard(moduleNumber);
+
+//                            if (cardCompletionStatus[lessonNumber - 2]) {
+                                cardCompletionStatus[lessonNumber - 1] = true;
+                                hideLockedOverlay(lessonNumber - 1);
+//                            }
+
+
                             totalCompletedModules.incrementAndGet(); // Increment AtomicInteger
+                        } else {
+                            //Module is not yet passed
+//                            c_Lesson_feedback.showModuleFailed(requireContext(), "Module " + lessonNumber);
                         }
 
                         double averageBKTScore = bktScoreCount > 0 ? totalBKTScore / bktScoreCount : 0.0;
@@ -279,6 +290,28 @@ public class b_main_1_lesson_progressive extends Fragment {
             }
         });
     }
+
+//    public void unlockPreviousCard(int moduleNumber) {
+//
+//        int cardId = (moduleNumber+2);
+//
+//        int lockedOverlayId = getLockedOverlayId(cardId);
+//        View lockedOverlay = view.findViewById(lockedOverlayId);
+//        if (lockedOverlay != null) {
+////            lockedOverlay.setVisibility(View.GONE);
+//            if (lockedOverlay.getVisibility())
+//        } else {
+//            Log.e("hideLockedOverlay", "Locked overlay view is null for card " + cardId);
+//        }
+//
+//        for (int i=0; i<moduleNumber; i++) {
+//            if (cardCompletionStatus[i] && lockedOverlay.getVisibility() == View.GONE)
+//                // do:
+//        //        cardCompletionStatus[moduleNumber] = true;
+//        //        hideLockedOverlay(moduleNumber);
+//        }
+//
+//    }
 
 
 
