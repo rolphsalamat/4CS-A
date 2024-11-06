@@ -12,7 +12,8 @@
         android:layout_height="32dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:src="@drawable/exit"
+        android:background="@drawable/exit"
+        android:backgroundTint="@color/white"
         android:contentDescription="Close"
         android:layout_margin="8dp" />
 

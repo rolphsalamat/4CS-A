@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -767,15 +768,47 @@ public class d_Lesson_container extends AppCompatActivity implements
         }
     }
 
-    public static void startCountdown(final Context context) {
+    public static void startCountdown(final Context context, String mode) {
+        Log.d("Countdown", "Starting countdown in mode: " + mode);
+
         new CountDownTimer(10000, 1000) { // 10 seconds countdown with 1-second interval
+            boolean shouldFinish = true; // Flag to determine if onFinish should run
+
             public void onTick(long millisUntilFinished) {
-                // You can update UI here if needed during the countdown
+                Log.d("Countdown", "Seconds remaining: " + millisUntilFinished / 1000);
+
+                if (mode.equals("Pre-Test")) {
+                    if (!(f_0_lesson_pre_test.choicesGroup.getCheckedRadioButtonId() == -1)) {
+                        Log.d("Countdown", "Pre-Test answer selected, skipping onFinish.");
+                        shouldFinish = false; // Prevent onFinish from executing
+                    }
+                }
+
+                if (mode.equals("Post-Test")) {
+                    if (f_3_lesson_post_test.getDifficulty() == e_Question.Difficulty.EASY
+                            || f_3_lesson_post_test.getDifficulty() == e_Question.Difficulty.MEDIUM) {
+                        if (!(f_3_lesson_post_test.choicesGroup.getCheckedRadioButtonId() == -1)) {
+                            Log.d("Countdown", "Post-Test answer selected (EASY/MEDIUM), skipping onFinish.");
+                            shouldFinish = false; // Prevent onFinish from executing
+                        }
+                    }
+                    if (f_3_lesson_post_test.getDifficulty() == e_Question.Difficulty.HARD) {
+                        if (!(f_3_lesson_post_test.identificationAnswer.toString().isEmpty())) {
+                            Log.d("Countdown", "Post-Test answer provided (HARD), skipping onFinish.");
+                            shouldFinish = false; // Prevent onFinish from executing
+                        }
+                    }
+                }
             }
 
             public void onFinish() {
-                Toast.makeText(context, "You haven't selected an answer yet", Toast.LENGTH_SHORT).show();
+                if (shouldFinish) { // Only show Toast if no answer was selected
+                    Toast.makeText(context, "You haven't selected an answer yet", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.d("Countdown", "onFinish called but answer was selected.");
+                }
             }
+
         }.start();
     }
 
@@ -941,7 +974,7 @@ public class d_Lesson_container extends AppCompatActivity implements
         dialog.show(); // Show the dialog
     }
 
-    private Fragment getCurrentFragment() {
+    public Fragment getCurrentFragment() {
         int position = viewPager.getCurrentItem();
         String fragmentTag = "android:switcher:" + R.id.viewPager + ":" + position;
         return getSupportFragmentManager().findFragmentByTag(fragmentTag);

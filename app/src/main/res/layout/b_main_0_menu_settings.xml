@@ -2,7 +2,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/autotutoria_background_color"
     android:padding="16dp">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,6 +21,7 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:background="@drawable/back"
+                android:backgroundTint="@color/white"
                 />
             <!-- Settings -->
             <TextView
@@ -28,7 +31,7 @@
                 android:layout_marginStart="20dp"
                 android:textSize="20sp"
                 android:text="Settings"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"/>
 
         </LinearLayout>
 
@@ -96,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Reminder Notification"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"/>
             <!-- Toggle Switch -->
             <Switch
                 android:id="@+id/switch_reminder"

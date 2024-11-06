@@ -180,10 +180,14 @@ public class b_main_1_lesson_progressive extends Fragment {
                     int totalModules = 0;
                     double totalAverageBKTScore = 0.0;
                     int lessonCount = 0;
+                    int moduleCount = 0;
                     int moduleCounter = 0;
                     AtomicInteger totalCompletedModules = new AtomicInteger(0); // Track the number of fully completed modules
 
                     for (DocumentSnapshot lessonDoc : task.getResult()) {
+
+                        moduleCount++;
+
                         String lesson = lessonDoc.getId();
                         int totalProgress = 0;
                         int totalMaxProgress = 0;
@@ -270,7 +274,8 @@ public class b_main_1_lesson_progressive extends Fragment {
                     String newCategory = getUserCategory(overallAverageBKTScore);
                     Log.e("TAG", "WALTER | New Category: " + newCategory);
 
-                    incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
+
+                    incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 2000, new Runnable() {
                         @Override
                         public void run() {
                             hideLoadingDialog();
@@ -278,9 +283,12 @@ public class b_main_1_lesson_progressive extends Fragment {
                             // Show the dialog only if all modules are complete
 
                             // 8 or how do I make this dynamic??
+                            // Optionally, use moduleCount, since it will always be equal to total modules
+                            // concern is baka mag read sya na always true
                             if (totalCompletedModules.get() == 8) { // Get value from AtomicInteger
                                 showChangeCategoryDialog(newCategory);
                             }
+
                         }
                     });
                 } else {

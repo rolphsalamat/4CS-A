@@ -38,7 +38,6 @@
             android:layout_alignParentBottom="true"
             android:layout_marginHorizontal="36dp"
             android:layout_marginTop="6dp"
-            android:layout_marginBottom="8dp"
             android:fontFamily="@font/mouldy_cheese"
             android:letterSpacing="0.08"
             android:text="SIGN UP"
@@ -307,7 +306,8 @@
         android:fontFamily="@font/roboto_serif"
         android:layout_marginHorizontal="10dp"
         android:text="Sign up"
-        android:textColor="#009688"
+        android:background="@drawable/rounded_corners"
+        android:textColor="@color/black"
         android:textSize="10sp" />
 
     <LinearLayout

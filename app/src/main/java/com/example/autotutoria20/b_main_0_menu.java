@@ -250,9 +250,15 @@ public class b_main_0_menu extends AppCompatActivity {
                     Toast.makeText(b_main_0_menu.this, "Settings", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(b_main_0_menu.this, b_main_0_menu_settings.class));
                 } else if (id == R.id.progressive_mode) {
-                    showSwitchModeDialog("Progressive Mode");
+                    if (isProgressiveMode)
+                        Toast.makeText(b_main_0_menu.this, "You are already in Progressive Mode", Toast.LENGTH_SHORT).show();
+                    else
+                        showSwitchModeDialog("Progressive Mode");
                 } else if (id == R.id.free_use_mode) {
-                    showSwitchModeDialog("Free Use Mode");
+                    if (!isProgressiveMode)
+                        Toast.makeText(b_main_0_menu.this, "You are already in Free Use Mode", Toast.LENGTH_SHORT).show();
+                    else
+                        showSwitchModeDialog("Free Use Mode");
                 } else if (id == R.id.rate) {
                     showRateUsDialog();
                 } else if (id == R.id.follow) {

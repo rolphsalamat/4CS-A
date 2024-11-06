@@ -29,7 +29,7 @@ public class f_0_lesson_pre_test extends Fragment {
     private e_Question[] questions;
     private TextView questionText;
     private int incorrect = 0;
-    private RadioGroup choicesGroup;
+    public static RadioGroup choicesGroup;
     private int answerAttempt = 0;
     private int attemptChances = 2;
     private int questionsAnswered = 1;
@@ -450,7 +450,7 @@ public class f_0_lesson_pre_test extends Fragment {
 
         //Log.e("loadQuestion", "loadQuestion();");
 
-        d_Lesson_container.startCountdown(requireContext());
+        d_Lesson_container.startCountdown(requireContext(), "Pre-Test");
 
         isCorrect = false;
 
@@ -516,7 +516,8 @@ public class f_0_lesson_pre_test extends Fragment {
 
         } else {
             Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
-            return false;  // No answer selected
+            d_Lesson_container.startCountdown(requireContext(), "Pre-Test");
+//            return false;  // No answer selected
         }
         return false;
     }

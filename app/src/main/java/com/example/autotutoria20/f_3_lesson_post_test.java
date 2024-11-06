@@ -3,7 +3,6 @@ package com.example.autotutoria20;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -36,13 +32,13 @@ public class f_3_lesson_post_test extends Fragment {
     private int currentQuestionIndex = 0;
     private e_Question[] questions;
     private TextView questionText;
-    private RadioGroup choicesGroup;
+    public static RadioGroup choicesGroup;
     public static String hint;
     public static String correctAnswer;
-    private EditText identificationAnswer;
+    public static EditText identificationAnswer;
     private TextView total;
     private Button submitButton;
-    private e_Question.Difficulty difficultyLevel;
+    public static e_Question.Difficulty difficultyLevel;
     private int answerAttempt = 0;
     private int attemptChances = 0;
     private int questionsAnswered = 1;
@@ -447,6 +443,10 @@ public class f_3_lesson_post_test extends Fragment {
 //        });
     }
 
+    public static e_Question.Difficulty getDifficulty() {
+        return difficultyLevel;
+    }
+
     private e_Question[] getPostTestQuestions(String module, String lesson) {
         String key = module + "_" + lesson;
 
@@ -663,7 +663,7 @@ public class f_3_lesson_post_test extends Fragment {
     private void loadQuestion() {
         String TAG = "loadQuestion";
 
-        d_Lesson_container.startCountdown(requireContext());
+        d_Lesson_container.startCountdown(requireContext(), "Post-Test");
 
         hint = ""; // reset hint
 
@@ -780,6 +780,7 @@ public class f_3_lesson_post_test extends Fragment {
                     Context context = getContext();
                     if (context != null) {
                         Toast.makeText(context, "Please select an answer.", Toast.LENGTH_SHORT).show();
+                        d_Lesson_container.startCountdown(requireContext(), "Pre-Test");
                     }
                     Log.e(TAG, "No answer selected | isCorrect: " + isCorrect);
                     return false;  // No answer selected

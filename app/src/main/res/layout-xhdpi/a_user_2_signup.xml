@@ -371,7 +371,8 @@
         android:layout_marginHorizontal="50dp"
         android:textStyle="bold"
         android:text="Sign up"
-        android:textColor="#009688"
+        android:background="@drawable/rounded_corners"
+        android:textColor="@color/black"
         android:textSize="14sp" />
 
     <RelativeLayout
