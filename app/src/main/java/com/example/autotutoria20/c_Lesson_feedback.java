@@ -136,7 +136,7 @@ public class c_Lesson_feedback {
         // Set up the 'Okay' button click listener
         okayButton.setOnClickListener(v -> {
             dialog.dismiss();
-            activity.finish(); // This will close/dismiss the activity
+//            activity.finish(); // This will close/dismiss the activity
         });
 
         // Show the dialog
