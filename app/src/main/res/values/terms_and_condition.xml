@@ -1,21 +1,30 @@
 <resources>
-    <string name="terms_conditions_title">Terms and Conditions</string>
+    <string name="terms_conditions_title">TERMS AND CONDITIONS</string>
     <string name="terms_conditions_content">
 
-        1. Acceptance of Terms By using AutoTutoria, you agree to these terms. If you do not accept these terms, you should not use the platform.\n\n
-        2. AutoTutoria offers online tutoring services. We connect students with qualified tutors based on the subject area requested.\n\n
-        3. User Responsibilities\n\n
-
-        \t\t * Students: You are responsible for providing accurate information when booking a session. Payments must be made in accordance with the pricing structure provided.\n\n
-        \t\t * Tutors: You must ensure the accuracy of your qualifications and availability. Misrepresentation may result in suspension or termination of your account.\n\n
-
-        4. AutoTutoria is not liable for any disputes between tutors and students or for the outcome of tutoring sessions. We do not guarantee academic success.\n\n
-        5. Intellectual Property All content provided on the platform, including lessons and materials, is the property of AutoTutoria  or the respective tutors. You may not copy, distribute, or use this content without permission.\n\n
-        6. Account Suspension or Termination We reserve the right to suspend or terminate accounts for violation of these terms or misuse of the platform.\n\n
-        7. Governing Law These terms are governed by the laws of Cabuyao, Laguna. Any legal action must be brought in the courts of Cabuyao, Laguna.\n\n
-        8. AutoTutoria reserves the right to modify these terms at any time. Users will be notified of significant changes.\n\n
-
-
+        WELCOME TO AUTOTUTORIA\n\n
+        This was developed as part of a research project titled \'\'\tEnhancing Educational Excellence\:\ An Intelligent Tutoring System for Automata\t\'\' by the University of Cabuyao. Please review these Terms and Conditions carefully before using the App. By accessing or using the App, you agree to be bound by these Terms. Do not continue to use AutoTutoria if you do not agree to take all terms and conditions stated on this page.\n\n
+        1. LICENSE\n\n
+         Unless explicitly stated otherwise, all intellectual property rights to the content on this app are owned by AutoTutoria and/or its licensors. These rights are fully reserved. You are permitted to use this app for personal purposes, in compliance with the restrictions outlined in these terms and conditions.\n\n
+        You must not:\n\n
+        \t\t • Republish material from AutoTutoria.\n
+        \t\t • Sell, rent, or sub-license material from AutoTutoria.\n
+        \t\t • Reproduce, duplicate, or copy material from AutoTutoria.\n
+        \t\t • Redistribute content from AutoTutoria.\n\n
+        2. USER CONTENT\n\n
+        In these terms and conditions, "User Content" refers to any audio, video, text, images, or other material you choose to display on AutoTutoria. By displaying User Content, you provide AutoTutoria with a non-exclusive, worldwide, irrevocable, and sub-licensable license to use, reproduce, modify, publish, translate, and distribute this content across any and all media platforms.\n\n
+        3. NO WARRANTIES\n\n
+        This app is provided "as is," with all faults, and AutoTutoria makes no representations or warranties of any kind regarding this app or the materials contained within it. Nothing on this app should be construed as professional advice.\n\n
+        4. LIMITATION OF LIABILITY\n\n
+        Under no circumstances shall AutoTutoria, or any of the research team be liable for any matter arising from or connected to your use of this app, whether such liability arises under contract or otherwise. AutoTutoria, along with research team, shall not be responsible for any indirect, consequential, or special liabilities that may result from or relate to your use of this app.\n\n
+        5. VARIATION OF TERMS\n\n
+        AutoTutoria reserves the right to modify these Terms at any time as deemed necessary. By using this app, you are expected to review these Terms regularly to stay informed of any changes.\n\n
+        6. ASSIGNMENT\n\n
+        AutoTutoria reserves the right to assign, transfer, or subcontract its rights and/or obligations under these Terms without prior notice. However, you are not permitted to assign, transfer, or subcontract any of your rights and/or obligations under these Terms.\n\n
+        7. ENTIRE AGREEMENT\n\n
+        These Terms represent the complete agreement between you and AutoTutoria regarding your use of this app and override all previous agreements and understandings.\n\n
+        9. PRIVACY POLICY\n\n
+        The Privacy Policy of the AutoTutoria application outlines its compliance with the Data Privacy Act of 2012, detailing the organizational structure under the Department of Information and Communications Technology (DICT), led by a Privacy Commissioner and supported by two Deputy Privacy Commissioners. The policy emphasizes fair and lawful data processing solely for app purposes, granting users the right to access, correct, and delete their personal data. Regular security audits are conducted to ensure data integrity, and personal data will not be shared with third parties without explicit consent, unless required by law.\n\n
     </string>
 
 </resources>
