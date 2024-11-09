@@ -63,6 +63,7 @@
         <activity android:name=".b_main_0_menu_profile" android:exported="true"/>
         <activity android:name=".b_main_0_menu_settings" android:exported="true"/>
         <activity android:name=".b_main_0_menu_tutorial" android:exported="true"/>
+        <activity android:name=".b_main_0_menu_isStudent" android:exported="true"/>
         <activity android:name=".b_main_1_lesson_progressive" android:exported="true"/>
         <activity android:name=".b_main_2_lesson_freeuse" android:exported="true"/>
 

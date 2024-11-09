@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,8 @@ import java.util.concurrent.TimeUnit;
 
 public class b_main_0_menu extends AppCompatActivity {
     private boolean[] cardStates = {true, false, false}; // Example state array for 3 cards
+    static Boolean isStudent = false;
+    static Boolean isProgressiveCompleted = false;
     private static final int PICK_IMAGE_REQUEST = 1;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -106,8 +109,6 @@ public class b_main_0_menu extends AppCompatActivity {
         if (!n_Network.isNetworkAvailable(this)) {
             Toast.makeText(b_main_0_menu.this, "No Internet", Toast.LENGTH_SHORT).show();
         }
-
-//        showLoadingDialog();
 
         // Instantiate x_bkt_algorithm
         x_bkt_algorithm algorithm = new x_bkt_algorithm();
@@ -152,6 +153,7 @@ public class b_main_0_menu extends AppCompatActivity {
                         if (currentUser != null) {
                             String userId = currentUser.getUid();
                             fetchUserData(userId);
+
                         }
                     } else {
                         // The tutorial has not been completed, show the tutorial
@@ -367,6 +369,46 @@ public class b_main_0_menu extends AppCompatActivity {
                 startActivityForResult(intent, PICK_IMAGE_REQUEST);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        showLearningModes();
+
+    }
+
+    private void showLearningModes() {
+
+        if (isStudent) {
+
+            NavigationView navigationView = findViewById(R.id.navigation_view);
+
+            // Disable free use mode by removing the corresponding menu item
+            Menu menu = navigationView.getMenu();
+            MenuItem progressiveItem = menu.findItem(R.id.progressive_mode);
+            MenuItem freeUseItem = menu.findItem(R.id.free_use_mode);
+
+            if (progressiveItem != null) {
+                progressiveItem.setVisible(false);
+                progressiveItem.setEnabled(false);
+            }
+            if (freeUseItem != null) {
+                freeUseItem.setVisible(false);
+                freeUseItem.setEnabled(false);
+            }
+
+            // Optionally, enable Free Use mode only if Progressive mode is completed
+            if (isProgressiveCompleted) {
+                progressiveItem.setVisible(true);
+                progressiveItem.setEnabled(true);
+                freeUseItem.setVisible(true);
+                freeUseItem.setEnabled(true);
+            }
+        } else {
+            // Do nothing or handle other user types if necessary
+        }
     }
 
 //    private void showLoadingDialog() {
@@ -746,6 +788,22 @@ public class b_main_0_menu extends AppCompatActivity {
                         String gender = document.getString("Gender");
                         Long age = document.getLong("Age");
 
+                        isStudent = document.getBoolean("isStudent");
+//                        if (isStudent == null)
+//                            isStudent = true;
+
+                        isProgressiveCompleted = document.getBoolean("isComplete");
+//                        if (isProgressiveCompleted == null)
+//                            isProgressiveCompleted = true;
+
+                        if (isStudent == null && isProgressiveCompleted == null)
+                            b_main_0_menu_isStudent.setStatusAuto();
+
+                        Log.e(TAG, "isStudent: " + isStudent);
+                        Log.e(TAG, "isComplete: " + isProgressiveCompleted);
+
+                        showLearningModes();
+
                         // Settings
                         Boolean updateNotif = document.getBoolean("App Update Notification");
                         Boolean newCourse = document.getBoolean("New Course Available Notification");
@@ -757,6 +815,7 @@ public class b_main_0_menu extends AppCompatActivity {
                         Log.e(TAG, "Email Address: " + email);
                         Log.e(TAG, "Gender: " + gender);
                         Log.e(TAG, "Age: " + age);
+                        Log.e(TAG, "isStudent: " + isStudent);
 
                         Log.e(TAG, "App Update Notification: " + updateNotif);
                         Log.e(TAG, "New Course Available Notification: " + newCourse);

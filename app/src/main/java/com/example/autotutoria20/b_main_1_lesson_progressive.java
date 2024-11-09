@@ -12,6 +12,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -29,7 +31,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -44,6 +48,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class b_main_1_lesson_progressive extends Fragment {
 
+
+    static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    static FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    static String userId = user != null ? user.getUid() : null;
     private FrameLayout lockedOverlayCard1, lockedOverlayCard2, lockedOverlayCard3, lockedOverlayCard4,
             lockedOverlayCard5, lockedOverlayCard6, lockedOverlayCard7, lockedOverlayCard8;
     private ProgressBar progressBarCard1, progressBarCard2, progressBarCard3, progressBarCard4,
@@ -103,7 +111,6 @@ public class b_main_1_lesson_progressive extends Fragment {
 
         // Show loading dialog
         showLoadingDialog();
-
 
         return view;
     }
@@ -286,6 +293,8 @@ public class b_main_1_lesson_progressive extends Fragment {
                             // Optionally, use moduleCount, since it will always be equal to total modules
                             // concern is baka mag read sya na always true
                             if (totalCompletedModules.get() == 8) { // Get value from AtomicInteger
+                                setCompletedStatus(true);
+//                                showToast("show change category dialog");
                                 showChangeCategoryDialog(newCategory);
                             }
 
@@ -297,6 +306,65 @@ public class b_main_1_lesson_progressive extends Fragment {
                 }
             }
         });
+    }
+
+    public void setCompletedStatus(Boolean status) {
+
+        String TAG = "setCompletedStatus";
+
+        b_main_0_menu.isProgressiveCompleted = true;
+
+        db.collection("users").document(userId)
+                .update("isComplete", status)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "'isComplete' field added with default value: true");
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error adding 'isComplete' field", e);
+                });
+
+    }
+
+    public static void isComplete() {
+
+        String TAG = "isComplete()";
+
+        if (userId == null) {
+            Log.e(TAG, "User not authenticated");
+            return;
+        }
+
+        db.collection("users").document(userId).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        // Check if the "isComplete" field exists
+                        if (documentSnapshot.contains("isComplete")) {
+                            // Retrieve the value of "isComplete"
+                            b_main_0_menu.isProgressiveCompleted = documentSnapshot.getBoolean("isComplete");
+                            Log.d(TAG, "Module Completed retrieved: " + b_main_0_menu.isProgressiveCompleted);
+                        } else {
+                            // If "isComplete" does not exist, set it to true and update the database
+                            Log.d(TAG, "'isComplete' field does not exist. Setting default value to true.");
+                            db.collection("users").document(userId)
+                                    .update("isComplete", true)
+                                    .addOnSuccessListener(aVoid -> {
+                                        Log.d(TAG, "'isComplete' field added with default value: true");
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e(TAG, "Error adding 'isComplete' field", e);
+                                    });
+                        }
+                    } else {
+                        Log.e(TAG, "No such document");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error retrieving User Status", e);
+                });
+
+        Log.e(TAG, "retrieving user isComplete | is complete!");
+        Log.e(TAG, "User is completed?: " + b_main_0_menu.isProgressiveCompleted);
+
     }
 
 //    public void unlockPreviousCard(int moduleNumber) {

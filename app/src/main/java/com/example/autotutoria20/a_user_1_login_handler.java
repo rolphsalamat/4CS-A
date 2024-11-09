@@ -87,49 +87,7 @@ public class a_user_1_login_handler extends AppCompatActivity {
         }
 
         createNotificationChannel();
-//        finish();
     }
-
-//    private void checkForAppUpdate() {
-//        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(a_user_1_login_handler.this);
-//
-//        // Returns an intent object that you use to check for an update.
-//        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
-//
-//        // Checks that the platform will allow the specified type of update.
-//        appUpdateInfoTask.addOnSuccessListener((appUpdateInfo -> {
-//            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-//                    // This example applies an immediate update. To apply a flexible update
-//                    // instead, pass in AppUpdateType.FLEXIBLE
-//                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-//                // Request the update.
-//                try {
-//                    appUpdateManager.startUpdateFlowForResult(
-//                            // Pass the intent that is returned by 'getAppUpdateInfo()'.
-//                            appUpdateInfo,
-//                            // Or 'AppUpdateType.FLEXIBLE' for flexible udpates.
-//                            AppUpdateType.IMMEDIATE,
-//                            // The current activity making the update request.
-//                            this,
-//                            // Include a request code to later monitor this update request,
-//                            MY_REQUEST_CODE);
-//                } catch (IntentSender.SendIntentException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//        }));
-//    }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == MY_REQUEST_CODE) {
-//            if (resultCode != RESULT_OK) {
-//                Log.w(TAG, "Update flow failed! Result code: " + resultCode);
-//                // If the update is cancelled or fails,
-//                // you can request to start the update again.
-//            }
-//        }
-//    }
 
     private void checkTutorial() {
 

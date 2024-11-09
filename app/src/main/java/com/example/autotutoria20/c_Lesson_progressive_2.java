@@ -191,20 +191,8 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
                 // Check if the lesson is finished
                 if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 2")) {
                     if (M1_Score < passingGrade) {
-                        showToast("BKT Score did not pass the passing grade:" +
-                                "\nBKT Score: " + M1_Score +
-                                "\nPassing Grade: " + passingGrade);
-//                        showDialog(
-//                                "You Failed",
-//                                "You did not reach the minimum passing grade," +
-//                                        "\nBKT Score: " + M1_Score +
-//                                        "\nPassing Grade: " + passingGrade
-//                        );
                         c_Lesson_feedback.showDialog(this, M1_Score, passingGrade, "Lesson 1");
-                        b_main_1_lesson_progressive.cardCompletionStatus[1] = false;
-
                     } else {
-//                    card4LockedOverlay.setVisibility(View.GONE);
                         setCardCompletionStatus(key, true);
 
                         Log.e("Completed Lesson!", "Calling Feedback Class");

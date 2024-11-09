@@ -67,12 +67,6 @@ public class b_main_0_menu_categorize_user extends AppCompatActivity {
             Toast.makeText(b_main_0_menu_categorize_user.this, "Selected: Expert", Toast.LENGTH_SHORT).show();
         });
 
-//        if (category == null) {
-//            Log.e("Categorization", "Categorization Error! category = " + category);
-//        } else {
-//            categorizeUser(category);
-//        }
-
     }
 
     public static double passingCategory(String category) {
@@ -147,6 +141,10 @@ public class b_main_0_menu_categorize_user extends AppCompatActivity {
         Log.d("Categorize User Class", "Redirecting to Main Menu");
 
         finish();
+
+        // launch isStudent class
+        Intent intent = new Intent(b_main_0_menu_categorize_user.this, b_main_0_menu_isStudent.class);
+        startActivity(intent);
 
     }
 

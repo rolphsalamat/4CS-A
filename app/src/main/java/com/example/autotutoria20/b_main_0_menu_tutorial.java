@@ -71,15 +71,6 @@ public class b_main_0_menu_tutorial extends AppCompatActivity {
 
         Log.d(TAG, "onCreate: WebView initialized");
 
-
-        // if no internet, show a prompt na walang internet
-        // else, loadVideo();
-
-
-//        if (!(n_Network.isNetworkAvailable(getBaseContext()))) {
-//            Toast.makeText(b_main_0_menu_tutorial.this, "Please connect to a network.", Toast.LENGTH_SHORT).show();
-//        }
-
         // Load the video
         loadVideo(videoUrl);
 
@@ -88,12 +79,6 @@ public class b_main_0_menu_tutorial extends AppCompatActivity {
         finishTutorialButton.setOnClickListener(v -> {
             Log.d(TAG, "Finish button clicked, marking tutorial as completed");
             markTutorialAsCompleted();
-
-            // this is the ORIGINAL CODE
-//            // Redirect to the main menu after completing the tutorial
-//            Intent mainMenuIntent = new Intent(b_main_0_menu_tutorial.this, b_main_0_menu.class);
-//            startActivity(mainMenuIntent);
-//            Log.d(TAG, "Redirecting to main menu");
 
             // since first log in sya, ask user about category..
             Intent mainMenuIntent = new Intent(b_main_0_menu_tutorial.this, b_main_0_menu_categorize_user.class);
@@ -122,15 +107,6 @@ public class b_main_0_menu_tutorial extends AppCompatActivity {
                     "src=\"https://www.youtube.com/embed/" + videoUrl + "?modestbranding=1&rel=0&showinfo=0\" " +
                     "frameborder=\"0\" allowfullscreen></iframe>" +
                     "</div></body></html>";
-
-//            // how to view youtube na nasa middle/??!?!?!
-//            iframeHtml = "<html><body style='margin:0;padding:0;'>" +
-//                    "<div style='justify-content: center;'>" +
-//                    "<div style='justify-content: center;'>" +
-//                    "<iframe width=\"250%\" height=\"100%\"" +
-//                    "src=\"https://www.youtube.com/embed/" + videoUrl +
-//                    "?modestbranding=1&rel=0&showinfo=0\" frameborder=\"0\" allowfullscreen></iframe></body></html>";
-
 
         }
         webView.loadData(iframeHtml, "text/html", "utf-8");
@@ -169,11 +145,6 @@ public class b_main_0_menu_tutorial extends AppCompatActivity {
                 int x = webView.getWidth() / 2;
                 int y = webView.getHeight() / 2;
 
-//                // Number of clicks
-//                int clickCount = 1;
-//
-//                for (int i=0;i<clickCount;i++) {
-                // Simulate click
                 simulateClick(x, y);
 //                }
                 Log.e("simulateClicksInCenter", "Click!");
@@ -214,15 +185,8 @@ public class b_main_0_menu_tutorial extends AppCompatActivity {
                     .addOnSuccessListener(aVoid -> {
                         Log.d("Tutorial", "Tutorial completion updated in Firestore");
 
-//                        // Update SharedPreferences
-//                        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
-//                        SharedPreferences.Editor editor = sharedPreferences.edit();
-//                        editor.putBoolean("isTutorialCompleted", true);
-//                        editor.apply();
-
-                        // Move to the main menu or next activity
-//                        moveToMainMenu();
                         finish();
+
                     })
                     .addOnFailureListener(e -> Log.e("Tutorial", "Error updating tutorial completion", e));
         } else {

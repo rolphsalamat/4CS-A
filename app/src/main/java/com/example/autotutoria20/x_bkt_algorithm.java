@@ -94,6 +94,7 @@ public class x_bkt_algorithm {
     }
 
 
+
     public void retrieveUserCategory(FetchCategoryCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -167,111 +168,6 @@ public class x_bkt_algorithm {
         Log.d(TAG, "Updated Knowledge Probability: " + knowledgeProbability);
     }
 
-
-    // Original Code
-//    public void updateKnowledgeProbability(boolean answeredCorrectly) {
-//        double pKnow = knowledgeProbability;
-//
-//        String TAG = "updateKnowledgeProbability";
-//
-//        Log.e(TAG, "Answer: " + answeredCorrectly);
-//        Log.e(TAG, "knowledgeProbability: " + knowledgeProbability);
-//        Log.e(TAG, "Learn Rate: " + learnRate);
-//        Log.e(TAG, "Guess Rate: " + guessRate);
-//        Log.e(TAG, "Slip Rate: "  + slipRate);
-//        Log.e(TAG, "Softening Rate: " + softeningRate);
-//
-//        if (answeredCorrectly) {
-//            // Update with guess rate
-//            // Formula: pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate)
-//            knowledgeProbability = pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate);
-//        } else {
-//            // Adjusted formula for incorrect answers
-//            // Instead of a drastic reduction, we decrease it by a smaller factor
-//            // Formula: pKnow * (1 - slipRate)
-//            // This reduces the score but not drastically
-//            knowledgeProbability = pKnow * (1 - slipRate);
-//
-//            // Optionally include a small adjustment for forget rate to soften the impact
-//            knowledgeProbability *= (1 - forgetRate);
-//        }
-//
-//        // Ensure knowledgeProbability stays within [0, 1]
-//        knowledgeProbability = Math.max(0.0, Math.min(1.0, knowledgeProbability));
-//
-//        Log.d(TAG, "Updated Knowledge Probability: " + knowledgeProbability);
-//    }
-
-//    public void updateKnowledgeProbability(boolean answeredCorrectly) {
-//        double pKnow = knowledgeProbability;
-//
-//        String TAG = "updateKnowledgeProbability";
-//
-//        Log.e(TAG, "Answer: " + answeredCorrectly);
-//        Log.e(TAG, "knowledgeProbability: " + knowledgeProbability);
-//        Log.e(TAG, "Learn Rate: " + learnRate);
-//        Log.e(TAG, "Guess Rate: " + guessRate);
-//        Log.e(TAG, "Slip Rate: "  + slipRate);
-//        Log.e(TAG, "Softening Rate: " + softeningRate);
-//
-////        case "Expert":
-////        learnRate = 0.9;
-////        slipRate = 0.05;
-////        guessRate = 0.05;
-////        forgetRate = 0.01;  // Experts rarely forget
-////        softeningRate = 0.4;
-////        knowledgeProbability = 0.9;  // Initial probability for Expert
-////        break;
-//
-//        if (answeredCorrectly) {
-//            // Update with guess rate
-//            // Formula: pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate)
-//            // Example Calculation:
-//            // 0.9 + (0.9 * (1 - 0.9)) * (1 - 0.05)
-//            // 0.9 + (0.09) * (0.95)
-//            // 0.9 + 0.0855
-//
-//            // Result: 0.9855
-//            knowledgeProbability = pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate);
-////            Log.e(TAG, "Score = (" + pKnow + " + (" + (learnRate*(1 - pKnow)) + " * " + (1-guessRate) + ")");
-//        } else {
-//            // Update with slip rate and forget rate
-//            // Formula: pKnow + (1 - forgetRate) * slipRate * softeningRate
-//            // Example Calculation:
-//            // 0.9 * (1 - 0.01) * 0.05 * 0.4
-//            // 0.9 * 0.99 * 0.02
-//
-//            // Result: 0.03588
-//            knowledgeProbability = pKnow + (1 - forgetRate) * slipRate * softeningRate;
-////            Log.e(TAG, "Score = (" + pKnow + " * (" + (1-forgetRate) + " * "  + slipRate + " * " + softeningRate + ")");
-//        }
-//
-//        Log.d(TAG, "Updated Knowledge Probability: " + knowledgeProbability);
-//    }
-
-//    public void updateKnowledgeProbability() {
-//
-//
-//        switch (category) {
-//
-//            case "Novice": // Level 1 [0.0 - 0.1] Novice
-//                knowledgeProbability = 0.0 + (0.1 - 0.0) * Math.random(); break;
-//            case "Beginner":  // Level 2 [0.1 - 0.3] Beginner
-//                knowledgeProbability = 0.1 + (0.3 - 0.1) * Math.random(); break;
-//            case "Intermediate": // Level 3 [0.3 - 0.5] Intermediate
-//                knowledgeProbability = 0.3 + (0.5 - 0.3) * Math.random(); break;
-//            case "Advanced": // Level 4 [0.5 - 0.7] Advanced
-//                knowledgeProbability = 0.5 + (0.7 - 0.5) * Math.random(); break;
-//            case "Expert": // Level 5 [0.7 - 0.9] Expert
-//                knowledgeProbability = 0.7 + (0.9 - 0.7) * Math.random(); break;
-//        }
-//
-//        Log.e("User Category", "Category: " + category);
-//        Log.e("User Category", "pKnow: " + knowledgeProbability);
-//
-//    }
-
-
     public e_Question.Difficulty getDifficultyLevel(double bktScore) {
 
         String TAG = "getDifficultyLevel()";
@@ -293,61 +189,6 @@ public class x_bkt_algorithm {
             return e_Question.Difficulty.EASY;
 
     }
-
-//    public static void setBKTCategory(String category) {
-//
-//        switch (category) {
-//            case "Novice":
-//                learnRate = 0.3;
-//                slipRate = 0.3;
-//                guessRate = 0.3;
-//                forgetRate = 0.1;
-//                softeningRate = 0.9;
-//                knowledgeProbability = 0.1;  // Initial probability for Novice
-//                break;
-//            case "Beginner":
-//                learnRate = 0.4;
-//                slipRate = 0.2;
-//                guessRate = 0.2;
-//                forgetRate = 0.05;
-//                softeningRate = 0.8;
-//                knowledgeProbability = 0.3;  // Initial probability for Beginner
-//                break;
-//            case "Intermediate":
-//                learnRate = 0.5;
-//                slipRate = 0.1;
-//                guessRate = 0.1;
-//                forgetRate = 0.03;
-//                softeningRate = 0.7;
-//                knowledgeProbability = 0.5;  // Initial probability for Intermediate
-//                break;
-//            case "Advanced":
-//                learnRate = 0.7;
-//                slipRate = 0.05;
-//                guessRate = 0.05;
-//                forgetRate = 0.02;
-//                softeningRate = 0.6;
-//                knowledgeProbability = 0.7;  // Initial probability for Advanced
-//                break;
-//            case "Expert":
-//                learnRate = 0.9;
-//                slipRate = 0.05;
-//                guessRate = 0.05;
-//                forgetRate = 0.01;  // Experts rarely forget
-//                softeningRate = 0.5;
-//                knowledgeProbability = 0.9;  // Initial probability for Expert
-//                break;
-//            default:
-//                throw new IllegalArgumentException("Invalid category: " + category);
-//        }
-//
-//        String TAG = "Set BKT Category";
-//
-//        Log.d(TAG, "Category: " + category);
-//        Log.d(TAG, "Learn Rate: " + learnRate);
-//        Log.d(TAG, "Slip Rate: " + slipRate);
-//
-//    }
 
     public static void setBKTCategory(String category) {
 
@@ -404,125 +245,12 @@ public class x_bkt_algorithm {
         Log.d(TAG, "Slip Rate: " + slipRate);
     }
 
-
-    public void setBKTParameters(e_Question.Difficulty difficulty) {
-        // Adjust BKT Model parameters based on difficulty level
-        double pInit, pTransit, pSlip, pGuess;
-
-        switch (difficulty) {
-            case EASY:
-                // Set parameters for EASY difficulty
-                pInit = 0.5;    // Example initial probability of knowledge
-                pTransit = 0.2; // Example probability of learning the skill after practice
-                pSlip = 0.1;    // Example probability of making a mistake despite knowing the skill
-                pGuess = 0.4;   // Example probability of guessing the correct answer without knowing the skill
-                Log.d("f_post_test", "BKT Difficulty Level: Easy | " + difficulty);
-                break;
-            case MEDIUM:
-                // Set parameters for MEDIUM difficulty
-                // Example values for medium difficulty
-                pInit = 0.4;
-                pTransit = 0.3;
-                pSlip = 0.15;
-                pGuess = 0.3;
-                Log.d("f_post_test", "(pInit:"+pInit+"pTransit:"+pTransit+"pSlip:"+pSlip+"pGuess:"+pGuess);
-                Log.d("f_post_test", "BKT Difficulty Level: Medium | " + difficulty);
-                break;
-            case HARD:
-                // Set parameters for HARD difficulty
-                pInit = 0.3;
-                pTransit = 0.4;
-                pSlip = 0.2;
-                pGuess = 0.2;
-                Log.d("f_post_test", "(pInit:"+pInit+"pTransit:"+pTransit+"pSlip:"+pSlip+"pGuess:"+pGuess);
-                Log.d("f_post_test", "BKT Difficulty Level: Hard | " + difficulty);
-                break;
-            default:
-                // Fallback to default values
-                pInit = 0.3;
-                pTransit = 0.2;
-                pSlip = 0.1;
-                pGuess = 0.4;
-                Log.d("f_post_test", "(pInit:"+pInit+"pTransit:"+pTransit+"pSlip:"+pSlip+"pGuess:"+pGuess);
-                Log.d("f_post_test", "BKT Difficulty Level: Default | " + difficulty);
-                break;
-        }
-        String TAG = "Parameter Check";
-
-        Log.e(TAG, "Difficulty: " + difficulty);
-        Log.e(TAG, "pInit: " + pInit);
-        Log.e(TAG, "pTransit: " + pTransit);
-        Log.e(TAG, "pSlip: " + pSlip);
-        Log.e(TAG, "pGuess: " + pGuess);
-
-        // Initialize BKT Model instance with the parameters based on difficulty
-        x_bkt_algorithm.getInstance(pInit, pTransit, pSlip, pGuess);
-    }
-
     public static x_bkt_algorithm getInstance(double pInit, double learnRate, double forgetRate, double slip) {
         if (instance == null) {
             instance = new x_bkt_algorithm(pInit, learnRate, forgetRate, slip);
         }
         return instance;
     }
-
-//    public void initializeBKTScores(String collectionPath, String documentName, String module, BKTCallback callback) {
-//        Log.d(TAG, "initializeBKTScores: Start - Attempting to retrieve document from path: " + collectionPath + "/" + documentName);
-//
-//        Log.d(TAG, "collectionPath: " + collectionPath);
-//        Log.d(TAG, "documentName: " + documentName);
-//        Log.d(TAG, "module: " + module);
-//        Log.d(TAG, "callback: " + callback);
-//
-//
-//        Log.d(TAG, "path: " + "users/"+userId+"/"+collectionPath+"/"+documentName+"/"+module+"/BKT Score");
-//
-////        FirebaseFirestore.setLoggingEnabled(true);
-//
-//        db.collection("users") // Mother Folder
-//                .document(userId) // Unique ID
-//                .collection(collectionPath) // Learning Mode
-//                .document(documentName) // Lesson [1 -> 8]
-//                .get()
-//                .addOnSuccessListener(documentSnapshot -> {
-//
-//                    Log.d(TAG, "Document retrieved successfully: " + documentSnapshot.getData());
-//
-//                    if (documentSnapshot.exists()) {
-//                        Log.d(TAG, "Document Data: " + documentSnapshot.getData());
-//                        Map<String, Object> moduleMap = (Map<String, Object>) documentSnapshot.get(module);
-//                        if (moduleMap != null) {
-//                            Log.d(TAG, "Module found: " + moduleMap);
-//                            if (moduleMap.containsKey("BKT Score")) {
-//
-//                                Object bktScoreObject = moduleMap.get("BKT Score");
-//
-//                                Double bktScore = null;
-//                                if (bktScoreObject instanceof Long) {
-//                                    bktScore = ((Long) bktScoreObject).doubleValue();  // Convert Long to Double
-//                                } else if (bktScoreObject instanceof Double) {
-//                                    bktScore = (Double) bktScoreObject;
-//                                }
-//                                Log.d(TAG, "BKT Score for " + module + ": " + bktScore);
-//                            } else {
-//                                Log.e(TAG, "No BKT Score found in module " + module);
-//                            }
-//                        } else {
-//                            Log.e(TAG, "Module map is null for module: " + module);
-//                        }
-//                    } else {
-//                        Log.e(TAG, "Document does not exist at path: " + collectionPath + "/" + documentName);
-//                    }
-//
-//                })
-//                .addOnFailureListener(e -> {
-//                    Log.e(TAG, "Error retrieving document from path: " + collectionPath + "/" + documentName, e);
-//                    callback.onBKTRetrieved(null);
-//                });
-//
-//
-//        Log.d(TAG, "initializeBKTScores: End - Firestore request has been initiated, waiting for callback.");
-//    }
 
     public void initializeBKTScores(String collectionPath, String documentName, String module) {
         String TAG = "WARNING";
@@ -612,7 +340,6 @@ public class x_bkt_algorithm {
 
         {
 
-
             // Reset only if di pa tapos yung lesson..
             // kelangan completed sya, pero dapat pasado din
             // Case 1: Completed, not Passed - RETAKE
@@ -658,65 +385,6 @@ public class x_bkt_algorithm {
         }
 
     }
-
-    // RECOMMENDED BY ChatGPT 4o Plus
-//    public void initializeBKTScores(String collectionPath, String documentName, String module, BKTCallback callback) {
-//        Log.d(TAG, "Attempting to retrieve document from path: " +
-//                "users/" + userId + "/" + collectionPath + "/" + documentName);
-//
-//        Log.e(TAG, "MARJON");
-//
-//        // Testing ko
-////        db.collection("users")
-////                .document(userId)
-////                .collection(collectionPath)
-////                .document(documentName)
-////                .get()
-////                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-////                    @Override
-////                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-////                        String TAG = "WARNING";
-////                        if (task.isSuccessful()) {
-////                            DocumentSnapshot document = task.getResult();
-////                            if (document.exists()) {
-////                                if ()
-////                            }
-////                        }
-////                    }
-////                })
-//
-//
-//
-//
-//                // Original code
-////                .addOnSuccessListener(documentSnapshot -> {
-////                    if (documentSnapshot.exists()) {
-////                        // Retrieve the BKT Scores as a Map
-////                        Map<String, Double> bktScoresMap = (Map<String, Double>) documentSnapshot
-////                                .get(module + ".BKT Scores"); // walang tuldok talaga to?
-////
-////                        if (bktScoresMap != null) {
-////                            // Convert the map to a list
-////                            bktScores = new ArrayList<>(bktScoresMap.values());
-////                            Log.e(TAG, "YEHEY I GOT IT!");
-////                            Log.e(TAG, "bktScores: " + bktScores);
-////                        } else {
-////                            bktScores = new ArrayList<>();  // Initialize an empty list if null
-////                            Log.e(TAG, "I failed to retrieve it :(");
-////                            Log.e(TAG, "bktScores: " + bktScores);
-////                        }
-////
-////                        callback.onBKTRetrieved(bktScores);
-////                    } else {
-////                        Log.e(TAG, "Document does not exist at path: " + collectionPath + "/" + documentName);
-////                        callback.onBKTRetrieved(null);
-////                    }
-////                })
-////                .addOnFailureListener(e -> {
-////                    Log.e(TAG, "Error retrieving BKT Scores", e);
-////                    callback.onBKTRetrieved(null);
-////                });
-//    }
 
     public static void resetScore(int moduleIndex, int lessonIndex,
                             boolean isProgressiveMode) {
@@ -963,47 +631,6 @@ public class x_bkt_algorithm {
                 .addOnSuccessListener(aVoid -> Log.d(TAG, "Test score successfully updated"))
                 .addOnFailureListener(e -> Log.e(TAG, "Error updating test score", e));
     }
-
-    // Level 1 [0.0 - 0.1] Novice
-    // Level 2 [0.1 - 0.3] Beginner
-    // Level 3 [0.3 - 0.5] Intermediate
-    // Level 4 [0.5 - 0.7] Advanced
-    // Level 5 [0.7 - 0.9] Expert
-
-    // optimized version daw??
-//    public void updateKnowledge(boolean correct) {
-//
-//        String TAG = "updateKnowledge";
-//
-//        Log.e(TAG, "Answer: " + correct);
-//        Log.e(TAG, "Category: " + category);
-//        Log.e(TAG, "Knowledge Probability: " + knowledgeProbability);
-//        Log.e(TAG, "Slip Rate: " + slipRate);
-//        Log.e(TAG, "Guess Rate: " + guessRate);
-//
-//        double newKnowledgeProbability;
-//
-//        if (correct) {
-//            // Update probability of knowing the skill after a correct answer
-//            newKnowledgeProbability = (knowledgeProbability * (1 - slipRate)) /
-//                    (knowledgeProbability * (1 - slipRate) + (1 - knowledgeProbability) * guessRate);
-//        } else {
-//            // Update probability of knowing the skill after an incorrect answer
-//            newKnowledgeProbability = (knowledgeProbability * slipRate) /
-//                    (knowledgeProbability * slipRate + (1 - knowledgeProbability) * (1 - guessRate));
-//        }
-//
-//        // Apply learning rate to update knowledge probability
-//        knowledgeProbability = newKnowledgeProbability + (1 - newKnowledgeProbability) * learnRate;
-//
-//        Log.e("updateKnowledge", "Updated pKnow is: " + knowledgeProbability + " because Answer is: " + correct);
-//
-//        // Ensure knowledgeProbability stays within bounds [0, 1]
-//        knowledgeProbability = Math.max(0, Math.min(1, knowledgeProbability));
-//
-//        Log.e("updateKnowledge", "Final knowledgeProbability: " + knowledgeProbability);
-//    }
-
 
     public static double getKnowledge() {
         Log.e("getKnowledge()", "knowledgeProbability: " + knowledgeProbability);

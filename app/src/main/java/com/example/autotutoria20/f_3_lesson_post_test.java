@@ -212,7 +212,9 @@ public class f_3_lesson_post_test extends Fragment {
 
                 TextView items = view.findViewById(R.id.answers_total);
 
-                items.setText("Item: 0/"+postTestQuestions);
+                items.setText("Item: " + c_Lesson_feedback.postTestAttemptAnswers
+                        + "/"
+                        + postTestQuestions);
 
                 // ang inaalam mo ngayon, kung ilang questions itatanong base on difficulty??
 
