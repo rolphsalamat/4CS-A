@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/plain_background"
+    android:background="@drawable/lesson_background"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -37,7 +37,7 @@
                 android:text="Module 8"
                 android:fontFamily="@font/mouldy_cheese"
                 android:textColor="#87CEEB"
-                android:textSize="30dp"
+                android:textSize="40dp"
                 tools:layout_editor_absoluteX="60dp"
                 tools:layout_editor_absoluteY="20dp"
                 android:textStyle="bold" />
