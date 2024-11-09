@@ -70,6 +70,7 @@ public class d_Lesson_container extends AppCompatActivity implements
 //    private Boolean isLessonPassed;
     public static Button nextButton;
     private Button backButton;
+    static TextView txtSecondsRemaining;
     private ShapeableImageView currentButton;
     private f_2_lesson_video videoLesson;
     private L_lesson_sequence.StepType[] stepSequence;
@@ -96,6 +97,7 @@ public class d_Lesson_container extends AppCompatActivity implements
         isPreTestComplete = false;
         isPostTestComplete = false;
 
+        txtSecondsRemaining = findViewById(R.id.seconds_remaining);
         gridLayout = findViewById(R.id.gridLayout);
         viewPager = findViewById(R.id.viewPager);
         viewPager.setOffscreenPageLimit(1);  // Adjust the offscreen page limit
@@ -775,7 +777,10 @@ public class d_Lesson_container extends AppCompatActivity implements
             boolean shouldFinish = true; // Flag to determine if onFinish should run
 
             public void onTick(long millisUntilFinished) {
-                Log.d("Countdown", "Seconds remaining: " + millisUntilFinished / 1000);
+                int secondsRemaining = (int) (millisUntilFinished / 1000);
+                Log.d("Countdown", "Seconds remaining: " + secondsRemaining);
+
+                txtSecondsRemaining.setText(secondsRemaining + "s");
 
                 if (mode.equals("Pre-Test")) {
                     if (!(f_0_lesson_pre_test.choicesGroup.getCheckedRadioButtonId() == -1)) {
@@ -803,6 +808,7 @@ public class d_Lesson_container extends AppCompatActivity implements
 
             public void onFinish() {
                 if (shouldFinish) { // Only show Toast if no answer was selected
+                    txtSecondsRemaining.setText("");
                     Toast.makeText(context, "You haven't selected an answer yet", Toast.LENGTH_SHORT).show();
                 } else {
                     Log.d("Countdown", "onFinish called but answer was selected.");

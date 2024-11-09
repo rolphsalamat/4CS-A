@@ -381,14 +381,14 @@ public class b_main_0_menu extends AppCompatActivity {
 
     private void showLearningModes() {
 
+        NavigationView navigationView = findViewById(R.id.navigation_view);
+
+        // Disable free use mode by removing the corresponding menu item
+        Menu menu = navigationView.getMenu();
+        MenuItem progressiveItem = menu.findItem(R.id.progressive_mode);
+        MenuItem freeUseItem = menu.findItem(R.id.free_use_mode);
+
         if (isStudent) {
-
-            NavigationView navigationView = findViewById(R.id.navigation_view);
-
-            // Disable free use mode by removing the corresponding menu item
-            Menu menu = navigationView.getMenu();
-            MenuItem progressiveItem = menu.findItem(R.id.progressive_mode);
-            MenuItem freeUseItem = menu.findItem(R.id.free_use_mode);
 
             if (progressiveItem != null) {
                 progressiveItem.setVisible(false);
@@ -406,8 +406,14 @@ public class b_main_0_menu extends AppCompatActivity {
                 freeUseItem.setVisible(true);
                 freeUseItem.setEnabled(true);
             }
+
         } else {
-            // Do nothing or handle other user types if necessary
+
+//            if (progressiveItem != null) {
+//                progressiveItem.setVisible(false);
+//                progressiveItem.setEnabled(false);
+//            }
+
         }
     }
 
