@@ -773,6 +773,7 @@ public class f_3_lesson_post_test extends Fragment {
                         Log.e(TAG, "Answer is Correct! | isCorrect: " + isCorrect);
                         return true;  // Correct answer
                     } else {
+                        d_Lesson_container.startCountdown(requireContext(), "Post-Test");
                         Toast.makeText(getContext(), "Incorrect, Try Again.", Toast.LENGTH_SHORT).show();
                         isCorrect = false;
                         Log.e(TAG, "Answer is Incorrect! | isCorrect: " + isCorrect);
@@ -811,6 +812,7 @@ public class f_3_lesson_post_test extends Fragment {
                     } else {
                         Context context = getContext();
                         if (context != null) {
+                            d_Lesson_container.startCountdown(requireContext(), "Post-Test");
                             Toast.makeText(context, "Incorrect! Chance: " + answerAttempt + "/" + attemptChances, Toast.LENGTH_SHORT).show();
                             identificationAnswer.setText("");
                         }

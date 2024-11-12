@@ -1093,14 +1093,17 @@ public class b_main_1_lesson_progressive extends Fragment {
         builder.setView(dialogView);
         AlertDialog dialog = builder.create();
 
-        Button exitButton = dialogView.findViewById(R.id.okay_button);
+        Button okayButton = dialogView.findViewById(R.id.okay_button);
+        okayButton.setOnClickListener(v -> dialog.dismiss());
+
+        Button exitButton = dialogView.findViewById(R.id.exit_button);
         exitButton.setOnClickListener(v -> dialog.dismiss());
 
-        dialog.setOnShowListener(dialogInterface -> {
-            int width = (int) (350 * getResources().getDisplayMetrics().density);
-            int height = (int) (350 * getResources().getDisplayMetrics().density);
-            dialog.getWindow().setLayout(width, height);
-        });
+//        dialog.setOnShowListener(dialogInterface -> {
+//            int width = (int) (350 * getResources().getDisplayMetrics().density);
+//            int height = (int) (350 * getResources().getDisplayMetrics().density);
+//            dialog.getWindow().setLayout(width, height);
+//        });
 
         dialog.show();
     }

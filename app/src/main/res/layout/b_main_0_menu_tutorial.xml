@@ -43,14 +43,21 @@
         android:layout_weight="1"
         android:layout_marginBottom="16dp">
 
-        <!-- WebView to capture remaining space -->
-        <WebView
-            android:id="@+id/webView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+<!--        &lt;!&ndash; WebView to capture remaining space &ndash;&gt;-->
+<!--        <WebView-->
+<!--            android:id="@+id/webView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            />-->
 
         <!-- Transparent view to cover the top area -->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            />
+
         <View
             android:id="@+id/pop_out_button"
             android:layout_width="match_parent"
@@ -82,12 +89,13 @@
     <!-- Finish Tutorial Button fixed at bottom -->
     <Button
         android:id="@+id/btnFinishTutorial"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Finish Tutorial"
+        android:text="Next"
         android:textSize="18sp"
         android:padding="12dp"
+        android:background="@drawable/rounded_corners"
         android:backgroundTint="@color/navy_blue"
         android:textColor="@android:color/white" />
 

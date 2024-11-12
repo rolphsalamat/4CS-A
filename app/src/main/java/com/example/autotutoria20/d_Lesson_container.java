@@ -773,7 +773,8 @@ public class d_Lesson_container extends AppCompatActivity implements
     public static void startCountdown(final Context context, String mode) {
         Log.d("Countdown", "Starting countdown in mode: " + mode);
 
-        new CountDownTimer(10000, 1000) { // 10 seconds countdown with 1-second interval
+        // Create a new CountDownTimer instance
+        CountDownTimer countDownTimer = new CountDownTimer(10000, 1000) { // 10 seconds countdown with 1-second interval
             boolean shouldFinish = true; // Flag to determine if onFinish should run
 
             public void onTick(long millisUntilFinished) {
@@ -782,25 +783,35 @@ public class d_Lesson_container extends AppCompatActivity implements
 
                 txtSecondsRemaining.setText(secondsRemaining + "s");
 
+                // Check for answer selection based on mode
                 if (mode.equals("Pre-Test")) {
                     if (!(f_0_lesson_pre_test.choicesGroup.getCheckedRadioButtonId() == -1)) {
-                        Log.d("Countdown", "Pre-Test answer selected, skipping onFinish.");
+                        Log.d("Countdown", "Pre-Test answer selected, stopping countdown.");
                         shouldFinish = false; // Prevent onFinish from executing
+                        txtSecondsRemaining.setText(""); // Clear text
+                        cancel(); // Stop the countdown
+                        return;
                     }
                 }
 
                 if (mode.equals("Post-Test")) {
-                    if (f_3_lesson_post_test.getDifficulty() == e_Question.Difficulty.EASY
-                            || f_3_lesson_post_test.getDifficulty() == e_Question.Difficulty.MEDIUM) {
+                    if (f_3_lesson_post_test.getDifficulty() == e_Question.Difficulty.EASY ||
+                            f_3_lesson_post_test.getDifficulty() == e_Question.Difficulty.MEDIUM) {
                         if (!(f_3_lesson_post_test.choicesGroup.getCheckedRadioButtonId() == -1)) {
-                            Log.d("Countdown", "Post-Test answer selected (EASY/MEDIUM), skipping onFinish.");
+                            Log.d("Countdown", "Post-Test answer selected (EASY/MEDIUM), stopping countdown.");
                             shouldFinish = false; // Prevent onFinish from executing
+                            txtSecondsRemaining.setText(""); // Clear text
+                            cancel(); // Stop the countdown
+                            return;
                         }
                     }
                     if (f_3_lesson_post_test.getDifficulty() == e_Question.Difficulty.HARD) {
                         if (!(f_3_lesson_post_test.identificationAnswer.toString().isEmpty())) {
-                            Log.d("Countdown", "Post-Test answer provided (HARD), skipping onFinish.");
+                            Log.d("Countdown", "Post-Test answer provided (HARD), stopping countdown.");
                             shouldFinish = false; // Prevent onFinish from executing
+                            txtSecondsRemaining.setText(""); // Clear text
+                            cancel(); // Stop the countdown
+                            return;
                         }
                     }
                 }
@@ -815,7 +826,7 @@ public class d_Lesson_container extends AppCompatActivity implements
                 }
             }
 
-        }.start();
+        }.start(); // Start the countdown timer
     }
 
 //    private void updateProgressAndMoveToNextStep() {
