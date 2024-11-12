@@ -335,41 +335,50 @@ public class c_Lesson_progressive_5 extends AppCompatActivity {
         }
     }
 
-    private void showExitConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_logout, null);
-        builder.setView(dialogView);
-
-        Button cancelButton = dialogView.findViewById(R.id.cancel_exit_module);
-        Button exitButton = dialogView.findViewById(R.id.exit_module);
-
-        AlertDialog alert = builder.create();
-
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alert.dismiss();
-            }
-        });
-
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        alert.show();
-    }
+//    private void showExitConfirmationDialog() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        LayoutInflater inflater = getLayoutInflater();
+//        View dialogView = inflater.inflate(R.layout.dialog_logout, null);
+//        builder.setView(dialogView);
+//
+//        Button cancelButton = dialogView.findViewById(R.id.cancel_exit_module);
+//        Button exitButton = dialogView.findViewById(R.id.exit_module);
+//
+//        AlertDialog alert = builder.create();
+//
+//        cancelButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                alert.dismiss();
+//            }
+//        });
+//
+//        exitButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
+//
+//        alert.show();
+//    }
 
     private void showCustomDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(c_Lesson_progressive_5.this);
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_complete_previous_lesson, null);
+        View dialogView = inflater.inflate(R.layout.dialog_complete_previous_module, null);
         builder.setView(dialogView);
 
+        Button exitButton = dialogView.findViewById(R.id.exit_button);
         Button okayButton = dialogView.findViewById(R.id.okay_button);
+
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
         okayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

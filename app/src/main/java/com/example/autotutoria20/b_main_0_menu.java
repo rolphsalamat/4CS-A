@@ -586,13 +586,21 @@ public class b_main_0_menu extends AppCompatActivity {
     private void showLogoutDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.b_main_0_menu_logout, null);
+        View dialogView = inflater.inflate(R.layout.dialog_logout, null);
         builder.setView(dialogView);
 
+        Button exitButton = dialogView.findViewById(R.id.exit_button);
         Button cancelButton = dialogView.findViewById(R.id.button_cancel);
         Button logoutButton = dialogView.findViewById(R.id.button_logout);
 
         AlertDialog dialog = builder.create();
+
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss(); // Dismiss the dialog without action
+            }
+        });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override

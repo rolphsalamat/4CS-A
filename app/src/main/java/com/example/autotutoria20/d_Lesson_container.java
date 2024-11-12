@@ -1167,7 +1167,7 @@ public class d_Lesson_container extends AppCompatActivity implements
 
         dialog = builder.create();
 
-        Button btnYes = dialogView.findViewById(R.id.exit_module);
+        Button btnYes = dialogView.findViewById(R.id.button_exit_lesson);
         btnYes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1175,7 +1175,7 @@ public class d_Lesson_container extends AppCompatActivity implements
             }
         });
 
-        Button btnCancel = dialogView.findViewById(R.id.cancel_exit_module);
+        Button btnCancel = dialogView.findViewById(R.id.button_cancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

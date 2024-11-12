@@ -248,40 +248,40 @@ public class c_Lesson_freeuse_8 extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void showExitConfirmationDialog() {
-        // Create a dialog builder
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        // Inflate the custom dialog layout
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_logout, null);
-        builder.setView(dialogView);
-
-        // Find "Yes" button in custom layout
-        Button btnYes = dialogView.findViewById(R.id.exit_module);
-        btnYes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle "Yes" button click
-                Toast.makeText(c_Lesson_freeuse_8.this, "Exiting module", Toast.LENGTH_SHORT).show();
-                finish(); // Finish the activity
-            }
-        });
-
-        // Find "No" button in custom layout
-        Button btnCancel = dialogView.findViewById(R.id.cancel_exit_module);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle "No" button click
-                Toast.makeText(c_Lesson_freeuse_8.this, "Cancel Exit", Toast.LENGTH_SHORT).show();
-                dialog.dismiss(); // Dismiss the dialog
-            }
-        });
-
-        // Create and show the dialog
-        dialog = builder.create();
-        dialog.show();
-    }
+//    private void showExitConfirmationDialog() {
+//        // Create a dialog builder
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//
+//        // Inflate the custom dialog layout
+//        View dialogView = getLayoutInflater().inflate(R.layout.dialog_logout, null);
+//        builder.setView(dialogView);
+//
+//        // Find "Yes" button in custom layout
+//        Button btnYes = dialogView.findViewById(R.id.exit_module);
+//        btnYes.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Handle "Yes" button click
+//                Toast.makeText(c_Lesson_freeuse_8.this, "Exiting module", Toast.LENGTH_SHORT).show();
+//                finish(); // Finish the activity
+//            }
+//        });
+//
+//        // Find "No" button in custom layout
+//        Button btnCancel = dialogView.findViewById(R.id.cancel_exit_module);
+//        btnCancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Handle "No" button click
+//                Toast.makeText(c_Lesson_freeuse_8.this, "Cancel Exit", Toast.LENGTH_SHORT).show();
+//                dialog.dismiss(); // Dismiss the dialog
+//            }
+//        });
+//
+//        // Create and show the dialog
+//        dialog = builder.create();
+//        dialog.show();
+//    }
 
     // Show the loading dialog
     private void showLoadingDialog() {

@@ -474,10 +474,19 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
     private void showCustomDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(c_Lesson_progressive_1.this);
         LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_complete_previous_lesson, null);
+        View dialogView = inflater.inflate(R.layout.dialog_complete_previous_module, null);
         builder.setView(dialogView);
 
+        Button exitButton = dialogView.findViewById(R.id.exit_button);
         Button okayButton = dialogView.findViewById(R.id.okay_button);
+
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
         okayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,88 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/plain_background"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <FrameLayout
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/autotutoria_background_color"
-        android:gravity="center"/>
+        android:layout_height="100dp"
+        android:background="@drawable/log_out_bg_only"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
-    <!-- Arrow Button -->
     <Button
-        android:id="@+id/exitButton"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_margin="3dp"
+        android:id="@+id/exit_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:background="@drawable/close_button"
-        android:backgroundTint="#ffffff"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-
+        android:layout_margin="10dp"
         />
 
     <ImageView
-        android:id="@+id/exit_module_image"
+        android:id="@+id/background"
         android:layout_width="match_parent"
-        android:layout_height="360dp"
-        android:layout_marginTop="11dp"
-        android:src="@drawable/log_out_logo"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        android:layout_height="wrap_content"
+        android:background="@drawable/log_out_bg_only"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="250dp"
+        android:layout_height="230dp"
+        android:layout_marginBottom="80dp"
+        android:background="@drawable/log_out_logo"
+        app:layout_constraintBottom_toBottomOf="@+id/background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/cannot_proceed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity=""
-        android:layout_marginTop="230dp"
-        android:fontFamily="@font/mouldy_cheese"
-        android:text="Are you sure you want to logout? "
-        android:textColor="#FFFFFF"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center"
+        android:layout_marginBottom="-50dp"
+        android:text="are you sure you want to logout?"
+        android:fontFamily="@font/debug_free_trial"
+        android:textColor="#fFFFFF"
+        android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/buttonLayout"/>
+        app:layout_constraintBottom_toBottomOf="@id/logo"
+        android:layout_alignBottom="@id/logo"
+        />
 
-    <LinearLayout
-        android:id="@+id/buttonLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="#284979"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/exit_module_image">
 
-        <Button
-            android:id="@+id/cancel_exit_module"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:backgroundTint="#FFF"
-            android:elevation="30dp"
-            android:text="Cancel"
-            android:textColor="#000" />
+    <Button
+        android:id="@+id/button_cancel"
+        android:layout_width="170dp"
+        android:layout_height="46dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/box_for_no"
+        android:elevation="10dp"
+        android:fontFamily="@font/debug_free_trial"
+        android:text="Yes, sign me out"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/background"
+        app:layout_constraintEnd_toStartOf="@+id/button_logout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cannot_proceed" />
 
-        <Button
-            android:id="@+id/exit_module"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:backgroundTint="#1b5694"
-            android:elevation="30dp"
-            android:text="Logout"
-            android:textColor="#FFF" />
-
-    </LinearLayout>
+    <Button
+        android:id="@+id/button_logout"
+        android:layout_width="175dp"
+        android:layout_height="51dp"
+        android:layout_margin="20dp"
+        android:layout_weight="1"
+        android:background="@drawable/box_for_yes"
+        android:elevation="10dp"
+        android:fontFamily="@font/debug_free_trial"
+        android:text="No,remain logged in"
+        android:textColor="#000"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cannot_proceed" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
