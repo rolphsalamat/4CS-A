@@ -43,9 +43,6 @@ public class e_Question {
             case MEDIUM:
                 this.type = QuestionType.MULTIPLE_CHOICE;
                 break;
-//            case HARD:
-//                this.type = QuestionType.IDENTIFICATION;
-//                break;
         }
     }
 

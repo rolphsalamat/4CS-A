@@ -60,38 +60,44 @@
         android:layout_alignBottom="@id/logo"
         />
 
-
-    <Button
-        android:id="@+id/button_cancel"
-        android:layout_width="170dp"
-        android:layout_height="46dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:layout_weight="1"
-        android:background="@drawable/box_for_no"
-        android:elevation="10dp"
-        android:fontFamily="@font/debug_free_trial"
-        android:text="Yes, sign me out"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/background"
-        app:layout_constraintEnd_toStartOf="@+id/button_logout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cannot_proceed" />
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/cannot_proceed"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
 
-    <Button
-        android:id="@+id/button_logout"
-        android:layout_width="175dp"
-        android:layout_height="51dp"
-        android:layout_margin="20dp"
-        android:layout_weight="1"
-        android:background="@drawable/box_for_yes"
-        android:elevation="10dp"
-        android:fontFamily="@font/debug_free_trial"
-        android:text="No,remain logged in"
-        android:textColor="#000"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cannot_proceed" />
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="170dp"
+            android:layout_height="46dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/box_for_no"
+            android:elevation="10dp"
+            android:fontFamily="@font/debug_free_trial"
+            android:text="No,remain logged in"
+            android:textColor="#000000"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/button_logout"
+            android:layout_width="175dp"
+            android:layout_height="51dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/box_for_yes"
+            android:elevation="10dp"
+            android:fontFamily="@font/debug_free_trial"
+            android:text="Yes, sign me out"
+            android:textColor="#000"
+            android:textSize="20sp"/>
+
+    </LinearLayout>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

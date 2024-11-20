@@ -30,15 +30,8 @@ public class L_lesson_handler extends FragmentPagerAdapter {
         L_lesson_sequence.StepType stepType = stepSequence[position];
         String[] parts = currentLesson.split("_");
 
-//        Log.e(TAG, "currentLesson: " + currentLesson);
-//        Log.e(TAG, "Inside L_Lesson_handler.java | Page Number: " + pageNumber);
-
         String module = parts[0];
         String lesson = parts[1];
-
-//        Log.e(TAG, "module: " + module);
-//        Log.e(TAG, "lesson: " + lesson);
-//        Log.e(TAG, "stepType: " + stepType);
 
         switch (stepType) {
             case PRE_TEST:

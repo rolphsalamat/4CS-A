@@ -35,6 +35,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -45,6 +47,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.appcheck.FirebaseAppCheck;
 import com.google.firebase.appcheck.AppCheckProviderFactory;
 //import com.google.firebase.appcheck.PlayIntegrityAppCheckProviderFactory;
+
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.Map;
 import java.util.Objects;
@@ -399,6 +403,7 @@ public class a_user_1_login extends AppCompatActivity {
 
                     // Log retrieved email and password
                     Log.d(TAG, "Retrieved email: " + email);
+                    Log.d(TAG, "Input password: " + password);
                     Log.d(TAG, "Retrieved hashed password: " + storedHashedPassword);
 
                     // Validate retrieved email and password
@@ -445,14 +450,14 @@ public class a_user_1_login extends AppCompatActivity {
                                             String userId = user.getUid();
                                             Log.d(TAG, "Login successful. User ID: " + userId);
 
-
                                             fetchUserInfo(userId); // Fetch additional user info
+
                                         } else {
                                             Log.d(TAG, "Email not verified");
                                             Toast.makeText(a_user_1_login.this,
                                                     "Please verify your email before logging in.",
                                                     Toast.LENGTH_SHORT).show();
-                                            user.sendEmailVerification();  // Optionally resend the verification email
+                                            user.sendEmailVerification();
                                         }
                                     } else {
                                         Log.d(TAG, "User login failed: User object is null");

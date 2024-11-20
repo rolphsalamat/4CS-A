@@ -26,7 +26,7 @@ public class c_Lesson_a_retrieveScore {
 
         // Retrieve progress for the specified lesson
         progressRef.get().addOnCompleteListener(task -> {
-            String TAG = "TANGINAMO HANS";
+            String TAG = "c_Lesson_a_retrieveScore.java";
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {

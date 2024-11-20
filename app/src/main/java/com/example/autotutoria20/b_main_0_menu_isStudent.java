@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
+import java.util.Collections;
 
 public class b_main_0_menu_isStudent extends AppCompatActivity {
 
@@ -31,10 +34,10 @@ public class b_main_0_menu_isStudent extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        Button btnStuddent = findViewById(R.id.buttonStudent);
+        Button btnStudent = findViewById(R.id.buttonStudent);
         Button btnUser = findViewById(R.id.buttonUser);
 
-        btnStuddent.setOnClickListener(v -> {
+        btnStudent.setOnClickListener(v -> {
             retrieveUserStatus(true);
             Toast.makeText(b_main_0_menu_isStudent.this, "Selected: Student", Toast.LENGTH_SHORT).show();
         });
@@ -75,20 +78,39 @@ public class b_main_0_menu_isStudent extends AppCompatActivity {
         b_main_0_menu.isProgressiveCompleted = false;
     }
 
-    public void setStatus(Boolean status) {
+//    public void setStatus(Boolean status) {
+//
+//        // If "isStudent" does not exist, set it to true and update the database
+//        Log.d(TAG, "'isStudent' field does not exist. Setting default value to true.");
+//        db.collection("users").document(userId)
+//                .update("isStudent", status)
+//                .addOnSuccessListener(aVoid -> {
+//                    Log.d(TAG, "'isStudent' field added with default value: " + status);
+//                })
+//                .addOnFailureListener(e -> {
+//                    Log.e(TAG, "Error adding 'isStudent' field", e);
+//                });
+//
+//    }
 
-        // If "isStudent" does not exist, set it to true and update the database
-        Log.d(TAG, "'isStudent' field does not exist. Setting default value to true.");
+    public void setStatus(Boolean status) {
+        if (status == null || userId == null) {
+            Log.e(TAG, "Invalid input: userId or status is null");
+            return;
+        }
+
+        Log.d(TAG, "Updating 'isStudent' field for userId: " + userId + " with value: " + status);
+
         db.collection("users").document(userId)
-                .update("isStudent", status)
+                .set(Collections.singletonMap("isStudent", status), SetOptions.merge())
                 .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "'isStudent' field added with default value: " + status);
+                    Log.d(TAG, "'isStudent' field added or updated successfully: " + status);
                 })
                 .addOnFailureListener(e -> {
-                    Log.e(TAG, "Error adding 'isStudent' field", e);
+                    Log.e(TAG, "Error adding or updating 'isStudent' field", e);
                 });
-
     }
+
 
     public void retrieveUserStatus(Boolean status) {
 

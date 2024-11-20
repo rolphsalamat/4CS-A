@@ -143,47 +143,6 @@ public class c_Lesson_feedback {
         dialog.show();
     }
 
-//    public static void showDialog(Context context, double score, double passingGrade, String lesson) {
-//
-//        // Create a new dialog
-//        Dialog dialog = new Dialog(context);
-//
-//        // Inflate the custom layout
-//        LayoutInflater inflater = LayoutInflater.from(context);
-//        View view = inflater.inflate(R.layout.c_lesson_failed_dialog, null);
-//
-//        // Set the dialog content view to the inflated layout
-//        dialog.setContentView(view);
-//        dialog.getWindow().setLayout(
-//                ViewGroup.LayoutParams.MATCH_PARENT, // Width
-//                ViewGroup.LayoutParams.WRAP_CONTENT); // Height
-//
-//
-//        // Find views within the inflated layout
-//        TextView message = view.findViewById(R.id.failed_lesson);
-//        TextView bktScore = view.findViewById(R.id.bkt_score);
-//        TextView passingScore = view.findViewById(R.id.passing_grade);
-//        Button okayButton = view.findViewById(R.id.okay_button);
-//
-//        score *= 100;
-//        passingGrade *= 100;
-//
-//        // Set text or any other properties for the views with 2 decimal places
-//        message.setText("You did not pass " + lesson);
-//        bktScore.setText(String.format("BKT Score: %.2f%%", score));
-//        passingScore.setText(String.format("Passing Grade: %.2f%%", passingGrade));
-//
-//        // Set up the 'Okay' button click listener
-//        okayButton.setOnClickListener(v -> {
-//            dialog.dismiss();
-////            context.dismiss();
-//        });
-//
-//        // Show the dialog
-//        dialog.show();
-//    }
-
-
     // Retrieve BKTScore from the database
     public void retrieveBKTScore(String mode, String lesson) {
 
@@ -449,12 +408,6 @@ public class c_Lesson_feedback {
             Button button = customView.findViewById(R.id.button_okay);
             button.setOnClickListener(v -> dialog.dismiss()); // dismiss the dialog on button click
 
-//            Log.e("showDialog", "OKAY ETO NA!!!");
-//            // Create and show the dialog with the selected layout
-//            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//            builder.setView(View.inflate(context, layoutId, null));
-//            AlertDialog dialog = builder.create();
-//            dialog.show();
         }
     }
 

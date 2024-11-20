@@ -83,19 +83,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
+                android:layout_margin="10dp"
                 android:padding="4dp">
                 <!-- Gray circle background for camera icon -->
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_marginTop="2dp"
                     android:background="@drawable/autotutoria_background_color"
                     app:shapeAppearanceOverlay="@style/ImageViewCircle" />
                 <!-- Camera icon -->
                 <ImageView
                     android:id="@+id/change_profile_icon"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center"
                     android:src="@drawable/camera"
                     app:tint="@color/white" />
@@ -142,7 +143,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="Category:"
+            android:text="Level:"
             android:textSize="20sp"
             android:fontFamily="@font/mouldy_cheese"
             android:textColor="@color/white" />
@@ -245,47 +246,47 @@
         android:clickable="true"
         android:textSize="20sp" />
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="50dp"-->
-<!--        android:orientation="horizontal"-->
-<!--        >-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal"
+        >
 
-<!--        <Button-->
-<!--            android:id="@+id/button_change_username"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_marginHorizontal="5dp"-->
-<!--            android:text="Change \nUsername"-->
-<!--            android:textColor="@color/navy_blue"-->
-<!--            android:background="@drawable/rounded_corners"-->
-<!--            />-->
+        <Button
+            android:id="@+id/button_change_username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="5dp"
+            android:text="Change \nUsername"
+            android:textColor="@color/navy_blue"
+            android:background="@drawable/rounded_corners"
+            />
 
-<!--        <Button-->
-<!--            android:id="@+id/button_change_email"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_marginHorizontal="5dp"-->
-<!--            android:text="Change \nEmail"-->
-<!--            android:textColor="@color/navy_blue"-->
-<!--            android:background="@drawable/rounded_corners"-->
-<!--            />-->
+        <Button
+            android:id="@+id/button_change_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="5dp"
+            android:text="Change \nEmail"
+            android:textColor="@color/navy_blue"
+            android:background="@drawable/rounded_corners"
+            />
 
-<!--        <Button-->
-<!--            android:id="@+id/button_change_password"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_marginHorizontal="5dp"-->
-<!--            android:text="Change \nPassword"-->
-<!--            android:textColor="@color/navy_blue"-->
-<!--            android:background="@drawable/rounded_corners"-->
-<!--            />-->
+        <Button
+            android:id="@+id/button_change_password"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="5dp"
+            android:text="Change \nPassword"
+            android:textColor="@color/navy_blue"
+            android:background="@drawable/rounded_corners"
+            />
 
-<!--    </LinearLayout>-->
+    </LinearLayout>
 
 <!--        &lt;!&ndash; Email Field (Editable) &ndash;&gt;-->
 <!--        <TextView-->
