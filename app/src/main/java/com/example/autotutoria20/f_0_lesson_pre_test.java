@@ -278,7 +278,10 @@ public class f_0_lesson_pre_test extends Fragment {
                                     "Pre-Test",
                                     c_Lesson_feedback.preTestCorrectAnswers);
                         }
-                        c_Lesson_feedback.preTestCorrectAnswers++;
+                        c_Lesson_feedback.preTestCorrectAnswers
+                                = Math.min(
+                                    c_Lesson_feedback.preTestCorrectAnswers + 1, preTestQuestions);
+
                     }
 
                     if (!x_bkt_algorithm.isLessonFinished)

@@ -152,6 +152,8 @@ public class x_bkt_algorithm {
             // Update with guess rate when answered correctly
             // Formula: pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate)
             knowledgeProbability = pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate);
+//            knowledgeProbability = pKnow + (1 - pKnow) * learnRate * (1 - guessRate);
+
         } else {
             // Softened adjustment for incorrect answers
             // Rather than a drastic reduction, use a milder decrease by incorporating the softening rate
@@ -191,6 +193,10 @@ public class x_bkt_algorithm {
     }
 
     public static void setBKTCategory(String category) {
+
+        if (category == null) {
+            throw new IllegalArgumentException("Category cannot be null");
+        }
 
         switch (category) {
             case "Novice":
@@ -243,6 +249,11 @@ public class x_bkt_algorithm {
         Log.d(TAG, "Category: " + category);
         Log.d(TAG, "Learn Rate: " + learnRate);
         Log.d(TAG, "Slip Rate: " + slipRate);
+        Log.d(TAG, "Guess Rate: " + guessRate);
+        Log.d(TAG, "Forget Rate: " + forgetRate);
+        Log.d(TAG, "Softening Rate: " + softeningRate);
+        Log.d(TAG, "Knowledge Probability: " + knowledgeProbability);
+
     }
 
     public static x_bkt_algorithm getInstance(double pInit, double learnRate, double forgetRate, double slip) {

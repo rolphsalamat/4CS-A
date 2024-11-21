@@ -102,6 +102,9 @@ public class d_Lesson_container extends AppCompatActivity implements
         viewPager = findViewById(R.id.viewPager);
         viewPager.setOffscreenPageLimit(1);  // Adjust the offscreen page limit
 
+        txtSecondsRemaining.setEnabled(false);
+        txtSecondsRemaining.setVisibility(View.GONE);
+
         db = FirebaseFirestore.getInstance();
 
         SharedPreferences sharedPreferences = getSharedPreferences("ModulePreferences", MODE_PRIVATE);
@@ -781,6 +784,7 @@ public class d_Lesson_container extends AppCompatActivity implements
             } else {
                 finish();
             }
+            c_Lesson_feedback.resetResult();
         }
     }
 
@@ -1119,7 +1123,7 @@ public class d_Lesson_container extends AppCompatActivity implements
 
         // Inflate the custom layout
         LayoutInflater inflater = getLayoutInflater();
-        View customDialogView = inflater.inflate(R.layout.c_lesson_passed_dialog, null);
+        View customDialogView = inflater.inflate(R.layout.c_lesson_passed_dialog_2, null);
 
         // Set the custom layout parameters for width and height
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(

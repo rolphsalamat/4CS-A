@@ -284,7 +284,9 @@ public class f_3_lesson_post_test extends Fragment {
                                     "Post-Test",
                                     c_Lesson_feedback.preTestCorrectAnswers);
                         }
-                        c_Lesson_feedback.postTestCorrectAnswers++;
+                        c_Lesson_feedback.postTestCorrectAnswers
+                                = Math.min(
+                                c_Lesson_feedback.postTestCorrectAnswers + 1, postTestQuestions);
                     }
 
                     if (!x_bkt_algorithm.isLessonFinished)
