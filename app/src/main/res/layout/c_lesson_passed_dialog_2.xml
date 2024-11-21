@@ -3,15 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/background"
-        android:layout_width="wrap_content"
-        android:layout_height="412dp"
         android:src="@drawable/passed_header_2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/background"
+
+        />
 
 
     <ImageView
@@ -53,7 +58,7 @@
         android:id="@+id/pre_test_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:layout_marginStart="50dp"
         android:text="Pre-Test Score: n/n"
         android:textColor="@color/white"
@@ -125,6 +130,8 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@id/background"
         app:layout_constraintStart_toStartOf="@id/background"
-        app:layout_constraintTop_toBottomOf="@+id/tokenLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/tokenLayout"
+        app:layout_constraintBottom_toBottomOf="@id/background"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

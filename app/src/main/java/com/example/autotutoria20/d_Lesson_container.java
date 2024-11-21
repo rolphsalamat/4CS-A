@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,13 +85,26 @@ public class d_Lesson_container extends AppCompatActivity implements
     private long backPressedTime; // Variable to track back press time
     private Toast backToast;
     private c_Lesson_feedback feedback;
+    private LinearLayout tokenLayout;
     private x_bkt_algorithm bktAlgo;
+//    public static long token;
+    public static int d_lesson_container_token;
+    public static TextView tokenCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.d_lesson_container);
+
+        tokenLayout = findViewById(R.id.tokenLayout);
+        tokenCount = findViewById(R.id.token);
+        tokenCount.setText("" + b_main_0_menu.token);
+
+        d_lesson_container_token = (int) b_main_0_menu.token;
+
+        tokenLayout.setVisibility(View.GONE);
+        tokenLayout.setEnabled(false);
 
         currentStep = 0;
         currentReturnStep = 0;
@@ -100,6 +114,8 @@ public class d_Lesson_container extends AppCompatActivity implements
         // e kasi ibang lesson na to :D
         isPreTestComplete = false;
         isPostTestComplete = false;
+
+        c_Lesson_feedback.resetResult();
 
         txtSecondsRemaining = findViewById(R.id.seconds_remaining);
         gridLayout = findViewById(R.id.gridLayout);
@@ -320,6 +336,11 @@ public class d_Lesson_container extends AppCompatActivity implements
 //                    txtSecondsRemaining.setVisibility(View.VISIBLE);
 //                    txtSecondsRemaining.setEnabled(true);
 
+                    if (f_3_lesson_post_test.getDifficulty() == e_Question.Difficulty.HARD) {
+                        tokenLayout.setVisibility(View.VISIBLE);
+                        tokenLayout.setEnabled(true);
+                    }
+
                     backButton.setVisibility(View.GONE);
                     backButton.setEnabled(false);
 
@@ -512,6 +533,7 @@ public class d_Lesson_container extends AppCompatActivity implements
 
         // set the stepView designs here??
         for (int i = 0; i < numberOfSteps; i++) {
+
             View stepView = new View(this);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = 0;
@@ -529,18 +551,6 @@ public class d_Lesson_container extends AppCompatActivity implements
             else {
                 stepView.setBackgroundResource(R.drawable.rounded_corners);
             }
-
-//            // Determine the background based on the step's position relative to the selected step
-//            if (i < (currentStep)) {
-////                Log.e(TAG, i + " < " + (currentStep) + ", so setting to completed (transparent) background");
-//                stepView.setBackgroundResource(R.drawable.rounded_corners_completed);
-//            } else if (i == (currentStep)) {
-////                Log.e(TAG, i + " == " + (currentStep) + ", so setting to current step (highlighted) background");
-//                stepView.setBackgroundResource(R.drawable.rounded_corners_current_step); // Highlight the current step
-//            } else {
-////                Log.e(TAG, i + " > " + (currentStep - 1) + ", so setting to transparent background");
-//                stepView.setBackgroundResource(R.drawable.rounded_corners);
-//            }
 
         } // end of for loop
     }
@@ -926,11 +936,14 @@ public class d_Lesson_container extends AppCompatActivity implements
         // Create the dialog
         AlertDialog dialog = builder.create();
 
+        String TAG = "showScoreDialog()";
+        Log.e(TAG, "Mode: " + testMode);
+        Log.e(TAG, "Score: " + score);
+        Log.e(TAG, "Total: " + questionCount);
+
         titleText.setText(testMode + " Result");
-        messageText.setText("Your score for " + testMode + " is: " +
-                // Pre-Test = (score-1);
-                // Post-Test =
-                (score) + "/" + questionCount);
+        messageText.setText("Your score for " + testMode + " is:\n" +
+                score + " / " + questionCount);
 
         okayButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -960,7 +973,6 @@ public class d_Lesson_container extends AppCompatActivity implements
         // Call feedback for pre-test
         c_Lesson_feedback.printResult("Pre-Test");
 
-//        currentStep = 1;
 
         isPreTestComplete = true;
         onNextButtonClicked(); // Proceed to the next step if the test is passed
@@ -1014,7 +1026,7 @@ public class d_Lesson_container extends AppCompatActivity implements
 
 //        Double new_pKnow = x_bkt_algorithm.getKnowledge();
 
-        showScoreDialog("Pre-Test", score, f_3_lesson_post_test.postTestQuestions);
+        showScoreDialog("Post-Test", score, f_3_lesson_post_test.postTestQuestions);
 
         lessonPassed = isPassed;
 
@@ -1035,85 +1047,64 @@ public class d_Lesson_container extends AppCompatActivity implements
         LayoutInflater inflater = getLayoutInflater();
         View customDialogView = inflater.inflate(R.layout.c_lesson_passed_dialog_2, null);
 
-        // Set the custom layout parameters for width and height
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, // Width: Match Parent
-//                (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 392, getResources().getDisplayMetrics()) // Height: 392dp
-                ViewGroup.LayoutParams.WRAP_CONTENT // Height: Wrap Content
-
-        );
-        customDialogView.setLayoutParams(params);
-
         // Set the custom layout to the dialog builder
         builder.setView(customDialogView);
 
+        // Find and update TextViews
         TextView dialogMessage = customDialogView.findViewById(R.id.message);
-        Button okButton = customDialogView.findViewById(R.id.okay_passed_button);
-
         dialogMessage.setText("You passed Lesson " + lesson + "!");
 
         TextView preTestMessage = customDialogView.findViewById(R.id.pre_test_score);
         preTestMessage.setText(
                 "Pre-Test Score: "
-                    + (c_Lesson_feedback.preTestCorrectAnswers)
-                    + "/"
-                    + (c_Lesson_feedback.preTestAttemptAnswers-1));
+                        + (c_Lesson_feedback.preTestCorrectAnswers)
+                        + "/"
+                        + (c_Lesson_feedback.preTestAttemptAnswers - 1));
 
         TextView postTestMessage = customDialogView.findViewById(R.id.post_test_score);
         postTestMessage.setText(
                 "Post-Test Score: "
-                    + (c_Lesson_feedback.postTestCorrectAnswers)
-                    + "/"
-                    + (c_Lesson_feedback.postTestAttemptAnswers-1));
+                        + (c_Lesson_feedback.postTestCorrectAnswers)
+                        + "/"
+                        + (c_Lesson_feedback.postTestAttemptAnswers - 1));
 
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        // Handle button click
+        Button okButton = customDialogView.findViewById(R.id.okay_passed_button);
+        okButton.setOnClickListener(v -> {
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            FirebaseUser currentUser = mAuth.getCurrentUser();
 
-                FirebaseAuth mAuth;
-                // Initialize FirebaseAuth
-                mAuth = FirebaseAuth.getInstance();
+            if (currentUser != null) {
+                String userId = currentUser.getUid();
+                DocumentReference userDoc = db.collection("users").document(userId);
 
-                FirebaseUser currentUser = mAuth.getCurrentUser();
-                if (currentUser != null) {
-                    String userId = currentUser.getUid();
+                userDoc.get().addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Long currentTokens = documentSnapshot.getLong("Token");
+                        if (currentTokens == null) currentTokens = 0L;
 
-                    // Reference to the user's document in Firestore
-                    DocumentReference userDoc = db.collection("users").document(userId);
-
-                    // Get the current token count and add 10 tokens
-                    userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot.exists()) {
-                                // Get the current token count
-                                Long currentTokens = documentSnapshot.getLong("Token");
-
-                                // If the current token value is null (if it's the user's first time), set it to 0
-                                if (currentTokens == null) {
-                                    currentTokens = 0L;
-                                }
-
-                                // Add 10 tokens to the current count
-                                Long newTokenCount = currentTokens + 10;
-
-                                // Update the token count in Firestore
-                                userDoc.update("Token", newTokenCount);
-                            }
-                        }
-                    });
-                }
-
-                finish(); // Optionally finish the activity
+                        userDoc.update("Token", currentTokens + 10);
+                    }
+                });
             }
-        });
 
+            finish(); // Optionally finish the activity
+        });
 
         // Create and show the dialog
         AlertDialog dialog = builder.create();
-        dialog.setCancelable(false); // Prevent dismissing by tapping outside
+        dialog.setCancelable(false);
         dialog.show();
+
+        // Dynamically set dialog width and height
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setLayout(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+        }
     }
+
 
     private void updateCurrentModuleInDatabase() {
         SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);

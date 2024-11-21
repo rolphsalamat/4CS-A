@@ -8,10 +8,13 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -29,6 +32,7 @@ public class f_0_lesson_pre_test extends Fragment {
     private static final String ARG_LESSON = "lesson";
     private static final String ARG_MODE = "mode";
 
+    private LinearLayout imageContainer;
     private int currentQuestionIndex = 0;
     private e_Question[] questions;
     private TextView questionText;
@@ -97,7 +101,6 @@ public class f_0_lesson_pre_test extends Fragment {
 
         // Get the Singleton instance
         bktModel = x_bkt_algorithm.getInstance(0.3, 0.2, 0.1, 0.4);
-
 
         // Determine if it's Progressive Mode
         if (getArguments() != null) {
@@ -193,23 +196,80 @@ public class f_0_lesson_pre_test extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        d_Lesson_container.startCountdown(requireContext(), "Pre-Test", questionsAnswered >= (preTestQuestions+1));
+        Log.e("Pre-Test onViewCreated", "Load Images");
+
+        // Ensure imageContainer has MATCH_PARENT width and fixed height in XML
+        imageContainer = requireView().findViewById(R.id.image_container);
+
+        if (imageContainer == null) {
+            Log.e("InitializationError", "imageContainer is null!");
+            return;
+        }
+
+        // Set container height to 60dp
+        int containerHeight = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 60, getResources().getDisplayMetrics());
+        imageContainer.getLayoutParams().height = containerHeight;
+
+        // Set container orientation to horizontal
+        imageContainer.setOrientation(LinearLayout.HORIZONTAL);
+
+        // Total horizontal spacing: 16dp as a base value for margin adjustment
+        int baseSpacing = 16;
+
+        // Calculate dynamic margin based on the number of images
+        int marginInPixels = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, baseSpacing / Math.max(1, preTestQuestions), getResources().getDisplayMetrics());
+
+        // Iterate through the number of images
+        for (int i = 0; i < preTestQuestions; i++) {
+
+            ImageView imageView = new ImageView(requireContext());
+
+            // Set each image to take an equal part of the width
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    0, // Width: Dynamic, evenly spaced
+                    LinearLayout.LayoutParams.MATCH_PARENT, // Height matches the container
+                    1f // Weight to divide equally
+            );
+
+            // Apply dynamic margins between images
+            if (i > 0) { // No margin for the first image
+                params.setMargins(marginInPixels, 0, 0, 0);
+            }
+
+            imageView.setLayoutParams(params);
+
+            // Set the tag
+            imageView.setTag("testAnswer_" + (i + 1));
+
+            // Set the image resource or background
+            imageView.setImageResource(R.drawable.test_answer_blank);
+//            imageView.setColorFilter(Color.GRAY);
+//            imageView.setBackgroundColor(Color.RED);
+
+            // Add the ImageView to the container
+            imageContainer.addView(imageView);
+
+            Log.e("Pre-Test onViewCreated", "load image done");
+
+        }
 
         questionText = view.findViewById(R.id.question_text);
         choicesGroup = view.findViewById(R.id.choices_group);
         submitButton = view.findViewById(R.id.submit_pre_test);
-        currentButton = view.findViewById(R.id.currentButton);
+//        currentButton = view.findViewById(R.id.currentButton);
 //        correct = view.findViewById(R.id.answers_correct);
 //        mistake = view.findViewById(R.id.answers_wrong);
         total = view.findViewById(R.id.answers_total);
 
-        if (!d_Lesson_container.isPreTestComplete) {
-            currentButton.setEnabled(false);
-            currentButton.setVisibility(View.GONE);
-        } else {
-            currentButton.setEnabled(true);
-            currentButton.setVisibility(View.VISIBLE);
-        }
+//        if (!d_Lesson_container.isPreTestComplete) {
+//            currentButton.setEnabled(false);
+//            currentButton.setVisibility(View.GONE);
+//        } else {
+//            currentButton.setEnabled(true);
+//            currentButton.setVisibility(View.VISIBLE);
+//        }
 
         // Ensure valid indices are used
         int moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
@@ -236,10 +296,10 @@ public class f_0_lesson_pre_test extends Fragment {
 //        }
 
 
-        currentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) { d_Lesson_container.onGoToCurrent(); }
-        });
+//        currentButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) { d_Lesson_container.onGoToCurrent(); }
+//        });
 
         if (getArguments() != null) {
             String module = getArguments().getString(ARG_MODULE);
@@ -518,6 +578,26 @@ public class f_0_lesson_pre_test extends Fragment {
             } else {
                 backgroundColor = Color.GREEN;
                 toastMessage = "Correct answer!";
+            }
+
+            if (answerAttempt >= attemptChances || isCorrect) {
+                // Construct the tag based on currentQuestionIndex
+                String targetTag = "testAnswer_" + c_Lesson_feedback.preTestAttemptAnswers;
+                Log.d("TagCheck", "Looking for ImageView with tag: " + targetTag);
+
+                // Find the ImageView with the matching tag
+                ImageView targetImageView = imageContainer.findViewWithTag(targetTag);
+
+                // Check if the ImageView exists, then update its resource
+                if (targetImageView != null) {
+                    if (isCorrect) {
+                        targetImageView.setImageResource(R.drawable.test_answer_check);
+                    } else {
+                        targetImageView.setImageResource(R.drawable.test_answer_cross);
+                    }
+                } else {
+                    Log.e("ImageViewError", "No ImageView found with tag: " + targetTag);
+                }
             }
 
             // Create a GradientDrawable for rounded corners

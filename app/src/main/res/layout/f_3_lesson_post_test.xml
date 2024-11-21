@@ -106,6 +106,16 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <LinearLayout
+        android:id="@+id/image_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"
+        android:layout_above="@id/submit_pre_test">
+    </LinearLayout>
+
     <Button
         android:id="@+id/submit_post_test"
         android:layout_width="match_parent"

@@ -412,7 +412,8 @@ public class f_1_lesson_text extends Fragment {
 
             int resId = getResources().getIdentifier(contentKey, "string", getContext().getPackageName());
             String content = getString(resId);
-            int delayInSeconds = calculateDelayBasedOnLength(content.length());
+//            int delayInSeconds = calculateDelayBasedOnLength(content.length());
+            int delayInSeconds = 1;
             delayFinish = delayInSeconds;
             Log.e(TAG, "delayFinish: " + delayFinish);
 
@@ -448,7 +449,7 @@ public class f_1_lesson_text extends Fragment {
 
                             // may option tayo na
 
-                        }, delayInSeconds * 1000L);
+                        }, delayInSeconds * 500L);
                     }
                     else if (currentStep == (totalSteps - 2)) {
                         Log.e(TUG, "currentStep("+currentStep+") == (totalSteps("+(totalSteps-2)+")");
@@ -467,7 +468,7 @@ public class f_1_lesson_text extends Fragment {
 
                             tapToContinueButton.setVisibility(View.GONE);
                             tapToContinueButton.setEnabled(false);
-                        }, delayInSeconds * 1000);
+                        }, delayInSeconds * 500);
                     }
                     return;
                 }

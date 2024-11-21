@@ -142,25 +142,49 @@ public class x_bkt_algorithm {
         String TAG = "updateKnowledgeProbability";
 
         Log.e(TAG, "Answer: " + answeredCorrectly);
-        Log.e(TAG, "knowledgeProbability: " + knowledgeProbability);
+        Log.e(TAG, "knowledgeProbability (before): " + pKnow);
         Log.e(TAG, "Learn Rate: " + learnRate);
         Log.e(TAG, "Guess Rate: " + guessRate);
         Log.e(TAG, "Slip Rate: " + slipRate);
         Log.e(TAG, "Softening Rate: " + softeningRate);
 
         if (answeredCorrectly) {
-            // Update for correct answers with a capped increase
-            knowledgeProbability = pKnow + Math.min(learnRate * (1 - pKnow) * (1 - guessRate), 0.2);
+            // Correct answer increases knowledge with capped gain
+            double categoryMultiplier = getCategoryMultiplier(true); // Higher for lower categories
+            double gain = learnRate * categoryMultiplier * (1 - pKnow) * (1 - guessRate);
+            knowledgeProbability = pKnow + Math.min(gain, 0.15); // Cap the gain for stability
         } else {
-            // Adjust for incorrect answers with a reduced penalty
-            knowledgeProbability = pKnow * (1 - (slipRate * softeningRate) / 2);
+            // Incorrect answer decreases knowledge with controlled penalty
+            double categoryMultiplier = getCategoryMultiplier(false); // Higher for higher categories
+            double penalty = slipRate * softeningRate * categoryMultiplier / 3;
+            knowledgeProbability = pKnow * (1 - penalty);
         }
 
         // Ensure knowledgeProbability stays within realistic bounds
-        knowledgeProbability = Math.max(0.3, Math.min(1.0, knowledgeProbability));
+        knowledgeProbability = Math.max(0.4, Math.min(1.0, knowledgeProbability));
 
         Log.d(TAG, "Updated Knowledge Probability: " + knowledgeProbability);
     }
+
+    private double getCategoryMultiplier(boolean isCorrect) {
+        // Example multipliers based on category
+        switch (b_main_0_menu_categorize_user.category) {
+            case "Novice":
+                return isCorrect ? 1.2 : 0.8; // Higher increase, lower decrease
+            case "Beginner":
+                return isCorrect ? 1.1 : 0.9;
+            case "Intermediate":
+                return isCorrect ? 1.0 : 1.0;
+            case "Advanced":
+                return isCorrect ? 0.9 : 1.1;
+            case "Expert":
+                return isCorrect ? 0.8 : 1.2; // Lower increase, higher decrease
+            default:
+                return 1.0; // Neutral multiplier for unhandled categories
+        }
+    }
+
+
 
 
     public e_Question.Difficulty getDifficultyLevel(double bktScore) {
@@ -193,58 +217,55 @@ public class x_bkt_algorithm {
 
         switch (category) {
             case "Novice":
-                // Easier learning for Novices with forgiving parameters
-                learnRate = 0.5;       // Increased learning for faster progress
-                slipRate = 0.3;        // Higher slip rate for greater tolerance of mistakes
-                guessRate = 0.35;      // Slightly higher guess rate for easier guessing
-                forgetRate = 0.1;      // Moderate forget rate to avoid stagnation
-                softeningRate = 0.9;   // High softening to minimize penalties for errors
-                knowledgeProbability = 0.2;  // Start with very low knowledge probability
+                learnRate = 0.8;       // High learning for rapid progress
+                slipRate = 0.2;        // Lower slip rate to avoid penalties
+                guessRate = 0.4;       // Higher guess rate for more leniency
+                forgetRate = 0.02;     // Minimal forget rate for better retention
+                softeningRate = 1.0;   // Max softening to reduce penalty impact
+                knowledgeProbability = 0.5;  // Starting knowledge probability closer to neutral
                 break;
 
             case "Beginner":
-                // Moderate improvement over Novice, with balanced parameters
-                learnRate = 0.6;       // Higher learning rate for steady improvement
-                slipRate = 0.2;        // Reduced slip rate for improved retention
-                guessRate = 0.25;      // Lower guess rate to encourage accurate answers
-                forgetRate = 0.08;     // Lower forget rate for more stable knowledge
-                softeningRate = 0.85;  // Forgiving softening rate for errors
-                knowledgeProbability = 0.4;  // Start with a moderate knowledge probability
+                learnRate = 0.85;      // High learning rate for steady improvement
+                slipRate = 0.15;       // Reduced slip rate for fewer penalties
+                guessRate = 0.35;      // Higher guess rate for more forgiveness
+                forgetRate = 0.015;    // Very low forget rate
+                softeningRate = 0.95;  // High softening to minimize penalty impact
+                knowledgeProbability = 0.6;  // Increased starting knowledge probability
                 break;
 
             case "Intermediate":
-                // Balanced parameters for stable progression
-                learnRate = 0.5;       // Balanced learning rate
-                slipRate = 0.15;       // Lower slip rate for better retention
-                guessRate = 0.2;       // Reduced guess rate for accuracy
-                forgetRate = 0.05;     // Slightly reduced forget rate
-                softeningRate = 0.8;   // Moderate softening for some forgiveness
-                knowledgeProbability = 0.5;  // Start with a stable knowledge probability
+                learnRate = 0.9;       // Higher learning rate for accelerated improvement
+                slipRate = 0.1;        // Minimal slip rate for fewer penalties
+                guessRate = 0.25;      // Balanced guess rate
+                forgetRate = 0.01;     // Negligible forget rate
+                softeningRate = 0.9;   // Forgiving softening for occasional errors
+                knowledgeProbability = 0.7;  // High starting knowledge probability
                 break;
 
             case "Advanced":
-                // Challenge increases while maintaining mastery potential
-                learnRate = 0.7;       // Higher learning rate for quick mastery
-                slipRate = 0.1;        // Low slip rate for better stability
-                guessRate = 0.1;       // Reduced guess rate for precision
-                forgetRate = 0.03;     // Minimal forget rate
-                softeningRate = 0.7;   // Mild softening for advanced learners
-                knowledgeProbability = 0.7;  // Start with a high knowledge probability
+                learnRate = 0.95;      // Very high learning rate for mastery
+                slipRate = 0.05;       // Very low slip rate
+                guessRate = 0.2;       // Balanced guess rate
+                forgetRate = 0.005;    // Minimal forget rate
+                softeningRate = 0.85;  // Gentle softening for rare mistakes
+                knowledgeProbability = 0.75;  // Strong starting knowledge probability
                 break;
 
             case "Expert":
-                // Minimalistic error margins for top-tier learners
-                learnRate = 0.9;       // Maximum learning rate
-                slipRate = 0.05;       // Minimal slip rate
-                guessRate = 0.05;      // Minimal guess rate for top accuracy
-                forgetRate = 0.02;     // Almost negligible forget rate
-                softeningRate = 0.6;   // Gentle softening for rare mistakes
-                knowledgeProbability = 0.85; // Start with very high knowledge probability
+                learnRate = 1.0;       // Maximum learning rate for mastery
+                slipRate = 0.02;       // Almost no slip rate
+                guessRate = 0.15;      // Minimal guess rate
+                forgetRate = 0.001;    // Negligible forget rate
+                softeningRate = 0.8;   // Moderate softening for occasional mistakes
+                knowledgeProbability = 0.8;  // Very high starting knowledge probability
                 break;
 
             default:
                 throw new IllegalArgumentException("Invalid category: " + category);
         }
+
+
 
         String TAG = "Set BKT Category";
         Log.d(TAG, "Category: " + category);

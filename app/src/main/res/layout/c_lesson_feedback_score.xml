@@ -34,7 +34,7 @@
                 android:id="@+id/message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Your score for ????-Test is: ?/?"
+                android:text="Your score for ????-Test\nis:?/?"
                 android:textSize="26sp"
                 android:textColor="@color/white"
                 android:fontFamily="@font/failed_font"
