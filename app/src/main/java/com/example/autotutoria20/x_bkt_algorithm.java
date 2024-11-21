@@ -145,30 +145,23 @@ public class x_bkt_algorithm {
         Log.e(TAG, "knowledgeProbability: " + knowledgeProbability);
         Log.e(TAG, "Learn Rate: " + learnRate);
         Log.e(TAG, "Guess Rate: " + guessRate);
-        Log.e(TAG, "Slip Rate: "  + slipRate);
+        Log.e(TAG, "Slip Rate: " + slipRate);
         Log.e(TAG, "Softening Rate: " + softeningRate);
 
         if (answeredCorrectly) {
-            // Update with guess rate when answered correctly
-            // Formula: pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate)
-            knowledgeProbability = pKnow + (learnRate * (1 - pKnow)) * (1 - guessRate);
-//            knowledgeProbability = pKnow + (1 - pKnow) * learnRate * (1 - guessRate);
-
+            // Update for correct answers with a capped increase
+            knowledgeProbability = pKnow + Math.min(learnRate * (1 - pKnow) * (1 - guessRate), 0.2);
         } else {
-            // Softened adjustment for incorrect answers
-            // Rather than a drastic reduction, use a milder decrease by incorporating the softening rate
-            // Formula: pKnow * (1 - slipRate * softeningRate)
-            knowledgeProbability = pKnow * (1 - slipRate * softeningRate);
-
-//            // Optionally include a forget rate to ensure the knowledge doesn't hold at maximum indefinitely
-//            knowledgeProbability *= (1 - forgetRate);
+            // Adjust for incorrect answers with a reduced penalty
+            knowledgeProbability = pKnow * (1 - (slipRate * softeningRate) / 2);
         }
 
-        // Ensure knowledgeProbability stays within [0, 1]
-        knowledgeProbability = Math.max(0.0, Math.min(1.0, knowledgeProbability));
+        // Ensure knowledgeProbability stays within realistic bounds
+        knowledgeProbability = Math.max(0.3, Math.min(1.0, knowledgeProbability));
 
         Log.d(TAG, "Updated Knowledge Probability: " + knowledgeProbability);
     }
+
 
     public e_Question.Difficulty getDifficultyLevel(double bktScore) {
 
@@ -200,47 +193,55 @@ public class x_bkt_algorithm {
 
         switch (category) {
             case "Novice":
-                // Increase learn rate and reduce slip rate for easier learning
-                learnRate = 0.4;  // Increased learn rate for better progress
-                slipRate = 0.25;  // Lower slip rate to prevent forgetting too quickly
-                guessRate = 0.3;  // Maintain guessing rate
-                forgetRate = 0.1; // Keep forget rate for Novice, slightly higher
-                softeningRate = 0.8; // Reduced softening to allow some error correction
-                knowledgeProbability = 0.1;  // Start with low knowledge probability
+                // Easier learning for Novices with forgiving parameters
+                learnRate = 0.5;       // Increased learning for faster progress
+                slipRate = 0.3;        // Higher slip rate for greater tolerance of mistakes
+                guessRate = 0.35;      // Slightly higher guess rate for easier guessing
+                forgetRate = 0.1;      // Moderate forget rate to avoid stagnation
+                softeningRate = 0.9;   // High softening to minimize penalties for errors
+                knowledgeProbability = 0.2;  // Start with very low knowledge probability
                 break;
+
             case "Beginner":
-                // Increase learn rate and adjust slip rate for smoother progress
-                learnRate = 0.5;  // Increase learn rate for better knowledge gain
-                slipRate = 0.2;   // Moderate slip rate to balance learning and forgetting
-                guessRate = 0.25; // Reduce guessing rate to ensure more accurate answers
-                forgetRate = 0.07; // Reduce forget rate slightly
-                softeningRate = 0.75; // Moderate softening for more forgiving incorrect answers
-                knowledgeProbability = 0.3;  // Start with a higher initial probability
+                // Moderate improvement over Novice, with balanced parameters
+                learnRate = 0.6;       // Higher learning rate for steady improvement
+                slipRate = 0.2;        // Reduced slip rate for improved retention
+                guessRate = 0.25;      // Lower guess rate to encourage accurate answers
+                forgetRate = 0.08;     // Lower forget rate for more stable knowledge
+                softeningRate = 0.85;  // Forgiving softening rate for errors
+                knowledgeProbability = 0.4;  // Start with a moderate knowledge probability
                 break;
+
             case "Intermediate":
-                learnRate = 0.5;  // Maintain a moderate learning rate
-                slipRate = 0.1;   // Low slip rate for stable retention
-                guessRate = 0.1;  // Keep low guess rate for more accurate answers
-                forgetRate = 0.03; // Low forget rate for Intermediate level
-                softeningRate = 0.7; // Maintain moderate softening rate
-                knowledgeProbability = 0.5;  // Higher probability as user progresses
+                // Balanced parameters for stable progression
+                learnRate = 0.5;       // Balanced learning rate
+                slipRate = 0.15;       // Lower slip rate for better retention
+                guessRate = 0.2;       // Reduced guess rate for accuracy
+                forgetRate = 0.05;     // Slightly reduced forget rate
+                softeningRate = 0.8;   // Moderate softening for some forgiveness
+                knowledgeProbability = 0.5;  // Start with a stable knowledge probability
                 break;
+
             case "Advanced":
-                learnRate = 0.7;  // Keep high learning rate for faster mastery
-                slipRate = 0.05;  // Very low slip rate for minimal forgetting
-                guessRate = 0.05; // Low guess rate, expert-level accuracy
-                forgetRate = 0.02; // Very low forget rate for advanced users
-                softeningRate = 0.6; // Gentle softening for minor errors
-                knowledgeProbability = 0.7;  // High initial knowledge probability
+                // Challenge increases while maintaining mastery potential
+                learnRate = 0.7;       // Higher learning rate for quick mastery
+                slipRate = 0.1;        // Low slip rate for better stability
+                guessRate = 0.1;       // Reduced guess rate for precision
+                forgetRate = 0.03;     // Minimal forget rate
+                softeningRate = 0.7;   // Mild softening for advanced learners
+                knowledgeProbability = 0.7;  // Start with a high knowledge probability
                 break;
+
             case "Expert":
-                learnRate = 0.9;  // Maximal learning rate for expert learners
-                slipRate = 0.05;  // Minimal slip rate
-                guessRate = 0.05; // Minimal guess rate for near-perfect knowledge
-                forgetRate = 0.01;  // Experts rarely forget
-                softeningRate = 0.5; // Least softening for expert learners
-                knowledgeProbability = 0.9;  // Near-max probability for experts
+                // Minimalistic error margins for top-tier learners
+                learnRate = 0.9;       // Maximum learning rate
+                slipRate = 0.05;       // Minimal slip rate
+                guessRate = 0.05;      // Minimal guess rate for top accuracy
+                forgetRate = 0.02;     // Almost negligible forget rate
+                softeningRate = 0.6;   // Gentle softening for rare mistakes
+                knowledgeProbability = 0.85; // Start with very high knowledge probability
                 break;
+
             default:
                 throw new IllegalArgumentException("Invalid category: " + category);
         }
@@ -255,6 +256,7 @@ public class x_bkt_algorithm {
         Log.d(TAG, "Knowledge Probability: " + knowledgeProbability);
 
     }
+
 
     public static x_bkt_algorithm getInstance(double pInit, double learnRate, double forgetRate, double slip) {
         if (instance == null) {

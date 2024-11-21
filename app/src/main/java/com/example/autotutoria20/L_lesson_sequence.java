@@ -134,11 +134,11 @@ public class L_lesson_sequence {
 
         lessonSequences.put("M2_Lesson 4", new StepType[]{
                 StepType.PRE_TEST,
-                StepType.TEXT, // Page 1
-                StepType.TEXT, // Page 2
-                StepType.TEXT, // Page 3
-                StepType.TEXT, // Page 4
-                StepType.TEXT, // Page 5
+//                StepType.TEXT, // Page 1
+//                StepType.TEXT, // Page 2
+//                StepType.TEXT, // Page 3
+//                StepType.TEXT, // Page 4
+//                StepType.TEXT, // Page 5
                 StepType.VIDEO,
                 StepType.POST_TEST
         });

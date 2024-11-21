@@ -134,10 +134,6 @@ public class d_Lesson_container extends AppCompatActivity implements
 
         boolean finalIsProgressiveMode = isProgressiveMode;
 
-//        String collectionPath = learningMode;
-//        String documentName = currentLesson;
-//        String module = currentModule;
-
         bktAlgo = new x_bkt_algorithm();
 
         Log.e(TAG, "Learning Mode: " + learningMode);
@@ -148,95 +144,6 @@ public class d_Lesson_container extends AppCompatActivity implements
         bktAlgo = x_bkt_algorithm.getInstance(0.3, 0.2, 0.1, 0.4);
 
         bktAlgo.initializeBKTScores(learningMode, currentLesson, currentModule);
-
-//        bktAlgo.initializeBKTScores(learningMode, currentLesson, currentModule, bktScores -> {
-//                    if (bktScores != null) {
-//
-//                        Log.d("d_lesson_container", "et ba yon!:!: BKT Scores initialized: " + bktScores);
-//
-//                        double passingGrade = b_main_0_menu_categorize_user.passingGrade;
-////                        lessonPassed = bktScores.get(0) > passingGrade;
-//
-//                        Log.d("TAG", "Lesson Complete? " + isCompleted);
-////                        Log.e("TAG", "Score["+bktScores.get(0)+"] > PassingGrade["+passingGrade+"]");
-//
-//                        Log.d("TAG", "Lesson Passed? " + lessonPassed);
-//
-//                        // Reset only if di pa tapos yung lesson..
-//                        // kelangan completed sya, pero dapat pasado din
-//                        // Case 1: Completed, not Passed - RETAKE
-//                        // Case 2: Completed, Passed - OK (do not reset)
-//                        // Case 3: InComplete, not Passed - RETAKE
-//                        // Case 4: InComplete, Passed - RETAKE (pwede kasi siyang passed if mataas ang Pre-Test)
-//
-//                        Log.e("TAG", "Let's Check Case...");
-//                        Log.e("TAG", "Module: " + currentModule);
-//                        Log.e("TAG", "Lesson: " + currentLesson);
-//
-//                        // Reset logic based on completion and passing status
-//                        if (isCompleted) {
-//                            if (!lessonPassed) {
-//                                // Case 1: Completed, not Passed - RETAKE
-//                                Log.e("TAG", "Case 1: Completed, not Passed - RETAKE");
-//                                c_Lesson_feedback.resetResult();
-//                                x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, finalIsProgressiveMode);
-//                                showToast("You completed the lesson but did not pass, please retake the lesson");
-//                            } else {
-//                                Log.e("TAG", "Case 2: Completed, Passed - OK (do nothing)");
-//                                // Case 2: Completed, Passed - OK (do nothing)
-//                                showToast("You completed the lesson and passed! Great job!");
-//                            }
-//                        } else {
-//                            // If the lesson is incomplete
-//                            if (!lessonPassed) {
-//                                Log.e("TAG", "Case 3: Incomplete, not Passed - RETAKE");
-//                                // Case 3: Incomplete, not Passed - RETAKE
-//                                c_Lesson_feedback.resetResult();
-//                                x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, finalIsProgressiveMode);
-//                                showToast("you completed the lesson but failed, please retake it.");
-//                            } else {
-//                                Log.e("TAG", "Case 4: Incomplete, Passed - RETAKE (possible because of high Pre-Test)");
-//                                // Case 4: Incomplete, Passed - RETAKE (possible because of high Pre-Test)
-//                                c_Lesson_feedback.resetResult();
-//                                x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, finalIsProgressiveMode);
-//                                showToast("You did not complete and failed the lesson, please retake it.");
-//                            }
-//                        }
-//
-//                    } else {
-//                        Log.e("d_lesson_container", "Failed to retrieve BKT Scores");
-//                    }
-//                });
-
-
-
-//        x_bkt_algorithm.getBKTScore(moduleIndex, lessonIndex, isProgressiveMode, new x_bkt_algorithm.ScoreCallback() {
-//            @Override
-//            public void onScoreRetrieved(float score) {
-//                Log.d("TAG", "The BKT Score is: " + score);
-//                // Handle the retrieved score here
-//
-//
-//
-//                Boolean lessonPassed = score < b_main_0_menu_categorize_user.passingGrade;
-//
-//                Log.d("TAG", "Lesson Complete? " + isCompleted);
-//                Log.d("TAG", "Lesson Passed? " + lessonPassed);
-//
-//                if (!isCompleted
-//                &&
-//                score < b_main_0_menu_categorize_user.passingGrade
-//                ) {
-//                    c_Lesson_feedback.resetResult();
-//
-//                    x_bkt_algorithm.resetScore(
-//                            moduleIndex,
-//                            lessonIndex,
-//                            finalIsProgressiveMode
-//                    );
-//                }
-//            }
-//        });
 
         Log.e("onCreate", "currentModule: " + currentModule + " | currentLesson: " + currentLesson);
 
@@ -410,10 +317,8 @@ public class d_Lesson_container extends AppCompatActivity implements
 
                 if (currentFragment instanceof f_3_lesson_post_test) {
 
-                    startCountdown(d_Lesson_container.this, "Post-Test", false);
-
-                    txtSecondsRemaining.setVisibility(View.VISIBLE);
-                    txtSecondsRemaining.setEnabled(true);
+//                    txtSecondsRemaining.setVisibility(View.VISIBLE);
+//                    txtSecondsRemaining.setEnabled(true);
 
                     backButton.setVisibility(View.GONE);
                     backButton.setEnabled(false);
@@ -854,6 +759,8 @@ public class d_Lesson_container extends AppCompatActivity implements
             @Override
             public void onFinish() {
                 if (timerActive) {
+                    Log.d("Countdown", "countdown complete.");
+                    Log.d("Countdown", "isTestFinished: " + isTestFinished);
                     if (isTestFinished) {
                         txtSecondsRemaining.setText("");
                         Log.d("Countdown", "You haven't selected an answer yet");
@@ -1023,7 +930,7 @@ public class d_Lesson_container extends AppCompatActivity implements
         messageText.setText("Your score for " + testMode + " is: " +
                 // Pre-Test = (score-1);
                 // Post-Test =
-                (score-1) + "/" + questionCount);
+                (score) + "/" + questionCount);
 
         okayButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1148,14 +1055,14 @@ public class d_Lesson_container extends AppCompatActivity implements
         TextView preTestMessage = customDialogView.findViewById(R.id.pre_test_score);
         preTestMessage.setText(
                 "Pre-Test Score: "
-                    + (c_Lesson_feedback.preTestCorrectAnswers-1)
+                    + (c_Lesson_feedback.preTestCorrectAnswers)
                     + "/"
                     + (c_Lesson_feedback.preTestAttemptAnswers-1));
 
         TextView postTestMessage = customDialogView.findViewById(R.id.post_test_score);
         postTestMessage.setText(
                 "Post-Test Score: "
-                    + (c_Lesson_feedback.postTestCorrectAnswers-1)
+                    + (c_Lesson_feedback.postTestCorrectAnswers)
                     + "/"
                     + (c_Lesson_feedback.postTestAttemptAnswers-1));
 

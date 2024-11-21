@@ -1,8 +1,12 @@
 package com.example.autotutoria20;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -188,6 +192,8 @@ public class f_0_lesson_pre_test extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+//        d_Lesson_container.startCountdown(requireContext(), "Pre-Test", questionsAnswered >= (preTestQuestions+1));
 
         questionText = view.findViewById(R.id.question_text);
         choicesGroup = view.findViewById(R.id.choices_group);
@@ -501,31 +507,44 @@ public class f_0_lesson_pre_test extends Fragment {
             e_Question currentQuestion = questions[currentQuestionIndex];
             isCorrect = (selectedId == currentQuestion.getCorrectAnswer_preTest());
 
-//            if (questionsAnswered <= preTestQuestions) {
-//
-//            }
+            // Determine the background color based on correctness
+            int backgroundColor;
+            String toastMessage;
 
             if (!isCorrect) {
-
-                if (answerAttempt >= attemptChances)
-                    incorrect++;
-
-                Toast.makeText(getContext(), "Incorrect answer.", Toast.LENGTH_SHORT).show();
-//                mistake.setText("Incorrect Answers: " + incorrect);
-
-                d_Lesson_container.startCountdown(requireContext(), "Pre-Test", questionsAnswered >= (preTestQuestions+1));
-
+                backgroundColor = Color.RED;
+                toastMessage = "Incorrect answer.";
+                incorrect++;
             } else {
-                Toast.makeText(getContext(), "Correct answer!", Toast.LENGTH_SHORT).show();
-                return isCorrect;  // Return if the answer is correct
+                backgroundColor = Color.GREEN;
+                toastMessage = "Correct answer!";
             }
+
+            // Create a GradientDrawable for rounded corners
+            GradientDrawable drawable = new GradientDrawable();
+            drawable.setColor(backgroundColor);
+            drawable.setCornerRadius(40); // Adjust this value for corner radius
+            submitButton.setBackground(drawable);
+            submitButton.setTextColor(Color.WHITE);
+
+            // Create a Handler to revert the colors after 1 second (1000 milliseconds)
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    // Revert to original colors
+                    submitButton.setBackgroundResource(R.drawable.rounded_corners); // Restore original drawable
+                    submitButton.setTextColor(Color.BLACK); // Restore original text color
+                }
+            }, 1000);
+
+            Toast.makeText(getContext(), toastMessage, Toast.LENGTH_SHORT).show();
+            d_Lesson_container.startCountdown(requireContext(), "Pre-Test", questionsAnswered >= (preTestQuestions + 1));
 
         } else {
             Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
-            d_Lesson_container.startCountdown(requireContext(), "Pre-Test", questionsAnswered >= (preTestQuestions+1));
-//            return false;  // No answer selected
+            d_Lesson_container.startCountdown(requireContext(), "Pre-Test", questionsAnswered >= (preTestQuestions + 1));
         }
-        return false;
+        return isCorrect; // Return whether the answer was correct or not
     }
 
     // Helper methods to get module and lesson indices

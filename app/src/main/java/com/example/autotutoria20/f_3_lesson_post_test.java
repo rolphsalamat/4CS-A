@@ -2,13 +2,18 @@ package com.example.autotutoria20;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -19,6 +24,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +43,7 @@ public class f_3_lesson_post_test extends Fragment {
     private static final String ARG_MODE = "mode";
 
     private ImageButton hintButton;
+    private FrameLayout hint_frameLayout;
     private int currentQuestionIndex = 0;
     private e_Question[] questions;
     private TextView questionText;
@@ -103,9 +116,16 @@ public class f_3_lesson_post_test extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 //
-        d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions+1));
+//        d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions+1));
 
         hintButton = view.findViewById(R.id.hintButton);
+        hint_frameLayout = view.findViewById(R.id.hint_frameLayout);
+
+        hintButton.setEnabled(false);
+        hintButton.setVisibility(View.GONE);
+
+        hint_frameLayout.setEnabled(false);
+        hint_frameLayout.setVisibility(View.GONE);
 
         hintButton.setOnClickListener(v -> {
 
@@ -118,32 +138,72 @@ public class f_3_lesson_post_test extends Fragment {
                 e_Question currentQuestion = questions[currentQuestionIndex];
                 correctAnswer = currentQuestion.getCorrectAnswer_HARD();
 
-                hint = generateHint(correctAnswer, bktModel.category);
+                hint = generateHint(correctAnswer, b_main_0_menu_categorize_user.category);
 
-                //      Create a dialog to show the user's score
-                AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-                builder.setTitle("Answer Hint");
+                showHintDialog(hint);
 
-                builder.setMessage("Answer is: " + hint);
-
-                // Add a button to dismiss the dialog
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss(); // Close the dialog
-                    }
-                });
-
-                builder.setCancelable(false);
-
-                // Create and show the dialog
-                AlertDialog dialog = builder.create();
-                dialog.show();
+//                //      Create a dialog to show the user's score
+//                AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+//                builder.setTitle("Answer Hint");
+//
+//                builder.setMessage("Answer is: " + hint);
+//
+//                // Add a button to dismiss the dialog
+//                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss(); // Close the dialog
+//                    }
+//                });
+//
+//                builder.setCancelable(false);
+//
+//                // Create and show the dialog
+//                AlertDialog dialog = builder.create();
+//                dialog.show();
 
                 // deduct 20 from the token from the database
 
+                // Initialize FirebaseAuth
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                FirebaseAuth mAuth;
+                mAuth = FirebaseAuth.getInstance();
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                String userId = currentUser.getUid();
+
+                // Reference to the user's document in Firestore
+                DocumentReference userDoc = db.collection("users").document(userId);
+
+                // Get the current token count and add 10 tokens
+                userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            // Get the current token count
+                            Long currentTokens = documentSnapshot.getLong("Token");
+
+                            // If the current token value is null (if it's the user's first time), set it to 0
+                            if (currentTokens == null) {
+                                currentTokens = 0L;
+                            }
+
+                            // Add 10 tokens to the current count
+                            Long newTokenCount = currentTokens - 20;
+
+                            String TAG = "generateHint";
+
+                            Log.e(TAG, "Token before hint: " + currentTokens);
+                            Log.e(TAG, "Token after hint: " + newTokenCount);
+
+                            // Update the token count in Firestore
+                            userDoc.update("Token", newTokenCount);
+                        }
+                    }
+                });
+
             }
         });
+
 
         questionText = view.findViewById(R.id.post_test_question);
         choicesGroup = view.findViewById(R.id.choices_group);
@@ -178,107 +238,51 @@ public class f_3_lesson_post_test extends Fragment {
             String documentName = "Lesson " + (lessonNumber + 1);
             String mod = "M" + (moduleNumber + 1);
 
-//            Log.e(TAG, "Try natin pumasok sa initializaBKTScores()");
-//            bktModel.initializeBKTScores(collectionPath, documentName, bktScores -> {
-//                Log.e(TAG, "ABDUL POST TEST INITIALIZE BKT SCORE YEHEY");
-//            });
+            double userScore = x_bkt_algorithm.getKnowledge();
 
-//            try {
-//                bktModel.initializeBKTScores(collectionPath, documentName, mod, bktScores -> {
-//                    Log.e(TAG, "NAKAPASOK AKO");
-//
-//                    // Extract the module number from the string (M1, M2, etc.)
-//                    char moduleChar = module.charAt(1);  // Get the second character, e.g., '1' from "M1"
-//                    Log.e(TAG, "moduleChar: " + moduleChar);
-//
-//                    // Convert it to an integer and decrement by 1 to get the zero-based index
-//                    int moduleIndex = Character.getNumericValue(moduleChar) - 1; // Adjust for zero-based index
-//                    Log.e(TAG, "moduleIndex: " + moduleIndex);
-//
-//                    // Ensure the moduleIndex is within valid range
-//                    if (moduleIndex >= 0 && moduleIndex < bktScores.size()) {
-//                        double userScore = bktScores.get(moduleIndex);  // Use the moduleIndex to get the correct score
-//                        Log.e("f_post_test", "bktScores: " + bktScores.toString());
-//                        Log.d("f_post_test", "User BKT Score for Module " + module + ": " + userScore);
-//
-//                        // Determine difficulty based on score
-//                        difficultyLevel = bktModel.getDifficultyLevel(userScore);
-//                        Log.d("f_post_test", "Determined Difficulty Level: " + difficultyLevel);
-//
-//                        // Set attempt chances based on difficulty level
-//                        if (difficultyLevel == e_Question.Difficulty.EASY)
-//                            attemptChances = 1;
-//                        else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                            attemptChances = 2;
-//                        else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                            attemptChances = 3;
-//
-//                        Log.e("f_post_test", "dahil " + difficultyLevel + " ang difficulty, gawin nating " + attemptChances + " ang chances");
-//
-//                        bktModel.setBKTParameters(difficultyLevel);
-//
-//                        Log.e(TAG, "I will pass these:");
-//                        Log.e(TAG, "module: " + module);
-//                        Log.e(TAG, "lesson: " + lesson);
-//
-//                        // Retrieve post-test questions based on difficulty level
-//                        questions = getPostTestQuestionsBasedOnDifficulty(module, lesson, difficultyLevel);
-//                        loadQuestion();
-//                    } else {
-//                        Log.e("f_post_test", "Invalid moduleIndex: " + moduleIndex + ", cannot retrieve BKT score.");
-//                    }
-//                });
-//
-//            } catch (Exception e) {
+            // Determine difficulty based on score
+            difficultyLevel = bktModel.getDifficultyLevel(userScore);
+            Log.d("f_post_test", "Determined Difficulty Level: " + difficultyLevel);
 
-                double userScore = x_bkt_algorithm.getKnowledge();
+            // Set attempt chances and number of questions based on difficulty level
+            if (difficultyLevel == e_Question.Difficulty.EASY) {
+                attemptChances = 1;
+                postTestQuestions = 10;
+            }
+            else if (difficultyLevel == e_Question.Difficulty.MEDIUM) {
+                attemptChances = 2;
+                postTestQuestions = 5;
+            }
+            else if (difficultyLevel == e_Question.Difficulty.HARD) {
+                attemptChances = 3;
+                postTestQuestions = 3;
 
-                // Determine difficulty based on score
-                difficultyLevel = bktModel.getDifficultyLevel(userScore);
-                Log.d("f_post_test", "Determined Difficulty Level: " + difficultyLevel);
+                // enable and show hint button
+                hintButton.setEnabled(true);
+                hintButton.setVisibility(View.VISIBLE);
 
-                // Set attempt chances and number of questions based on difficulty level
-                if (difficultyLevel == e_Question.Difficulty.EASY) {
-                    attemptChances = 1;
-                    postTestQuestions = 10;
-                }
-                else if (difficultyLevel == e_Question.Difficulty.MEDIUM) {
-                    attemptChances = 2;
-                    postTestQuestions = 5;
-                }
-                else if (difficultyLevel == e_Question.Difficulty.HARD) {
-                    attemptChances = 3;
-                    postTestQuestions = 3;
-                }
+                hint_frameLayout.setEnabled(true);
+                hint_frameLayout.setVisibility(View.VISIBLE);
 
-                TextView items = view.findViewById(R.id.answers_total);
+            }
 
-                items.setText("Item: " + c_Lesson_feedback.postTestAttemptAnswers
-                        + "/"
-                        + postTestQuestions);
+            TextView items = view.findViewById(R.id.answers_total);
 
-                // ang inaalam mo ngayon, kung ilang questions itatanong base on difficulty??
+            items.setText("Item: " + c_Lesson_feedback.postTestAttemptAnswers
+                    + "/"
+                    + postTestQuestions);
 
-                // tapos, yung post-test na identification, hindi nagpo-process ng answer na nandon sa identification
-
-            // dapat merong if statement, para nakabukod yung pag-process ng easy, medium, and hard
-
-                Log.e("f_post_test", "dahil " + difficultyLevel + " ang difficulty, gawin nating " + attemptChances + " ang chances");
+            Log.e("f_post_test", "dahil " + difficultyLevel + " ang difficulty, gawin nating " + attemptChances + " ang chances");
 
 //                bktModel.setBKTParameters(difficultyLevel);
 
-                Log.e(TAG, "I will pass these:");
-                Log.e(TAG, "module: " + module);
-                Log.e(TAG, "lesson: " + lesson);
+            Log.e(TAG, "I will pass these:");
+            Log.e(TAG, "module: " + module);
+            Log.e(TAG, "lesson: " + lesson);
 
-                // Retrieve post-test questions based on difficulty level
-                questions = getPostTestQuestionsBasedOnDifficulty(module, lesson, difficultyLevel);
-                loadQuestion();
-
-//                throw new RuntimeException(e);
-//            }
-
-
+            // Retrieve post-test questions based on difficulty level
+            questions = getPostTestQuestionsBasedOnDifficulty(module, lesson, difficultyLevel);
+            loadQuestion();
 
             Log.e(TAG, "wala :( loadQuestion nalang :(");
             loadQuestion();
@@ -780,29 +784,10 @@ public class f_3_lesson_post_test extends Fragment {
 
     public boolean checkAnswer() {
         String TAG = "checkAnswer()";
-
         Log.e(TAG, "checkAnswer() method is CALLED");
-
-//        // Check if choicesGroup is null
-//        if (choicesGroup == null
-//        ||
-//        identificationAnswer.getText().toString().trim().isEmpty()) {
-//
-//            Log.e(TAG, "identification answer is null");
-//            Context context = getContext();
-//            if (context != null) {
-//                Toast.makeText(context, "Error: Choices group is missing.", Toast.LENGTH_SHORT).show();
-//            } else {
-//                Log.e(TAG, "Context is null, cannot show Toast.");
-//            }
-//
-//        }
-
-        Log.e(TAG, "Difficulty: " + difficultyLevel);
 
         // Handling EASY and MEDIUM difficulty levels
         if (difficultyLevel == e_Question.Difficulty.EASY || difficultyLevel == e_Question.Difficulty.MEDIUM) {
-
             if (choicesGroup == null) {
                 Log.e(TAG, "choicesGroup is null!");
                 return false;  // Exit early to avoid crash
@@ -814,90 +799,65 @@ public class f_3_lesson_post_test extends Fragment {
                         Toast.makeText(getContext(), "Correct!", Toast.LENGTH_SHORT).show();
                         isCorrect = true;
                         Log.e(TAG, "Answer is Correct! | isCorrect: " + isCorrect);
+
+                        // Change button appearance for correct answer
+                        changeButtonAppearance(Color.GREEN, Color.WHITE);
                         return true;  // Correct answer
                     } else {
-                        d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions+1));
+                        d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions + 1));
                         Toast.makeText(getContext(), "Incorrect, Try Again.", Toast.LENGTH_SHORT).show();
                         isCorrect = false;
                         Log.e(TAG, "Answer is Incorrect! | isCorrect: " + isCorrect);
+
+                        // Change button appearance for incorrect answer
+                        changeButtonAppearance(Color.RED, Color.WHITE);
                         return false;  // Incorrect answer
                     }
                 } else {
                     Context context = getContext();
                     if (context != null) {
                         Toast.makeText(context, "Please select an answer.", Toast.LENGTH_SHORT).show();
-                        d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions+1));
+                        d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions + 1));
                     }
                     Log.e(TAG, "No answer selected | isCorrect: " + isCorrect);
                     return false;  // No answer selected
                 }
             }
-
-
         }
+
         // Handling HARD difficulty level
         else if (difficultyLevel == e_Question.Difficulty.HARD) {
-
             e_Question currentQuestion = questions[currentQuestionIndex];
-
-            // get answer
             correctAnswer = currentQuestion.getCorrectAnswer_HARD();
 
             if (identificationAnswer != null) {
                 String inputAnswer = String.valueOf(identificationAnswer.getText()).trim();
                 if (!inputAnswer.isEmpty()) {
-
-                    // Use .equals() to compare String values
                     if (inputAnswer.equalsIgnoreCase(correctAnswer)) {
                         isCorrect = true;
                         Log.e(TAG, "Answer is Correct! | isCorrect: " + isCorrect);
+
+                        // Change button appearance for correct answer
+                        changeButtonAppearance(Color.GREEN, Color.WHITE);
                         return true;  // Correct answer
                     } else {
                         Context context = getContext();
                         if (context != null) {
-                            d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions+1));
+                            d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions + 1));
                             Toast.makeText(context, "Incorrect! Chance: " + answerAttempt + "/" + attemptChances, Toast.LENGTH_SHORT).show();
                             identificationAnswer.setText("");
                         }
 
-                        if (answerAttempt == (attemptChances-1)) {
-                            Log.e("Generate Hint", "Correct Answer: " + correctAnswer);
-
-                            hint = generateHint(correctAnswer, b_main_0_menu_categorize_user.category);
-
-//                d_Lesson_container.showDialog(
-//                        "Answer Hint",
-//                        "The Answer is: " + hint
-//                );
-
-
-                            //      Create a dialog to show the user's score
-                            AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-                            builder.setTitle("Answer Hint");
-
-                            builder.setMessage("Answer is: " + hint);
-
-                            // Add a button to dismiss the dialog
-                            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss(); // Close the dialog
-                                }
-                            });
-
-                            builder.setCancelable(false);
-
-                            // Create and show the dialog
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-
-                            Log.e("Generate Hint", "Hint: " + hint);
+                        if (answerAttempt == (attemptChances - 1)) {
+                            showHintDialog(correctAnswer); // Show hint dialog
                         }
 
                         isCorrect = false;
                         Log.e(TAG, "Answer is Incorrect! | isCorrect: " + isCorrect);
-                        return false;  // Incorrect answer
 
+                        // Change button appearance for incorrect answer
+                        changeButtonAppearance(Color.RED, Color.WHITE);
+                        return false;  // Incorrect answer
                     }
                 } else {
                     Context context = getContext();
@@ -916,7 +876,78 @@ public class f_3_lesson_post_test extends Fragment {
         return false;  // Default return in case of unhandled difficulty
     }
 
+    // Method to change button appearance temporarily
+    private void changeButtonAppearance(int backgroundColor, int textColor) {
+        submitButton.setBackgroundResource(R.drawable.rounded_corners); // Keep rounded corners
+
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setColor(backgroundColor);
+        drawable.setCornerRadius(40); // Adjust this value for corner radius
+        submitButton.setBackground(drawable);
+        submitButton.setTextColor(textColor);
+
+        // Revert colors after 1 second
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                submitButton.setBackgroundResource(R.drawable.rounded_corners); // Restore original drawable
+                submitButton.setTextColor(Color.BLACK); // Restore original text color
+            }
+        }, 1000);
+    }
+
+    // Method to show hint dialog when needed
+    private void showHintDialog(String correctAnswer) {
+
+        // Generate the hint based on the correct answer and category
+        String hint = generateHint(correctAnswer, b_main_0_menu_categorize_user.category);
+
+        // Inflate the custom layout
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View customView = inflater.inflate(R.layout.c_lesson_answer_hint, null);
+
+        // Set the hint text to the TextView in the custom layout
+        TextView hintTextView = customView.findViewById(R.id.hint);
+        Button okayButton = customView.findViewById(R.id.okay);
+
+        hintTextView.setText(hint);
+
+        // Build the AlertDialog with the custom view
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        builder.setView(customView); // Set the custom view
+        builder.setCancelable(false);
+
+        // Create the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        okayButton.setOnClickListener(v -> {
+            dialog.dismiss();
+        });
+
+//        // Adjust the dialog dimensions
+//        dialog.getWindow().setLayout(
+//                ViewGroup.LayoutParams.MATCH_PARENT, // Width: Match parent
+//                (int) TypedValue.applyDimension(
+//                        TypedValue.COMPLEX_UNIT_DIP, 300, // Height: 300dp
+//                        requireActivity().getResources().getDisplayMetrics())
+//        );
+
+        // Adjust the dialog dimensions
+        dialog.getWindow().setLayout(
+                ViewGroup.LayoutParams.WRAP_CONTENT, // Width: Wrap content
+                ViewGroup.LayoutParams.WRAP_CONTENT  // Height: Wrap content
+        );
+
+
+        // Log the generated hint
+        Log.e("Generate Hint", "Hint: " + hint);
+    }
+
+
+
     public static String generateHint(String originalString, String category) {
+
         // Define the number of underscores based on the category
         // Define the number of underscores based on the category
         if (originalString == null) {
@@ -975,15 +1006,11 @@ public class f_3_lesson_post_test extends Fragment {
             intList.add(parts[i].length());
         }
 
-        // Perplexity
-//        int replacePerWord = replaceChar / parts.length;
-
-        // Copilot
         int replacePerWord = Math.max(1, replaceChar / parts.length);
 
         Log.e("Replace per word:", replacePerWord + "");
 
-// To store the final modified string
+        // To store the final modified string
         StringBuilder sampleStringName = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < stringList.size(); i++) {
