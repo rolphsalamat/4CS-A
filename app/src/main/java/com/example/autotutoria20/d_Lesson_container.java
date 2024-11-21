@@ -29,9 +29,13 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
@@ -411,15 +415,14 @@ public class d_Lesson_container extends AppCompatActivity implements
                     txtSecondsRemaining.setVisibility(View.VISIBLE);
                     txtSecondsRemaining.setEnabled(true);
 
-                    // wala nang nextButton dito, last na to eh. abnormal kaba??
-                    nextButton.setVisibility(View.GONE);
-                    nextButton.setEnabled(false);
-
                     backButton.setVisibility(View.GONE);
                     backButton.setEnabled(false);
 
                     // I think magiging permanent na to??
                     nextButton.setText("Go to Post-Test");
+                    // wala nang nextButton dito, last na to eh. abnormal kaba??
+                    nextButton.setVisibility(View.GONE);
+                    nextButton.setEnabled(false);
 
                     // hide back button??
                     // or hayaan sila mag back, pero dapat mag decrement din yung sa next button
@@ -1156,13 +1159,48 @@ public class d_Lesson_container extends AppCompatActivity implements
                     + "/"
                     + (c_Lesson_feedback.postTestAttemptAnswers-1));
 
-        // Show the dialog when OK button is clicked
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                FirebaseAuth mAuth;
+                // Initialize FirebaseAuth
+                mAuth = FirebaseAuth.getInstance();
+
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                if (currentUser != null) {
+                    String userId = currentUser.getUid();
+
+                    // Reference to the user's document in Firestore
+                    DocumentReference userDoc = db.collection("users").document(userId);
+
+                    // Get the current token count and add 10 tokens
+                    userDoc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+                                // Get the current token count
+                                Long currentTokens = documentSnapshot.getLong("Token");
+
+                                // If the current token value is null (if it's the user's first time), set it to 0
+                                if (currentTokens == null) {
+                                    currentTokens = 0L;
+                                }
+
+                                // Add 10 tokens to the current count
+                                Long newTokenCount = currentTokens + 10;
+
+                                // Update the token count in Firestore
+                                userDoc.update("Token", newTokenCount);
+                            }
+                        }
+                    });
+                }
+
                 finish(); // Optionally finish the activity
             }
         });
+
 
         // Create and show the dialog
         AlertDialog dialog = builder.create();

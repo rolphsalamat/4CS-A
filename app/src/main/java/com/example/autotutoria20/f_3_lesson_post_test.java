@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ public class f_3_lesson_post_test extends Fragment {
     private static final String ARG_LESSON = "lesson";
     private static final String ARG_MODE = "mode";
 
+    private ImageButton hintButton;
     private int currentQuestionIndex = 0;
     private e_Question[] questions;
     private TextView questionText;
@@ -102,8 +104,47 @@ public class f_3_lesson_post_test extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 //
         d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions+1));
-        
-//        items.setText();
+
+        hintButton = view.findViewById(R.id.hintButton);
+
+        hintButton.setOnClickListener(v -> {
+
+            if (b_main_0_menu.token < 20)
+                Toast.makeText(requireContext(), "Insufficient Token", Toast.LENGTH_SHORT).show();
+            else {
+
+                Toast.makeText(requireContext(), "Generate Hint", Toast.LENGTH_SHORT).show();
+
+                e_Question currentQuestion = questions[currentQuestionIndex];
+                correctAnswer = currentQuestion.getCorrectAnswer_HARD();
+
+                hint = generateHint(correctAnswer, bktModel.category);
+
+                //      Create a dialog to show the user's score
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+                builder.setTitle("Answer Hint");
+
+                builder.setMessage("Answer is: " + hint);
+
+                // Add a button to dismiss the dialog
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss(); // Close the dialog
+                    }
+                });
+
+                builder.setCancelable(false);
+
+                // Create and show the dialog
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                // deduct 20 from the token from the database
+
+            }
+        });
+
         questionText = view.findViewById(R.id.post_test_question);
         choicesGroup = view.findViewById(R.id.choices_group);
         submitButton = view.findViewById(R.id.submit_post_test);
@@ -830,7 +871,7 @@ public class f_3_lesson_post_test extends Fragment {
 //                );
 
 
-//      Create a dialog to show the user's score
+                            //      Create a dialog to show the user's score
                             AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
                             builder.setTitle("Answer Hint");
 

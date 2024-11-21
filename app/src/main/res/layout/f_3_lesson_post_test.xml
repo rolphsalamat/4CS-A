@@ -19,14 +19,49 @@
         android:textSize="22sp"
         android:textStyle="bold" />
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|top"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp">
+
+        <!-- ImageButton for hint -->
+        <ImageButton
+            android:id="@+id/hintButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:background="@drawable/hint"
+            android:backgroundTint="#f1b502"
+            android:textAllCaps="false"
+            android:fontFamily="@font/mouldy_cheese" />
+
+        <!-- TextView displaying the hint cost -->
+        <TextView
+            android:id="@+id/hintCostText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="20"
+            android:fontFamily="@font/mouldy_cheese"
+            android:textColor="@color/white"
+            android:layout_gravity="bottom|end"
+            android:textSize="14sp" />
+
+
+    </FrameLayout>
+
+
     <!-- Add your post-test layout components here -->
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:gravity="center"
         android:fontFamily="@font/mouldy_cheese"
+        android:gravity="center"
         android:text="Post-Test"
         android:textColor="#87CEEB"
         android:textSize="30dp"

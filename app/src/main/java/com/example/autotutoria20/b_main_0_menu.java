@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -76,6 +77,8 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class b_main_0_menu extends AppCompatActivity {
+    public static long token;
+    private TextView tokenCount;
     private boolean[] cardStates = {true, false, false}; // Example state array for 3 cards
     static Boolean isStudent = false;
     static Boolean isProgressiveCompleted = false;
@@ -96,6 +99,7 @@ public class b_main_0_menu extends AppCompatActivity {
     private List<Fragment> progressiveFragmentList;
     private List<Fragment> freeUseFragmentList;
     private long backPressedTime;
+    private LinearLayout tokenLayout;
     private Button increment_progress;
     private View module, description, uplifts;
     private ShapeableImageView profileImageView;
@@ -113,13 +117,13 @@ public class b_main_0_menu extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         Log.d("hello", "word");
         setContentView(R.layout.b_main_0_menu);
 
-        if (!n_Network.isNetworkAvailable(this)) {
+        if (!n_Network.isNetworkAvailable(this))
             Toast.makeText(b_main_0_menu.this, "No Internet", Toast.LENGTH_SHORT).show();
-        }
 
         // Instantiate x_bkt_algorithm
         x_bkt_algorithm algorithm = new x_bkt_algorithm();
@@ -177,9 +181,14 @@ public class b_main_0_menu extends AppCompatActivity {
             redirectToLogin();
         }
 
+        if (!isProgressiveMode) {
+            tokenLayout.setVisibility(View.GONE);
+            tokenLayout.setEnabled(false);
+        }
 
-
-        Log.d("hello", "allyzza");
+        tokenLayout = findViewById(R.id.tokenLayout);
+        tokenCount = findViewById(R.id.token);
+        tokenCount.setText("" + token);
 
         learningModeText = findViewById(R.id.learning_mode_text);
         learningModeIcon = findViewById(R.id.learning_mode_icon);
@@ -225,17 +234,6 @@ public class b_main_0_menu extends AppCompatActivity {
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
-
-
-//        TextView frequentlyAskedQuestions = findViewById(R.id.faq);
-//        frequentlyAskedQuestions.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.e("HELLO WORLD", "START FAQ");
-//                startActivity(new Intent(b_main_0_menu.this, a_user_4_FAQ.class));
-//                Log.e("HELLO WORLD", "FAQ | What happened!??!!");
-//            }
-//        });
 
         // NAVIGATION DRAWER BUTTONS
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -915,6 +913,15 @@ public class b_main_0_menu extends AppCompatActivity {
                         String gender = document.getString("Gender");
                         Long age = document.getLong("Age");
 
+                        if (document.contains("Token")) {
+                            token = document.getLong("Token");
+                        } else {
+                            db.collection("users")
+                                    .document(userId)
+                                    .update("Token", 0L);
+                            token = 0;
+                        }
+
                         isStudent = document.getBoolean("isStudent");
 //                        if (isStudent == null)
 //                            isStudent = true;
@@ -944,6 +951,7 @@ public class b_main_0_menu extends AppCompatActivity {
                         Log.e(TAG, "Email Address: " + email);
                         Log.e(TAG, "Gender: " + gender);
                         Log.e(TAG, "Age: " + age);
+                        Log.e(TAG, "Token: " + token);
 
                         Log.e(TAG, "App Update Notification: " + updateNotif);
                         Log.e(TAG, "New Course Available Notification: " + newCourse);
@@ -951,6 +959,8 @@ public class b_main_0_menu extends AppCompatActivity {
 
                         greetUserName.setText("Hello, " + firstName);
                         greetUserCategory.setText(category);
+
+                        tokenCount.setText("" + token);
 
                         // Check if the user has a custom profile picture
                         Boolean hasCustomProfilePicture = document.getBoolean("hasCustomProfilePicture");

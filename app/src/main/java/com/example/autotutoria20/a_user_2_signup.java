@@ -25,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -213,6 +214,7 @@ public class a_user_2_signup extends AppCompatActivity {
             userData.put("Gender", gender);
             userData.put("Profile Picture", defaultProfilePicture);
             userData.put("Age", age);
+            userData.put("Token", 0);
             userData.put("Birthday", birthday);
             userData.put("App Update Notification", true);
             userData.put("New Course Available Notification", true);

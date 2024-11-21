@@ -42,26 +42,48 @@
                 android:textSize="30sp"
                 android:gravity="center_horizontal|center_vertical" />
 
-<!--            <RelativeLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent">-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-<!--                <TextView-->
-<!--                    android:id="@+id/faq"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginEnd="20dp"-->
-<!--                    android:layout_alignParentEnd="true"-->
-<!--                    android:layout_alignParentTop="true"-->
-<!--                    android:layout_alignParentBottom="true"-->
-<!--                    android:text="FAQs"-->
-<!--                    android:fontFamily="@font/getto_funky"-->
-<!--                    android:textStyle="normal"-->
-<!--                    android:textColor="@color/white"-->
-<!--                    android:textSize="30sp"-->
-<!--                    android:gravity="end|center" />-->
+                <!-- Horizontal LinearLayout to align TextView and ImageView side by side -->
+                <LinearLayout
+                    android:id="@+id/tokenLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-<!--            </RelativeLayout>-->
+                    <!-- Token ImageView -->
+                    <ImageView
+                        android:layout_width="19dp"
+                        android:layout_height="20dp"
+                        android:layout_marginVertical="10dp"
+                        android:background="@drawable/token"
+                        android:backgroundTint="#f1b502" />
+
+                    <!-- Token TextView -->
+                    <TextView
+                        android:id="@+id/token"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="10dp"
+                        android:textAlignment="center"
+                        android:fontFamily="@font/getto_funky"
+                        android:gravity="end|center"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="26sp"
+                        android:textStyle="normal" /> <!-- Add some space between the text and image -->
+
+
+                </LinearLayout>
+
+
+
+            </RelativeLayout>
 
 
 

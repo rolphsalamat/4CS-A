@@ -16,8 +16,8 @@
 
     <ImageView
         android:id="@+id/passed_logo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:src="@drawable/passed_logo"
         app:layout_constraintTop_toTopOf="@id/background"
         app:layout_constraintStart_toStartOf="@id/background"
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:text="Congratulations!"
         android:textColor="@color/white"
-        android:textSize="32sp"
+        android:textSize="28sp"
         android:fontFamily="@font/failed_font"
         app:layout_constraintTop_toBottomOf="@id/passed_logo"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:text="You passed lesson n"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:fontFamily="@font/failed_font"
         app:layout_constraintTop_toBottomOf="@id/congratulations"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +57,7 @@
         android:layout_marginStart="50dp"
         android:text="Pre-Test Score: n/n"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:fontFamily="@font/failed_font"
         app:layout_constraintTop_toBottomOf="@id/message"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,11 +70,47 @@
         android:layout_marginStart="50dp"
         android:text="Post-Test Score: n/n"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:fontFamily="@font/failed_font"
         app:layout_constraintTop_toBottomOf="@id/pre_test_score"
         app:layout_constraintStart_toStartOf="parent"
         />
+
+    <!-- Horizontal LinearLayout to align TextView and ImageView side by side -->
+    <LinearLayout
+        android:id="@+id/tokenLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="50dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/post_test_score"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Token TextView -->
+        <TextView
+            android:id="@+id/token"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:textAlignment="center"
+            android:fontFamily="@font/getto_funky"
+            android:gravity="end|center"
+            android:text="You received: 10"
+            android:textColor="@color/white"
+            android:textSize="26sp"
+            android:textStyle="normal" />
+
+        <!-- Token ImageView -->
+        <ImageView
+            android:layout_width="19dp"
+            android:layout_height="20dp"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/token"
+            android:backgroundTint="#f1b502" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/okay_passed_button"
@@ -89,6 +125,6 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@id/background"
         app:layout_constraintStart_toStartOf="@id/background"
-        app:layout_constraintTop_toBottomOf="@+id/post_test_score" />
+        app:layout_constraintTop_toBottomOf="@+id/tokenLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
