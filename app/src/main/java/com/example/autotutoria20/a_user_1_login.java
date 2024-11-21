@@ -42,6 +42,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.PhoneAuthProvider;
 
 // App Check
 import com.google.firebase.appcheck.FirebaseAppCheck;
@@ -73,6 +75,9 @@ public class a_user_1_login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a_user_1_login);
+
+        // Initialize Firebase Auth
+        FirebaseAuth auth = FirebaseAuth.getInstance();
 
         FirebaseApp.initializeApp(this);
         FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();

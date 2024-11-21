@@ -27,6 +27,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -38,6 +39,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.yalantis.ucrop.UCrop;
+
+import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory;
+import com.google.firebase.appcheck.FirebaseAppCheck;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -55,6 +59,7 @@ public class b_main_0_menu_profile extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     private AlertDialog changePasswordDialog;
     private AlertDialog changeUsernameDialog;
+    private AlertDialog changeEmailDialog;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private EditText profileName;
     private EditText profileCategory;
@@ -78,6 +83,11 @@ public class b_main_0_menu_profile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.b_main_0_menu_profile);
+
+        // Initialize Firebase App Check
+        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+        firebaseAppCheck.installAppCheckProviderFactory(
+            SafetyNetAppCheckProviderFactory.getInstance());
 
         if (currentUser != null) {
             fetchUserData(userId);
@@ -381,18 +391,18 @@ public class b_main_0_menu_profile extends AppCompatActivity {
         Button submitButton = dialogView.findViewById(R.id.change_email_button);
 
         // Create the dialog
-        AlertDialog dialog = builder.create();
+        changeEmailDialog = builder.create();
 
         // Set up cancel button
         cancelButton.setOnClickListener(v -> {
             // Dismiss the dialog
-            dialog.dismiss();
+            changeEmailDialog.dismiss();
         });
 
         // Set up exit button
         exitButton.setOnClickListener(v -> {
             // Dismiss the dialog
-            dialog.dismiss();
+            changeEmailDialog.dismiss();
         });
 
         // Set up submit button
@@ -404,7 +414,6 @@ public class b_main_0_menu_profile extends AppCompatActivity {
             if (isValidEmail(email)) {
 
                 changeEmailAddress(email, password); // Call your method with new email
-                dialog.dismiss(); // Dismiss the dialog after submission
 
             } else {
                 Toast.makeText(getApplicationContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
@@ -412,7 +421,7 @@ public class b_main_0_menu_profile extends AppCompatActivity {
 
         });
 
-        dialog.show(); // Show the dialog
+        changeEmailDialog.show(); // Show the dialog
     }
 
     // Helper method to validate email format
@@ -421,65 +430,82 @@ public class b_main_0_menu_profile extends AppCompatActivity {
     }
 
     private void changeEmailAddress(String newEmail, String password) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        Toast.makeText(b_main_0_menu_profile.this, "We're still working on this feature. :)", Toast.LENGTH_SHORT).show();
+        // Check if user is signed in
+        if (user == null) {
+            Toast.makeText(getApplicationContext(), "No user is signed in.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-//        FirebaseAuth auth = FirebaseAuth.getInstance();
-//        FirebaseUser user = auth.getCurrentUser();
-//
-//        // Check if user is signed in
-//        if (user == null) {
-//            Toast.makeText(getApplicationContext(), "No user is signed in.", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        // Re-authenticate the user
-//        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), password);
-//        user.reauthenticate(credential)
-//                .addOnCompleteListener(reauthTask -> {
-//                    if (reauthTask.isSuccessful()) {
-//                        Log.d("Auth", "Reauthentication successful");
-//
-//                        // Update email in Firebase Authentication
-//                        user.updateEmail(newEmail)
-//                                .addOnCompleteListener(updateTask -> {
-//                                    if (updateTask.isSuccessful()) {
-//                                        Log.d("Auth", "Email updated successfully in Authentication");
-//                                        Toast.makeText(getApplicationContext(), "Email updated successfully! A verification email has been sent.", Toast.LENGTH_SHORT).show();
-//
-//                                        // Send verification email
-//                                        user.sendEmailVerification()
-//                                                .addOnCompleteListener(verificationTask -> {
-//                                                    if (verificationTask.isSuccessful()) {
-//                                                        Log.d("Auth", "Verification email sent to: " + newEmail);
-//                                                    } else {
-//                                                        Log.e("Auth", "Error sending verification email: ", verificationTask.getException());
-//                                                    }
-//                                                });
-//
-//                                        // Now update Firestore
-//                                        DocumentReference userRef = db.collection("users").document(user.getUid());
-//                                        userRef.update("Email Address", newEmail)
-//                                                .addOnSuccessListener(aVoid -> {
-//                                                    Log.d("Firestore", "Email Address updated successfully in Firestore");
-//                                                    Toast.makeText(getApplicationContext(), "Email Address updated in Firestore!", Toast.LENGTH_SHORT).show();
-//                                                })
-//                                                .addOnFailureListener(e -> {
-//                                                    Log.e("Firestore", "Error updating email in Firestore", e);
-//                                                    Toast.makeText(getApplicationContext(), "Error updating email in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                                                });
-//                                    } else {
-//                                        Log.e("Auth", "Error updating email in Authentication", updateTask.getException());
-//                                        Toast.makeText(getApplicationContext(), "Error updating email: " + updateTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                                    }
-//                                });
-//                    } else {
-//                        Log.e("Auth", "Reauthentication failed.", reauthTask.getException());
-//                        Toast.makeText(getApplicationContext(), "Reauthentication failed: " + reauthTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+        // Check if the new email format is valid
+        if (!isValidEmail(newEmail)) {
+            Toast.makeText(getApplicationContext(), "Invalid email format.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        // Check if the email is verified
+        if (!user.isEmailVerified()) {
+            Toast.makeText(getApplicationContext(), "Please verify your current email before updating.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Re-authenticate the user
+        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), password);
+        user.reauthenticate(credential)
+                .addOnCompleteListener(reauthTask -> {
+                    if (reauthTask.isSuccessful()) {
+                        Log.d("Auth", "Reauthentication successful");
+
+                        // Update email in Firebase Authentication
+                        user.updateEmail(newEmail)
+                                .addOnCompleteListener(updateTask -> {
+                                    if (updateTask.isSuccessful()) {
+                                        Log.d("Auth", "Email updated successfully in Authentication");
+                                        Toast.makeText(getApplicationContext(), "Email updated successfully! A verification email has been sent.", Toast.LENGTH_SHORT).show();
+
+                                        // Send verification email
+                                        user.sendEmailVerification()
+                                                .addOnCompleteListener(verificationTask -> {
+                                                    if (verificationTask.isSuccessful()) {
+                                                        Log.d("Auth", "Verification email sent to: " + newEmail);
+                                                    } else {
+                                                        Log.e("Auth", "Error sending verification email: ", verificationTask.getException());
+                                                    }
+                                                });
+
+                                        // Now update Firestore
+                                        DocumentReference userRef = FirebaseFirestore.getInstance()
+                                                .collection("users")
+                                                .document(user.getUid());
+                                        userRef.update("Email Address", newEmail)
+                                                .addOnSuccessListener(aVoid -> {
+                                                    Log.d("Firestore", "Email Address updated successfully in Firestore");
+                                                    Toast.makeText(getApplicationContext(), "Email Address updated in Firestore!", Toast.LENGTH_SHORT).show();
+                                                })
+                                                .addOnFailureListener(e -> {
+                                                    Log.e("Firestore", "Error updating email in Firestore", e);
+                                                    Toast.makeText(getApplicationContext(), "Error updating email in Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                });
+                                    } else {
+                                        // Handle specific FirebaseAuth exceptions
+                                        if (updateTask.getException() instanceof FirebaseAuthException) {
+                                            String errorCode = ((FirebaseAuthException) updateTask.getException()).getErrorCode();
+                                            if ("ERROR_OPERATION_NOT_ALLOWED".equals(errorCode)) {
+                                                Toast.makeText(getApplicationContext(), "Sign-in provider is disabled. Please enable it in Firebase console.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                        Log.e("Auth", "Error updating email in Authentication", updateTask.getException());
+                                        Toast.makeText(getApplicationContext(), "Error updating email: " + updateTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    } else {
+                        Log.e("Auth", "Reauthentication failed.", reauthTask.getException());
+                        Toast.makeText(getApplicationContext(), "Reauthentication failed: " + reauthTask.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
+
 
 //    // Edit email
 //    private void changeEmailAddress(String newEma il) {

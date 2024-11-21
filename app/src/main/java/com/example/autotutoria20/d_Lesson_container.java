@@ -292,6 +292,9 @@ public class d_Lesson_container extends AppCompatActivity implements
                 viewPager.setLayoutParams(params);
                 nextButton.setVisibility(View.GONE);
 
+                txtSecondsRemaining.setVisibility(View.GONE);
+                txtSecondsRemaining.setEnabled(false);
+
                 // Get the current fragment
                 Fragment currentFragment = getCurrentFragment();
 
@@ -305,6 +308,9 @@ public class d_Lesson_container extends AppCompatActivity implements
 
                     // ano gagawin by default? pwede namang wala, kasi wala naman talaga tong code na to nung una..
                     Log.e(TAG, "Pre Test");
+
+                    txtSecondsRemaining.setVisibility(View.VISIBLE);
+                    txtSecondsRemaining.setEnabled(true);
 
                     backButton.setVisibility(View.GONE);
                     backButton.setEnabled(false);
@@ -396,6 +402,11 @@ public class d_Lesson_container extends AppCompatActivity implements
                 }
 
                 if (currentFragment instanceof f_3_lesson_post_test) {
+
+                    startCountdown(d_Lesson_container.this, "Post-Test", false);
+
+                    txtSecondsRemaining.setVisibility(View.VISIBLE);
+                    txtSecondsRemaining.setEnabled(true);
 
                     // wala nang nextButton dito, last na to eh. abnormal kaba??
                     nextButton.setVisibility(View.GONE);
@@ -658,6 +669,9 @@ public class d_Lesson_container extends AppCompatActivity implements
             stepView.setTag(i);
             stepView.setClickable(true);  // Make the stepView clickable
 
+            if (currentStep >= (numberOfSteps-1))
+                stepView.setClickable(false);
+
             stepView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -770,64 +784,87 @@ public class d_Lesson_container extends AppCompatActivity implements
         }
     }
 
-    public static void startCountdown(final Context context, String mode) {
+    public static void startCountdown(final Context context, String mode, Boolean isTestFinished) {
+
         Log.d("Countdown", "Starting countdown in mode: " + mode);
+        Log.d("Countdown", "isTestFinished: " + isTestFinished);
 
-        // Create a new CountDownTimer instance
-        CountDownTimer countDownTimer = new CountDownTimer(10000, 1000) { // 10 seconds countdown with 1-second interval
-            boolean shouldFinish = true; // Flag to determine if onFinish should run
+        int milliseconds = 10000; // 10 seconds countdown
+        final CountDownTimer countDownTimer = new CountDownTimer(milliseconds, 1000) { // 1-second interval
+            boolean timerActive = true; // Tracks whether the timer is active
 
+            @Override
             public void onTick(long millisUntilFinished) {
+
+                if (isTestFinished) {
+                    Log.d("Countdown", "Test is finished, stopping countdown.");
+                    timerActive = false; // Prevent onFinish from executing
+                    txtSecondsRemaining.setText(""); // Clear text
+                    cancel(); // Stop the countdown
+                    Log.d("Countdown", mode + " Mode | Countdown cancelled due to test completion.");
+                    return;
+                }
+
                 int secondsRemaining = (int) (millisUntilFinished / 1000);
                 Log.d("Countdown", "Seconds remaining: " + secondsRemaining);
-
                 txtSecondsRemaining.setText(secondsRemaining + "s");
 
                 // Check for answer selection based on mode
-                if (mode.equals("Pre-Test")) {
-                    if (!(f_0_lesson_pre_test.choicesGroup.getCheckedRadioButtonId() == -1)) {
-                        Log.d("Countdown", "Pre-Test answer selected, stopping countdown.");
-                        shouldFinish = false; // Prevent onFinish from executing
-                        txtSecondsRemaining.setText(""); // Clear text
-                        cancel(); // Stop the countdown
-                        return;
-                    }
+                if (mode.equals("Pre-Test") && f_0_lesson_pre_test.choicesGroup.getCheckedRadioButtonId() != -1) {
+                    Log.d("Countdown", "Pre-Test answer selected, stopping countdown.");
+                    timerActive = false; // Prevent onFinish from executing
+                    txtSecondsRemaining.setText(""); // Clear text
+                    cancel(); // Stop the countdown
+                    Log.d("Countdown", "Pre-Test | Countdown Cancelled.");
+                    return;
                 }
 
                 if (mode.equals("Post-Test")) {
                     if (f_3_lesson_post_test.getDifficulty() == e_Question.Difficulty.EASY ||
                             f_3_lesson_post_test.getDifficulty() == e_Question.Difficulty.MEDIUM) {
-                        if (!(f_3_lesson_post_test.choicesGroup.getCheckedRadioButtonId() == -1)) {
+                        if (f_3_lesson_post_test.choicesGroup.getCheckedRadioButtonId() != -1) {
                             Log.d("Countdown", "Post-Test answer selected (EASY/MEDIUM), stopping countdown.");
-                            shouldFinish = false; // Prevent onFinish from executing
+                            timerActive = false; // Prevent onFinish from executing
                             txtSecondsRemaining.setText(""); // Clear text
                             cancel(); // Stop the countdown
+                            Log.d("Countdown", "Post-Test | Countdown Cancelled.");
                             return;
                         }
                     }
-                    if (f_3_lesson_post_test.getDifficulty() == e_Question.Difficulty.HARD) {
-                        if (!(f_3_lesson_post_test.identificationAnswer.toString().isEmpty())) {
-                            Log.d("Countdown", "Post-Test answer provided (HARD), stopping countdown.");
-                            shouldFinish = false; // Prevent onFinish from executing
-                            txtSecondsRemaining.setText(""); // Clear text
-                            cancel(); // Stop the countdown
-                            return;
-                        }
+
+                    if (f_3_lesson_post_test.getDifficulty() == e_Question.Difficulty.HARD &&
+                            !f_3_lesson_post_test.identificationAnswer.toString().isEmpty()) {
+                        Log.d("Countdown", "Post-Test answer provided (HARD), stopping countdown.");
+                        timerActive = false; // Prevent onFinish from executing
+                        txtSecondsRemaining.setText(""); // Clear text
+                        cancel(); // Stop the countdown
+                        Log.d("Countdown", "Post-Test | Countdown Cancelled.");
+                        return;
                     }
                 }
             }
 
+            @Override
             public void onFinish() {
-                if (shouldFinish) { // Only show Toast if no answer was selected
-                    txtSecondsRemaining.setText("");
-                    Toast.makeText(context, "You haven't selected an answer yet", Toast.LENGTH_SHORT).show();
+                if (timerActive) {
+                    if (isTestFinished) {
+                        txtSecondsRemaining.setText("");
+                        Log.d("Countdown", "You haven't selected an answer yet");
+                        Toast.makeText(context, "You haven't selected an answer yet", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Log.d("Countdown", "onFinish called but answer was selected.");
+                    Log.d("Countdown", "onFinish called but the timer was canceled.");
                 }
             }
+        };
 
-        }.start(); // Start the countdown timer
+        // Start the countdown if the test is not finished
+        if (!isTestFinished) {
+            countDownTimer.start();
+        }
     }
+
+
 
 //    private void updateProgressAndMoveToNextStep() {
 //        String TAG = "OKAY NEXT NA";

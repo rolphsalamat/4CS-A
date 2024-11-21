@@ -306,7 +306,7 @@ public class f_0_lesson_pre_test extends Fragment {
                         }
 
                         questionsAnswered++; // Increment answered count
-//                        Log.e(TAG, "increment questionsAnswered["+questionsAnswered+"]");
+                        Log.e(TAG, "increment questionsAnswered["+questionsAnswered+"]");
 
                         // Load next question only if still within pre-test limits.
 //                        Log.d(TAG, "if (correctAnswer["+correctAnswer+"] || currentQuestionIndex["+currentQuestionIndex
@@ -450,7 +450,7 @@ public class f_0_lesson_pre_test extends Fragment {
 
         //Log.e("loadQuestion", "loadQuestion();");
 
-        d_Lesson_container.startCountdown(requireContext(), "Pre-Test");
+        d_Lesson_container.startCountdown(requireContext(), "Pre-Test", questionsAnswered >= (preTestQuestions+1));
 
         isCorrect = false;
 
@@ -510,7 +510,7 @@ public class f_0_lesson_pre_test extends Fragment {
                 Toast.makeText(getContext(), "Incorrect answer.", Toast.LENGTH_SHORT).show();
 //                mistake.setText("Incorrect Answers: " + incorrect);
 
-                d_Lesson_container.startCountdown(requireContext(), "Pre-Test");
+                d_Lesson_container.startCountdown(requireContext(), "Pre-Test", questionsAnswered >= (preTestQuestions+1));
 
             } else {
                 Toast.makeText(getContext(), "Correct answer!", Toast.LENGTH_SHORT).show();
@@ -519,7 +519,7 @@ public class f_0_lesson_pre_test extends Fragment {
 
         } else {
             Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
-            d_Lesson_container.startCountdown(requireContext(), "Pre-Test");
+            d_Lesson_container.startCountdown(requireContext(), "Pre-Test", questionsAnswered >= (preTestQuestions+1));
 //            return false;  // No answer selected
         }
         return false;

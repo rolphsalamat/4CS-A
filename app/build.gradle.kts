@@ -37,8 +37,11 @@ android {
 
 dependencies {
 
-    // App Check
+    // Add Firebase App Check dependency
+    implementation ("com.google.firebase:firebase-appcheck:16.0.0")
+    implementation ("com.google.firebase:firebase-appcheck-safetynet:16.0.0")
     implementation ("com.google.firebase:firebase-appcheck:latest_version")
+    implementation ("com.google.android.gms:play-services-safetynet:18.1.0")
 
     // In-App Update
     implementation("com.google.android.play:app-update:2.1.0")
@@ -71,6 +74,7 @@ dependencies {
     // Firebase dependencies
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
     implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-auth:22.1.1")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-storage")

@@ -100,9 +100,9 @@ public class f_3_lesson_post_test extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-//        TextView items = view.findViewById(R.id.answers_total);
 //
+        d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions+1));
+        
 //        items.setText();
         questionText = view.findViewById(R.id.post_test_question);
         choicesGroup = view.findViewById(R.id.choices_group);
@@ -665,7 +665,7 @@ public class f_3_lesson_post_test extends Fragment {
     private void loadQuestion() {
         String TAG = "loadQuestion";
 
-        d_Lesson_container.startCountdown(requireContext(), "Post-Test");
+        d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions+1));
 
         hint = ""; // reset hint
 
@@ -773,7 +773,7 @@ public class f_3_lesson_post_test extends Fragment {
                         Log.e(TAG, "Answer is Correct! | isCorrect: " + isCorrect);
                         return true;  // Correct answer
                     } else {
-                        d_Lesson_container.startCountdown(requireContext(), "Post-Test");
+                        d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions+1));
                         Toast.makeText(getContext(), "Incorrect, Try Again.", Toast.LENGTH_SHORT).show();
                         isCorrect = false;
                         Log.e(TAG, "Answer is Incorrect! | isCorrect: " + isCorrect);
@@ -783,7 +783,7 @@ public class f_3_lesson_post_test extends Fragment {
                     Context context = getContext();
                     if (context != null) {
                         Toast.makeText(context, "Please select an answer.", Toast.LENGTH_SHORT).show();
-                        d_Lesson_container.startCountdown(requireContext(), "Pre-Test");
+                        d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions+1));
                     }
                     Log.e(TAG, "No answer selected | isCorrect: " + isCorrect);
                     return false;  // No answer selected
@@ -812,7 +812,7 @@ public class f_3_lesson_post_test extends Fragment {
                     } else {
                         Context context = getContext();
                         if (context != null) {
-                            d_Lesson_container.startCountdown(requireContext(), "Post-Test");
+                            d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions+1));
                             Toast.makeText(context, "Incorrect! Chance: " + answerAttempt + "/" + attemptChances, Toast.LENGTH_SHORT).show();
                             identificationAnswer.setText("");
                         }
