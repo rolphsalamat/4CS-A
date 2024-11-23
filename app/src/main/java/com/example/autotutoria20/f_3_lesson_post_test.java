@@ -220,11 +220,12 @@ public class f_3_lesson_post_test extends Fragment {
 
             double userScore = x_bkt_algorithm.getKnowledge();
 
-            // Determine difficulty based on score
-            difficultyLevel = bktModel.getDifficultyLevel(userScore);
+            // Determine difficulty based on scoreserScore);
             Log.d("f_post_test", "Determined Difficulty Level: " + difficultyLevel);
 
-            // Set attempt chances and number of questions based on difficulty level
+            // Set attempt chances and number of questions
+            difficultyLevel = bktModel.getDifficultyLevel(userScore);
+
             if (difficultyLevel == e_Question.Difficulty.EASY) {
                 attemptChances = 1;
                 postTestQuestions = 10;
@@ -311,7 +312,7 @@ public class f_3_lesson_post_test extends Fragment {
 
 //                bktModel.setBKTParameters(difficultyLevel);
 
-            Log.e(TAG, "I will pass these:");
+            Log.e(TAG, "I will pass these:")    ;
             Log.e(TAG, "module: " + module);
             Log.e(TAG, "lesson: " + lesson);
 
@@ -454,9 +455,12 @@ public class f_3_lesson_post_test extends Fragment {
     private e_Question[] getPostTestQuestions(String module, String lesson) {
         String key = module + "_" + lesson;
 
+        Log.e("NEVER", "Key: " + key);
+
         switch (key) {
             /* ===== Module 1 ===== */
             case "M1_Lesson 1":
+                Log.e("NEVER", "I am inside M1_Lesson 1");
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_1_1.get_PostTest_Lesson1_Easy_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
@@ -644,6 +648,7 @@ public class f_3_lesson_post_test extends Fragment {
         Log.e(TAG, "module: " + module);
         Log.e(TAG, "lesson: " + lesson);
 
+        Log.e(TAG, "Difficulty: " + difficulty);
 
         e_Question[] allQuestions = getPostTestQuestions(module, lesson);  // Fetch all questions for the lesson
 
@@ -908,10 +913,14 @@ public class f_3_lesson_post_test extends Fragment {
         // Log the generated hint
         Log.e("Generate Hint", "Hint: " + hint);
 
-        d_Lesson_container.d_lesson_container_token -= 20;
+        if (d_Lesson_container.d_lesson_container_token >= 20) {
+            d_Lesson_container.d_lesson_container_token -= 20;
+            // refresh token in d_lesson_container
+            d_Lesson_container.tokenCount.setText("" + d_Lesson_container.d_lesson_container_token);
+        } else{
+            Toast.makeText(requireContext(), "Insufficient Funds", Toast.LENGTH_SHORT).show();
+        }
 
-        // refresh token in d_lesson_container
-        d_Lesson_container.tokenCount.setText("" + d_Lesson_container.d_lesson_container_token);
 
     }
 

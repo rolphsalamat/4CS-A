@@ -17,6 +17,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Map;
+
 public class f_1_lesson_text extends Fragment {
 
     private static final String ARG_KEY = "key";
@@ -55,6 +60,7 @@ public class f_1_lesson_text extends Fragment {
     private LinearLayout nextButton;
     private Boolean isTextLessonDone = false;
     private Button tapToContinueButton;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private int delayFinish = 0;
     private int currentStep = 0; // Track which content is currently shown
     private int pageNumber = 1; // will be incremented after page is done :)
@@ -86,8 +92,11 @@ public class f_1_lesson_text extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d("f_text_lesson", "onResume called");
-        Log.e("f_text_lesson", "loadTextContentForKey(" + key + ");");
-        loadTextContentForKey(key, pageNumber);
+//        Log.e("f_text_lesson", "loadTextContentForKey(" + key + ");");
+//        loadTextContentForKey(key, pageNumber);
+
+        Log.e("f_text_lesson", "loadTextContentForKey2(" + key + ");");
+        loadTextContentForKey2(key, pageNumber);
 
         d_Lesson_container.nextButton.setVisibility(View.VISIBLE);
         d_Lesson_container.nextButton.setEnabled(true);
@@ -595,90 +604,58 @@ public class f_1_lesson_text extends Fragment {
 //        nextButton.setAllCaps(true);
 //    }
 
-    public void loadTextContentForKey(String key, int pageNumber) {
-        String TAG = "LOAD TEXT LESSON TEXTS";
+    public void loadTextContentForKey2(String key, int pageNumber) {
+        String TAG = "loadTextContentForKey2";
+
         Log.d(TAG, "Page Number: " + pageNumber);
-        Log.e(TAG, "key: " + key);
+        Log.d(TAG, "Key: " + key);
 
-        // Construct resource names
-        String title = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_title";
-        String context1 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_1";
-        String context2 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_2";
-        String context3 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_3";
-        String context4 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_4";
-        String context5 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_5";
-        String context6 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_6";
-        String context7 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_7";
-        String context8 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_8";
-        String context9 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_9";
-        String context10 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_10";
+        String module = "Module " + key.charAt(1);
+        String lesson = "Lesson " + key.charAt(10);
+        String pageKey = "Page " + pageNumber;
 
-        // Retrieve the resource IDs
-        int titleResId = getResources().getIdentifier(title, "string", getContext().getPackageName());
-        int text1ResId = getResources().getIdentifier(context1, "string", getContext().getPackageName());
-        int text2ResId = getResources().getIdentifier(context2, "string", getContext().getPackageName());
-        int text3ResId = getResources().getIdentifier(context3, "string", getContext().getPackageName());
-        int text4ResId = getResources().getIdentifier(context4, "string", getContext().getPackageName());
-        int text5ResId = getResources().getIdentifier(context5, "string", getContext().getPackageName());
-        int text6ResId = getResources().getIdentifier(context6, "string", getContext().getPackageName());
-        int text7ResId = getResources().getIdentifier(context7, "string", getContext().getPackageName());
-        int text8ResId = getResources().getIdentifier(context8, "string", getContext().getPackageName());
-        int text9ResId = getResources().getIdentifier(context9, "string", getContext().getPackageName());
-        int text10ResId = getResources().getIdentifier(context10, "string", getContext().getPackageName());
+        // Reference to Firestore document
+        DocumentReference userRef = db.collection("text lesson").document(module);
 
-        // Log errors for missing resources
-        String TEG = "auto resource ID generator";
+        userRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                Map<String, Object> lessonMap = (Map<String, Object>) task.getResult().get(lesson);
+                if (lessonMap != null) {
+                    Map<String, Object> pageMap = (Map<String, Object>) lessonMap.get(pageKey);
+                    if (pageMap != null) {
+                        // Retrieve the Title
+                        String title = (String) pageMap.getOrDefault("Title", "None");
+                        titleTextView.setText(title); // Set the title to the titleTextView
 
+                        // Clear all content TextViews initially
+                        clearAllContentTextViews();
 
+                        // Iterate over all keys in the pageMap
+                        int contentIndex = 1; // To match Content X numbering
+                        for (Map.Entry<String, Object> entry : pageMap.entrySet()) {
+                            String keyName = entry.getKey();
+                            if (keyName.startsWith("Content ")) { // Process only Content keys
+                                String content = (String) entry.getValue();
+                                setTextViewContent(contentIndex, content);
+                                Log.d("loadTextContentForKey2", "Content " + contentIndex + ": " + content);
+                                contentIndex++;
 
-        if (titleResId == 0) {
-            Log.e(TEG, "Title is wrong: " + title);
-            numberOfTexts--;
-        }
-        if (text1ResId == 0) {
-            Log.e(TEG, "Text 1 is wrong: " + context1);
-            numberOfTexts--;
-        }
-        if (text2ResId == 0) {
-            Log.e(TEG, "Text 2 is wrong: " + context2);
-            numberOfTexts--;
-        }
-        if (text3ResId == 0) {
-            Log.e(TEG, "Text 3 is wrong: " + context3);
-            numberOfTexts--;
-        }
-        if (text4ResId == 0) {
-            Log.e(TEG, "Text 4 is wrong: " + context4);
-            numberOfTexts--;
-        }
-        if (text5ResId == 0) {
-            Log.e(TEG, "Text 5 is wrong: " + context5);
-            numberOfTexts--;
-        }
-        if (text6ResId == 0) {
-            Log.e(TEG, "Text 6 is wrong: " + context6);
-            numberOfTexts--;
-        }
-        if (text7ResId == 0) {
-            Log.e(TEG, "Text 7 is wrong: " + context7);
-            numberOfTexts--;
-        }
-        if (text8ResId == 0) {
-            Log.e(TEG, "Text 8 is wrong: " + context8);
-            numberOfTexts--;
-        }
-        if (text9ResId == 0) {
-            Log.e(TEG, "Text 9 is wrong: " + context9);
-            numberOfTexts--;
-        }
-        if (text10ResId == 0) {
-            Log.e(TEG, "Text 10 is wrong: " + context10);
-            numberOfTexts--;
-        }
+                            }
+                        }
+                    } else {
+                        Log.d(TAG, "No data found for Page " + pageNumber);
+                    }
+                } else {
+                    Log.d(TAG, "No data found for Lesson " + key.charAt(10));
+                }
+            } else {
+                Log.e(TAG, "Error retrieving document: ", task.getException());
+            }
+        });
+    }
 
-
-        // Clear previous content
-        titleTextView.setText("");
+    // Helper method to clear all content TextViews
+    private void clearAllContentTextViews() {
         contentTextView_01.setText("");
         contentTextView_02.setText("");
         contentTextView_03.setText("");
@@ -689,31 +666,166 @@ public class f_1_lesson_text extends Fragment {
         contentTextView_08.setText("");
         contentTextView_09.setText("");
         contentTextView_10.setText("");
+    }
 
-        // Set the text content with try-catch for safety
-        try {
-            if (titleResId != 0) {
-                titleTextView.setText(titleResId);
-            } else {
-                titleTextView.setText(""); // Fallback in case of missing title
-            }
-
-            // Set each content TextView with validation
-            setContentWithFallback(contentTextView_01, text1ResId);
-            setContentWithFallback(contentTextView_02, text2ResId);
-            setContentWithFallback(contentTextView_03, text3ResId);
-            setContentWithFallback(contentTextView_04, text4ResId);
-            setContentWithFallback(contentTextView_05, text5ResId);
-            setContentWithFallback(contentTextView_06, text6ResId);
-            setContentWithFallback(contentTextView_07, text7ResId);
-            setContentWithFallback(contentTextView_08, text8ResId);
-            setContentWithFallback(contentTextView_09, text9ResId);
-            setContentWithFallback(contentTextView_10, text10ResId);
-
-        } catch (Exception e) {
-            Log.e(TAG, "Error setting text content: ", e); // Log any exceptions
+    // Helper method to set content to a TextView based on index
+    private void setTextViewContent(int index, String content) {
+        switch (index) {
+            case 1:
+                contentTextView_01.setText(content);
+                break;
+            case 2:
+                contentTextView_02.setText(content);
+                break;
+            case 3:
+                contentTextView_03.setText(content);
+                break;
+            case 4:
+                contentTextView_04.setText(content);
+                break;
+            case 5:
+                contentTextView_05.setText(content);
+                break;
+            case 6:
+                contentTextView_06.setText(content);
+                break;
+            case 7:
+                contentTextView_07.setText(content);
+                break;
+            case 8:
+                contentTextView_08.setText(content);
+                break;
+            case 9:
+                contentTextView_09.setText(content);
+                break;
+            case 10:
+                contentTextView_10.setText(content);
+                break;
+            default:
+                Log.w("loadTextContentForKey2", "More content fields than TextViews available.");
+                break;
         }
     }
+
+//    public void loadTextContentForKey(String key, int pageNumber) {
+//        String TAG = "LOAD TEXT LESSON TEXTS";
+//        Log.d(TAG, "Page Number: " + pageNumber);
+//        Log.e(TAG, "key: " + key);
+//
+//        // Construct resource names
+//        String title = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_title";
+//        String context1 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_1";
+//        String context2 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_2";
+//        String context3 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_3";
+//        String context4 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_4";
+//        String context5 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_5";
+//        String context6 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_6";
+//        String context7 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_7";
+//        String context8 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_8";
+//        String context9 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_9";
+//        String context10 = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_10";
+//
+//        // Retrieve the resource IDs
+//        int titleResId = getResources().getIdentifier(title, "string", getContext().getPackageName());
+//        int text1ResId = getResources().getIdentifier(context1, "string", getContext().getPackageName());
+//        int text2ResId = getResources().getIdentifier(context2, "string", getContext().getPackageName());
+//        int text3ResId = getResources().getIdentifier(context3, "string", getContext().getPackageName());
+//        int text4ResId = getResources().getIdentifier(context4, "string", getContext().getPackageName());
+//        int text5ResId = getResources().getIdentifier(context5, "string", getContext().getPackageName());
+//        int text6ResId = getResources().getIdentifier(context6, "string", getContext().getPackageName());
+//        int text7ResId = getResources().getIdentifier(context7, "string", getContext().getPackageName());
+//        int text8ResId = getResources().getIdentifier(context8, "string", getContext().getPackageName());
+//        int text9ResId = getResources().getIdentifier(context9, "string", getContext().getPackageName());
+//        int text10ResId = getResources().getIdentifier(context10, "string", getContext().getPackageName());
+//
+//        // Log errors for missing resources
+//        String TEG = "auto resource ID generator";
+//
+//
+//
+//        if (titleResId == 0) {
+//            Log.e(TEG, "Title is wrong: " + title);
+//            numberOfTexts--;
+//        }
+//        if (text1ResId == 0) {
+//            Log.e(TEG, "Text 1 is wrong: " + context1);
+//            numberOfTexts--;
+//        }
+//        if (text2ResId == 0) {
+//            Log.e(TEG, "Text 2 is wrong: " + context2);
+//            numberOfTexts--;
+//        }
+//        if (text3ResId == 0) {
+//            Log.e(TEG, "Text 3 is wrong: " + context3);
+//            numberOfTexts--;
+//        }
+//        if (text4ResId == 0) {
+//            Log.e(TEG, "Text 4 is wrong: " + context4);
+//            numberOfTexts--;
+//        }
+//        if (text5ResId == 0) {
+//            Log.e(TEG, "Text 5 is wrong: " + context5);
+//            numberOfTexts--;
+//        }
+//        if (text6ResId == 0) {
+//            Log.e(TEG, "Text 6 is wrong: " + context6);
+//            numberOfTexts--;
+//        }
+//        if (text7ResId == 0) {
+//            Log.e(TEG, "Text 7 is wrong: " + context7);
+//            numberOfTexts--;
+//        }
+//        if (text8ResId == 0) {
+//            Log.e(TEG, "Text 8 is wrong: " + context8);
+//            numberOfTexts--;
+//        }
+//        if (text9ResId == 0) {
+//            Log.e(TEG, "Text 9 is wrong: " + context9);
+//            numberOfTexts--;
+//        }
+//        if (text10ResId == 0) {
+//            Log.e(TEG, "Text 10 is wrong: " + context10);
+//            numberOfTexts--;
+//        }
+//
+//
+//        // Clear previous content
+//        titleTextView.setText("");
+//        contentTextView_01.setText("");
+//        contentTextView_02.setText("");
+//        contentTextView_03.setText("");
+//        contentTextView_04.setText("");
+//        contentTextView_05.setText("");
+//        contentTextView_06.setText("");
+//        contentTextView_07.setText("");
+//        contentTextView_08.setText("");
+//        contentTextView_09.setText("");
+//        contentTextView_10.setText("");
+//
+//        // Set the text content with try-catch for safety
+//        try {
+//            if (titleResId != 0) {
+//                titleTextView.setText(titleResId);
+//            } else {
+//                titleTextView.setText(""); // Fallback in case of missing title
+//            }
+//
+//            // Set each content TextView with validation
+//            setContentWithFallback(contentTextView_01, text1ResId);
+//            setContentWithFallback(contentTextView_02, text2ResId);
+//            setContentWithFallback(contentTextView_03, text3ResId);
+//            setContentWithFallback(contentTextView_04, text4ResId);
+//            setContentWithFallback(contentTextView_05, text5ResId);
+//            setContentWithFallback(contentTextView_06, text6ResId);
+//            setContentWithFallback(contentTextView_07, text7ResId);
+//            setContentWithFallback(contentTextView_08, text8ResId);
+//            setContentWithFallback(contentTextView_09, text9ResId);
+//            setContentWithFallback(contentTextView_10, text10ResId);
+//
+//        } catch (Exception e) {
+//            Log.e(TAG, "Error setting text content: ", e); // Log any exceptions
+//        }
+//    }
 
     // Helper method to set TextViews with fallback
     private void setContentWithFallback(TextView textView, int resId) {

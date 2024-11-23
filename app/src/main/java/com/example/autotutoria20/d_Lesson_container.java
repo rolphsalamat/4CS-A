@@ -936,6 +936,16 @@ public class d_Lesson_container extends AppCompatActivity implements
         // Create the dialog
         AlertDialog dialog = builder.create();
 
+        // Pre-Test
+        // -= 1
+        if (testMode.equals("Pre-Test"))
+            score -= 1;
+        else if (testMode.equals("Post-Test"))
+            questionCount += 1;
+
+        //Post-Test
+        //
+
         String TAG = "showScoreDialog()";
         Log.e(TAG, "Mode: " + testMode);
         Log.e(TAG, "Score: " + score);
@@ -1099,7 +1109,7 @@ public class d_Lesson_container extends AppCompatActivity implements
         // Dynamically set dialog width and height
         if (dialog.getWindow() != null) {
             dialog.getWindow().setLayout(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             );
         }

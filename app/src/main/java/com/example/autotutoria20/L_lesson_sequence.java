@@ -1,5 +1,13 @@
 package com.example.autotutoria20;
 
+import android.util.Log;
+
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,13 +51,13 @@ public class L_lesson_sequence {
         lessonSequences.put("M1_Lesson 1", new StepType[]{
                 StepType.PRE_TEST,
                 StepType.TEXT, // Page 1
-                StepType.TEXT, // Page 2
-                StepType.TEXT, // Page 3
-                StepType.TEXT, // Page 4
-                StepType.TEXT, // Page 5
-                StepType.TEXT, // Page 6
-                StepType.TEXT, // Page 7
-                StepType.TEXT, // Page 8
+//                StepType.TEXT, // Page 2
+//                StepType.TEXT, // Page 3
+//                StepType.TEXT, // Page 4
+//                StepType.TEXT, // Page 5
+//                StepType.TEXT, // Page 6
+//                StepType.TEXT, // Page 7
+//                StepType.TEXT, // Page 8
                 StepType.VIDEO,
                 StepType.POST_TEST
         });
@@ -257,12 +265,65 @@ public class L_lesson_sequence {
         return lessonSequences;
     }
 
+    public interface OnVideoLinkRetrievedCallback {
+        void onSuccess(String videoLink);
+        void onFailure(Exception e);
+    }
+
+
+    public static String getLessonVideoLinks2(String module, String lesson) {
+        String TAG = "getLessonVideoLinks2";
+        String videoLink = null;  // Default to null if no link is found
+
+        Log.d(TAG, "Module: " + module);
+        Log.d(TAG, "Lesson: " + lesson);
+
+        // Prepare document and field keys
+        String moduleString = "Module " + module.charAt(1); // e.g., "Module 1"
+        String lessonField = "Lesson " + lesson.charAt(6);  // e.g., "Lesson 1"
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("Youtube Links").document(moduleString);
+
+//        docRef.get()
+
+                // the idea is to get the String value from the path: Youtube Links/moduleString and in that path we will see a String
+        // named Lesson 1 or Lesson n, that is the String I need to get,
+
+        try {
+            // Fetch the document asynchronously and block until it's done
+            DocumentSnapshot documentSnapshot = Tasks.await(docRef.get()); // Blocking here until the document is fetched
+
+            if (documentSnapshot.exists()) {
+                // Get the video link for the specified lesson
+                videoLink = documentSnapshot.getString(lessonField);
+                if (videoLink != null) {
+                    Log.d(TAG, "Video Link: " + videoLink);
+                } else {
+                    Log.e(TAG, "No video link found for " + lessonField);
+                }
+            } else {
+                Log.e(TAG, "No document found for " + moduleString);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error retrieving video link", e);
+        }
+
+        return videoLink; // This will return the video link (or null if it wasn't found)
+    }
+
+
+
+
+
     // Map to store YouTube links for each lesson
     public static Map<String, String> getLessonVideoLinks() {
-        Map<String, String> lessonVideoLinks = new HashMap<>();
 
-        // lock yt controls
-        // 6.3GB Total
+
+        // Reference to Firestore document
+//        DocumentReference userRef = db.collection("Youtube Links")
+
+        Map<String, String> lessonVideoLinks = new HashMap<>();
 
         // Add YouTube links for each lesson
         lessonVideoLinks.put("M1_Lesson 1", "92O_Hc6Yz5M");
@@ -295,6 +356,7 @@ public class L_lesson_sequence {
         lessonVideoLinks.put("M3_Lesson 8", "ufaQ_S6IfbM");
 
         return lessonVideoLinks;
+
     }
 
     public static int getRemainingTextLessons(L_lesson_sequence.StepType[] stepSequence, int currentStep) {

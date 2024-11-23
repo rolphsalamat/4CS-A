@@ -39,7 +39,10 @@ public class L_lesson_handler extends FragmentPagerAdapter {
             case POST_TEST:
                 return f_3_lesson_post_test.newInstance(module, lesson, learningMode);
             case VIDEO:
-                String videoUrl = L_lesson_sequence.getLessonVideoLinks().get(currentLesson);
+
+                String videoUrl = L_lesson_sequence.getLessonVideoLinks2(module, lesson);
+                Log.d(TAG, "BOSS YUNG LINK MO AY: " + videoUrl);
+
                 return f_2_lesson_video.newInstance(videoUrl);
             case TEXT:
 //                Log.e(TAG, "Loading text lesson for key: " + currentLesson);

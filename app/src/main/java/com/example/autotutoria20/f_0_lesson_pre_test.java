@@ -25,6 +25,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class f_0_lesson_pre_test extends Fragment {
 
@@ -308,8 +315,12 @@ public class f_0_lesson_pre_test extends Fragment {
             //Log.e("f_pre_test.java", "module: " + module);
             //Log.e("f_pre_test.java", "lesson: " + lesson);
 
+
+
             // Retrieve questions based on module and lesson
             questions = getPreTestQuestions(module, lesson);
+
+//            getPreTestFromDatabase(module, lesson);
 
             // Load the first question
             loadQuestion();
@@ -446,6 +457,108 @@ public class f_0_lesson_pre_test extends Fragment {
 
         });
     }
+
+//    private void getPreTestFromDatabase(String oldmodule, String lesson) {
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//
+////        // Create a Map to store Pre-Test data at the Module level
+////        Map<String, Map<String, Map<String, Object>>> allModulesData = new HashMap<>();
+//
+//        String module = "Module " + oldmodule.charAt(1);
+//
+//        Log.d("PreTest", "Fetching data for Module: " + module + ", Lesson: " + lesson);
+//
+//        db.collection("Questions")
+//                .document(module) // e.g., "Module 1"
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        DocumentSnapshot moduleSnapshot = task.getResult();
+//
+//                        if (moduleSnapshot != null && moduleSnapshot.exists()) {
+//                            Log.d("PreTest", "Module data found for: " + module);
+//                            // Access the specific lesson
+//                            Map<String, Object> lessonData = (Map<String, Object>) moduleSnapshot.get(lesson); // e.g., "Lesson 1"
+//
+//                            if (lessonData != null) {
+//                                Log.d("PreTest", "Lesson data found for: " + lesson);
+//                                // Access the Pre-Test data
+//                                Map<String, Object> preTestDataMap = (Map<String, Object>) lessonData.get("Pre-Test");
+//
+//                                if (preTestDataMap != null) {
+//                                    Log.d("PreTest", "Pre-Test data found for: " + lesson);
+//
+//                                    // Create a Map for the current lesson
+//                                    Map<String, Object> lessonDataMap = new HashMap<>();
+//
+//                                    // Retrieve questions, choices, and answers
+//                                    Object questionsObj = preTestDataMap.get("Questions");
+//                                    Object choicesObj = preTestDataMap.get("Choices");
+//                                    Object answersObj = preTestDataMap.get("Answers");
+//
+//                                    // Proceed with fetching the questions, choices, and answers only if they are Maps and not null
+//                                    if (questionsObj instanceof Map && choicesObj instanceof Map && answersObj instanceof Map) {
+//                                        Map<String, Object> questions = (Map<String, Object>) questionsObj;
+//                                        Map<String, Object> choices = (Map<String, Object>) choicesObj;
+//                                        Map<String, Object> answers = (Map<String, Object>) answersObj;
+//
+//                                        // Loop through each question and store in the Map
+//                                        for (Map.Entry<String, Object> entry : questions.entrySet()) {
+//                                            String questionKey = entry.getKey(); // "Question 1", "Question 2", etc.
+//
+//                                            // Retrieve each question, choice, and answer
+//                                            String question = (String) questions.get(questionKey);
+//                                            ArrayList<String> choiceList = (ArrayList<String>) choices.get(questionKey);
+//                                            Number answer = (Number) answers.get(questionKey);
+//
+//                                            Log.d("PreTest", "Fetching data for " + questionKey);
+//                                            Log.d("PreTest", "Question: " + question);
+//                                            Log.d("PreTest", "Choices: " + choiceList);
+//                                            Log.d("PreTest", "Answer: " + answer);
+//
+//                                            // Check if any of the data is null before assigning
+//                                            if (question != null && choiceList != null && answer != null) {
+//                                                // Store data for this question
+//                                                Map<String, Object> questionData = new HashMap<>();
+//                                                questionData.put("Question", question);
+//                                                questionData.put("Choices", choiceList);
+//                                                questionData.put("Answer", answer);
+//
+//                                                lessonDataMap.put(questionKey, questionData);
+//
+//                                                Log.d("PreTest", "Stored data for " + questionKey + ": " + questionData);
+//                                            } else {
+//                                                Log.e("PreTest", "Missing data for " + questionKey);
+//                                            }
+//                                        }
+//
+//                                        // Now store this lesson data inside the module map
+//                                        PreTestDataManager.allModulesData.put(module, new HashMap<>());
+//                                        PreTestDataManager.allModulesData.get(module).put(lesson, lessonDataMap);
+//
+//                                        Log.d("PreTest", "Stored data for " + lesson + ": " + lessonDataMap);
+//
+//                                    } else {
+//                                        Log.e("PreTest", "One or more data fields (Questions, Choices, Answers) are not in the expected Map format.");
+//                                    }
+//                                } else {
+//                                    Log.e("PreTest", "Pre-Test data not found for " + lesson);
+//                                }
+//
+//                            } else {
+//                                Log.e("PreTest", "Lesson data not found: " + lesson);
+//                            }
+//                        } else {
+//                            Log.e("PreTest", "Module data not found: " + module);
+//                        }
+//                    } else {
+//                        Log.e("PreTest", "Failed to fetch data: ", task.getException());
+//                    }
+//                });
+//    }
+
+
+
 
     private e_Question[] getPreTestQuestions(String module, String lesson) {
         String key = module + "_" + lesson;

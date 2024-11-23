@@ -41,8 +41,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -55,15 +53,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Source;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.yalantis.ucrop.UCrop;
-
-import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -74,10 +70,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class b_main_0_menu extends AppCompatActivity {
     public static long token;
+    public static Map<String, String> youtubeLinksMap;
     private TextView tokenCount;
     private boolean[] cardStates = {true, false, false}; // Example state array for 3 cards
     static Boolean isStudent = false;
@@ -167,7 +163,13 @@ public class b_main_0_menu extends AppCompatActivity {
                         FirebaseUser currentUser = mAuth.getCurrentUser();
                         if (currentUser != null) {
                             String userId = currentUser.getUid();
+
+                            fetchYoutubeLinks();
                             fetchUserData(userId);
+                            t_TestDataFromDatabase.getTestQuestionsFromDatabase("Pre-Test");
+                            t_TestDataFromDatabase.getTestQuestionsFromDatabase("Post-Test Easy");
+                            t_TestDataFromDatabase.getTestQuestionsFromDatabase("Post-Test Medium");
+                            t_TestDataFromDatabase.getTestQuestionsFromDatabase("Post-Test Hard");
 
                         }
                     } else {
@@ -418,6 +420,153 @@ public class b_main_0_menu extends AppCompatActivity {
         });
 
     }
+
+//    private void getTestQuestionsFromDatabase(String testMode) {
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//
+//        Log.d(testMode, "Fetching all modules and lessons data");
+//
+//        db.collection("Questions")
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    if (task.isSuccessful()) {
+//                        for (DocumentSnapshot moduleSnapshot : task.getResult()) {
+//                            String module = moduleSnapshot.getId(); // e.g., "Module 1"
+//
+//                            if (module.contains("Module ")) {
+//                                Log.d(testMode, "Module data found for: " + module);
+//
+//                                for (String lesson : moduleSnapshot.getData().keySet()) {
+//                                    if (lesson.contains("Lesson ")) {
+//                                        Log.d(testMode, "Lesson data found for: " + lesson);
+//
+//                                        Map<String, Object> lessonData = (Map<String, Object>) moduleSnapshot.get(lesson);
+//                                        Map<String, Object> TestDataMap = (Map<String, Object>) lessonData.get(testMode);
+//
+//                                        if (TestDataMap != null) {
+//                                            Log.d(testMode, testMode + " data found for: " + lesson);
+//
+//                                            // Loop through all keys in TestDataMap
+//                                            for (String key : TestDataMap.keySet()) {
+//                                                Log.d("PreTest", "Processing key: " + key);
+//
+//                                                // Retrieve Questions, Choices, and Answers directly from TestDataMap
+//                                                Object questionsObj = TestDataMap.get("Questions");
+//                                                Object choicesObj = TestDataMap.get("Choices");
+//                                                Object answersObj = TestDataMap.get("Answers");
+//
+//                                                // Proceed only if they are Maps and not null
+//                                                if (questionsObj instanceof Map && choicesObj instanceof Map && answersObj instanceof Map) {
+//                                                    Map<String, Object> questions = (Map<String, Object>) questionsObj;
+//                                                    Map<String, Object> choices = (Map<String, Object>) choicesObj;
+//                                                    Map<String, Object> answers = (Map<String, Object>) answersObj;
+//
+//                                                    // Loop through each question and store it in the map
+//                                                    for (Map.Entry<String, Object> entry : questions.entrySet()) {
+//                                                        String questionKey = entry.getKey(); // "Question 1", "Question 2", etc.
+//
+//                                                        // Retrieve each question, choice, and answer
+//                                                        String question = (String) questions.get(questionKey);
+//                                                        List<String> choiceList = (List<String>) choices.get("Choice " + questionKey.substring(questionKey.length() - 1)); // Match "Choice 1" for "Question 1"
+//                                                        Number answer = (Number) answers.get("Answer " + questionKey.substring(questionKey.length() - 1)); // Match "Answer 1" for "Question 1"
+//
+//                                                        Log.e("PreTest", "Fetching data for " + questionKey);
+//                                                        Log.d("PreTest", "Question: " + question);
+//                                                        Log.d("PreTest", "Choices: " + choiceList);
+//                                                        Log.d("PreTest", "Answer: " + answer);
+//
+//                                                        // Check if any of the data is null before assigning
+//                                                        if (question != null && choiceList != null && answer != null) {
+//                                                            // Store data for this question
+//                                                            Map<String, Object> questionData = new HashMap<>();
+//                                                            questionData.put("Question", question);
+//                                                            questionData.put("Choices", choiceList);
+//                                                            questionData.put("Answer", answer);
+//
+//                                                            Log.d("PreTest", "Stored data for " + questionKey + ": " + questionData);
+//
+//                                                            // add this questionData to
+//
+//                                                        } else {
+//                                                            Log.e("PreTest", "Missing data for " + questionKey);
+//                                                        }
+//                                                    }
+//
+//                                                    Log.d("PreTest", "Stored all data for key: " + key);
+//                                                } else {
+//                                                    Log.e("PreTest", "Invalid data structure for key: " + key);
+//                                                }
+//                                            }
+//
+//                                            Log.d("PreTest", "Completed processing all test mode data for: " + lesson);
+//                                        }
+//                                    }
+//                                }
+//
+//                            }
+//                        }
+//                    } else {
+//                        Log.e(testMode, "Failed to fetch modules data: ", task.getException());
+//                    }
+//                });
+//    }
+
+
+    private void fetchYoutubeLinks() {
+        String TAG = "fetchYoutubeLinks()";
+
+        Log.e(TAG, "Fetching YouTube Links...");
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        youtubeLinksMap = new HashMap<>(); // Ensure this is initialized
+
+        db.collection("Youtube Links")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.e(TAG, "Modules fetched successfully");
+
+                        for (QueryDocumentSnapshot moduleDoc : task.getResult()) {
+                            String moduleName = moduleDoc.getId(); // e.g., "Module 4"
+                            String moduleNumber = moduleName.replace("Module ", ""); // Extract the number (e.g., "4")
+
+                            Log.e(TAG, "Processing module: " + moduleName);
+
+                            // Iterate through each lesson field in the module document
+                            for (String lessonField : moduleDoc.getData().keySet()) {
+                                Log.e(TAG, "Processing field: " + lessonField);
+
+                                // Check if the field matches the expected format ("Lesson X")
+                                if (lessonField.startsWith("Lesson")) {
+                                    String lessonNumber = lessonField.replace("Lesson ", ""); // Extract the number (e.g., "2")
+                                    String retrievedString = moduleDoc.getString(lessonField);
+
+                                    if (retrievedString != null) {
+                                        // Construct the key in "M(lessonN)_Lesson (moduleN)" format
+                                        String key = "M" + lessonNumber + "_Lesson " + moduleNumber;
+
+                                        // Add to map
+                                        youtubeLinksMap.put(key, retrievedString);
+
+                                        Log.e(TAG, "Added YouTube link: " + key + " -> " + retrievedString);
+                                    } else {
+                                        Log.e(TAG, "No data found for: " + lessonField + " in module: " + moduleName);
+                                    }
+                                } else {
+                                    Log.e(TAG, "Skipped non-lesson field: " + lessonField);
+                                }
+                            }
+                        }
+
+                        // Log the final map
+                        Log.d("YoutubeLinksMap", youtubeLinksMap.toString());
+                    } else {
+                        Log.e(TAG, "Error fetching modules: ", task.getException());
+                    }
+                });
+    }
+
+
 
     // Handle the results
     @Override
@@ -922,13 +1071,23 @@ public class b_main_0_menu extends AppCompatActivity {
                             token = 0;
                         }
 
-                        isStudent = document.getBoolean("isStudent");
-//                        if (isStudent == null)
-//                            isStudent = true;
+                        if (document.contains("isStudent")) {
+                            isStudent = document.getBoolean("isStudent");
+                        } else {
+                            db.collection("users")
+                                    .document(userId)
+                                    .update("isStudent", true);
+                            token = 0;
+                        }
 
-                        isProgressiveCompleted = document.getBoolean("isComplete");
-//                        if (isProgressiveCompleted == null)
-//                            isProgressiveCompleted = true;
+                        if (document.contains("isComplete")) {
+                            isProgressiveCompleted = document.getBoolean("isComplete");
+                        } else {
+                            db.collection("users")
+                                    .document(userId)
+                                    .update("isComplete", false);
+                            isProgressiveCompleted = false;
+                        }
 
                         if (isStudent == null && isProgressiveCompleted == null) {
                             Log.e(TAG, "isStudent == null \nisComplete == null");
