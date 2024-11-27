@@ -198,12 +198,12 @@ public class c_Lesson_progressive_4 extends AppCompatActivity {
 
         switch (key) {
             case 1:
-                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M1_Lesson 4");
+                newText = progress + "/" + t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 4");
                 module1ProgressText.setText(newText);
 
 
                 // Check if the lesson is finished
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 4")) {
+                if (progress >= t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 4")) {
                     if (M1_Score < passingGrade) {
                         c_Lesson_feedback.showDialog(this, M1_Score, passingGrade, "Lesson 1");
                     } else {
@@ -214,11 +214,11 @@ public class c_Lesson_progressive_4 extends AppCompatActivity {
                 break;
 
             case 2:
-                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M2_Lesson 4");
+                newText = progress + "/" + t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 4");
                 module2ProgressText.setText(newText);
 
                 // Check if the lesson is finished
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M2_Lesson 4")) {
+                if (progress >= t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 4")) {
                     if (M1_Score < passingGrade ||
                         M2_Score < passingGrade) {
                         if (cardCompletionStatus[0])

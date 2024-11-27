@@ -54,34 +54,34 @@ public class z_Lesson_steps
     public static final int total_module_count = 8; // Kung ilang cards sa main menu
 
     public static final int[] lesson_1_steps = {
-            L_lesson_sequence.getNumberOfSteps("M1_Lesson 1"),
-            L_lesson_sequence.getNumberOfSteps("M2_Lesson 1"),
-            L_lesson_sequence.getNumberOfSteps("M3_Lesson 1"),
-            L_lesson_sequence.getNumberOfSteps("M4_Lesson 1")};
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 1"),
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 1"),
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M3_Lesson 1"),
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M4_Lesson 1")};
     public static final int[] lesson_2_steps = {
-            L_lesson_sequence.getNumberOfSteps("M1_Lesson 2")};
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 2")};
     public static final int[] lesson_3_steps = {
-            L_lesson_sequence.getNumberOfSteps("M1_Lesson 3"),
-            L_lesson_sequence.getNumberOfSteps("M2_Lesson 3")};
-//            L_lesson_sequence.getNumberOfSteps("M3_Lesson 3")};
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 3"),
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 3")};
+//            t_LessonSequenceFromDatabase.getNumberOfSteps("M3_Lesson 3")};
     public static final int[] lesson_4_steps = {
-            L_lesson_sequence.getNumberOfSteps("M1_Lesson 4"),
-            L_lesson_sequence.getNumberOfSteps("M2_Lesson 4")};
-//            L_lesson_sequence.getNumberOfSteps("M3_Lesson 4")};
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 4"),
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 4")};
+//            t_LessonSequenceFromDatabase.getNumberOfSteps("M3_Lesson 4")};
     public static final int[] lesson_5_steps = {
-            L_lesson_sequence.getNumberOfSteps("M1_Lesson 5"),
-            L_lesson_sequence.getNumberOfSteps("M2_Lesson 5"),
-            L_lesson_sequence.getNumberOfSteps("M3_Lesson 5")};
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 5"),
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 5"),
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M3_Lesson 5")};
     public static final int[] lesson_6_steps = {
-            L_lesson_sequence.getNumberOfSteps("M1_Lesson 6"),
-            L_lesson_sequence.getNumberOfSteps("M2_Lesson 6"),
-            L_lesson_sequence.getNumberOfSteps("M3_Lesson 6")};
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 6"),
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 6"),
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M3_Lesson 6")};
     public static final int[] lesson_7_steps = {
-            L_lesson_sequence.getNumberOfSteps("M1_Lesson 7")};
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 7")};
     public static final int[] lesson_8_steps = {
-            L_lesson_sequence.getNumberOfSteps("M1_Lesson 8"),
-            L_lesson_sequence.getNumberOfSteps("M2_Lesson 8"),
-            L_lesson_sequence.getNumberOfSteps("M3_Lesson 8")};
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 8"),
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 8"),
+            t_LessonSequenceFromDatabase.getNumberOfSteps("M3_Lesson 8")};
 
     // Private constructor to prevent instantiation
     private z_Lesson_steps() {

@@ -61,7 +61,7 @@ public class b_main_1_lesson_progressive extends Fragment {
 
     private boolean isProgressiveMode = true; // Default mode is progressive mode
     private static View view;
-    private CustomLoadingDialog loadingDialog;
+    private static CustomLoadingDialog loadingDialog;
 
     // Define card progress array
     private int[] cardProgress = new int[z_Lesson_steps.total_module_count]; // refer to the assigned value
@@ -157,8 +157,8 @@ public class b_main_1_lesson_progressive extends Fragment {
         }
     }
 
-    private void hideLoadingDialog() {
-        if (loadingDialog != null && loadingDialog.isShowing() && getActivity() != null && !getActivity().isFinishing()) {
+    static void hideLoadingDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
             loadingDialog.dismiss();
         }
     }
@@ -167,9 +167,9 @@ public class b_main_1_lesson_progressive extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
         fetchAllProgressData();
 
-//        initializeModules();
     }
 
     private void fetchAllProgressData() {
@@ -190,21 +190,27 @@ public class b_main_1_lesson_progressive extends Fragment {
                     int moduleCount = 0;
                     int moduleCounter = 0;
                     AtomicInteger totalCompletedModules = new AtomicInteger(0); // Track the number of fully completed modules
+                    boolean firstFailureDetected = false; // Track if a failure has been detected
+
+                    int completeCounter = 0;
 
                     for (DocumentSnapshot lessonDoc : task.getResult()) {
-
                         moduleCount++;
 
+                        // Initialize variables for each lesson
                         String lesson = lessonDoc.getId();
                         int totalProgress = 0;
                         int totalMaxProgress = 0;
                         int lessonNumber = Integer.parseInt(lesson.substring(7).trim());
                         int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
                         totalModules += maxProgressValues.length;
-                        int completeCounter = 0;
 
                         double totalBKTScore = 0.0;
                         int bktScoreCount = 0;
+
+                        int progress = 0;
+                        completeCounter = 0; // Track modules passed in this lesson
+                        Double moduleScore = 0.0;
 
                         for (int i = 0; i < maxProgressValues.length; i++) {
                             String keyProgress = "M" + (i + 1) + ".Progress";
@@ -216,62 +222,59 @@ public class b_main_1_lesson_progressive extends Fragment {
                                 totalMaxProgress += maxProgressValues[i];
                             }
 
-                            Double moduleScore = lessonDoc.getDouble(keyScore);
+                            moduleScore = lessonDoc.getDouble(keyScore);
                             if (moduleScore != null) {
                                 totalBKTScore += moduleScore;
                                 bktScoreCount++;
                             }
 
-                            Log.e(TAG, "Lesson[" + (i + 1) + "] BKT Score: " + moduleScore);
-                            Log.e(TAG, "Lesson[" + (i + 1) + "] Progress: " + moduleProgress);
-
+                            // Check passing conditions for the module
                             if (moduleScore != null && moduleScore >= b_main_0_menu_categorize_user.passingGrade) {
                                 String module = "M" + (i + 1);
                                 String lesson_1 = "Lesson " + lessonNumber;
-                                if (moduleProgress != null && moduleProgress >= getLessonSteps(module, lesson_1)) {
+                                int lessonSteps = getLessonSteps(module, lesson_1);
+                                if (moduleProgress != null && moduleProgress >= lessonSteps) {
                                     completeCounter++;
-                                    Log.e(TAG, "Lesson[" + (i + 1) + "] Passed | completeCounter: " + completeCounter);
                                 }
                             }
-
-                            moduleCounter++;
-                            final int progress = (int) ((moduleCounter / (float) totalModules) * 100);
-                            updateProgress(progress);
                         }
 
-                        if (completeCounter == maxProgressValues.length) {
-                            Log.e("TAG", "Module[" + lessonNumber + "] is Complete!");
+                        // Update progress
+                        progress = (int) ((totalProgress / (float) totalMaxProgress) * 100);
+                        updateProgress(progress);
 
-//                            int moduleNumber = (lessonNumber-1);
-//                            unlockPreviousCard(moduleNumber);
-
-//                            if (cardCompletionStatus[lessonNumber - 2]) {
-                                cardCompletionStatus[lessonNumber - 1] = true;
-                                hideLockedOverlay(lessonNumber - 1);
-//                            }
-
-
-                            totalCompletedModules.incrementAndGet(); // Increment AtomicInteger
-                        } else {
-                            //Module is not yet passed
-//                            c_Lesson_feedback.showModuleFailed(requireContext(), "Module " + lessonNumber);
-                        }
-
-                        double averageBKTScore = bktScoreCount > 0 ? totalBKTScore / bktScoreCount : 0.0;
+                        // Average BKT Score
+                        float averageBKTScore = (float) (bktScoreCount > 0 ? totalBKTScore / bktScoreCount : 0.0);
                         Log.e(TAG, "Average BKT Score for Lesson " + lessonNumber + ": " + averageBKTScore);
 
-                        totalAverageBKTScore += averageBKTScore;
-                        lessonCount++;
+                        if (completeCounter == maxProgressValues.length) {
+                            Log.e(TAG, "Lesson " + lessonNumber + " is complete!");
+                            cardProgress[lessonNumber - 1] = 100;
+                            cardCompletionStatus[lessonNumber - 1] = true;
+                            hideLockedOverlay(lessonNumber - 1);
+                        } else {
+                            int checkModule = lessonNumber - 1; // Adjust for 0-based indexing
+                            Log.i(TAG, "FAILED BA | Module: " + (checkModule));
+                            // Show failure dialog for the next module only
+                            if (!firstFailureDetected) {
+                                Log.i(TAG, "FAILED BA | inside !firstFailureDetected");
+                                if (averageBKTScore < 60 && averageBKTScore != 0) {
+                                    Log.i(TAG, "FAILED BA | inside if statement");
+                                    String moduleName = "Module " + lessonNumber;
+                                    c_Lesson_feedback.showModuleFailed(requireContext(), moduleName, moduleScore, moduleScore);
+                                    firstFailureDetected = true;
+                                }
+                            }
+                        }
 
+                        // Update the card progress display
                         if (totalMaxProgress > 0) {
                             double overallProgress = ((double) totalProgress / totalMaxProgress) * 100;
                             int overallProgressInt = (int) Math.round(overallProgress);
                             updateCardProgress(lessonNumber, overallProgressInt);
                         }
-
-                        Log.e("TAG", "WALTER | completedModule: " + totalCompletedModules.get());
-                        Log.e("TAG", "WALTER | Module Count: " + maxProgressValues.length);
                     }
+
 
                     double overallAverageBKTScore = lessonCount > 0 ? totalAverageBKTScore / lessonCount : 0.0;
                     overallAverageBKTScore *= 100;
@@ -891,57 +894,96 @@ public class b_main_1_lesson_progressive extends Fragment {
 //        }
 
     private int getLessonSteps(String module, String lesson) {
+        String TAG = "getLessonSteps(" + module + ", " + lesson + ");";
 
-        int getLesson = Integer.parseInt(String.valueOf(lesson.charAt(7)));
-        int getModule = Integer.parseInt(String.valueOf(module.charAt(1)));
+        // Extracting lesson and module numbers from the strings
+        int getModule = Integer.parseInt(String.valueOf(module.charAt(1))); // Assumes module format "Module X"
+        int getLesson = Integer.parseInt(String.valueOf(lesson.charAt(7))); // Assumes lesson format "Lesson X"
 
-        switch (getLesson) {
-            case 1:
-                switch (getModule) {
-                    case 1: return L_lesson_sequence.getNumberOfSteps("M1_Lesson 1");
-                    case 2: return L_lesson_sequence.getNumberOfSteps("M2_Lesson 1");
-                    case 3: return L_lesson_sequence.getNumberOfSteps("M3_Lesson 1");
-                    case 4: return L_lesson_sequence.getNumberOfSteps("M4_Lesson 1");
-                }
-            case 2:
-                switch (getModule) {
-                    case 1: return L_lesson_sequence.getNumberOfSteps("M1_Lesson 2");
-                }
-            case 3:
-                switch (getModule) {
-                    case 1: return L_lesson_sequence.getNumberOfSteps("M1_Lesson 3");
-                    case 2: return L_lesson_sequence.getNumberOfSteps("M2_Lesson 3");
-                }
-            case 4:
-                switch (getModule) {
-                    case 1: return L_lesson_sequence.getNumberOfSteps("M1_Lesson 4");
-                    case 2: return L_lesson_sequence.getNumberOfSteps("M2_Lesson 4");
-                }
-            case 5:
-                switch (getModule) {
-                    case 1: return L_lesson_sequence.getNumberOfSteps("M1_Lesson 5");
-                    case 2: return L_lesson_sequence.getNumberOfSteps("M2_Lesson 5");
-                    case 3: return L_lesson_sequence.getNumberOfSteps("M3_Lesson 5");
-                }
-            case 6:
-                switch (getModule) {
-                    case 1: return L_lesson_sequence.getNumberOfSteps("M1_Lesson 6");
-                    case 2: return L_lesson_sequence.getNumberOfSteps("M2_Lesson 6");
-                    case 3: return L_lesson_sequence.getNumberOfSteps("M3_Lesson 6");
-                }
-            case 7:
-                switch (getModule) {
-                    case 1: return L_lesson_sequence.getNumberOfSteps("M1_Lesson 7");
-                }
-            case 8:
-                switch (getModule) {
-                    case 1: return L_lesson_sequence.getNumberOfSteps("M1_Lesson 8");
-                    case 2: return L_lesson_sequence.getNumberOfSteps("M2_Lesson 8");
-                    case 3: return L_lesson_sequence.getNumberOfSteps("M3_Lesson 8");
-                }
+        Log.i(TAG, "Module: " + getModule);
+        Log.i(TAG, "Lesson: " + getLesson);
+
+        String newModule = "Module " + getModule;
+        String newLesson = "Lesson " + getLesson;
+
+        // Retrieve the lessons map for the specified module
+        Map<String, Integer> lessonsMap = t_LessonSequenceFromDatabase.lessonStepsCount.get(newModule);
+
+        if (lessonsMap != null) {
+
+            Log.i(TAG, "lessonMap != null");
+            // Retrieve the step count for the specified lesson
+            Integer stepCount = lessonsMap.get(newLesson);
+
+            if (stepCount != null) {
+
+                Log.i(TAG, "stepCount != null");
+                Log.i(TAG, "Step count for " + newModule + " " + newLesson + ": " + stepCount);
+                return stepCount; // Return the found step count
+
+            } else {
+                Log.i(TAG, newLesson + " not found in " + newModule);
+            }
+        } else {
+            Log.i(TAG, newModule + " not found in lessonStepsCount");
         }
 
-        return 0;
+        // Fallback logic using switch-case (commented out)
+    /*
+    switch (getLesson) {
+        case 1:
+            switch (getModule) {
+                case 1: return t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 1");
+                case 2: return t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 1");
+                case 3: return t_LessonSequenceFromDatabase.getNumberOfSteps("M3_Lesson 1");
+                case 4: return t_LessonSequenceFromDatabase.getNumberOfSteps("M4_Lesson 1");
+            }
+            break;
+        case 2:
+            switch (getModule) {
+                case 1: return t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 2");
+            }
+            break;
+        case 3:
+            switch (getModule) {
+                case 1: return t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 3");
+                case 2: return t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 3");
+            }
+            break;
+        case 4:
+            switch (getModule) {
+                case 1: return t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 4");
+                case 2: return t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 4");
+            }
+        case 5:
+            switch (getModule) {
+                case 1: return t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 5");
+                case 2: return t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 5");
+                case 3: return t_LessonSequenceFromDatabase.getNumberOfSteps("M3_Lesson 5");
+            }
+        case 6:
+            switch (getModule) {
+                case 1: return t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 6");
+                case 2: return t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 6");
+                case 3: return t_LessonSequenceFromDatabase.getNumberOfSteps("M3_Lesson 6");
+            }
+        case 7:
+            switch (getModule) {
+                case 1: return t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 7");
+            }
+        case 8:
+            switch (getModule) {
+                case 1: return t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 8");
+                case 2: return t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 8");
+                case 3: return t_LessonSequenceFromDatabase.getNumberOfSteps("M3_Lesson 8");
+            }
+        // Additional cases can be added here as needed...
+    }
+    */
+
+        // If no valid step count is found, return a default value or indicate an error
+        Log.i(TAG, "No valid steps found for " + module + " " + lesson);
+        return -1; // Indicate that no steps were found
     }
 
     private void resetCardProgress() {
@@ -1000,19 +1042,10 @@ public class b_main_1_lesson_progressive extends Fragment {
     }
 
     private void updateCardProgress(int cardId, int progress) {
+        
         cardId -= 1;
         String TAG = "updateCardProgress()";
         cardProgress[cardId] = Math.min(progress, 100);
-
-//        if (cardProgress[cardId] >= 100
-////                && isModuleComplete(cardId)
-//        ) {
-//            Log.e("cardCompletionStatus[]", "cardProgress[" + (cardId-1) + "]: " + cardProgress[cardId] + " >= 100, so TRUE na to");
-//            cardCompletionStatus[cardId] = true;
-//            if (cardId < cardCompletionStatus.length && cardCompletionStatus[cardId]) {
-//                hideLockedOverlay(cardId + 2);
-//            }
-//        }
 
         cardId += 1;
         ProgressBar progressBar = view.findViewById(getProgressBarId(cardId));
@@ -1021,6 +1054,7 @@ public class b_main_1_lesson_progressive extends Fragment {
 
         progressBar.setProgress(cardProgress[cardId]);
         progressText.setText(cardProgress[cardId] + "% Completed");
+
     }
 
     private void initializeViews() {

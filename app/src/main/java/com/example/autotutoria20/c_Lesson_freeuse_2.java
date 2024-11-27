@@ -164,13 +164,13 @@ public class c_Lesson_freeuse_2 extends AppCompatActivity {
 
         switch (key) {
             case 1:
-                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M1_Lesson 2");
+                newText = progress + "/" + t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 2");
                 if (module1ProgressText != null) {
                     module1ProgressText.setText(newText);
                 } else {
                     Log.e("updateUI", "TextView for module 1 not found");
                 }
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 2")) {
+                if (progress >= t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 2")) {
                     cardCompletionStatus[0] = true; // Mark card 1 as completed
 
                     Log.e("Comleted Lesson!", "Calling Feedback Class");

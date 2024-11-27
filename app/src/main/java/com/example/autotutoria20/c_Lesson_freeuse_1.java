@@ -174,50 +174,50 @@ public class c_Lesson_freeuse_1 extends AppCompatActivity {
 
         switch (key) {
             case 1:
-                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M1_Lesson 1");
+                newText = progress + "/" + t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 1");
                 if (module1ProgressText != null) {
                     module1ProgressText.setText(newText);
                 } else {
                     showToast("TextView for module 1 not found");
                     Log.e("updateUI", "TextView for module 1 not found");
                 }
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 1")) {
+                if (progress >= t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 1")) {
                     cardCompletionStatus[0] = true; // Mark card 1 as completed
                 }
                 break;
             case 2:
-                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M2_Lesson 1");
+                newText = progress + "/" + t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 1");
                 if (module2ProgressText != null) {
                     module2ProgressText.setText(newText);
                 } else {
                     showToast("TextView for module 2 not found");
                     Log.e("updateUI", "TextView for module 2 not found");
                 }
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M2_Lesson 1")) {
+                if (progress >= t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 1")) {
                     cardCompletionStatus[1] = true; // Mark card 2 as completed
                 }
                 break;
             case 3:
-                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M3_Lesson 1");
+                newText = progress + "/" + t_LessonSequenceFromDatabase.getNumberOfSteps("M3_Lesson 1");
                 if (module3ProgressText != null) {
                     module3ProgressText.setText(newText);
                 } else {
                     showToast("TextView for module 3 not found");
                     Log.e("updateUI", "TextView for module 3 not found");
                 }
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M3_Lesson 1")) {
+                if (progress >= t_LessonSequenceFromDatabase.getNumberOfSteps("M3_Lesson 1")) {
                     cardCompletionStatus[2] = true; // Mark card 3 as completed
                 }
                 break;
             case 4:
-                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M4_Lesson 1");
+                newText = progress + "/" + t_LessonSequenceFromDatabase.getNumberOfSteps("M4_Lesson 1");
                 if (module4ProgressText != null) {
                     module4ProgressText.setText(newText);
                 } else {
                     showToast("TextView for module 4 not found");
                     Log.e("updateUI", "TextView for module 4 not found");
                 }
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M4_Lesson 1")) {
+                if (progress >= t_LessonSequenceFromDatabase.getNumberOfSteps("M4_Lesson 1")) {
                     cardCompletionStatus[3] = true; // Mark card 4 as completed
 
                     Log.e("Comleted Lesson!", "Calling Feedback Class");

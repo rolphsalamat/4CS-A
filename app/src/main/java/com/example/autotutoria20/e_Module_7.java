@@ -1,6 +1,7 @@
 package com.example.autotutoria20;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,7 +10,7 @@ public class e_Module_7 {
     static e_Question[] getPreTestQuestions(String[] questions, String[][] choices, int[] answers) {
         List<e_Question> questionList = new ArrayList<>();
         for (int i = 0; i < questions.length; i++) {
-            questionList.add(new e_Question(questions[i], choices[i], answers[i])); // Pre-test is always multiple choice
+            questionList.add(new e_Question(questions[i], Arrays.asList(choices[i]), answers[i])); // Pre-test is always multiple choice
         }
 
         // Shuffle the list to randomize the order of the questions
@@ -22,7 +23,7 @@ public class e_Module_7 {
     static e_Question[] get_PostTest_EasyMedium_Questions(String[] questions, String[][] choices, int[] answers, e_Question.Difficulty level) {
         List<e_Question> questionList = new ArrayList<>();
         for (int i = 0; i < questions.length; i++) {
-            questionList.add(new e_Question(questions[i], choices[i], answers[i], level)); // Adjust based on difficulty
+            questionList.add(new e_Question(questions[i], Arrays.asList(choices[i]), answers[i], level)); // Adjust based on difficulty
         }
 
         // Shuffle the list to randomize the order of the questions

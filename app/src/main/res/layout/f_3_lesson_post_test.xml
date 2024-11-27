@@ -92,10 +92,12 @@
         android:id="@+id/identification_answer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners"
         android:hint="Type your answer here"
+        android:textColorHint="@color/black"
         android:layout_marginTop="10dp"
         android:padding="12dp"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:visibility="gone"
         />

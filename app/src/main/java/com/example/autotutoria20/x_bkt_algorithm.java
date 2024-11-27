@@ -204,8 +204,7 @@ public class x_bkt_algorithm {
     }
 
 
-
-    public void updateKnowledgeProbability(boolean answeredCorrectly) {
+    public void updateKnowledgeProbability(boolean answeredCorrectly, int attempts) {
         double pKnow = knowledgeProbability;
 
         String TAG = "updateKnowledgeProbability";
@@ -216,25 +215,67 @@ public class x_bkt_algorithm {
         Log.e(TAG, "Guess Rate: " + guessRate);
         Log.e(TAG, "Slip Rate: " + slipRate);
         Log.e(TAG, "Softening Rate: " + softeningRate);
+        Log.e(TAG, "Forget Rate: " + forgetRate);
 
         if (answeredCorrectly) {
+            // Stricter gain calculation for correct answers
             double categoryMultiplier = getCategoryMultiplier(true);
-
-            // Add a perfect score bonus if knowledgeProbability is already high
-            double perfectScoreBonus = (pKnow > 0.85) ? 0.05 : 0.0;
-
             double gain = learnRate * categoryMultiplier * (1 - pKnow) * (1 - guessRate);
-            knowledgeProbability = pKnow + Math.min(gain + perfectScoreBonus, 0.3); // Slightly higher max gain
+
+            // Lower the gain cap to make improvements smaller
+            knowledgeProbability = pKnow + Math.min(gain, 0.15); // Lower max gain for stricter model
         } else {
+            // Higher penalty for incorrect answers
             double categoryMultiplier = getCategoryMultiplier(false);
-            double penalty = slipRate * softeningRate * categoryMultiplier / 3.0; // Reduced penalty factor
-            knowledgeProbability = pKnow * (1 - penalty);
+            double penalty = slipRate * softeningRate * categoryMultiplier;
+
+            // Implement a slight forgetting factor
+            knowledgeProbability = pKnow * (1 - penalty) * (1 - forgetRate);
         }
 
-        knowledgeProbability = Math.max(0.6, Math.min(1.0, knowledgeProbability)); // Higher minimum bound for encouragement
+        // Dynamically adjust the minimum knowledge probability
+        double dynamicMin = 0.3 + (attempts * 0.05); // Adjust dynamically based on attempts
+
+        // Set strict bounds for knowledge probability to reflect limited improvement
+        knowledgeProbability = Math.max(dynamicMin, Math.min(1.0, knowledgeProbability)); // Higher minimum bound
 
         Log.d(TAG, "Updated Knowledge Probability: " + knowledgeProbability);
     }
+
+
+//    public void updateKnowledgeProbability(boolean answeredCorrectly) {
+//        double pKnow = knowledgeProbability;
+//
+//        String TAG = "updateKnowledgeProbability";
+//
+//        Log.e(TAG, "Answer: " + answeredCorrectly);
+//        Log.e(TAG, "knowledgeProbability (before): " + pKnow);
+//        Log.e(TAG, "Learn Rate: " + learnRate);
+//        Log.e(TAG, "Guess Rate: " + guessRate);
+//        Log.e(TAG, "Slip Rate: " + slipRate);
+//        Log.e(TAG, "Softening Rate: " + softeningRate);
+//
+//        if (answeredCorrectly) {
+//            // Adjust the gain for lower categories (Novice/Beginner)
+//            double gainMultiplier = (pKnow < 0.8) ? 1.5 : 1.0; // More gain for lower probabilities
+//            double categoryMultiplier = getCategoryMultiplier(true);
+//
+//            double gain = learnRate * gainMultiplier * categoryMultiplier * (1 - pKnow) * (1 - guessRate);
+//            knowledgeProbability = pKnow + Math.min(gain, 0.3); // Capped max gain
+//        } else {
+//            // Adjust penalty for higher categories (Intermediate/Advanced/Expert)
+//            double penaltyMultiplier = (pKnow > 0.8) ? 1.2 : 0.8; // Stricter penalty for higher probabilities
+//            double categoryMultiplier = getCategoryMultiplier(false);
+//
+//            double penalty = slipRate * softeningRate * penaltyMultiplier * categoryMultiplier;
+//            knowledgeProbability = pKnow * (1 - penalty);
+//        }
+//
+//        // Bound knowledgeProbability between 0.6 (minimum) and 1.0 (maximum)
+//        knowledgeProbability = Math.max(0.6, Math.min(1.0, knowledgeProbability));
+//
+//        Log.d(TAG, "Updated Knowledge Probability: " + knowledgeProbability);
+//    }
 
 
 
@@ -337,7 +378,7 @@ public class x_bkt_algorithm {
                                                         : 0.0; // Use default if Progress is missing or not a number
 
                                                 String module_lesson = module + "_" + documentName;
-                                                int steps = L_lesson_sequence.getNumberOfSteps(module_lesson);
+                                                int steps = t_LessonSequenceFromDatabase.getNumberOfSteps(module_lesson);
 
                                                 isLessonPassed = bktScore > b_main_0_menu_categorize_user.passingGrade;
                                                 isLessonCompleted = progress >= steps;
@@ -550,13 +591,14 @@ public class x_bkt_algorithm {
     public void updateScore(
             int moduleIndex, int lessonIndex,
             boolean isProgressiveMode,
-            boolean isCorrect
+            boolean isCorrect,
+            int attempt
     ) {
 
         String TAG = "BKT | updateScore()";
 
 //        updateKnowledge(isCorrect); // Call to update knowledge based on correctness
-        updateKnowledgeProbability(isCorrect); // eto ba dapat??
+        updateKnowledgeProbability(isCorrect, attempt); // eto ba dapat??
 
         if (
 //                bktScores == null ||
@@ -650,7 +692,7 @@ public class x_bkt_algorithm {
         Log.e(TAG, "Field path for update: " + moduleFieldPath + " | Lesson " + lessonIndex);
 
         Map<String, Object> updates = new HashMap<>();
-        updates.put(moduleFieldPath, score); // Update only the specific field
+        updates.put(moduleFieldPath, (score+1)); // Update only the specific field
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

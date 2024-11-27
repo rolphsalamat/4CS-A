@@ -20,15 +20,28 @@ import androidx.fragment.app.Fragment;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class f_1_lesson_text extends Fragment {
-
+    int contentIndex = 1;
+    int contentCount = 0;
+    Map <String, String> contentMap = new HashMap<>();
+    Map <String, List<Integer>> bulletMap = new HashMap<>();
+    Map<String, Map<String, Object>> pages = new HashMap<>();
+    List<Integer> pageSteps = new ArrayList<>();
+    List<Integer> contentCount2 = new ArrayList<>();
     private static final String ARG_KEY = "key";
     private static final String ARG_PAGE_NUMBER = "pageNumber"; // New argument
     private static final String ARG_MODULE = "currentModule"; // New argument
     private static final String ARG_LESSON = "currentLesson"; // New argument
 
+    private int contentKey;
     private String key;
     private String currentModule; // Variable to store currentModule
     private String currentLesson; // Variable to store currentLesson
@@ -41,10 +54,10 @@ public class f_1_lesson_text extends Fragment {
             contentLayout_01, contentLayout_02, contentLayout_03, contentLayout_04, contentLayout_05,
             contentLayout_06, contentLayout_07, contentLayout_08, contentLayout_09, contentLayout_10
     };
-    private ImageView
+    ImageView
             contentImageView_01, contentImageView_02, contentImageView_03, contentImageView_04, contentImageView_05,
             contentImageView_06, contentImageView_07, contentImageView_08, contentImageView_09, contentImageView_10;
-    private TextView
+    TextView
             contentTextView_01, contentTextView_02, contentTextView_03, contentTextView_04, contentTextView_05,
             contentTextView_06, contentTextView_07, contentTextView_08, contentTextView_09, contentTextView_10;
     TextView[] contentTextViews = {
@@ -56,26 +69,27 @@ public class f_1_lesson_text extends Fragment {
             contentImageView_01, contentImageView_02, contentImageView_03, contentImageView_04, contentImageView_05,
             contentImageView_06, contentImageView_07, contentImageView_08, contentImageView_09, contentImageView_10
     };
+    private Handler handler = new Handler();
     private int numberOfTexts = 11;
     private LinearLayout nextButton;
     private Boolean isTextLessonDone = false;
     private Button tapToContinueButton;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private int delayFinish = 0;
-    private int currentStep = 0; // Track which content is currently shown
+    private int currentStep = 1; // Track which content is currently shown
     private int pageNumber = 1; // will be incremented after page is done :)
     private TextLessonCompleteListener TextLessonCompleteListener;
     private OnNextButtonClickListener callback;
-    private int totalSteps = 2; // Default total steps
 
     public static f_1_lesson_text newInstance(String key, int pageNumber) {
 
-        Log.e("IM HERE", "IM HERE, nasa newInstance nako...");
+        // // Log.e("IM HERE", "IM HERE, nasa newInstance nako...");
         f_1_lesson_text fragment = new f_1_lesson_text();
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
         args.putInt(ARG_PAGE_NUMBER, pageNumber); // Pass the page number
         fragment.setArguments(args);
+
         return fragment;
 
     }
@@ -91,15 +105,11 @@ public class f_1_lesson_text extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("f_text_lesson", "onResume called");
-//        Log.e("f_text_lesson", "loadTextContentForKey(" + key + ");");
-//        loadTextContentForKey(key, pageNumber);
 
-        Log.e("f_text_lesson", "loadTextContentForKey2(" + key + ");");
-        loadTextContentForKey2(key, pageNumber);
+        loadTextContentForKey2(key, "Page " + pageNumber);
 
-        d_Lesson_container.nextButton.setVisibility(View.VISIBLE);
-        d_Lesson_container.nextButton.setEnabled(true);
+        // Log.i("setPageContent", "setPageContent | onResume()");
+        setPageContent(pageNumber);
 
     }
 
@@ -108,18 +118,18 @@ public class f_1_lesson_text extends Fragment {
         View view = inflater.inflate(R.layout.f_1_lesson_text, container, false);
 
         // Reset??
-        currentStep = 0;
+        currentStep = 1;
 
         // Retrieve the key from the arguments
         if (getArguments() != null) {
             key = getArguments().getString(ARG_KEY);
             pageNumber = getArguments().getInt(ARG_PAGE_NUMBER, 1); // Retrieve page number
         } else {
-            Log.e("f_text_lesson", "Arguments bundle is null. Key and page number are not set.");
+             // Log.e("f_text_lesson", "Arguments bundle is null. Key and page number are not set.");
         }
 
         if (key == null) {
-            Log.e("f_text_lesson", "Key is null in onCreateView");
+             // Log.e("f_text_lesson", "Key is null in onCreateView");
         }
 
         // Initialize views and other logic
@@ -190,47 +200,55 @@ public class f_1_lesson_text extends Fragment {
         nextButton = view.findViewById(R.id.next_button);
         tapToContinueButton = view.findViewById(R.id.tap_to_continue);
 
-        // Set visibility for buttons
-        nextButton.setEnabled(true);
-        tapToContinueButton.setVisibility(View.VISIBLE);
-
         // Ensure TextViews and Button are not null
-        if (titleTextView == null || nextButton == null || tapToContinueButton == null) {
-            Log.e("f_text_lesson", "One or more views are null. Check your layout file.");
-            return;  // Early return to prevent further crashes
-        }
-
-        // Hide all content TextViews initially
-        for (TextView textView : contentTextViews) {
-            textView.setVisibility(View.GONE);
-        }
+        if (titleTextView == null || nextButton == null || tapToContinueButton == null)
+            return;
 
         // Proceed with your logic
         if (getArguments() != null) {
             key = getArguments().getString(ARG_KEY);
             pageNumber = getArguments().getInt(ARG_PAGE_NUMBER, -1); // Retrieve page number
-            setTotalStepsForKey(key);
+//            setTotalStepsForKey(key);
+//            // Log.i("setPageContent(" + pageNumber + ")", "setPageContent(" + pageNumber + "); | onViewCreated();");
+//            setPageContent(pageNumber);
         }
 
         // Set OnClickListener for the nextButton
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Log.i("nextButton", "nextButton clicked!");
                 nextButton.setEnabled(false);
                 tapToContinueButton.setEnabled(false);
                 tapToContinueButton.setVisibility(View.GONE);
+
+                showNextStep();
+                showTextView(currentStep);
+
                 handleNextButtonClick();
+
             }
         });
 
+
+//        nextButton.performClick();
+
         // "ALSO" Set OnClickListener for the tapToContinueButton
+
+//        tap_to_continue
         tapToContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                nextButton.setEnabled(false);
+                // Log.i("tapToContinueButton", "tapToContinueButton clicked!");
+
                 tapToContinueButton.setEnabled(false);
                 tapToContinueButton.setVisibility(View.GONE);
+
+                showNextStep();
+                showTextView(currentStep);
+
                 handleNextButtonClick();
+
             }
         });
 
@@ -273,346 +291,179 @@ public class f_1_lesson_text extends Fragment {
 
     }
 
-    private void setTotalStepsForKey(String key) {
-
-        totalSteps = 0;  // Reset total steps
-
-        // Generate resource names dynamically
-
-        // check pageNumber
-        Log.e("setTotalStepsForKey", "Page Number: " + pageNumber);
-
-//        // ginawa ko lang ganto kasi mali ata yung naming sa String resource file??
-//        String baseName = "module" + key.charAt(10) + "_" + pageNumber + "_" + key.charAt(1);
-
-        // pero eto talaga yung original...
-        String baseName = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber;
-
-        Log.e("setTotalStepsForKey", "baseName: " + baseName);
-
-        // Check if title and content resources exist and have values, increment totalSteps accordingly
-        if (resourceHasValue(baseName + "_title")) totalSteps++;
-        else totalSteps++;
-
-        int contentCount = 10;
-
-        for (int i=1; i<=contentCount;i++) {
-            if (resourceHasValue(baseName + "_content_" + i)) totalSteps++;
-        }
-
-        // replaced by the for loop.. just change the int contentCount integer..
-//        if (resourceHasValue(baseName + "_content_1")) totalSteps++;
-//        if (resourceHasValue(baseName + "_content_2")) totalSteps++;
-//        if (resourceHasValue(baseName + "_content_3")) totalSteps++;
-//        if (resourceHasValue(baseName + "_content_4")) totalSteps++;
-//        if (resourceHasValue(baseName + "_content_5")) totalSteps++;
-//        if (resourceHasValue(baseName + "_content_6")) totalSteps++;
-//        if (resourceHasValue(baseName + "_content_7")) totalSteps++;
-//        if (resourceHasValue(baseName + "_content_8")) totalSteps++;
-//        if (resourceHasValue(baseName + "_content_8")) totalSteps++;
-//        if (resourceHasValue(baseName + "_content_9")) totalSteps++;
-//        if (resourceHasValue(baseName + "_content_10")) totalSteps++;
-
-        Log.e("setTotalStepsForKey", "totalSteps: " + totalSteps);
-    }
-
-    private boolean resourceHasValue(String resourceName) {
-        int resId = getResources().getIdentifier(resourceName, "string", getContext().getPackageName());
-        Log.e("resourceHasValue()", "checking: " + getResources().getIdentifier(resourceName, "string", getContext().getPackageName()));
-        if (resId != 0) {  // Check if the resource ID is valid
-            String value = getString(resId);
-            Log.d("resourceHasValue", "Resource: " + resourceName + " Value: " + value); // Log the value
-            return value != null && !value.trim().isEmpty();  // Check if the resource has a non-empty value
-        }
-        Log.d("resourceHasValue", "Resource: " + resourceName + " not found or empty.");
-        return false;  // Return false if the resource does not exist or is empty
-    }
-
-
     private void handleNextButtonClick() {
-        Log.d("handleNextButtonClick()", "currentStep(" + currentStep + ") < totalSteps(" + totalSteps + ")");
 
-        if (currentStep < (totalSteps - 1)) {
-            showNextStep(currentStep);
+        // Log.i("setPageContent", "setPageContent | handleNextButtonClick()");
+        setPageContent(pageNumber);
 
-            currentStep++;
-        }
-        else {
+        showTextView(currentStep);
+        showNextStep();
 
-            // Notify the parent activity that the button was clicked
-            if (callback != null) {
-                callback.onNextButtonClicked();
-//                // Reset currentStep for the next page
-//                currentStep = 0;
-            }
+        // Execute additional code after a delay of 600 milliseconds
+        new Handler().postDelayed(() -> {
 
-        }
+            // disable if want to show contentTextViews  one by one
+            d_Lesson_container.nextButton.setEnabled(true);
+            d_Lesson_container.nextButton.setVisibility(View.VISIBLE);
+
+        }, 1000);
+
     }
 
-    private void setBullet(int pageNumber, int step, ImageView contentImageView, TextView contentTextView, LinearLayout linearLayout) {
-        String TAG = "setBullet()";
+    void showTextView(int step) {
+        String TAG = "showTextView";
 
-        // Convert dp to pixels
-        float scale = contentImageView.getContext().getResources().getDisplayMetrics().density;
-        int sizeInDp = (int) (20 * scale + 0.5f); // 25dp to pixels
+        contentTextView_01.setVisibility(View.VISIBLE);
+        contentTextView_02.setVisibility(View.VISIBLE);
+        contentTextView_03.setVisibility(View.VISIBLE);
+        contentTextView_04.setVisibility(View.VISIBLE);
+        contentTextView_05.setVisibility(View.VISIBLE);
+        contentTextView_06.setVisibility(View.VISIBLE);
+        contentTextView_07.setVisibility(View.VISIBLE);
+        contentTextView_08.setVisibility(View.VISIBLE);
+        contentTextView_09.setVisibility(View.VISIBLE);
+        contentTextView_10.setVisibility(View.VISIBLE);
 
-        int layoutMargin = 16;
+        nextButton.setVisibility(View.VISIBLE);
+        nextButton.setEnabled(true);
 
-        Log.e(TAG, "calling getIndentation method");
-
-        // Get the bullet types dynamically based on the key and pageNumber
-        int[][] moduleArray = f_1_lesson_text_bullets.getIndentation(key, pageNumber);
-
-        if (moduleArray.length == 0 || pageNumber > moduleArray.length) {
-            Log.e(TAG, "Invalid page number. No bullets available for page " + pageNumber);
-            return; // Invalid page number, return early
-        }
-
-        if (step >= moduleArray[pageNumber - 1].length) {
-            Log.e(TAG, "Invalid step number for page " + pageNumber + ". Step: " + step);
-            return; // Invalid step number, return early
-        }
-
-        int bulletType = moduleArray[pageNumber - 1][step];  // Get bullet type for the step
-
-        // Set bullet image and padding based on the bullet type
-        if (bulletType == 1) {
-            linearLayout.setPadding((24 + layoutMargin), layoutMargin, layoutMargin, layoutMargin);
-            contentImageView.getLayoutParams().width = sizeInDp;
-            contentImageView.getLayoutParams().height = sizeInDp;
-            contentImageView.setImageResource(R.drawable.bullet_1);  // Set bullet_1 image
-        } else if (bulletType == 2) {
-            linearLayout.setPadding((75 + layoutMargin), layoutMargin, layoutMargin, layoutMargin);
-            contentImageView.getLayoutParams().width = sizeInDp;
-            contentImageView.getLayoutParams().height = sizeInDp;
-            contentImageView.setImageResource(R.drawable.bullet_2);  // Set bullet_2 image
-        } else {
-            contentImageView.setImageDrawable(null);
-            contentTextView.setPadding(0, 0, 0, 0);  // No indentation
-        }
-
-        contentImageView.requestLayout();  // Request layout update to apply the new size
     }
 
 
-    private void showNextStep(int step) {
-        String TAG = "showNextStep";
-        int actualStep = 0;
+//    private void setBullet(int pageNumber, int step, ImageView contentImageView, TextView contentTextView, LinearLayout linearLayout) {
+//        String TAG = "setBullet()";
+//
+//        // Convert dp to pixels
+//        float scale = contentImageView.getContext().getResources().getDisplayMetrics().density;
+//        int sizeInDp = (int) (20 * scale + 0.5f); // 25dp to pixels
+//
+//        int layoutMargin = 16;
+//
+////        // Get the bullet types dynamically based on the key and pageNumber
+////        int[][] moduleArray = f_1_lesson_text_bullets.getIndentation(key, pageNumber);
+////
+////        if (moduleArray.length == 0 || pageNumber > moduleArray.length) {
+////            // // Log.e(TAG, "Invalid page number. No bullets available for page " + pageNumber);
+////            return; // Invalid page number, return early
+////        }
+////
+////        if (step >= moduleArray[pageNumber - 1].length) {
+////            // // Log.e(TAG, "Invalid step number for page " + pageNumber + ". Step: " + step);
+////            return; // Invalid step number, return early
+////        }
+////
+////        int bulletType = moduleArray[pageNumber - 1][step];  // Get bullet type for the step
+//
+//
+//
+//        // Set bullet image and padding based on the bullet type
+//        if (bulletType == 1) {
+//            linearLayout.setPadding((24 + layoutMargin), layoutMargin, layoutMargin, layoutMargin);
+//            contentImageView.getLayoutParams().width = sizeInDp;
+//            contentImageView.getLayoutParams().height = sizeInDp;
+//            contentImageView.setImageResource(R.drawable.bullet_1);  // Set bullet_1 image
+//        } else if (bulletType == 2) {
+//            linearLayout.setPadding((75 + layoutMargin), layoutMargin, layoutMargin, layoutMargin);
+//            contentImageView.getLayoutParams().width = sizeInDp;
+//            contentImageView.getLayoutParams().height = sizeInDp;
+//            contentImageView.setImageResource(R.drawable.bullet_2);  // Set bullet_2 image
+//        } else {
+//            contentImageView.setImageDrawable(null);
+//            contentTextView.setPadding(0, 0, 0, 0);  // No indentation
+//        }
+//
+//        contentImageView.requestLayout();  // Request layout update to apply the new size
+//    }
+
+    private void showNextStep() {
 
         nextButton.setEnabled(false);
         tapToContinueButton.setVisibility(View.GONE);
         tapToContinueButton.setEnabled(false);
 
-        String[] contentKeys = {
-                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_1",
-                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_2",
-                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_3",
-                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_4",
-                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_5",
-                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_6",
-                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_7",
-                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_8",
-                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_9",
-                "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_content_10"
-        };
-
-        for (int i = 0; i < contentKeys.length; i++) {
-            String contentKey = contentKeys[i];
-
-            int resId = getResources().getIdentifier(contentKey, "string", getContext().getPackageName());
-            String content = getString(resId);
-//            int delayInSeconds = calculateDelayBasedOnLength(content.length());
-            int delayInSeconds = 1;
-            delayFinish = delayInSeconds;
-            Log.e(TAG, "delayFinish: " + delayFinish);
-
-            if (resourceHasValue(contentKey)) {
-                actualStep++;
-                if (actualStep == step + 1) {
-
-                    contentTextViews[i].setVisibility(View.VISIBLE);
-                    contentTextViews[i].setText(content);
-                    setBullet(pageNumber, i, contentImageViews[i], contentTextViews[i], contentLayouts[i]);
-
-                    String TUG = "TEST HERE ROP";
-
-                    Log.e("AAAAAAAAAAAAAAAAAAAAAAAA", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-
-                    // Rop's Code
-                    if (currentStep < (totalSteps - 2)) {
-                        Log.e(TUG, "currentStep("+currentStep+") < (totalSteps("+(totalSteps-2)+")");
-                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-
-//                            // Enable Tap to Continue kasi tapos na yung delay...
-                            nextButton.setEnabled(true);
-//                            tapToContinueButton.setVisibility(View.VISIBLE);
-//                            tapToContinueButton.setEnabled(true);
-
-//                            nextButton.performClick();
-
-                            d_Lesson_container.clickCenter(delayInSeconds);
-//                            d_Lesson_container.simulateClicksInCenter();
-
-                            // i-click na agad yung nextButton dito??
-//                            handleNextButtonClick();
-
-                            // may option tayo na
-
-                        }, delayInSeconds * 500L);
-                    }
-                    else if (currentStep == (totalSteps - 2)) {
-                        Log.e(TUG, "currentStep("+currentStep+") == (totalSteps("+(totalSteps-2)+")");
-//                        if (totalSteps == 2) {
-                            if (TextLessonCompleteListener != null) {
-                                TextLessonCompleteListener.onTextLessonComplete(true, delayFinish);
-                            }
-//                        }
-                    }
-                    else if (currentStep == (totalSteps - 1)) {
-                        Log.e(TUG, "currentStep("+currentStep+") == (totalSteps("+(totalSteps-1)+")");
-                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-
-                            nextButton.setVisibility(View.VISIBLE);
-                            nextButton.setEnabled(true);
-
-                            tapToContinueButton.setVisibility(View.GONE);
-                            tapToContinueButton.setEnabled(false);
-                        }, delayInSeconds * 500);
-                    }
-                    return;
-                }
-            } else {
-                contentTextViews[i].setVisibility(View.GONE);
-            }
-        }
         nextButton.setVisibility(View.VISIBLE);
         nextButton.setEnabled(true);
+
     }
-
-    static int calculateDelayBasedOnLength(int length) {
-
-        /**
-         * This method calculates the delay based on the length of the string and the reading speed of the target audience.
-         *
-         * Reference Table for Multiplier:
-         * +--------------------------------+-----------------+------------------------------+---------------------------+
-         * | Educational Level              |   Average WPM   |  Characters Per Second (CPS) |  Multiplier (sec/char)    |
-         * +--------------------------------+-----------------+------------------------------+---------------------------+
-         * | 1. Elementary Student          |  100 - 150 WPM  |  8.33 - 12.50 CPS            |  0.0800 - 0.1200 sec/char |
-         * | 2. High School Student         |  200 - 300 WPM  |  16.67 - 25.00 CPS           |  0.0400 - 0.0600 sec/char |
-         * | 3. Senior High School Student  |  250 - 350 WPM  |  20.83 - 29.17 CPS           |  0.0343 - 0.0480 sec/char |
-         * | 4. College Student             |  250 - 350 WPM  |  20.83 - 29.17 CPS           |  0.0343 - 0.0480 sec/char |
-         * | 5. Graduate (Bachelor's)       |  300 - 400 WPM  |  25.00 - 33.33 CPS           |  0.0300 - 0.0400 sec/char |
-         * | 6. Master's Student            |  350 - 450 WPM  |  29.17 - 37.50 CPS           |  0.0267 - 0.0343 sec/char |
-         * | 7. Doctorate (PhD)             |  400 - 500 WPM  |  33.33 - 41.67 CPS           |  0.0240 - 0.0300 sec/char |
-         * +--------------------------------+-----------------+------------------------------+---------------------------+
-         */
-
-
-        // 0 -
-        // n -
-
-        // use 8 on publish
-        // use 10 for testing
-        int level = 3; // Default to High School Student
-
-        // Adjust the multiplier based on the educational level
-        double multiplier;
-        switch (level) {
-            case 0: // User-Friendly
-                multiplier = 0.15; // No Average Data, just for user-friendliness
-                break;
-            case 1: // Elementary Student
-                multiplier = 0.10; // Average of 0.0800 - 0.1200
-                break;
-            case 2: // High School Student
-                multiplier = 0.05; // Average of 0.0400 - 0.0600
-                break;
-            case 3: // Senior High School Student
-                multiplier = 0.0412; // Average of 0.0343 - 0.0480
-                break;
-            case 4: // College Student
-                multiplier = 0.0378; // Average of 0.0343 - 0.0480
-                break;
-            case 5: // Graduate (Bachelor's)
-                multiplier = 0.035; // Average of 0.0300 - 0.0400
-                break;
-            case 6: // Master's Student
-                multiplier = 0.0305; // Average of 0.0267 - 0.0343
-                break;
-            case 7: // Doctorate (PhD)
-                multiplier = 0.027; // Average of 0.0240 - 0.0300
-                break;
-            case 8: // Test User #1
-                multiplier = 0.02508; // Average of 0.0240 - 0.0300
-                break;
-            case 9: // Test User #2
-                multiplier = 0.02338; // Ewan kung anong average na to, kung di pa kayo makuntento dito ewan ko nalang
-                break;
-            case 10: // Test User #3
-                multiplier = 0.02067; // please makuntento na kayo :)
-                break;
-            default:
-                multiplier = 0.05; // Default value if no valid level is provided
-                break;
-        }
-
-        return (int) (length * multiplier);
-    }
-
-
-//    private int calculateDelayBasedOnLength(int length) {
-//        // Adjust the multiplier according to your target audience.
-//        // For example, using 0.05 seconds per character (which corresponds to 20 characters per second).
-//        double multiplier = 0.06; // Adjust this value based on your target audience
+//
+//    static int calculateDelayBasedOnLength(int length) {
+//
+//        /**
+//         * This method calculates the delay based on the length of the string and the reading speed of the target audience.
+//         *
+//         * Reference Table for Multiplier:
+//         * +--------------------------------+-----------------+------------------------------+---------------------------+
+//         * | Educational Level              |   Average WPM   |  Characters Per Second (CPS) |  Multiplier (sec/char)    |
+//         * +--------------------------------+-----------------+------------------------------+---------------------------+
+//         * | 1. Elementary Student          |  100 - 150 WPM  |  8.33 - 12.50 CPS            |  0.0800 - 0.1200 sec/char |
+//         * | 2. High School Student         |  200 - 300 WPM  |  16.67 - 25.00 CPS           |  0.0400 - 0.0600 sec/char |
+//         * | 3. Senior High School Student  |  250 - 350 WPM  |  20.83 - 29.17 CPS           |  0.0343 - 0.0480 sec/char |
+//         * | 4. College Student             |  250 - 350 WPM  |  20.83 - 29.17 CPS           |  0.0343 - 0.0480 sec/char |
+//         * | 5. Graduate (Bachelor's)       |  300 - 400 WPM  |  25.00 - 33.33 CPS           |  0.0300 - 0.0400 sec/char |
+//         * | 6. Master's Student            |  350 - 450 WPM  |  29.17 - 37.50 CPS           |  0.0267 - 0.0343 sec/char |
+//         * | 7. Doctorate (PhD)             |  400 - 500 WPM  |  33.33 - 41.67 CPS           |  0.0240 - 0.0300 sec/char |
+//         * +--------------------------------+-----------------+------------------------------+---------------------------+
+//         */
+//
+//
+//        // 0 -
+//        // n -
+//
+//        // use 8 on publish
+//        // use 10 for testing
+//        int level = 3; // Default to High School Student
+//
+//        // Adjust the multiplier based on the educational level
+//        double multiplier;
+//        switch (level) {
+//            case 0: // User-Friendly
+//                multiplier = 0.15; // No Average Data, just for user-friendliness
+//                break;
+//            case 1: // Elementary Student
+//                multiplier = 0.10; // Average of 0.0800 - 0.1200
+//                break;
+//            case 2: // High School Student
+//                multiplier = 0.05; // Average of 0.0400 - 0.0600
+//                break;
+//            case 3: // Senior High School Student
+//                multiplier = 0.0412; // Average of 0.0343 - 0.0480
+//                break;
+//            case 4: // College Student
+//                multiplier = 0.0378; // Average of 0.0343 - 0.0480
+//                break;
+//            case 5: // Graduate (Bachelor's)
+//                multiplier = 0.035; // Average of 0.0300 - 0.0400
+//                break;
+//            case 6: // Master's Student
+//                multiplier = 0.0305; // Average of 0.0267 - 0.0343
+//                break;
+//            case 7: // Doctorate (PhD)
+//                multiplier = 0.027; // Average of 0.0240 - 0.0300
+//                break;
+//            case 8: // Test User #1
+//                multiplier = 0.02508; // Average of 0.0240 - 0.0300
+//                break;
+//            case 9: // Test User #2
+//                multiplier = 0.02338; // Ewan kung anong average na to, kung di pa kayo makuntento dito ewan ko nalang
+//                break;
+//            case 10: // Test User #3
+//                multiplier = 0.02067; // please makuntento na kayo :)
+//                break;
+//            default:
+//                multiplier = 0.05; // Default value if no valid level is provided
+//                break;
+//        }
 //
 //        return (int) (length * multiplier);
 //    }
 
-
-
-//    private void showNextStep(int step) {
-//        step++;
-//        String TAG = "showNextStep(" + step + ")";
-//
-//        switch (step) {
-//            case 1:
-//                Log.e(TAG, "Step: " + step);
-//                contentTextView_2.setVisibility(View.VISIBLE);
-//                break;
-//            case 2:
-//                Log.e(TAG, "Step: " + step);
-//                contentTextView_3.setVisibility(View.VISIBLE);
-//                break;
-//            case 3:
-//                Log.e(TAG, "NOTHING TO SHOW, STEP: " + step);
-//                break;
-//            case 4:
-//                Log.e(TAG, "NOTHING TO SHOW, STEP: " + step);
-//                break;
-//            case 5:
-//                Log.e(TAG, "NOTHING TO SHOW, STEP: " + step);
-//                break;
-//
-//        }
-//    }
-
-//    private void updateNextButtonForFinalAction() {
-//        nextButton.setText("Next");
-//        nextButton.setTextColor(getResources().getColor(R.color.black));
-//        nextButton.setBackgroundResource(android.R.color.darker_gray);
-//        nextButton.setAllCaps(true);
-//    }
-
-    public void loadTextContentForKey2(String key, int pageNumber) {
+    public void loadTextContentForKey2(String key, String page) {
         String TAG = "loadTextContentForKey2";
 
-        Log.d(TAG, "Page Number: " + pageNumber);
-        Log.d(TAG, "Key: " + key);
+        String module = "Module " + key.charAt(10);
+        String lesson = "Lesson " + key.charAt(1);
 
-        String module = "Module " + key.charAt(1);
-        String lesson = "Lesson " + key.charAt(10);
-        String pageKey = "Page " + pageNumber;
+        // Log.i(TAG, "loadTextContentForKey2(" + key + ");");
 
         // Reference to Firestore document
         DocumentReference userRef = db.collection("text lesson").document(module);
@@ -620,42 +471,264 @@ public class f_1_lesson_text extends Fragment {
         userRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
                 Map<String, Object> lessonMap = (Map<String, Object>) task.getResult().get(lesson);
+
                 if (lessonMap != null) {
-                    Map<String, Object> pageMap = (Map<String, Object>) lessonMap.get(pageKey);
-                    if (pageMap != null) {
-                        // Retrieve the Title
-                        String title = (String) pageMap.getOrDefault("Title", "None");
-                        titleTextView.setText(title); // Set the title to the titleTextView
 
-                        // Clear all content TextViews initially
-                        clearAllContentTextViews();
+                    clearAllContentTextViews();
 
-                        // Iterate over all keys in the pageMap
-                        int contentIndex = 1; // To match Content X numbering
-                        for (Map.Entry<String, Object> entry : pageMap.entrySet()) {
-                            String keyName = entry.getKey();
-                            if (keyName.startsWith("Content ")) { // Process only Content keys
-                                String content = (String) entry.getValue();
-                                setTextViewContent(contentIndex, content);
-                                Log.d("loadTextContentForKey2", "Content " + contentIndex + ": " + content);
-                                contentIndex++;
+                    for (Map.Entry<String, Object> lessonEntry : lessonMap.entrySet()) {
+                        String pageKey2 = lessonEntry.getKey();
+                        Map<String, Object> pageMap = (Map<String, Object>) lessonEntry.getValue();
 
+                        if (pageMap != null || pageMap.containsKey(page)) {
+                            Map<String, Object> contentWithBulletsMap = new HashMap<>(); // To store content and bullets together
+
+                            // Process content and bullets
+                            for (Map.Entry<String, Object> entry : pageMap.entrySet()) {
+                                String keyName = entry.getKey();
+
+                                if (keyName.startsWith("Title")) {
+                                    String title = (String) entry.getValue();
+                                    contentWithBulletsMap.put(keyName, title);
+                                }
+
+                                if (keyName.startsWith("Content ")) {
+                                    // Extract content
+                                    String content = (String) entry.getValue();
+                                    contentWithBulletsMap.put(keyName, content);
+                                }
+
+                                if (keyName.equals("Bullet")) {
+                                    // Extract bullets
+                                    Object bulletData = entry.getValue();
+                                    if (bulletData instanceof List<?>) {
+                                        List<?> rawBulletList = (List<?>) bulletData;
+
+                                        // Convert to List<Integer> for consistent handling
+                                        List<Integer> bulletList = new ArrayList<>();
+                                        for (Object item : rawBulletList) {
+                                            if (item instanceof Number) {
+                                                bulletList.add(((Number) item).intValue());
+                                            }
+                                        }
+                                        contentWithBulletsMap.put("Bullet", bulletList);
+                                        // Log.i(TAG, "contentWithBulletsMap: " + contentWithBulletsMap);
+                                    }
+                                }
                             }
+
+                            // Log combined content and bullets
+                            // Log.i(TAG, "Page: " + pageKey2 + " | Content with Bullets: " + contentWithBulletsMap);
+
+                            pages.put(pageKey2, contentWithBulletsMap);
+                            // Log.i(TAG, "Pages: " + pages);
+
                         }
-                    } else {
-                        Log.d(TAG, "No data found for Page " + pageNumber);
                     }
+                    setPageContent(pageNumber);
                 } else {
-                    Log.d(TAG, "No data found for Lesson " + key.charAt(10));
+                    // Log.d(TAG, "No data found for Lesson " + lesson);
                 }
             } else {
-                Log.e(TAG, "Error retrieving document: ", task.getException());
+                // Log.e(TAG, "Error retrieving document: ", task.getException());
             }
         });
     }
 
+
+    // Original Code
+//    public void loadTextContentForKey2(String key) {
+//        String TAG = "loadTextContentForKey2";
+//
+////        // // Log.d(TAG, "Page Number: " + pageNumber);
+//        // // Log.d(TAG, "Key: " + key);
+//
+//        String module = "Module " + key.charAt(10);
+//        String lesson = "Lesson " + key.charAt(1);
+////        String pageKey = "Page " + pageNumber;
+//
+//        // // Log.i(TAG, "Module: " + module);
+//        // // Log.i(TAG, "Lesson: " + lesson);
+////        // // Log.i(TAG, "Page: " + pageKey);
+//
+//        // Reference to Firestore document
+//        DocumentReference userRef = db.collection("text lesson").document(module);
+//
+//        userRef.get().addOnCompleteListener(task -> {
+//            if (task.isSuccessful() && task.getResult() != null) {
+//                Map<String, Object> lessonMap = (Map<String, Object>) task.getResult().get(lesson);
+//
+//                if (lessonMap != null) {
+//                    // Iterate over each entry in the lessonMap
+//                    for (Map.Entry<String, Object> lessonEntry : lessonMap.entrySet()) {
+//                        String pageKey2 = lessonEntry.getKey(); // Get the current page key
+//                        Map<String, Object> pageMap = (Map<String, Object>) lessonEntry.getValue(); // Get the corresponding page map
+//
+//                        // Assuming you want to use the page number based on the current iteration
+//                        int pageNumberKey = Integer.parseInt(pageKey2.replaceAll("[^0-9]", "")); // Extracting number from key
+//                        String page = "Page " + pageNumberKey;
+//                        // // Log.i(TAG, "Page: " + page);
+//
+//                        contentMap = new HashMap<>(); // Create a new inner map for this page
+//                        bulletMap = new HashMap<>();
+//
+//                        if (pageMap != null) {
+//                            // Retrieve the Title
+//                            String title = (String) pageMap.getOrDefault("Title", "");
+//                            contentMap.put("Title", title); // Store Title in the inner map
+//
+//                            int[] bullets;
+//                            Object bulletData = pageMap.get("Bullet"); // Retrieve the value for the "Bullet" key
+//
+//                            if (bulletData == null)
+//                                // // Log.i("loadTextContentForKey2", "Bullet is NOT in the Database, default tayo pre");
+//
+//                            if (bulletData instanceof List) {
+//                                // // Log.i("loadTextContentForKey2", "Bullet is a List");
+//                                // Safely cast to a List of Numbers
+//                                List<Number> bulletList = (List<Number>) bulletData;
+//                                // Convert the List<Number> to an int[]
+//                                bullets = bulletList.stream().mapToInt(Number::intValue).toArray();
+//                            } else {
+//                                // // Log.i("loadTextContentForKey2", "Bullet is NOT a List");
+//                                // Default value if the key is missing or not a List
+//                                bullets = new int[]{0};
+//                            }
+//
+//                            // // Log.i("loadTextContentForKey2", "Bullets: " + Arrays.toString(bullets));
+//
+//                            // Clear all content TextViews initially
+////                            clearAllContentTextViews();
+//
+//                            // Iterate over all keys in the pageMap
+//                            contentIndex = 1; // To match Content X numbering
+//
+//                            int iteration = 1;
+//                            int stopLoop;
+//                            boolean addIteration = false;
+//
+//                            while (iteration != 10) {
+//                                stopLoop = 0; // Reset stopLoop for each iteration of the outer loop
+//                                boolean foundMatch = false; // Flag to track if we found a match in this iteration
+//
+//                                for (Map.Entry<String, Object> entry : pageMap.entrySet()) {
+//                                    String keyName = entry.getKey();
+//
+//                                    // // Log.e("loadTextContentForKey2", "before if (keyName.startsWith(\"Content \"" + iteration + "))");
+//                                    // // Log.i(TAG, "keyName: " + keyName);
+//                                    // // Log.i(TAG, "Expected Name: " + "Content " + iteration);
+//
+//                                    // Check for matching key
+//                                    if (keyName.startsWith("Content " + iteration)) {
+//                                        // // Log.i(TAG, "YES MATCH!");
+//
+//                                        String content = (String) entry.getValue();
+//                                        contentKey++;
+//
+//                                        // Store each content in the inner map with a key of "Content X"
+//                                        contentMap.put("Content " + contentIndex, content);
+//                                        contentIndex++;
+//
+//                                         // Log.i("loadTextContentForKey2", "Mitsushi | Module: " + module);
+//                                         // Log.i("loadTextContentForKey2", "Mitsushi | Lesson: " + lesson);
+//                                         // Log.i("loadTextContentForKey2", "Mitsushi | Page: " + page);
+//                                         // Log.i("loadTextContentForKey2", "Mitsushi | Content Number: " + keyName);
+//                                        // // Log.i("loadTextContentForKey2", "Mitsushi | Content : " + content);
+//                                        // // Log.i("loadTextForContentKey2", "Mitsushi | Bullet: " + Arrays.toString(bullets));
+//
+//                                        // // Log.e("loadTextContentForKey2", "Mitsushi | ise-save ko na Content sa index: " + contentIndex);
+//                                        // // Log.d("loadTextContentForKey2", "Mitsushi | Content " + contentIndex + ": " + content);
+//
+//                                        // Check if bulletData is a list and safely cast
+//                                        if (bulletData instanceof List<?>) {
+//                                            List<?> rawBulletList = (List<?>) bulletData;
+//
+//                                            // Convert each element to Integer
+//                                            List<Integer> bulletList = new ArrayList<>();
+//                                            for (Object item : rawBulletList) {
+//                                                if (item instanceof Number) { // Ensure it's a number
+//                                                    bulletList.add(((Number) item).intValue());
+//                                                }
+//                                            }
+//
+//                                            // Put the List<Integer> into the bulletMap
+//                                            bulletMap.put("Bullet", bulletList);
+//                                        } else {
+//                                            // Default empty list if no valid data is found
+//                                            bulletMap.put("Bullet", Collections.emptyList());
+//                                        }
+//
+//                                        // Log.i(TAG, "ASCORBIC ACID | Bullet: " + bulletMap);
+//
+//
+//                                        // // Log.d(TAG, "foundMatch! | addIteration!");
+//                                        // Mark that we found a match
+//                                        foundMatch = true;
+//                                        addIteration = true;
+//                                    }
+//
+//                                    stopLoop++;
+//                                    // // Log.i(TAG, "stopLoop: " + stopLoop);
+//                                    // // Log.i(TAG, "pageMap.size(): " + pageMap.size());
+//
+//                                    // Break if we've processed enough entries
+//                                    if (stopLoop == (pageMap.size()+1)) {
+//                                        break;
+//                                    }
+//                                }
+//
+//                                // // Log.i(TAG, "Iteration: " + iteration);
+//
+//                                // Only increment iteration if we found a match
+//                                if (foundMatch) {
+//                                    // // Log.e(TAG, "foundMath! | increment iteration: " + (iteration+1));
+//                                    iteration++;
+//                                } else {
+//                                    // If no matches were found for this iteration, break to avoid infinite loop
+//                                    break;
+//                                }
+//
+//                            }
+//
+//                            if (addIteration && iteration >= 1) {
+//                                // // Log.i(TAG, "addIteration | contentCount2: " + (iteration-2));
+//                                contentCount2.add(iteration-2);
+//                                addIteration = !addIteration;
+//                            }
+//
+//                            // Sort using TreeMap
+////                            Map<String, String> sortedMap = new TreeMap<>(contentMap);
+//
+//                            setTextViewContent();
+//
+//                            // // Log.i(TAG, "pageSteps.add(" + contentIndex + ")");
+//                            pageSteps.add(contentIndex);
+//
+//                            // After processing all contents for this page, add the inner map to the pages map
+//                            pages.put(page, contentMap); // Use 'page' as the key in pages map
+//                            // Log.i(TAG, "DUET | pages: " + pages);
+//
+//                            // // Log.i(TAG, "Pages <Map> : " + pages);
+//
+//                        } else {
+//                            // // Log.d(TAG, "No data found for Page " + page);
+//                        }
+//                    }
+//                    // // Log.i(TAG, "Hash Map: " + pages);
+//                } else {
+//                    // // Log.d(TAG, "No data found for Lesson " + key.charAt(10));
+//                }
+//            } else {
+//                // // Log.e(TAG, "Error retrieving document: ", task.getException());
+//            }
+//        });
+//    }
+
     // Helper method to clear all content TextViews
     private void clearAllContentTextViews() {
+
+        titleTextView.setText("");
+
         contentTextView_01.setText("");
         contentTextView_02.setText("");
         contentTextView_03.setText("");
@@ -668,49 +741,252 @@ public class f_1_lesson_text extends Fragment {
         contentTextView_10.setText("");
     }
 
-    // Helper method to set content to a TextView based on index
-    private void setTextViewContent(int index, String content) {
-        switch (index) {
-            case 1:
-                contentTextView_01.setText(content);
-                break;
-            case 2:
-                contentTextView_02.setText(content);
-                break;
-            case 3:
-                contentTextView_03.setText(content);
-                break;
-            case 4:
-                contentTextView_04.setText(content);
-                break;
-            case 5:
-                contentTextView_05.setText(content);
-                break;
-            case 6:
-                contentTextView_06.setText(content);
-                break;
-            case 7:
-                contentTextView_07.setText(content);
-                break;
-            case 8:
-                contentTextView_08.setText(content);
-                break;
-            case 9:
-                contentTextView_09.setText(content);
-                break;
-            case 10:
-                contentTextView_10.setText(content);
-                break;
-            default:
-                Log.w("loadTextContentForKey2", "More content fields than TextViews available.");
-                break;
+    public void setPageContent(int pageNumber) {
+        String TAG = "setPageContent(" + pageNumber + ");";
+        // Log.i(TAG, "setPageContent(" + pageNumber + "); | setPageContent();");
+
+        // Array of TextViews and ImageViews for content and bullets
+        TextView[] contentTextViews = {
+                contentTextView_01, contentTextView_02,
+                contentTextView_03, contentTextView_04,
+                contentTextView_05, contentTextView_06,
+                contentTextView_07, contentTextView_08,
+                contentTextView_09, contentTextView_10
+        };
+        ImageView[] contentImageViews = {
+                contentImageView_01, contentImageView_02,
+                contentImageView_03, contentImageView_04,
+                contentImageView_05, contentImageView_06,
+                contentImageView_07, contentImageView_08,
+                contentImageView_09, contentImageView_10
+        };
+        LinearLayout[] contentLayouts = {
+                contentLayout_01, contentLayout_02,
+                contentLayout_03, contentLayout_04,
+                contentLayout_05, contentLayout_06,
+                contentLayout_07, contentLayout_08,
+                contentLayout_09, contentLayout_10
+        };
+
+        // Clear all TextViews
+        for (TextView textView : contentTextViews)
+            textView.setText(null);
+
+        String newPageNumber = "Page " + pageNumber;
+
+        // Retrieve content map for the page
+        Map<String, Object> contentMap = pages.get(newPageNumber);
+
+        if (contentMap != null) {
+            // Set the title`
+            String title = (String) contentMap.getOrDefault("Title", null);
+
+            if (title != null) {
+                titleTextView.setText(title);
+            }
+            else {
+                titleTextView.setVisibility(View.GONE);
+                contentTextView_01.setPadding(0, 40, 0, 0);
+            }
+
+            // Get bullets list
+            List<Integer> bullets = (List<Integer>) contentMap.getOrDefault("Bullet", new ArrayList<>());
+
+            for (int i = 0; i < contentTextViews.length; i++) {
+                String contentKey = "Content " + (i + 1);
+                String content = (String) contentMap.getOrDefault(contentKey, "");
+
+                // Set content text
+                contentTextViews[i].setText(content);
+
+                if (i < bullets.size()) {
+                    int bulletType = bullets.get(i);
+                    setBullet(bulletType, contentImageViews[i], contentTextViews[i], contentLayouts[i]);
+                } else {
+                    // No bullet, reset ImageView and layout
+                    contentImageViews[i].setImageDrawable(null);
+//                    contentLayouts[i].setPadding(0, 0, 0, 0);
+                }
+            }
+        } else {
+            // Log.d(TAG, "No data found for Page " + newPageNumber);
         }
     }
 
+    // New setBullet method
+    private void setBullet(int bulletType, ImageView contentImageView, TextView contentTextView, LinearLayout linearLayout) {
+        String TAG = "setBullet()";
+
+        // Convert dp to pixels
+        float scale = contentImageView.getContext().getResources().getDisplayMetrics().density;
+        int sizeInDp = (int) (20 * scale + 0.5f); // 20dp to pixels
+        int layoutMargin = 16; // Margin in dp
+
+        // Set bullet image and layout properties based on bullet type
+        if (bulletType == 1) {
+            linearLayout.setPadding((24 + layoutMargin), layoutMargin, layoutMargin, layoutMargin);
+            contentImageView.getLayoutParams().width = sizeInDp;
+            contentImageView.getLayoutParams().height = sizeInDp;
+            contentImageView.setImageResource(R.drawable.bullet_1);
+            contentImageView.setVisibility(View.VISIBLE);
+        } else if (bulletType == 2) {
+            linearLayout.setPadding((75 + layoutMargin), layoutMargin, layoutMargin, layoutMargin);
+            contentImageView.getLayoutParams().width = sizeInDp;
+            contentImageView.getLayoutParams().height = sizeInDp;
+            contentImageView.setImageResource(R.drawable.bullet_2);
+            contentImageView.setVisibility(View.VISIBLE);
+        } else {
+            contentImageView.setImageDrawable(null);
+            contentImageView.setVisibility(View.INVISIBLE);
+            linearLayout.setPadding(0, 0, 0, 0); // Reset padding
+        }
+
+        // Request layout update
+        contentImageView.requestLayout();
+    }
+
+    private void setTextViewContent() {
+        String TAG = "Running Devices";
+
+        String outerKey = "Page " + pageNumber; // Assuming currentStep is defined
+        // // Log.i(TAG, "outerKey: " + outerKey);
+
+        // Check if the outerKey exists in the pages map
+        if (pages.containsKey(outerKey)) {
+            // Retrieve the inner map associated with outerKey
+            Map<String, Object> innerMap = pages.get(outerKey);
+
+            // Check if innerMap is not null
+            if (innerMap != null) {
+                // Retrieve the title
+                String title = (String) innerMap.get("Title");
+                titleTextView.setText(title);
+                // // Log.i(TAG, "Title: " + title);
+
+                List<String> contents = new ArrayList<>(10);
+
+                for (String key : innerMap.keySet()) {
+                    // // Log.i(TAG, "Doraemon | Key: " + key);
+                    if (key.startsWith("Content ")) {
+                        contents.add(key);
+                        // // Log.d(TAG, "Found Content Key: " + key);
+                        // // Log.i(TAG, "Content: " + innerMap.get(key));
+                        int index = Integer.parseInt(key.substring(8));
+//                        String content = innerMap.get("Content " + index);
+//                        contents.add(index, content);
+
+//                        contents.add(content);
+//
+//                        // // Log.i(TAG, "Index " + index + " | Content " + content);
+                    }
+                }
+                // // Log.i(TAG, "Total contents found: " + contents.size());
+                contentCount = contents.size();
+
+                Collections.sort(contents);
+
+                for (int i=0;i< contents.size();i++) {
+                    // // Log.i(TAG, "Content[" + i +"]: " + contents.get(i));
+                }
+
+                for (int i=contents.size(); i< 10; i++) {
+                    setContextView(i, "");
+                }
+
+                // Loop through and retrieve contents based on actual count
+                for (int i = 0; i < contents.size(); i++) { // Start from 0
+                    String contentKey = contents.get(i); // Get content key
+                    // // Log.i(TAG, "contentKey: " + contents.get(i));
+                    String content = (String) innerMap.get(contentKey); // Retrieve content
+
+                    if (content != null) {
+                        // // Log.i(TAG, contentKey + ": " + content);
+                        // // Log.d(TAG, contentKey + " | Setting contentTextView_" + (i + 1) + ": " + content);
+
+                        setContextView(i, content);
+
+                    } else {
+//                        // Log.w(TAG, "No content found for key: " + contentKey);
+                    }
+                }
+            } else {
+//                // // Log.e(TAG, "Inner map for key '" + outerKey + "' is null.");
+            }
+        } else {
+//            // // Log.e(TAG, "Outer key '" + outerKey + "' not found in pages map.");
+        }
+    }
+
+    private void setContextView(int i, String content) {
+        // Dynamically set the text for each Content TextViews
+        switch (i) {
+            case 0:
+                contentTextView_01.setText(content);
+                break;
+            case 1:
+                contentTextView_02.setText(content);
+                break;
+            case 2:
+                contentTextView_03.setText(content);
+                break;
+            case 3:
+                contentTextView_04.setText(content);
+                break;
+            case 4:
+                contentTextView_05.setText(content);
+                break;
+            case 5:
+                contentTextView_06.setText(content);
+                break;
+            case 6:
+                contentTextView_07.setText(content);
+                break;
+            case 7:
+                contentTextView_08.setText(content);
+                break;
+            case 8:
+                contentTextView_09.setText(content);
+                break;
+            case 9:
+                contentTextView_10.setText(content);
+                break;
+            default:
+                // Log.w("setContextViewt", "No more TextViews available for Content: " + (i + 1));
+        }
+    }
+
+//    public void showContentTextViews(Context context) {
+//
+//
+//        for (int i = 1; i <= contentIndex; i++) {
+//            final int index = i;
+//
+//            handler.postDelayed(() -> {
+//                // Dynamically resolve TextView ID
+//                int resId = context.getResources().getIdentifier(
+//                        "contentTextView_" + String.format("%02d", index),
+//                        "id",
+//                        context.getPackageName()
+//                );
+//
+//                contentTextViews[Integer.parseInt(String.format("%02d", index))].setVisibility(View.VISIBLE);
+//
+////                // Use rootView to find the TextView
+////                TextView textView = getView().findViewById(resId);
+////                if (textView != null) {
+////                    textView.setVisibility(View.VISIBLE);
+////                } else {
+////                    // // Log.e("showContentTextViews", "TextView contentTextView_" + String.format("%02d", index) + " not found");
+////                }
+//            }, 600L * i); // Delay by 600ms per item
+//        }
+//    }
+
+
 //    public void loadTextContentForKey(String key, int pageNumber) {
 //        String TAG = "LOAD TEXT LESSON TEXTS";
-//        Log.d(TAG, "Page Number: " + pageNumber);
-//        Log.e(TAG, "key: " + key);
+//        // // Log.d(TAG, "Page Number: " + pageNumber);
+//        // // Log.e(TAG, "key: " + key);
 //
 //        // Construct resource names
 //        String title = "module" + key.charAt(10) + "_" + key.charAt(1) + "_" + pageNumber + "_title";
@@ -744,47 +1020,47 @@ public class f_1_lesson_text extends Fragment {
 //
 //
 //        if (titleResId == 0) {
-//            Log.e(TEG, "Title is wrong: " + title);
+//            // // Log.e(TEG, "Title is wrong: " + title);
 //            numberOfTexts--;
 //        }
 //        if (text1ResId == 0) {
-//            Log.e(TEG, "Text 1 is wrong: " + context1);
+//            // // Log.e(TEG, "Text 1 is wrong: " + context1);
 //            numberOfTexts--;
 //        }
 //        if (text2ResId == 0) {
-//            Log.e(TEG, "Text 2 is wrong: " + context2);
+//            // // Log.e(TEG, "Text 2 is wrong: " + context2);
 //            numberOfTexts--;
 //        }
 //        if (text3ResId == 0) {
-//            Log.e(TEG, "Text 3 is wrong: " + context3);
+//            // // Log.e(TEG, "Text 3 is wrong: " + context3);
 //            numberOfTexts--;
 //        }
 //        if (text4ResId == 0) {
-//            Log.e(TEG, "Text 4 is wrong: " + context4);
+//            // // Log.e(TEG, "Text 4 is wrong: " + context4);
 //            numberOfTexts--;
 //        }
 //        if (text5ResId == 0) {
-//            Log.e(TEG, "Text 5 is wrong: " + context5);
+//            // // Log.e(TEG, "Text 5 is wrong: " + context5);
 //            numberOfTexts--;
 //        }
 //        if (text6ResId == 0) {
-//            Log.e(TEG, "Text 6 is wrong: " + context6);
+//            // // Log.e(TEG, "Text 6 is wrong: " + context6);
 //            numberOfTexts--;
 //        }
 //        if (text7ResId == 0) {
-//            Log.e(TEG, "Text 7 is wrong: " + context7);
+//            // // Log.e(TEG, "Text 7 is wrong: " + context7);
 //            numberOfTexts--;
 //        }
 //        if (text8ResId == 0) {
-//            Log.e(TEG, "Text 8 is wrong: " + context8);
+//            // // Log.e(TEG, "Text 8 is wrong: " + context8);
 //            numberOfTexts--;
 //        }
 //        if (text9ResId == 0) {
-//            Log.e(TEG, "Text 9 is wrong: " + context9);
+//            // // Log.e(TEG, "Text 9 is wrong: " + context9);
 //            numberOfTexts--;
 //        }
 //        if (text10ResId == 0) {
-//            Log.e(TEG, "Text 10 is wrong: " + context10);
+//            // // Log.e(TEG, "Text 10 is wrong: " + context10);
 //            numberOfTexts--;
 //        }
 //
@@ -823,18 +1099,18 @@ public class f_1_lesson_text extends Fragment {
 //            setContentWithFallback(contentTextView_10, text10ResId);
 //
 //        } catch (Exception e) {
-//            Log.e(TAG, "Error setting text content: ", e); // Log any exceptions
+//            // // Log.e(TAG, "Error setting text content: ", e); // Log any exceptions
 //        }
 //    }
 
     // Helper method to set TextViews with fallback
-    private void setContentWithFallback(TextView textView, int resId) {
-        if (resId != 0) {
-            textView.setText(resId);
-        } else {
-            textView.setText(""); // Fallback in case of missing content
-        }
-    }
+//    private void setContentWithFallback(TextView textView, int resId) {
+//        if (resId != 0) {
+//            textView.setText(resId);
+//        } else {
+//            textView.setText(""); // Fallback in case of missing content
+//        }
+//    }
 
 
 }

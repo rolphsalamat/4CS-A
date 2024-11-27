@@ -14,7 +14,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/background"
 
         />
 
@@ -36,7 +35,7 @@
         android:layout_height="wrap_content"
         android:text="Congratulations!"
         android:textColor="@color/white"
-        android:textSize="28sp"
+        android:textSize="46sp"
         android:fontFamily="@font/failed_font"
         app:layout_constraintTop_toBottomOf="@id/passed_logo"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +47,7 @@
         android:layout_height="wrap_content"
         android:text="You passed lesson n"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="32sp"
         android:fontFamily="@font/failed_font"
         app:layout_constraintTop_toBottomOf="@id/congratulations"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +61,7 @@
         android:layout_marginStart="50dp"
         android:text="Pre-Test Score: n/n"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="28sp"
         android:fontFamily="@font/failed_font"
         app:layout_constraintTop_toBottomOf="@id/message"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +74,7 @@
         android:layout_marginStart="50dp"
         android:text="Post-Test Score: n/n"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="28sp"
         android:fontFamily="@font/failed_font"
         app:layout_constraintTop_toBottomOf="@id/pre_test_score"
         app:layout_constraintStart_toStartOf="parent"
@@ -87,6 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="50dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -102,7 +102,7 @@
             android:textAlignment="center"
             android:fontFamily="@font/getto_funky"
             android:gravity="end|center"
-            android:text="You received: 10"
+            android:text="You received: ??"
             android:textColor="@color/white"
             android:textSize="26sp"
             android:textStyle="normal" />
@@ -131,7 +131,6 @@
         app:layout_constraintEnd_toEndOf="@id/background"
         app:layout_constraintStart_toStartOf="@id/background"
         app:layout_constraintTop_toBottomOf="@+id/tokenLayout"
-        app:layout_constraintBottom_toBottomOf="@id/background"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

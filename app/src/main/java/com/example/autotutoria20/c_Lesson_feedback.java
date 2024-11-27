@@ -38,9 +38,9 @@ public class c_Lesson_feedback {
     private static Context context; // Add context field
 
     // for result:
-    public static int preTestCorrectAnswers = 1;
+    public static int preTestCorrectAnswers = 0;
     public static int preTestAttemptAnswers = 1;
-    public static int postTestCorrectAnswers = 1;
+    public static int postTestCorrectAnswers = 0;
     public static int postTestAttemptAnswers = 1;
 
     // Constructor
@@ -54,9 +54,9 @@ public class c_Lesson_feedback {
     }
 
     public static void resetResult() {
-        preTestCorrectAnswers = 1;
+        preTestCorrectAnswers = 0;
         preTestAttemptAnswers = 1;
-        postTestCorrectAnswers = 1;
+        postTestCorrectAnswers = 0;
         postTestAttemptAnswers = 1;
     }
 
@@ -71,7 +71,7 @@ public class c_Lesson_feedback {
 
     }
 
-    public static void showModuleFailed(Context context, String module) {
+    public static void showModuleFailed(Context context, String module, double lessonNumber, double score) {
 
         // Create a new dialog
         Dialog dialog = new Dialog(context);
@@ -94,9 +94,18 @@ public class c_Lesson_feedback {
         Button okayButton = view.findViewById(R.id.okay_button);
 
         // Set text or any other properties for the views with 2 decimal places
-        message.setText("You did not pass " + module);
-        bktScore.setText("");
-        passingScore.setText("");
+        message.setText(
+                "You did not pass\n"
+                + module + " Lesson " + (int) (lessonNumber*10)
+                );
+
+        /*=============
+         * You did not pass
+         * Module n Lesson n
+         * ============*/
+
+        bktScore.setText(String.format("BKT Score: %.2f%%", (score*100)));
+        passingScore.setText("Passing Grade: 60.00%");
 
         // Set up the 'Okay' button click listener
         okayButton.setOnClickListener(v -> dialog.dismiss());

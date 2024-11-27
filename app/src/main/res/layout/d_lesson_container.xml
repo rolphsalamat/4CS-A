@@ -7,102 +7,87 @@
     android:background="@drawable/autotutoria_background_color"
     tools:context=".d_Lesson_container">
 
-    <Button
-        android:id="@+id/exitButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_margin="30dp"
-        android:background="@drawable/exit"
-        android:backgroundTint="@color/white"
+    <LinearLayout
+        android:id="@+id/lesson_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        />
+        >
 
-    <Button
-        android:id="@+id/backButtonLayout"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_margin="30dp"
-        android:background="@drawable/back"
-        android:backgroundTint="@color/white"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/exitButton"
-        tools:ignore="NotSibling" />
+        <Button
+            android:id="@+id/exitButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/exit"
+            android:backgroundTint="@color/white"
+            />
+
+        <Button
+            android:id="@+id/backButtonLayout"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/back"
+            android:backgroundTint="@color/white"/>
+
+        <LinearLayout
+            android:id="@+id/tokenLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="20dp"
+            android:layout_gravity="end|center_vertical"
+            android:gravity="end|center_vertical"
+            android:orientation="horizontal">
+
+            <!-- Token ImageView -->
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/token"
+                app:tint="#f1b502" />
+
+            <!-- Token TextView -->
+            <TextView
+                android:id="@+id/token"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:gravity="center"
+                android:fontFamily="@font/getto_funky"
+                android:text="0"
+                android:textColor="@color/white"
+                android:textSize="30sp" />
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
 
     <GridLayout
         android:id="@+id/gridLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
-        android:layout_margin="20dp"
+        android:layout_margin="8dp"
         android:orientation="horizontal"
         android:rowCount="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/exitButton"
-        />
-
-    <!-- Horizontal LinearLayout to align TextView and ImageView side by side -->
-    <LinearLayout
-        android:id="@+id/tokenLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:layout_alignParentEnd="true"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        >
-
-        <!-- Token ImageView -->
-        <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_marginVertical="10dp"
-            android:background="@drawable/token"
-            android:backgroundTint="#f1b502" />
-
-        <!-- Token TextView -->
-        <TextView
-            android:id="@+id/token"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="10dp"
-            android:textAlignment="center"
-            android:fontFamily="@font/getto_funky"
-            android:gravity="end|center"
-            android:text="0"
-            android:textColor="@color/white"
-            android:textSize="38sp"
-            android:textStyle="normal" /> <!-- Add some space between the text and image -->
-
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/seconds_remaining"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text=""
-        android:textColor="@color/white"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/viewPager"
+        app:layout_constraintTop_toBottomOf="@id/lesson_header"
         />
 
     <com.example.autotutoria20.NonScrollableViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         android:layout_marginHorizontal="20dp"
         app:layout_constraintTop_toBottomOf="@id/gridLayout"
         app:layout_constraintBottom_toBottomOf="parent"
         />
-
-    <!--        android:layout_marginVertical="110dp" />-->
 
     <Button
         android:id="@+id/nextButton"

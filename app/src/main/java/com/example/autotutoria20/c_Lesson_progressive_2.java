@@ -183,13 +183,13 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
 
         switch (key) {
             case 1:
-                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M1_Lesson 2");
+                newText = progress + "/" + t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 2");
                 module1ProgressText.setText(newText);
 
                 double M1_Score = c_Lesson_a_retrieveScore.bktScores.get(0); // Accessing first module's score
 
                 // Check if the lesson is finished
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 2")) {
+                if (progress >= t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 2")) {
                     if (M1_Score < passingGrade) {
                         c_Lesson_feedback.showDialog(this, M1_Score, passingGrade, "Lesson 1");
                     } else {

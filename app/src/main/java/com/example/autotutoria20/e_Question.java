@@ -1,12 +1,19 @@
 package com.example.autotutoria20;
 
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class e_Question {
     private String question;
-    private String[] choices;
-    private int correctAnswer_preTest;
+    private Difficulty difficulty; // Field to store difficulty level
+    private List<String> choices; // Store choices as List<String>
+    private String answer;
+    private int correctAnswer_preTest; // Assuming this is an index or identifier for correct answer
     private int correctAnswer_EASY_MEDIUM;
-    private String correctAnswer_HARD;
-    private Difficulty difficulty;
+    private String correctAnswer_HARD; // Store correct answer for HARD difficulty
     private QuestionType type;  // New field to store the type of question
 
     public enum Difficulty {
@@ -19,17 +26,37 @@ public class e_Question {
         IDENTIFICATION
     }
 
-    // Constructor for pre-test (default multiple choice)
-    public e_Question(String question, String[] choices, int correctAnswer) {
+
+    // Pre-Test || Post-Test Medium
+    public e_Question(String question, List<String> choices, int correctAnswer) {
+        String TAG = "e_Question() constructor for Pre-Test or Post-Test Medium";
+
         this.question = question;
         this.choices = choices;
-        this.correctAnswer_preTest = correctAnswer;
-        this.type = QuestionType.MULTIPLE_CHOICE; // Pre-test always multiple-choice
+        this.correctAnswer_preTest = correctAnswer; // Store the index of the correct answer
+        this.correctAnswer_EASY_MEDIUM = correctAnswer;
+
+        Log.i(TAG, "Question: " + question);
+        Log.i(TAG, "Choices: " + choices);
+        Log.i(TAG, "Answer: " + correctAnswer);
     }
 
-    // Constructor for post-test (determined by difficulty)
-    // For EASY and MEDIUM ONLY
-    public e_Question(String question, String[] choices, int correctAnswer, Difficulty difficulty) {
+    // Difficulty.HARD
+    public e_Question(String question, String answer, Difficulty level) {
+        String TAG = "e_Question() constructor for Pre-Test Hard";
+
+        this.question = question;
+        this.correctAnswer_HARD = answer;
+        this.difficulty = level;
+
+        Log.i(TAG,"Ryan nandito ako");
+        Log.i(TAG, "Question: " + question);
+        Log.i(TAG, "Answer: " + answer);
+        Log.i(TAG, "Difficulty: " + level);
+    }
+
+
+    public e_Question(String question, List<String> choices, int correctAnswer, Difficulty difficulty) {
         this.question = question;
         this.choices = choices;
         this.correctAnswer_EASY_MEDIUM = correctAnswer;
@@ -46,29 +73,20 @@ public class e_Question {
         }
     }
 
-    // Constructor for post-test (determined by difficulty)
-    // For EASY and MEDIUM ONLY
-    public e_Question(String question, String correctAnswer, Difficulty difficulty) {
-        this.question = question;
-        this.correctAnswer_HARD = correctAnswer;
-        this.difficulty = difficulty;
-
-        if (difficulty == Difficulty.HARD) {
-            this.type = QuestionType.IDENTIFICATION;
-        }
-
-    }
-
     public String getQuestion() {
         return question;
     }
 
-    public String[] getChoices() {
+    public List<String> getChoices() {
         return choices;
     }
 
+    public Difficulty getDifficulty() {
+        return difficulty; // Getter for difficulty
+    }
+
     public int getCorrectAnswer_preTest() {
-        return correctAnswer_preTest;
+        return correctAnswer_preTest; // Return the index or identifier for the correct answer
     }
 
     public int getCorrectAnswer_EASY_MEDIUM() {
@@ -76,36 +94,6 @@ public class e_Question {
     }
 
     public String getCorrectAnswer_HARD() {
-        return correctAnswer_HARD;
+        return correctAnswer_HARD; // Return the correct answer for HARD difficulty
     }
-
-    public Difficulty getDifficulty() {
-        return difficulty;
-    }
-
-    public QuestionType getType() {
-        return type;
-    }
-
-    public void setType(QuestionType type) {
-        this.type = type;
-    }
-
-    public static int getPreTestQuestionCount(String lesson, String module) {
-        switch (lesson) {
-            case "Lesson 1": return e_Module_1.getPreTestCount(module);
-            case "Lesson 2": return e_Module_2.getPreTestCount(module);
-            case "Lesson 3": return e_Module_3.getPreTestCount(module);
-            case "Lesson 4": return e_Module_4.getPreTestCount(module);
-            case "Lesson 5": return e_Module_5.getPreTestCount(module);
-            case "Lesson 6": return e_Module_6.getPreTestCount(module);
-            case "Lesson 7": return e_Module_7.getPreTestCount(module);
-            case "Lesson 8": return e_Module_8.getPreTestCount(module);
-            // Add more cases as needed
-            default:
-                //Log.e("getLessonIndex", "Invalid lesson: " + lesson);
-                throw new IllegalArgumentException("Invalid lesson: " + lesson);
-        }
-    }
-
 }

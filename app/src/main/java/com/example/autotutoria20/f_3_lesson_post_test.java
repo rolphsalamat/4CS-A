@@ -34,6 +34,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -45,10 +46,12 @@ public class f_3_lesson_post_test extends Fragment {
 
     private LinearLayout imageContainer_postTest;
     private ImageButton hintButton;
+    private String[] options; // Assuming there are options for the question
     private FrameLayout hint_frameLayout;
     private int currentQuestionIndex = 0;
     private e_Question[] questions;
     private TextView questionText;
+    private e_Question currentQuestion;
     public static RadioGroup choicesGroup;
     public static String hint;
     public static String correctAnswer;
@@ -62,7 +65,7 @@ public class f_3_lesson_post_test extends Fragment {
     static int postTestQuestions = 10;
     private boolean isCorrect = false;
     private boolean isProgressiveMode = true; // Default to Progressive Mode
-
+    private AlertDialog hintDialog;
     private PostTestCompleteListener postTestCompleteListener;
 
     // BKT Model instance
@@ -138,7 +141,8 @@ public class f_3_lesson_post_test extends Fragment {
                 e_Question currentQuestion = questions[currentQuestionIndex];
                 correctAnswer = currentQuestion.getCorrectAnswer_HARD();
 
-                hint = generateHint(correctAnswer, b_main_0_menu_categorize_user.category);
+                // Log.i("Call me maybe", "I'm calling generateHint");
+                hint = f_3_lesson_post_test_generateHint.generateHint(correctAnswer, b_main_0_menu_categorize_user.category);
 
                 showHintDialog(hint);
 
@@ -172,8 +176,8 @@ public class f_3_lesson_post_test extends Fragment {
 
                             String TAG = "generateHint";
 
-                            Log.e(TAG, "Token before hint: " + currentTokens);
-                            Log.e(TAG, "Token after hint: " + newTokenCount);
+                            // Log.e(TAG, "Token before hint: " + currentTokens);
+                            // Log.e(TAG, "Token after hint: " + newTokenCount);
 
                             // Update the token count in Firestore
                             userDoc.update("Token", newTokenCount);
@@ -201,8 +205,7 @@ public class f_3_lesson_post_test extends Fragment {
         if (getArguments() != null) {
 
             String TAG = "GWENCHANA";
-
-            Log.e(TAG, "PASOK NA ROP");
+            // Log.e(TAG, "PASOK NA ROP");
 
             String module = getArguments().getString(ARG_MODULE);
             String lesson = getArguments().getString(ARG_LESSON);
@@ -221,20 +224,25 @@ public class f_3_lesson_post_test extends Fragment {
             double userScore = x_bkt_algorithm.getKnowledge();
 
             // Determine difficulty based on scoreserScore);
-            Log.d("f_post_test", "Determined Difficulty Level: " + difficultyLevel);
+            // Log.d("f_post_test", "Determined Difficulty Level: " + difficultyLevel);
+
+            String difficultyString = null;
 
             // Set attempt chances and number of questions
             difficultyLevel = bktModel.getDifficultyLevel(userScore);
 
             if (difficultyLevel == e_Question.Difficulty.EASY) {
+                difficultyString = "Post-Test Easy";
                 attemptChances = 1;
                 postTestQuestions = 10;
             }
             else if (difficultyLevel == e_Question.Difficulty.MEDIUM) {
+                difficultyString = "Post-Test Medium";
                 attemptChances = 2;
                 postTestQuestions = 5;
             }
             else if (difficultyLevel == e_Question.Difficulty.HARD) {
+                difficultyString = "Post-Test Hard";
                 attemptChances = 3;
                 postTestQuestions = 3;
 
@@ -247,7 +255,26 @@ public class f_3_lesson_post_test extends Fragment {
 
             }
 
-            Log.e(TAG, "Post-Test | Load Images");
+//            // Temporary for testing
+//            difficultyLevel = e_Question.Difficulty.HARD;
+//            difficultyString = "Post-Test Hard";
+//            attemptChances = 3;
+//            postTestQuestions = 3;
+//
+//            // enable and show hint button
+//            hintButton.setEnabled(true);
+//            hintButton.setVisibility(View.VISIBLE);
+//
+//            hint_frameLayout.setEnabled(true);
+//            hint_frameLayout.setVisibility(View.VISIBLE);
+//            // Temporary for testing
+
+            String formattedModule = "Module " + module.charAt(1);
+
+            questions = t_TestDataFromDatabase.getRandomQuestionsData(formattedModule, lesson, difficultyString).toArray(new e_Question[0]);
+
+            // Log.e(TAG, "Post-Test | Load Images");
+            // Log.i(TAG, "Questions: " + Arrays.toString(questions));
 
             // Ensure imageContainer has MATCH_PARENT width and fixed height in XML
             imageContainer_postTest = requireView().findViewById(R.id.image_container);
@@ -287,7 +314,7 @@ public class f_3_lesson_post_test extends Fragment {
 
                 // Set the tag
                 imageView.setTag("testAnswer_" + (i + 1));
-                Log.e("Post-Test imageContainer", "testAnswer_" + (i+1));
+                // Log.e("Post-Test imageContainer", "testAnswer_" + (i+1));
 
                 // Set the image resource or background
                 imageView.setImageResource(R.drawable.test_answer_blank);
@@ -296,11 +323,11 @@ public class f_3_lesson_post_test extends Fragment {
                 // Add the ImageView to the container
                 imageContainer_postTest.addView(imageView);
 
-                Log.e(TAG, "Post-Test | Loading Images...");
+                // Log.e(TAG, "Post-Test | Loading Images...");
 
             }
 
-            Log.e(TAG, "Post-Test | DONE Load Images");
+            // Log.e(TAG, "Post-Test | DONE Load Images");
 
             TextView items = view.findViewById(R.id.answers_total);
 
@@ -308,26 +335,26 @@ public class f_3_lesson_post_test extends Fragment {
                     + "/"
                     + postTestQuestions);
 
-            Log.e("f_post_test", "dahil " + difficultyLevel + " ang difficulty, gawin nating " + attemptChances + " ang chances");
+            // Log.e("f_post_test", "dahil " + difficultyLevel + " ang difficulty, gawin nating " + attemptChances + " ang chances");
 
 //                bktModel.setBKTParameters(difficultyLevel);
 
-            Log.e(TAG, "I will pass these:")    ;
-            Log.e(TAG, "module: " + module);
-            Log.e(TAG, "lesson: " + lesson);
+            // Log.e(TAG, "I will pass these:")    ;
+            // Log.e(TAG, "module: " + module);
+            // Log.e(TAG, "lesson: " + lesson);
 
             // Retrieve post-test questions based on difficulty level
-            questions = getPostTestQuestionsBasedOnDifficulty(module, lesson, difficultyLevel);
+//            questions = getPostTestQuestionsBasedOnDifficulty(module, lesson, difficultyLevel);
             loadQuestion();
 
-            Log.e(TAG, "wala :( loadQuestion nalang :(");
-            loadQuestion();
+//            // Log.e(TAG, "wala :( loadQuestion nalang :(");
+//            loadQuestion();
 
         }
 
         submitButton.setOnClickListener(v -> {
 
-            Log.e("HEY!", "Submit Button Clicked!");
+            // Log.e("HEY!", "Submit Button Clicked!");
 
 //            if (d_Lesson_container.isPreTestComplete)
 //                d_Lesson_container.onGoToCurrent();
@@ -348,11 +375,11 @@ public class f_3_lesson_post_test extends Fragment {
                 int lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
 
                 if (moduleIndex < 0 || lessonIndex < 0) {
-                    Log.e("submitButton.onClick", "Invalid module or lesson index");
+                    // Log.e("submitButton.onClick", "Invalid module or lesson index");
                     return;
                 }
 
-                Log.e("HEY!", "questionsAnswered("+questionsAnswered+") < postTestQuestions("+(postTestQuestions)+")");
+                // Log.e("HEY!", "questionsAnswered("+questionsAnswered+") < postTestQuestions("+(postTestQuestions)+")");
                 // Ensure that questions answered does not exceed total pre-test questions.
                 if (questionsAnswered <= (postTestQuestions)) {
 
@@ -371,9 +398,9 @@ public class f_3_lesson_post_test extends Fragment {
                     }
 
                     if (!x_bkt_algorithm.isLessonFinished)
-                        bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer);
+                        bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer, answerAttempt);
 
-                    Log.d("TESTING", "Answer: " + correctAnswer);
+                    // Log.d("TESTING", "Answer: " + correctAnswer);
 
                     // Check if we need to move to the next question based on attempts or correctness.
                     if (answerAttempt >= attemptChances || correctAnswer) {
@@ -385,35 +412,35 @@ public class f_3_lesson_post_test extends Fragment {
                                         c_Lesson_feedback.postTestAttemptAnswers + 1, postTestQuestions);
 
                         // Move to next question or reset if all have been answered.
-                        Log.d(TAG, "currentQuestionInddex["+currentQuestionIndex+"] < questions.length-1["+(questions.length-1)+"])");
+                        // Log.d(TAG, "currentQuestionInddex["+currentQuestionIndex+"] < questions.length-1["+(questions.length-1)+"])");
                         if (currentQuestionIndex < questions.length - 1) {
                             currentQuestionIndex++;
-                            Log.e(TAG, "currentQuestionIndex++; ["+currentQuestionIndex+"]");
+                            // Log.e(TAG, "currentQuestionIndex++; ["+currentQuestionIndex+"]");
                         } else {
                             currentQuestionIndex = 0; // Reset for new round
                             bktModel.logScores(); // Log scores at reset point
-                            Log.e(TAG, "reset currentQuestionIndex["+currentQuestionIndex+"]");
+                            // Log.e(TAG, "reset currentQuestionIndex["+currentQuestionIndex+"]");
                         }
 
                         questionsAnswered++; // Increment answered count
-                        Log.e(TAG, "increment questionsAnswered["+questionsAnswered+"]");
+                        // Log.e(TAG, "increment questionsAnswered["+questionsAnswered+"]");
 
                         // Load next question only if still within pre-test limits.
-                        Log.d(TAG, "if (correctAnswer["+correctAnswer+"] || currentQuestionIndex["+currentQuestionIndex
-                                + "] < postTestQuestions["+postTestQuestions+"] && answerAttempt["+answerAttempt+"] >= attemptChances["+attemptChances+"]");
+//                         Log.d(TAG, "if (correctAnswer["+correctAnswer+"] || currentQuestionIndex["+currentQuestionIndex
+//                                + "] < postTestQuestions["+postTestQuestions+"] && answerAttempt["+answerAttempt+"] >= attemptChances["+attemptChances+"]");
                         if (correctAnswer || currentQuestionIndex < postTestQuestions && answerAttempt >= attemptChances) {
                             loadQuestion(); // Load next question
-                            Log.e(TAG, "loadQuestion();");
+                            // Log.e(TAG, "loadQuestion();");
                             answerAttempt = 0; // Reset attempts for new question
-                            Log.e(TAG, "reset answerAttempt["+answerAttempt+"]");
+                            // Log.e(TAG, "reset answerAttempt["+answerAttempt+"]");
                         }
                     } else {
-                        Log.d("TESTING", "Not moving to next question yet.");
+                        // Log.d("TESTING", "Not moving to next question yet.");
                     }
 
                     //                     == to dapat.. ginawa ko lang >=
                      if (questionsAnswered >= (postTestQuestions+1)) {
-                        Log.d("TESTING", "Post-Test complete!");
+                        // Log.d("TESTING", "Post-Test complete!");
 
 //                        c_Lesson_feedback.postTestAttemptAnswers++;
 
@@ -421,7 +448,8 @@ public class f_3_lesson_post_test extends Fragment {
                         if (postTestCompleteListener != null) {
 
                             double bktscore = x_bkt_algorithm.getKnowledge();
-
+                            Log.d("TESTING", "Post-Test BKT Score: " + x_bkt_algorithm.getKnowledge());
+                            Log.d("TESTING", "Post-Test Score: " + c_Lesson_feedback.postTestCorrectAnswers);
                             postTestCompleteListener.onPostTestComplete(
                                     correctAnswer,
                                     c_Lesson_feedback.postTestCorrectAnswers,
@@ -448,6 +476,11 @@ public class f_3_lesson_post_test extends Fragment {
 
     }
 
+    @Override
+    public String toString() {
+        return "Question: " + questionText + ", Options: " + Arrays.toString(options) + ", Correct Answer: " + correctAnswer;
+    }
+
     public static e_Question.Difficulty getDifficulty() {
         return difficultyLevel;
     }
@@ -455,12 +488,12 @@ public class f_3_lesson_post_test extends Fragment {
     private e_Question[] getPostTestQuestions(String module, String lesson) {
         String key = module + "_" + lesson;
 
-        Log.e("NEVER", "Key: " + key);
+        // Log.e("NEVER", "Key: " + key);
 
         switch (key) {
             /* ===== Module 1 ===== */
             case "M1_Lesson 1":
-                Log.e("NEVER", "I am inside M1_Lesson 1");
+                // Log.e("NEVER", "I am inside M1_Lesson 1");
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_1_1.get_PostTest_Lesson1_Easy_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
@@ -644,11 +677,11 @@ public class f_3_lesson_post_test extends Fragment {
 
         String TAG = "GWEN";
 
-        Log.e(TAG, "I RECEIVED these:");
-        Log.e(TAG, "module: " + module);
-        Log.e(TAG, "lesson: " + lesson);
+        // Log.e(TAG, "I RECEIVED these:");
+        // Log.e(TAG, "module: " + module);
+        // Log.e(TAG, "lesson: " + lesson);
 
-        Log.e(TAG, "Difficulty: " + difficulty);
+        // Log.e(TAG, "Difficulty: " + difficulty);
 
         e_Question[] allQuestions = getPostTestQuestions(module, lesson);  // Fetch all questions for the lesson
 
@@ -662,7 +695,7 @@ public class f_3_lesson_post_test extends Fragment {
 
         // Fallback to all questions if no questions match the difficulty
         if (filteredQuestions.isEmpty()) {
-            Log.e("f_post_test", "No questions match the difficulty level.");
+            // Log.e("f_post_test", "No questions match the difficulty level.");
             return allQuestions;
         }
 
@@ -676,66 +709,114 @@ public class f_3_lesson_post_test extends Fragment {
 
         hint = ""; // reset hint
 
-        Log.e("Generate Hint", "Cleared Hint: " + hint);
+        // Log.e("Generate Hint", "Cleared Hint: " + hint);
 
         // Check if questions array is null or empty
         if (questions == null) {
-            Log.e(TAG, "Error: Questions array is null.");
+            // Log.e(TAG, "Error: Questions array is null.");
             Toast.makeText(getContext(), "Error: Questions not initialized.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (questions.length == 0) {
-            Log.e(TAG, "Error: Questions array is empty.");
+            // Log.e(TAG, "Error: Questions array is empty.");
             Toast.makeText(getContext(), "Error: No questions available.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check if currentQuestionIndex is within bounds
         if (currentQuestionIndex >= questions.length) {
-            Log.e(TAG, "Error: Invalid currentQuestionIndex (" + currentQuestionIndex + "). Out of bounds.");
+            // Log.e(TAG, "Error: Invalid currentQuestionIndex (" + currentQuestionIndex + "). Out of bounds.");
             return;
         }
 
-        Log.e(TAG, "Loading question at index: " + currentQuestionIndex);
+        // Log.e(TAG, "Loading question at index: " + currentQuestionIndex);
 
         // Reset isCorrect before loading a new question
         isCorrect = false;
+
+        // Get the current question
+        currentQuestion = questions[currentQuestionIndex];
+        // Log.e(TAG, "ACER | Current question: " + currentQuestion.getQuestion());
+        // Log.e(TAG, "ACER | Current answer: " + currentQuestion.getCorrectAnswer_EASY_MEDIUM());
 
         // Clear previous selection
         choicesGroup.clearCheck();
         identificationAnswer.setText("");
 
-        // Get the current question
-        e_Question currentQuestion = questions[currentQuestionIndex];
-        Log.e(TAG, "Current question: " + currentQuestion.getQuestion());
-
         questionText.setText(currentQuestion.getQuestion());
+
+        // Log.d(TAG, "Leakproof | Difficulty: " + difficultyLevel);
+        // Log.i(TAG, "Leakproof | Question: " + currentQuestion.getQuestion());
+
+        if (!(difficultyLevel == e_Question.Difficulty.HARD))
+            // Log.i(TAG, "Leakproof | Choices: " + currentQuestion.getChoices());
+
+        // Log.i(TAG, "Leakproof | HARD Answer: " + currentQuestion.getCorrectAnswer_HARD());
+        // Log.i(TAG, "Leakproof | EASY|MEDIUM Answer: " + currentQuestion.getCorrectAnswer_EASY_MEDIUM());
+        // Log.i(TAG, "Leakproof | Pre-Test Answer: " + currentQuestion.getCorrectAnswer_preTest());
+
         choicesGroup.removeAllViews();
 
         if (difficultyLevel == e_Question.Difficulty.EASY || difficultyLevel == e_Question.Difficulty.MEDIUM) {
-            String[] choices = currentQuestion.getChoices();
-            for (int i = 0; i < choices.length; i++) {
-                RadioButton choiceButton = new RadioButton(getContext());
-                choiceButton.setId(i);
-                choiceButton.setText(choices[i]);
-                choiceButton.setTextColor(getResources().getColor(R.color.white));
-                choiceButton.setTextSize(18);
+            List<String> choices = currentQuestion.getChoices();
 
-                RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
-                        RadioGroup.LayoutParams.WRAP_CONTENT,
-                        RadioGroup.LayoutParams.WRAP_CONTENT
-                );
-                params.setMargins(0, 8, 0, 8);
+            // Check if choices is null or empty
+            if (choices != null && !choices.isEmpty()) {
+                for (int i = 0; i < choices.size(); i++) {
+                    RadioButton choiceButton = new RadioButton(getContext());
+                    choiceButton.setId(i);
+                    choiceButton.setText(choices.get(i));
+                    choiceButton.setTextColor(getResources().getColor(R.color.white));
+                    choiceButton.setTextSize(18);
 
-                choiceButton.setLayoutParams(params);
-                choicesGroup.addView(choiceButton);
+                    RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
+                            RadioGroup.LayoutParams.WRAP_CONTENT,
+                            RadioGroup.LayoutParams.WRAP_CONTENT
+                    );
+                    params.setMargins(0, 8, 0, 8);
+
+                    choiceButton.setLayoutParams(params);
+                    choicesGroup.addView(choiceButton);
+                }
+            } else {
+                // Log.i(TAG, "choices is empty or null!");
             }
 
             choicesGroup.setVisibility(View.VISIBLE);
             identificationAnswer.setVisibility(View.GONE);
+        }
 
-        } else if (difficultyLevel == e_Question.Difficulty.HARD) {
+        // Original Code
+//        if (difficultyLevel == e_Question.Difficulty.EASY || difficultyLevel == e_Question.Difficulty.MEDIUM) {
+//            List<String> choices = currentQuestion.getChoices();
+//
+//            if (!choices.isEmpty())
+//                for (int i = 0; i < choices.size(); i++) {
+//                    RadioButton choiceButton = new RadioButton(getContext());
+//                    choiceButton.setId(i);
+//                    choiceButton.setText(choices.get(i));
+//                    choiceButton.setTextColor(getResources().getColor(R.color.white));
+//                    choiceButton.setTextSize(18);
+//
+//                    RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
+//                            RadioGroup.LayoutParams.WRAP_CONTENT,
+//                            RadioGroup.LayoutParams.WRAP_CONTENT
+//                    );
+//                    params.setMargins(0, 8, 0, 8);
+//
+//                    choiceButton.setLayoutParams(params);
+//                    choicesGroup.addView(choiceButton);
+//                }
+//            else
+//                // Log.i(TAG, "choices is empty!");
+//
+//            choicesGroup.setVisibility(View.VISIBLE);
+//            identificationAnswer.setVisibility(View.GONE);
+//
+//        }
+
+        else if (difficultyLevel == e_Question.Difficulty.HARD) {
             identificationAnswer.setVisibility(View.VISIBLE);
             choicesGroup.setVisibility(View.GONE);
             identificationAnswer.setText("");
@@ -744,18 +825,29 @@ public class f_3_lesson_post_test extends Fragment {
 
     public boolean checkAnswer() {
         String TAG = "checkAnswer()";
-        Log.e(TAG, "checkAnswer() method is CALLED");
-        Log.e(TAG, "postTestAttemptAnswers: " + c_Lesson_feedback.postTestAttemptAnswers);
+        // Log.e(TAG, "checkAnswer() method is CALLED");
+        // Log.e(TAG, "postTestAttemptAnswers: " + c_Lesson_feedback.postTestAttemptAnswers);
 
         if (difficultyLevel == e_Question.Difficulty.EASY || difficultyLevel == e_Question.Difficulty.MEDIUM) {
             if (choicesGroup == null) {
-                Log.e(TAG, "choicesGroup is null!");
+                // Log.e(TAG, "choicesGroup is null!");
                 return false;
             } else {
                 int selectedId = choicesGroup.getCheckedRadioButtonId();
                 if (selectedId != -1) {
+
                     e_Question currentQuestion = questions[currentQuestionIndex];
+                    int correctAnswer = currentQuestion.getCorrectAnswer_EASY_MEDIUM();
                     isCorrect = (selectedId == currentQuestion.getCorrectAnswer_EASY_MEDIUM());
+
+                    // Bakit laging 0 yung correct Answer?
+
+
+                    // Log.i(TAG, "EASY || MEDIUM | ELECTRONICS | Question: " + currentQuestion.getQuestion());
+                    // Log.i(TAG, "EASY || MEDIUM | ELECTRONICS | Choices: " + currentQuestion.getChoices());
+                    // Log.i(TAG, "EASY || MEDIUM | ELECTRONICS | correctAnswer: " + correctAnswer);
+                    // Log.i(TAG, "EASY || MEDIUM | ELECTRONICS | Answer: " + selectedId);
+                    // Log.i(TAG, "Your answer is: " + (isCorrect ? "Correct!" : "Wrong!"));
 
                     if (answerAttempt >= attemptChances || isCorrect) {
                         // Change button appearance based on correctness
@@ -764,18 +856,18 @@ public class f_3_lesson_post_test extends Fragment {
 
                         // Update target ImageView
                         String targetTag = "testAnswer_" + c_Lesson_feedback.postTestAttemptAnswers;
-                        Log.d("TagCheck", "Post-Test | Looking for ImageView with tag: " + targetTag);
+                        // Log.d("TagCheck", "Post-Test | Looking for ImageView with tag: " + targetTag);
 
                         ImageView targetImageView = imageContainer_postTest.findViewWithTag(targetTag);
                         if (targetImageView != null) {
-                            Log.d("ImageViewFound", "Found ImageView with tag: " + targetTag);
+                            // Log.d("ImageViewFound", "Found ImageView with tag: " + targetTag);
 
                             int imageResource = isCorrect ? R.drawable.test_answer_check : R.drawable.test_answer_cross;
                             targetImageView.setImageResource(imageResource);
                             targetImageView.invalidate(); // Force redraw
 
                         } else {
-                            Log.e("ImageViewError", "No ImageView found with tag: " + targetTag);
+                            // Log.e("ImageViewError", "No ImageView found with tag: " + targetTag);
                         }
                     }
 
@@ -791,7 +883,7 @@ public class f_3_lesson_post_test extends Fragment {
                 } else {
                     Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
                     d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions + 1));
-                    Log.e(TAG, "No answer selected | isCorrect: " + isCorrect);
+                    // Log.e(TAG, "No answer selected | isCorrect: " + isCorrect);
                     return false;
                 }
             }
@@ -803,25 +895,29 @@ public class f_3_lesson_post_test extends Fragment {
                 String inputAnswer = String.valueOf(identificationAnswer.getText()).trim();
                 if (!inputAnswer.isEmpty()) {
                     isCorrect = inputAnswer.equalsIgnoreCase(correctAnswer);
+                    
+                    // Change button appearance based on correctness
+                    int backgroundColor = isCorrect ? Color.GREEN : Color.RED;
+                    changeButtonAppearance(backgroundColor, Color.WHITE);
+
+                    // Log.i(TAG, "ELECTRONICS | correctAnswer: " + correctAnswer);
+                    // Log.i(TAG, "ELECTRONICS | Answer: " + inputAnswer);
 
                     if (answerAttempt >= attemptChances || isCorrect) {
-                        // Change button appearance based on correctness
-                        int backgroundColor = isCorrect ? Color.GREEN : Color.RED;
-                        changeButtonAppearance(backgroundColor, Color.WHITE);
 
                         // Update target ImageView
                         String targetTag = "testAnswer_" + c_Lesson_feedback.postTestAttemptAnswers;
-                        Log.d("TagCheck", "Post-Test | Looking for ImageView with tag: " + targetTag);
+                        // Log.d("TagCheck", "Post-Test | Looking for ImageView with tag: " + targetTag);
 
                         ImageView targetImageView = imageContainer_postTest.findViewWithTag(targetTag);
                         if (targetImageView != null) {
-                            Log.d("ImageViewFound", "Found ImageView with tag: " + targetTag);
+                            // Log.d("ImageViewFound", "Found ImageView with tag: " + targetTag);
 
                             int imageResource = isCorrect ? R.drawable.test_answer_check : R.drawable.test_answer_cross;
                             targetImageView.setImageResource(imageResource);
                             targetImageView.invalidate(); // Force redraw
                         } else {
-                            Log.e("ImageViewError", "No ImageView found with tag: " + targetTag);
+                            // Log.e("ImageViewError", "No ImageView found with tag: " + targetTag);
                         }
                     }
 
@@ -830,9 +926,10 @@ public class f_3_lesson_post_test extends Fragment {
                         Toast.makeText(getContext(), "Incorrect! Chance: " + answerAttempt + "/" + attemptChances, Toast.LENGTH_SHORT).show();
                         identificationAnswer.setText("");
 
-                        if (answerAttempt == (attemptChances - 1)) {
-                            showHintDialog(correctAnswer);
-                        }
+//                        if (answerAttempt == (attemptChances - 1)) {
+//                            showHintDialog(correctAnswer);
+//                        }
+
                     } else {
                         Toast.makeText(getContext(), "Correct!", Toast.LENGTH_SHORT).show();
                     }
@@ -840,11 +937,11 @@ public class f_3_lesson_post_test extends Fragment {
                     return isCorrect;
                 } else {
                     Toast.makeText(getContext(), "Please enter an answer.", Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "No answer provided | isCorrect: " + isCorrect);
+                    // Log.e(TAG, "No answer provided | isCorrect: " + isCorrect);
                     return false;
                 }
             } else {
-                Log.e(TAG, "identificationAnswer is null!");
+                // Log.e(TAG, "identificationAnswer is null!");
                 return false;
             }
         }
@@ -877,8 +974,11 @@ public class f_3_lesson_post_test extends Fragment {
     // Method to show hint dialog when needed
     private void showHintDialog(String correctAnswer) {
 
-        // Generate the hint based on the correct answer and category
-        String hint = generateHint(correctAnswer, b_main_0_menu_categorize_user.category);
+        String TAG = "showHintDialog()";
+
+        // Log.i(TAG, "Correct Answer: " + correctAnswer);
+//        // Generate the hint based on the correct answer and category
+//        String hint = f_3_lesson_post_test_generateHint.generateHint(correctAnswer, b_main_0_menu_categorize_user.category);
 
         // Inflate the custom layout
         LayoutInflater inflater = requireActivity().getLayoutInflater();
@@ -888,7 +988,7 @@ public class f_3_lesson_post_test extends Fragment {
         TextView hintTextView = customView.findViewById(R.id.hint);
         Button okayButton = customView.findViewById(R.id.okay);
 
-        hintTextView.setText(hint);
+        hintTextView.setText(correctAnswer);
 
         // Build the AlertDialog with the custom view
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
@@ -896,24 +996,25 @@ public class f_3_lesson_post_test extends Fragment {
         builder.setCancelable(false);
 
         // Create the dialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        hintDialog = builder.create();
+        hintDialog.show();
 
         okayButton.setOnClickListener(v -> {
-            dialog.dismiss();
+            hintDialog.dismiss();
         });
 
         // Adjust the dialog dimensions
-        dialog.getWindow().setLayout(
+        hintDialog.getWindow().setLayout(
                 ViewGroup.LayoutParams.WRAP_CONTENT, // Width: Wrap content
                 ViewGroup.LayoutParams.WRAP_CONTENT  // Height: Wrap content
         );
 
 
         // Log the generated hint
-        Log.e("Generate Hint", "Hint: " + hint);
+        // Log.e("Generate Hint", "Hint: " + hint);
 
         if (d_Lesson_container.d_lesson_container_token >= 20) {
+            f_3_lesson_post_test_generateHint.takeToken(false, 20);
             d_Lesson_container.d_lesson_container_token -= 20;
             // refresh token in d_lesson_container
             d_Lesson_container.tokenCount.setText("" + d_Lesson_container.d_lesson_container_token);
@@ -923,101 +1024,6 @@ public class f_3_lesson_post_test extends Fragment {
 
 
     }
-
-
-
-    public static String generateHint(String originalString, String category) {
-
-        // Define the number of underscores based on the category
-        // Define the number of underscores based on the category
-        if (originalString == null) {
-            Log.e("Error", "originalString is null");
-            // Handle the error (e.g., return, throw an exception, or show a message)
-            return originalString; // or handle accordingly
-        }
-        int answerLength = originalString.length(); // Now it's safe to call length()
-        if (category == null) {
-            Log.e("Error", "category is null");
-            return originalString;
-        }
-        Log.e("Generate Hint", "Category: " + category);
-
-        int replaceChar;
-        String TAG = "Generate Hint";
-        switch (category) {
-            case "Beginner":
-                replaceChar = (int) (answerLength * 0.3); // Cast to int
-                Log.e(TAG, "Beginner | replaceChar["+replaceChar+"] = answerLength["+answerLength+"] * 0.8");
-                break;
-            case "Novice":
-                replaceChar = (int) (answerLength * 0.4); // Cast to int
-                Log.e(TAG, "Novice | replaceChar["+replaceChar+"] = answerLength["+answerLength+"] * 0.6");
-                break;
-            case "Intermediate":
-                replaceChar = (int) (answerLength * 0.5); // Cast to int
-                Log.e(TAG, "Intermediate | replaceChar["+replaceChar+"] = answerLength["+answerLength+"] * 0.4");
-                break;
-            case "Advanced":
-                replaceChar = (int) (answerLength * 0.7); // Cast to int
-                Log.e(TAG, "Advanced | replaceChar["+replaceChar+"] = answerLength["+answerLength+"] * 0.3");
-                break;
-            case "Expert":
-                replaceChar = (int) (answerLength * 0.9); // Cast to int
-                Log.e(TAG, "Expert | replaceChar["+replaceChar+"] = answerLength["+answerLength+"] * 0.2");
-                break;
-            default:
-                replaceChar = 1; // Default to 1 if category is not recognized
-        }
-        Log.e("Generate Hint", "Characters to replace part 1: " + replaceChar);
-
-        // Ensure replaceChar is at least 1
-        replaceChar = Math.max(replaceChar, 1);
-        Log.e("Generate Hint", "Characters to replace part 2: " + replaceChar);
-
-        String[] parts = originalString.split(" ");
-
-        // Create a new ArrayList
-        List<String> stringList = new ArrayList<>();
-        List<Integer> intList = new ArrayList<>();
-        for (int i = 0; i < parts.length; i++) {
-            stringList.add(parts[i]);
-            Log.e("Seperate Answer Parts[" + i + "]:", stringList.get(i));
-            // Add the length of each part to intList
-            intList.add(parts[i].length());
-        }
-
-        int replacePerWord = Math.max(1, replaceChar / parts.length);
-
-        Log.e("Replace per word:", replacePerWord + "");
-
-        // To store the final modified string
-        StringBuilder sampleStringName = new StringBuilder();
-        Random random = new Random();
-        for (int i = 0; i < stringList.size(); i++) {
-            StringBuilder modifiedWord = new StringBuilder(stringList.get(i));
-            int countReplacements = Math.min(replacePerWord, modifiedWord.length());
-            Log.e("Count replacements for word[" + i + "]:", countReplacements + "");
-
-            for (int j = 0; j < countReplacements; j++) {
-                int indexToReplace;
-                do {
-                    indexToReplace = random.nextInt(modifiedWord.length());
-                } while (modifiedWord.charAt(indexToReplace) == '_'); // Avoid replacing already replaced characters
-                modifiedWord.setCharAt(indexToReplace, '_'); // Replace character with underscore
-            }
-            sampleStringName.append(modifiedWord);
-            if (i < stringList.size() - 1) {
-                sampleStringName.append(" "); // Add space between words
-            }
-        }
-
-        Log.e("Final modified string:", sampleStringName.toString());
-
-        // this method still returns a not perfect String..
-        return sampleStringName.toString();
-
-    }
-
 
     // Helper methods to get module and lesson indices
     private int getModuleIndex(String module) {
@@ -1045,7 +1051,7 @@ public class f_3_lesson_post_test extends Fragment {
             case "Lesson 7": return 6;
             case "Lesson 8": return 7;
             default:
-                Log.e("getLessonIndex", "Invalid lesson: " + lesson);
+                // Log.e("getLessonIndex", "Invalid lesson: " + lesson);
                 throw new IllegalArgumentException("Invalid lesson: " + lesson);
         }
     }

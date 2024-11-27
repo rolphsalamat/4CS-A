@@ -9,12 +9,12 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class L_lesson_handler extends FragmentPagerAdapter {
 
-    private final L_lesson_sequence.StepType[] stepSequence;
+    private final d_Lesson_container.StepType[] stepSequence;
     private final String currentLesson;
     private final String learningMode;
     static int pageNumber;
 
-    public L_lesson_handler(@NonNull FragmentManager fm, L_lesson_sequence.StepType[] stepSequence, String currentLesson, String learningMode, int pageNumber) {
+    public L_lesson_handler(@NonNull FragmentManager fm, d_Lesson_container.StepType[] stepSequence, String currentLesson, String learningMode, int pageNumber) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         this.stepSequence = stepSequence;
         this.currentLesson = currentLesson;
@@ -27,11 +27,14 @@ public class L_lesson_handler extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         String TAG = "LessonPagerAdapter";
 
-        L_lesson_sequence.StepType stepType = stepSequence[position];
+        d_Lesson_container.StepType stepType = stepSequence[position];
         String[] parts = currentLesson.split("_");
 
-        String module = parts[0];
-        String lesson = parts[1];
+        String module = parts[0]; // M1 | M2 | M3 | M4
+        String lesson = parts[1]; // Lesson 1 | Lesson 2
+
+        Log.i(TAG, "Module: " + module);
+        Log.i(TAG, "Lesson: " + lesson);
 
         switch (stepType) {
             case PRE_TEST:
@@ -39,8 +42,8 @@ public class L_lesson_handler extends FragmentPagerAdapter {
             case POST_TEST:
                 return f_3_lesson_post_test.newInstance(module, lesson, learningMode);
             case VIDEO:
-
-                String videoUrl = L_lesson_sequence.getLessonVideoLinks2(module, lesson);
+                Log.i(TAG, " getLessonVideoLinks2(" + module + ", " + lesson + ");");
+                String videoUrl = t_YoutubeLinkFromDatabase.getLessonVideoLinks2(module, lesson);
                 Log.d(TAG, "BOSS YUNG LINK MO AY: " + videoUrl);
 
                 return f_2_lesson_video.newInstance(videoUrl);

@@ -41,11 +41,20 @@ public class a_user_1_login_handler extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (!n_Network.isNetworkAvailable3(this)) {
-//            Toast.makeText(a_user_1_login_handler.this, "No Internet", Toast.LENGTH_SHORT).show();
+            Toast.makeText(a_user_1_login_handler.this, "No Internet", Toast.LENGTH_SHORT).show();
+            Log.i("Login Handler", "No Internet!");
 
-            Intent loginIntent = new Intent(this, b_main_0_menu.class);
-            startActivity(loginIntent);
+            // show can't use app dialog
+            // finish
+            finish();
 
+
+//            Intent loginIntent = new Intent(this, b_main_0_menu.class);
+//            startActivity(loginIntent);
+
+        } else {
+            Toast.makeText(a_user_1_login_handler.this, "Has Internet", Toast.LENGTH_SHORT).show();
+            Log.i("Login Handler", "Has Internet!");
         }
 
 //        checkForAppUpdate();

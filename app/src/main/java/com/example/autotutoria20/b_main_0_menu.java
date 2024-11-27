@@ -73,7 +73,6 @@ import java.util.Map;
 
 public class b_main_0_menu extends AppCompatActivity {
     public static long token;
-    public static Map<String, String> youtubeLinksMap;
     private TextView tokenCount;
     private boolean[] cardStates = {true, false, false}; // Example state array for 3 cards
     static Boolean isStudent = false;
@@ -88,8 +87,8 @@ public class b_main_0_menu extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
-    private ViewPager viewPager;
-    private CustomPagerAdapter pagerAdapter;
+    static ViewPager viewPager;
+    static CustomPagerAdapter pagerAdapter;
     private static TextView greetUserName;
     private static TextView greetUserCategory;
     private List<Fragment> progressiveFragmentList;
@@ -100,7 +99,7 @@ public class b_main_0_menu extends AppCompatActivity {
     private View module, description, uplifts;
     private ShapeableImageView profileImageView;
     private FrameLayout profileFrameLayout;
-    private CustomLoadingDialog loadingDialog;
+    private static CustomLoadingDialog loadingDialog;
     private boolean isProgressiveMode = true;
     private TextView learningModeText;
     private ImageView learningModeIcon;
@@ -115,8 +114,10 @@ public class b_main_0_menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        Log.d("hello", "word");
+        // Log.("hello", "word");
         setContentView(R.layout.b_main_0_menu);
+
+        showLoadingDialog();
 
         if (!n_Network.isNetworkAvailable(this))
             Toast.makeText(b_main_0_menu.this, "No Internet", Toast.LENGTH_SHORT).show();
@@ -130,7 +131,7 @@ public class b_main_0_menu extends AppCompatActivity {
             public void onCategoryFetched(String category) {
                 // Handle the retrieved category here
                 if (category != null) {
-                    Log.d("MainActivity", "User Category: " + category);
+                    // Log.("MainActivity", "User Category: " + category);
                     // You can now use the category for further processing
 
                     b_main_0_menu_categorize_user.category = category;
@@ -138,7 +139,7 @@ public class b_main_0_menu extends AppCompatActivity {
                     x_bkt_algorithm.setBKTCategory(category);
 
                 } else {
-                    Log.d("MainActivity", "Failed to retrieve user category.");
+                    // Log.("MainActivity", "Failed to retrieve user category.");
                 }
             }
         });
@@ -151,21 +152,28 @@ public class b_main_0_menu extends AppCompatActivity {
         boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
 
         if (isLoggedIn) {
-            Log.e(TAG, "isLoggedIn: " + isLoggedIn);
+            // Log.(TAG, "isLoggedIn: " + isLoggedIn);
 //            FirebaseUser currentUser = mAuth.getCurrentUser();
             // Check if the tutorial is completed
             a_user_1_login_handler.checkTutorialCompletion(new a_user_1_login_handler.TutorialCompletionCallback() {
                 @Override
                 public void onTutorialChecked(boolean isComplete) {
-                    Log.e(TAG, "checkTutorialCompletion(): " + isComplete);
+                    // Log.(TAG, "checkTutorialCompletion(): " + isComplete);
                     if (isComplete) {
                         // The tutorial has been completed, proceed with fetching user data or whatever comes next
                         FirebaseUser currentUser = mAuth.getCurrentUser();
                         if (currentUser != null) {
                             String userId = currentUser.getUid();
 
-                            fetchYoutubeLinks();
                             fetchUserData(userId);
+
+                            // Retrieve Lesson Sequence
+                            t_LessonSequenceFromDatabase.getLessonSequenceFromDatabase2();
+
+                            // Retrieve Youtube Links
+                            t_YoutubeLinkFromDatabase.fetchYoutubeLinks();
+
+                            // Retrieve Questions
                             t_TestDataFromDatabase.getTestQuestionsFromDatabase("Pre-Test");
                             t_TestDataFromDatabase.getTestQuestionsFromDatabase("Post-Test Easy");
                             t_TestDataFromDatabase.getTestQuestionsFromDatabase("Post-Test Medium");
@@ -221,7 +229,8 @@ public class b_main_0_menu extends AppCompatActivity {
 
         pagerAdapter = new CustomPagerAdapter(
                 getSupportFragmentManager(), progressiveFragmentList);
-        viewPager.setAdapter(pagerAdapter);
+
+//        viewPager.setAdapter(pagerAdapter);
 
         // Button highlighter for Header
         module = findViewById(R.id.modulesSelected);
@@ -260,7 +269,7 @@ public class b_main_0_menu extends AppCompatActivity {
                     finish();
                     startActivity(new Intent(b_main_0_menu.this, b_main_0_menu_profile.class));
                 } else if (id == R.id.settings) {
-                    Log.e("NavigationView", "Let's open Settings");
+                    // Log.("NavigationView", "Let's open Settings");
                     Toast.makeText(b_main_0_menu.this, "Settings", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(b_main_0_menu.this, b_main_0_menu_settings.class));
                 } else if (id == R.id.progressive_mode) {
@@ -353,7 +362,7 @@ public class b_main_0_menu extends AppCompatActivity {
 //                        uplifts.setBackgroundColor(Color.WHITE);
 //                        break;
                     default:
-                        Log.e("onPageSelected(" + position +")", "Error!");
+                        // Log.("onPageSelected(" + position +")", "Error!");
                 }
 
 //                if (position == 0) {
@@ -424,7 +433,7 @@ public class b_main_0_menu extends AppCompatActivity {
 //    private void getTestQuestionsFromDatabase(String testMode) {
 //        FirebaseFirestore db = FirebaseFirestore.getInstance();
 //
-//        Log.d(testMode, "Fetching all modules and lessons data");
+//        // Log.(testMode, "Fetching all modules and lessons data");
 //
 //        db.collection("Questions")
 //                .get()
@@ -434,21 +443,21 @@ public class b_main_0_menu extends AppCompatActivity {
 //                            String module = moduleSnapshot.getId(); // e.g., "Module 1"
 //
 //                            if (module.contains("Module ")) {
-//                                Log.d(testMode, "Module data found for: " + module);
+//                                // Log.(testMode, "Module data found for: " + module);
 //
 //                                for (String lesson : moduleSnapshot.getData().keySet()) {
 //                                    if (lesson.contains("Lesson ")) {
-//                                        Log.d(testMode, "Lesson data found for: " + lesson);
+//                                        // Log.(testMode, "Lesson data found for: " + lesson);
 //
 //                                        Map<String, Object> lessonData = (Map<String, Object>) moduleSnapshot.get(lesson);
 //                                        Map<String, Object> TestDataMap = (Map<String, Object>) lessonData.get(testMode);
 //
 //                                        if (TestDataMap != null) {
-//                                            Log.d(testMode, testMode + " data found for: " + lesson);
+//                                            // Log.(testMode, testMode + " data found for: " + lesson);
 //
 //                                            // Loop through all keys in TestDataMap
 //                                            for (String key : TestDataMap.keySet()) {
-//                                                Log.d("PreTest", "Processing key: " + key);
+//                                                // Log.("PreTest", "Processing key: " + key);
 //
 //                                                // Retrieve Questions, Choices, and Answers directly from TestDataMap
 //                                                Object questionsObj = TestDataMap.get("Questions");
@@ -470,10 +479,10 @@ public class b_main_0_menu extends AppCompatActivity {
 //                                                        List<String> choiceList = (List<String>) choices.get("Choice " + questionKey.substring(questionKey.length() - 1)); // Match "Choice 1" for "Question 1"
 //                                                        Number answer = (Number) answers.get("Answer " + questionKey.substring(questionKey.length() - 1)); // Match "Answer 1" for "Question 1"
 //
-//                                                        Log.e("PreTest", "Fetching data for " + questionKey);
-//                                                        Log.d("PreTest", "Question: " + question);
-//                                                        Log.d("PreTest", "Choices: " + choiceList);
-//                                                        Log.d("PreTest", "Answer: " + answer);
+//                                                        // Log.("PreTest", "Fetching data for " + questionKey);
+//                                                        // Log.("PreTest", "Question: " + question);
+//                                                        // Log.("PreTest", "Choices: " + choiceList);
+//                                                        // Log.("PreTest", "Answer: " + answer);
 //
 //                                                        // Check if any of the data is null before assigning
 //                                                        if (question != null && choiceList != null && answer != null) {
@@ -483,22 +492,22 @@ public class b_main_0_menu extends AppCompatActivity {
 //                                                            questionData.put("Choices", choiceList);
 //                                                            questionData.put("Answer", answer);
 //
-//                                                            Log.d("PreTest", "Stored data for " + questionKey + ": " + questionData);
+//                                                            // Log.("PreTest", "Stored data for " + questionKey + ": " + questionData);
 //
 //                                                            // add this questionData to
 //
 //                                                        } else {
-//                                                            Log.e("PreTest", "Missing data for " + questionKey);
+//                                                            // Log.("PreTest", "Missing data for " + questionKey);
 //                                                        }
 //                                                    }
 //
-//                                                    Log.d("PreTest", "Stored all data for key: " + key);
+//                                                    // Log.("PreTest", "Stored all data for key: " + key);
 //                                                } else {
-//                                                    Log.e("PreTest", "Invalid data structure for key: " + key);
+//                                                    // Log.("PreTest", "Invalid data structure for key: " + key);
 //                                                }
 //                                            }
 //
-//                                            Log.d("PreTest", "Completed processing all test mode data for: " + lesson);
+//                                            // Log.("PreTest", "Completed processing all test mode data for: " + lesson);
 //                                        }
 //                                    }
 //                                }
@@ -506,67 +515,10 @@ public class b_main_0_menu extends AppCompatActivity {
 //                            }
 //                        }
 //                    } else {
-//                        Log.e(testMode, "Failed to fetch modules data: ", task.getException());
+//                        // Log.(testMode, "Failed to fetch modules data: ", task.getException());
 //                    }
 //                });
 //    }
-
-
-    private void fetchYoutubeLinks() {
-        String TAG = "fetchYoutubeLinks()";
-
-        Log.e(TAG, "Fetching YouTube Links...");
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        youtubeLinksMap = new HashMap<>(); // Ensure this is initialized
-
-        db.collection("Youtube Links")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.e(TAG, "Modules fetched successfully");
-
-                        for (QueryDocumentSnapshot moduleDoc : task.getResult()) {
-                            String moduleName = moduleDoc.getId(); // e.g., "Module 4"
-                            String moduleNumber = moduleName.replace("Module ", ""); // Extract the number (e.g., "4")
-
-                            Log.e(TAG, "Processing module: " + moduleName);
-
-                            // Iterate through each lesson field in the module document
-                            for (String lessonField : moduleDoc.getData().keySet()) {
-                                Log.e(TAG, "Processing field: " + lessonField);
-
-                                // Check if the field matches the expected format ("Lesson X")
-                                if (lessonField.startsWith("Lesson")) {
-                                    String lessonNumber = lessonField.replace("Lesson ", ""); // Extract the number (e.g., "2")
-                                    String retrievedString = moduleDoc.getString(lessonField);
-
-                                    if (retrievedString != null) {
-                                        // Construct the key in "M(lessonN)_Lesson (moduleN)" format
-                                        String key = "M" + lessonNumber + "_Lesson " + moduleNumber;
-
-                                        // Add to map
-                                        youtubeLinksMap.put(key, retrievedString);
-
-                                        Log.e(TAG, "Added YouTube link: " + key + " -> " + retrievedString);
-                                    } else {
-                                        Log.e(TAG, "No data found for: " + lessonField + " in module: " + moduleName);
-                                    }
-                                } else {
-                                    Log.e(TAG, "Skipped non-lesson field: " + lessonField);
-                                }
-                            }
-                        }
-
-                        // Log the final map
-                        Log.d("YoutubeLinksMap", youtubeLinksMap.toString());
-                    } else {
-                        Log.e(TAG, "Error fetching modules: ", task.getException());
-                    }
-                });
-    }
-
-
 
     // Handle the results
     @Override
@@ -635,6 +587,26 @@ public class b_main_0_menu extends AppCompatActivity {
 
     }
 
+    private void showLoadingDialog() {
+        if (b_main_0_menu.this != null && !b_main_0_menu.this.isFinishing()) {
+            loadingDialog = new CustomLoadingDialog(b_main_0_menu.this);
+            loadingDialog.setCancelable(false); // Prevent closing the dialog
+            loadingDialog.show();
+        }
+    }
+
+    static void updateProgress(int progress) {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.setProgress(progress);
+        }
+    }
+
+    static void hideLoadingDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
+    }
+
     private void showLearningModes() {
 
         NavigationView navigationView = findViewById(R.id.navigation_view);
@@ -669,28 +641,8 @@ public class b_main_0_menu extends AppCompatActivity {
         }
     }
 
-//    private void showLoadingDialog() {
-//        loadingDialog = new CustomLoadingDialog();
-//        loadingDialog.setCancelable(false); // Prevent closing the dialog
-//        loadingDialog.show();
-//    }
-//
-//    private void updateProgress(int progress) {
-//        if (loadingDialog != null) {
-//            loadingDialog.setProgress(progress);
-//        }
-//    }
-//
-//    private void hideLoadingDialog() {
-//        if (loadingDialog != null && loadingDialog.isShowing()) {
-//            loadingDialog.dismiss();
-//        }
-//    }
-
-
-
     private void showTutorial() {
-        Log.d("b_main_0_menu", "Showing tutorial because loginAttempts is 0");
+        // Log.("b_main_0_menu", "Showing tutorial because loginAttempts is 0");
         Intent tutorialIntent = new Intent(this, b_main_0_menu_tutorial.class);
         startActivity(tutorialIntent);
         finish();
@@ -756,8 +708,8 @@ public class b_main_0_menu extends AppCompatActivity {
                 String userId = mAuth.getCurrentUser().getUid();
                 StorageReference storageReference = FirebaseStorage.getInstance().getReference("profile_pictures/" + userId + ".jpg");
 
-                Log.d("FirebaseStorage", "Uploading image to: " + storageReference.getPath());
-                Log.d("FirebaseStorage", "Image URI: " + imageUri.toString());
+                // Log.("FirebaseStorage", "Uploading image to: " + storageReference.getPath());
+                // Log.("FirebaseStorage", "Image URI: " + imageUri.toString());
 
                 UploadTask uploadTask = storageReference.putBytes(data);
                 uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -767,7 +719,7 @@ public class b_main_0_menu extends AppCompatActivity {
                             @Override
                             public void onSuccess(Uri uri) {
                                 String imageUrl = uri.toString();
-                                Log.d("FirebaseStorage", "Image uploaded successfully. URL: " + imageUrl);
+                                // Log.("FirebaseStorage", "Image uploaded successfully. URL: " + imageUrl);
                                 saveImageUrlToFirestore(imageUrl);
                             }
                         });
@@ -775,16 +727,16 @@ public class b_main_0_menu extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e("FirebaseStorage", "Error uploading image", e);
+                        // Log.("FirebaseStorage", "Error uploading image", e);
                         Toast.makeText(b_main_0_menu.this, "Failed to upload image: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e("FirebaseStorage", "Error converting image to bitmap", e);
+                // Log.("FirebaseStorage", "Error converting image to bitmap", e);
             }
         } else {
-            Log.e("FirebaseStorage", "Image URI is null");
+            // Log.("FirebaseStorage", "Image URI is null");
             Toast.makeText(b_main_0_menu.this, "No image selected", Toast.LENGTH_SHORT).show();
         }
     }
@@ -805,7 +757,7 @@ public class b_main_0_menu extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e("Firestore", "Error updating Firestore", e);
+                        // Log.("Firestore", "Error updating Firestore", e);
                         Toast.makeText(b_main_0_menu.this, "Failed to update profile picture: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
@@ -834,7 +786,7 @@ public class b_main_0_menu extends AppCompatActivity {
 //                Toast.makeText(b_main_0_menu.this, "Rating: " + rating, Toast.LENGTH_SHORT).show();
 //                Toast.makeText(b_main_0_menu.this, "Comment: " + comment, Toast.LENGTH_SHORT).show();
 
-                dialog.dismiss();
+                // dialog.ismiss();
             }
         });
 
@@ -858,14 +810,14 @@ public class b_main_0_menu extends AppCompatActivity {
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss(); // Dismiss the dialog without action
+                // dialog.ismiss(); // Dismiss the dialog without action
             }
         });
 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss(); // Dismiss the dialog without action
+                // dialog.ismiss(); // Dismiss the dialog without action
             }
         });
 
@@ -881,7 +833,7 @@ public class b_main_0_menu extends AppCompatActivity {
                 Toast.makeText(b_main_0_menu.this, "Logout Successful", Toast.LENGTH_SHORT).show();
 
                 // Dismiss the dialog
-                dialog.dismiss();
+                // dialog.ismiss();
 
                 // Redirect to login screen
                 Intent loginIntent = new Intent(b_main_0_menu.this, a_user_1_login.class);
@@ -922,7 +874,7 @@ public class b_main_0_menu extends AppCompatActivity {
 
     private void switchMode() {
 
-        Log.d("switchMode()", "Switching mode...");
+        // Log.("switchMode()", "Switching mode...");
 
         if (isProgressiveMode) {
             learningModeText.setText("Progressive Mode");
@@ -940,7 +892,7 @@ public class b_main_0_menu extends AppCompatActivity {
         // Close the navigation drawer
         drawerLayout.closeDrawer(GravityCompat.START);
 //        pagerAdapter.notifyDataSetChanged();
-        Log.d("switchMode()", "Mode switched.");
+        // Log.("switchMode()", "Mode switched.");
 
     }
 
@@ -957,7 +909,7 @@ public class b_main_0_menu extends AppCompatActivity {
 
         builder.setView(dialogView);
 
-        final AlertDialog dialog = builder.create();
+        final AlertDialog switchModeDialog = builder.create();
 
         // Set up the dialog buttons
         Button positiveButton = dialogView.findViewById(R.id.btn_positive);
@@ -976,24 +928,24 @@ public class b_main_0_menu extends AppCompatActivity {
                 }
 
                 switchMode();
-                dialog.dismiss();
+                switchModeDialog.dismiss();
             }
         });
 
         negativeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                // dialog.ismiss();
             }
         });
 
         // Adjust the dialog size
-        dialog.getWindow().setLayout(
+        switchModeDialog.getWindow().setLayout(
                 (int) (getResources().getDisplayMetrics().widthPixels * 0.95),  // width: 90% of the screen width
                 ViewGroup.LayoutParams.WRAP_CONTENT  // height: wrap content
         );
 
-        dialog.show();
+        switchModeDialog.show();
     }
 
     @Override
@@ -1090,12 +1042,12 @@ public class b_main_0_menu extends AppCompatActivity {
                         }
 
                         if (isStudent == null && isProgressiveCompleted == null) {
-                            Log.e(TAG, "isStudent == null \nisComplete == null");
+                            // Log.(TAG, "isStudent == null \nisComplete == null");
                             b_main_0_menu_isStudent.setStatusAuto();
                         }
 
-                        Log.e(TAG, "isStudent: " + isStudent);
-                        Log.e(TAG, "isComplete: " + isProgressiveCompleted);
+                        // Log.(TAG, "isStudent: " + isStudent);
+                        // Log.(TAG, "isComplete: " + isProgressiveCompleted);
 
                         showLearningModes();
 
@@ -1104,17 +1056,17 @@ public class b_main_0_menu extends AppCompatActivity {
                         Boolean newCourse = document.getBoolean("New Course Available Notification");
                         Boolean reminderNotif = document.getBoolean("Reminder Notification");
 
-                        Log.e(TAG, "First Login: " + tutorial);
-                        Log.e(TAG, "First Name: " + firstName);
-                        Log.e(TAG, "Last Name: " + lastName);
-                        Log.e(TAG, "Email Address: " + email);
-                        Log.e(TAG, "Gender: " + gender);
-                        Log.e(TAG, "Age: " + age);
-                        Log.e(TAG, "Token: " + token);
+                        // Log.(TAG, "First Login: " + tutorial);
+                        // Log.(TAG, "First Name: " + firstName);
+                        // Log.(TAG, "Last Name: " + lastName);
+                        // Log.(TAG, "Email Address: " + email);
+                        // Log.(TAG, "Gender: " + gender);
+                        // Log.(TAG, "Age: " + age);
+                        // Log.(TAG, "Token: " + token);
 
-                        Log.e(TAG, "App Update Notification: " + updateNotif);
-                        Log.e(TAG, "New Course Available Notification: " + newCourse);
-                        Log.e(TAG, "Reminder Notification: " + reminderNotif);
+                        // Log.(TAG, "App Update Notification: " + updateNotif);
+                        // Log.(TAG, "New Course Available Notification: " + newCourse);
+                        // Log.(TAG, "Reminder Notification: " + reminderNotif);
 
                         greetUserName.setText("Hello, " + firstName);
                         greetUserCategory.setText(category);
@@ -1124,13 +1076,13 @@ public class b_main_0_menu extends AppCompatActivity {
                         // Check if the user has a custom profile picture
                         Boolean hasCustomProfilePicture = document.getBoolean("hasCustomProfilePicture");
                         if (hasCustomProfilePicture != null && hasCustomProfilePicture) {
-                            Log.e(TAG, "I have my own Profile Picture!");
+                            // Log.(TAG, "I have my own Profile Picture!");
                             String customProfilePictureUrl = document.getString("profilePictureUrl");
                             if (customProfilePictureUrl != null) {
                                 Picasso.get().load(customProfilePictureUrl).into(profileImageView);
                             }
                         } else {
-                            Log.e(TAG, "I aint got my own Profile Picture!");
+                            // Log.(TAG, "I aint got my own Profile Picture!");
                             // User does not have a custom profile picture yet
                             if (gender != null) {
                                 if (gender.equalsIgnoreCase("male")) {
@@ -1197,7 +1149,7 @@ public class b_main_0_menu extends AppCompatActivity {
     }
 
     private void processLessonData(HashMap<String, Map<String, Object>> progressiveModeData, HashMap<String, Map<String, Object>> freeUseModeData) {
-        Log.d("Main Menu", "Meron nako'ng data ng Lessons");
+        // Log.("Main Menu", "Meron nako'ng data ng Lessons");
 
         // Log and process Progressive Mode data
         if (progressiveModeData != null) {
@@ -1209,12 +1161,12 @@ public class b_main_0_menu extends AppCompatActivity {
                 for (Map.Entry<String, Object> lessonEntry : lessonData.entrySet()) {
                     String moduleName = lessonEntry.getKey();
                     Object moduleValue = lessonEntry.getValue();
-                    Log.d("LessonData", "hihi Progressive Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
+                    // Log.("LessonData", "hihi Progressive Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
                 }
             }
         } else {
             Toast.makeText(this, "Wala par", Toast.LENGTH_SHORT).show();
-            Log.d("No Progressive Mode", "Wala ako nakitang Progressive Mode par, sensya na you");
+            // Log.("No Progressive Mode", "Wala ako nakitang Progressive Mode par, sensya na you");
         }
 
         // Log and process Free Use Mode data
@@ -1227,14 +1179,13 @@ public class b_main_0_menu extends AppCompatActivity {
                 for (Map.Entry<String, Object> lessonEntry : lessonData.entrySet()) {
                     String moduleName = lessonEntry.getKey();
                     Object moduleValue = lessonEntry.getValue();
-                    Log.d("LessonData", "hihi Free Use Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
+                    // Log.("LessonData", "hihi Free Use Mode: " + lessonName + ", Field: " + moduleName + ", Value: " + moduleValue);
                 }
             }
         } else {
             Toast.makeText(this, "Wala par", Toast.LENGTH_SHORT).show();
-            Log.d("No Free Use Mode", "Wala ako nakitang Free Use Mode par, sensya na you");
+            // Log.("No Free Use Mode", "Wala ako nakitang Free Use Mode par, sensya na you");
         }
 
-//        hideLoadingDialog();
     }
 }

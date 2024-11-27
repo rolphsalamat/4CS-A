@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="500dp"
-        android:layout_height="500dp"
+        android:layout_height="wrap_content"
         android:src="@drawable/failed_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +42,8 @@
         android:id="@+id/failed_lesson"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="You did not pass Lesson n"
+        android:textAlignment="center"
+        android:text="You did not pass Module 1\nLesson 4"
         android:fontFamily="@font/failed_font"
         android:textColor="@color/white"
         android:textSize="32sp"
@@ -61,7 +62,7 @@
         android:textColor="@color/white"
         android:textSize="24sp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/failed_lesson"
         />
@@ -83,6 +84,7 @@
         android:id="@+id/okay_button"
         android:layout_width="125dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="Okay"
         android:textAllCaps="false"
         android:fontFamily="@font/failed_font"
@@ -91,7 +93,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/passing_grade"
-        app:layout_constraintBottom_toBottomOf="parent"
         />
 
 

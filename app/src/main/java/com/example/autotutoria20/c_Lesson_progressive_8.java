@@ -199,11 +199,11 @@ public class c_Lesson_progressive_8 extends AppCompatActivity {
 
         switch (key) {
             case 1:
-                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M1_Lesson 8");
+                newText = progress + "/" + t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 8");
                 module1ProgressText.setText(newText);
 
                 // Check if the lesson is finished
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M1_Lesson 8")) {
+                if (progress >= t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 8")) {
                     if (M1_Score < passingGrade) {
                         c_Lesson_feedback.showDialog(this, M1_Score, passingGrade, "Lesson 1");
                     } else {
@@ -213,11 +213,11 @@ public class c_Lesson_progressive_8 extends AppCompatActivity {
                 }
                 break;
             case 2:
-                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M2_Lesson 8");
+                newText = progress + "/" + t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 8");
                 module2ProgressText.setText(newText);
 
                 // Check if the lesson is finished
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M2_Lesson 8")) {
+                if (progress >= t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 8")) {
                     if (M1_Score < passingGrade ||
                         M2_Score < passingGrade) {
                         if (cardCompletionStatus[0])
@@ -231,11 +231,11 @@ public class c_Lesson_progressive_8 extends AppCompatActivity {
                 break;
 
             case 3:
-                newText = progress + "/" + L_lesson_sequence.getNumberOfSteps("M3_Lesson 8");
+                newText = progress + "/" + t_LessonSequenceFromDatabase.getNumberOfSteps("M3_Lesson 8");
                 module3ProgressText.setText(newText);
 
                 // Check if the lesson is finished
-                if (progress >= L_lesson_sequence.getNumberOfSteps("M3_Lesson 8")) {
+                if (progress >= t_LessonSequenceFromDatabase.getNumberOfSteps("M3_Lesson 8")) {
                     if (M1_Score < passingGrade ||
                         M2_Score < passingGrade ||
                         M3_Score < passingGrade) {

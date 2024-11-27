@@ -52,17 +52,6 @@
         android:layout_below="@id/question_text"
         android:layout_marginTop="20dp"/>
 
-<!--    <com.google.android.material.imageview.ShapeableImageView-->
-<!--        android:id="@+id/currentButton"-->
-<!--        android:layout_width="60dp"-->
-<!--        android:layout_height="60dp"-->
-<!--        android:layout_marginEnd="10dp"-->
-<!--        android:layout_marginBottom="30dp"-->
-<!--        android:background="@drawable/return_icon"-->
-<!--        android:layout_above="@id/submit_pre_test"-->
-<!--        android:layout_alignEnd="@+id/submit_pre_test"-->
-<!--    />-->
-
     <LinearLayout
         android:id="@+id/image_container"
         android:layout_width="match_parent"

@@ -92,6 +92,9 @@ public class f_2_lesson_video extends Fragment {
             Log.d(TAG, "Video URL retrieved from SharedPreferences: " + videoUrl);
         }
 
+//        // Bypass setting, for a custom video
+//        videoUrl = "y6oMutwJQCw";
+
         d_Lesson_container.simulateClicksInCenter();
     }
 

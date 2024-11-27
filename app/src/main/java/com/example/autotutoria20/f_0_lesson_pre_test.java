@@ -5,6 +5,9 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+
+import java.util.HashSet;
+import java.util.Random;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
@@ -31,13 +34,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class f_0_lesson_pre_test extends Fragment {
 
     private static final String ARG_MODULE = "module";
     private static final String ARG_LESSON = "lesson";
     private static final String ARG_MODE = "mode";
+    private static final Random random = new Random();  // For generating random numbers
 
     private LinearLayout imageContainer;
     private int currentQuestionIndex = 0;
@@ -60,6 +66,8 @@ public class f_0_lesson_pre_test extends Fragment {
 
     // BKT Model instance
     private x_bkt_algorithm bktModel;
+    private int moduleIndex;
+    private int lessonIndex;
 
     // Interface to notify the container activity when pre-test is complete
     public interface PreTestCompleteListener {
@@ -203,13 +211,14 @@ public class f_0_lesson_pre_test extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        Log.e("Pre-Test onViewCreated", "Load Images");
+//        Log.e("Pre-Test onViewCreated", "Load Images");
+
 
         // Ensure imageContainer has MATCH_PARENT width and fixed height in XML
         imageContainer = requireView().findViewById(R.id.image_container);
 
         if (imageContainer == null) {
-            Log.e("InitializationError", "imageContainer is null!");
+//            Log.e("InitializationError", "imageContainer is null!");
             return;
         }
 
@@ -258,7 +267,7 @@ public class f_0_lesson_pre_test extends Fragment {
             // Add the ImageView to the container
             imageContainer.addView(imageView);
 
-            Log.e("Pre-Test onViewCreated", "load image done");
+//            Log.e("Pre-Test onViewCreated", "load image done");
 
         }
 
@@ -270,6 +279,10 @@ public class f_0_lesson_pre_test extends Fragment {
 //        mistake = view.findViewById(R.id.answers_wrong);
         total = view.findViewById(R.id.answers_total);
 
+        total.setText("Item: " + c_Lesson_feedback.preTestAttemptAnswers
+                + "/"
+                +  preTestQuestions);
+
 //        if (!d_Lesson_container.isPreTestComplete) {
 //            currentButton.setEnabled(false);
 //            currentButton.setVisibility(View.GONE);
@@ -279,11 +292,11 @@ public class f_0_lesson_pre_test extends Fragment {
 //        }
 
         // Ensure valid indices are used
-        int moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
-        int lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
+        moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
+        lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
 
         if (moduleIndex < 0 || lessonIndex < 0) {
-            Log.e("submitButton.onClick", "Invalid module or lesson index");
+//            Log.e("submitButton.onClick", "Invalid module or lesson index");
             return;
         }
 
@@ -309,16 +322,32 @@ public class f_0_lesson_pre_test extends Fragment {
 //        });
 
         if (getArguments() != null) {
+
             String module = getArguments().getString(ARG_MODULE);
             String lesson = getArguments().getString(ARG_LESSON);
 
-            //Log.e("f_pre_test.java", "module: " + module);
-            //Log.e("f_pre_test.java", "lesson: " + lesson);
+            String TAG = "ANAK KO";
 
+            Log.i(TAG, TAG + "| ARG_MODULE | Module: " + module);
+            Log.i(TAG, TAG + "| ARG_MODULE | Lesson: " + lesson);
 
+            Log.i(TAG, TAG + " Module: " + module);
+            Log.i(TAG, TAG + " Lesson: " + lesson);
+
+            String formattedModule = "Module " + lesson.charAt(7);
+            String formattedLesson = "Lesson " + module.charAt(1);
+            Log.i(TAG, TAG + " formattedModule: " + formattedModule);
+            Log.i(TAG, TAG + " formattedLesson: " + formattedLesson);
+
+            questions = t_TestDataFromDatabase
+                    .getRandomQuestionsData(
+                            formattedModule,
+                            formattedLesson,
+                            "Pre-Test")
+                    .toArray(new e_Question[0]);
 
             // Retrieve questions based on module and lesson
-            questions = getPreTestQuestions(module, lesson);
+//            questions = getPreTestQuestions(formattedModule, lesson, "Pre-Test");
 
 //            getPreTestFromDatabase(module, lesson);
 
@@ -340,32 +369,14 @@ public class f_0_lesson_pre_test extends Fragment {
 
                 boolean correctAnswer = checkAnswer(); // Check if the answer is correct
 
-                Log.e("HEY!", "questionsAnswered("+questionsAnswered+") < preTestQuestions("+(preTestQuestions)+")");
+//                Log.e("HEY!", "questionsAnswered("+questionsAnswered+") < preTestQuestions("+(preTestQuestions)+")");
                 // Ensure that questions answered does not exceed total pre-test questions.
                 if (questionsAnswered <= preTestQuestions) { // <= talaga to
 
-                    Log.e("TAG", "ROP CHECK THIS: | isLessonFinished: " + x_bkt_algorithm.isLessonFinished);
-
-                    // Update feedback and scores based on correctness
-                    if (correctAnswer) {
-                        if (!x_bkt_algorithm.isLessonFinished) {
-                            x_bkt_algorithm.updateTestScore(
-                                    isProgressiveMode,
-                                    moduleIndex, lessonIndex,
-                                    "Pre-Test",
-                                    c_Lesson_feedback.preTestCorrectAnswers);
-                        }
-                        c_Lesson_feedback.preTestCorrectAnswers
-                                = Math.min(
-                                    c_Lesson_feedback.preTestCorrectAnswers + 1, preTestQuestions);
-
-                    }
+//                    Log.e("TAG", "ROP CHECK THIS: | isLessonFinished: " + x_bkt_algorithm.isLessonFinished);
 
                     if (!x_bkt_algorithm.isLessonFinished)
-                        bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer);
-
-//                    Log.d("TESTING", "Answer: " + correctAnswer);
-//
+                        bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer, answerAttempt);
 
                     // Check if we need to move to the next question based on attempts or correctness.
                     if (answerAttempt >= attemptChances || correctAnswer) {
@@ -386,26 +397,20 @@ public class f_0_lesson_pre_test extends Fragment {
                         }
 
                         questionsAnswered++; // Increment answered count
-                        Log.e(TAG, "increment questionsAnswered["+questionsAnswered+"]");
+//                        Log.e(TAG, "increment questionsAnswered["+questionsAnswered+"]");
 
                         // Load next question only if still within pre-test limits.
 //                        Log.d(TAG, "if (correctAnswer["+correctAnswer+"] || currentQuestionIndex["+currentQuestionIndex
 //                        + "] < preTestQuestions["+preTestQuestions+"] && answerAttempt["+answerAttempt+"] >= attemptChances["+attemptChances+"]");
                         if (correctAnswer || currentQuestionIndex < preTestQuestions && answerAttempt >= attemptChances) {
-                            loadQuestion(); // Load next question
-//                            Log.e(TAG, "loadQuestion();");
-                            answerAttempt = 0; // Reset attempts for new question
-//                            Log.e(TAG, "reset answerAttempt["+answerAttempt+"]");
+
+                            if (!(questionsAnswered == (preTestQuestions+1)))
+                                loadQuestion();
+
+                            answerAttempt = 0;
+
                         }
 
-                    } else {
-
-//                        Log.d("TESTING", "Not moving to next question yet.");
-
-                        int mistakes = 0;
-                        mistakes = c_Lesson_feedback.preTestAttemptAnswers - c_Lesson_feedback.preTestCorrectAnswers;
-
-//                        mistake.setText("Incorrect Answers: " + mistakes);
                     }
 
                     // may plus 1 to kanina
@@ -414,13 +419,17 @@ public class f_0_lesson_pre_test extends Fragment {
 
                         // Handle completion of pre-test.
                         if (preTestCompleteListener != null) {
+                            Log.d("TESTING", "Pre-Test BKT Score: " + x_bkt_algorithm.getKnowledge());
+                            Log.d("TESTING", "Pre-Test Score: " + c_Lesson_feedback.preTestCorrectAnswers);
                             preTestCompleteListener.onPreTestComplete(
 //                                    correctAnswer,
                                     c_Lesson_feedback.preTestCorrectAnswers);
                             c_Lesson_feedback.printResult("Pre-Test");
                             d_Lesson_container.isPreTestComplete = true;
 
-                            loadQuestion(); // Load a different question for user return
+                            // Removed, wag na daw balikan pre-test :D
+//                            loadQuestion();
+
                         }
                     }
 
@@ -458,220 +467,193 @@ public class f_0_lesson_pre_test extends Fragment {
         });
     }
 
-//    private void getPreTestFromDatabase(String oldmodule, String lesson) {
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//    private e_Question[] getPreTestQuestions(String module, String lesson, String testMode) {
+//        String TAG = "getPreTestQuestions";
+//        Log.e(TAG, "I am here!");
 //
-////        // Create a Map to store Pre-Test data at the Module level
-////        Map<String, Map<String, Map<String, Object>>> allModulesData = new HashMap<>();
+//        // Log available modules for debugging
+//        Log.d(TAG, "Available modules: " + t_TestDataFromDatabase.modules.keySet());
 //
-//        String module = "Module " + oldmodule.charAt(1);
+//        // Retrieve the module data from the modules map
+//        Map<String, Object> moduleData = t_TestDataFromDatabase.modules.get(module);
 //
-//        Log.d("PreTest", "Fetching data for Module: " + module + ", Lesson: " + lesson);
 //
-//        db.collection("Questions")
-//                .document(module) // e.g., "Module 1"
-//                .get()
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        DocumentSnapshot moduleSnapshot = task.getResult();
+//        if (moduleData == null) {
+//            Log.e("PreTest", "Module not found: " + module);
+//            return new e_Question[0]; // Return empty array if module not found
+//        }
 //
-//                        if (moduleSnapshot != null && moduleSnapshot.exists()) {
-//                            Log.d("PreTest", "Module data found for: " + module);
-//                            // Access the specific lesson
-//                            Map<String, Object> lessonData = (Map<String, Object>) moduleSnapshot.get(lesson); // e.g., "Lesson 1"
+//        // Retrieve the lesson data from the module data
+//        Map<String, Object> lessonData = (Map<String, Object>) moduleData.get(lesson);
+//        if (lessonData == null) {
+//            Log.e("PreTest", "Lesson not found: " + lesson);
+//            return new e_Question[0]; // Return empty array if lesson not found
+//        }
 //
-//                            if (lessonData != null) {
-//                                Log.d("PreTest", "Lesson data found for: " + lesson);
-//                                // Access the Pre-Test data
-//                                Map<String, Object> preTestDataMap = (Map<String, Object>) lessonData.get("Pre-Test");
+//        // Retrieve pre-test questions from lesson data
+//        Map<String, Object> preTestData = (Map<String, Object>) lessonData.get(testMode);
+//        if (preTestData == null) {
+//            Log.e("PreTest", "Pre-Test data not found for: " + lesson);
+//            return new e_Question[0]; // Return empty array if pre-test data not found
+//        }
 //
-//                                if (preTestDataMap != null) {
-//                                    Log.d("PreTest", "Pre-Test data found for: " + lesson);
+//        // Prepare to collect questions
+//        List<e_Question> questionsList = new ArrayList<>();
 //
-//                                    // Create a Map for the current lesson
-//                                    Map<String, Object> lessonDataMap = new HashMap<>();
+//        // Loop through each question in pre-test data
+//        for (String questionKey : preTestData.keySet()) {
+//            Map<String, Object> questionDetails = (Map<String, Object>) preTestData.get(questionKey);
 //
-//                                    // Retrieve questions, choices, and answers
-//                                    Object questionsObj = preTestDataMap.get("Questions");
-//                                    Object choicesObj = preTestDataMap.get("Choices");
-//                                    Object answersObj = preTestDataMap.get("Answers");
+//            // Create a new e_Question object based on retrieved details
+//            String questionText = (String) questionDetails.get("Question");
 //
-//                                    // Proceed with fetching the questions, choices, and answers only if they are Maps and not null
-//                                    if (questionsObj instanceof Map && choicesObj instanceof Map && answersObj instanceof Map) {
-//                                        Map<String, Object> questions = (Map<String, Object>) questionsObj;
-//                                        Map<String, Object> choices = (Map<String, Object>) choicesObj;
-//                                        Map<String, Object> answers = (Map<String, Object>) answersObj;
+//            // Convert List<String> choices to String[]
+//            List<String> choicesList = (List<String>) questionDetails.get("Choices");
+//            String[] choices = choicesList.toArray(new String[0]); // Convert List to Array
 //
-//                                        // Loop through each question and store in the Map
-//                                        for (Map.Entry<String, Object> entry : questions.entrySet()) {
-//                                            String questionKey = entry.getKey(); // "Question 1", "Question 2", etc.
+//            Number answer = (Number) questionDetails.get("Answer");
 //
-//                                            // Retrieve each question, choice, and answer
-//                                            String question = (String) questions.get(questionKey);
-//                                            ArrayList<String> choiceList = (ArrayList<String>) choices.get(questionKey);
-//                                            Number answer = (Number) answers.get(questionKey);
+//            // Create an e_Question instance and add it to the list
+//            e_Question question = new e_Question(questionText, choices, answer.intValue());
+//            questionsList.add(question);
+//        }
 //
-//                                            Log.d("PreTest", "Fetching data for " + questionKey);
-//                                            Log.d("PreTest", "Question: " + question);
-//                                            Log.d("PreTest", "Choices: " + choiceList);
-//                                            Log.d("PreTest", "Answer: " + answer);
-//
-//                                            // Check if any of the data is null before assigning
-//                                            if (question != null && choiceList != null && answer != null) {
-//                                                // Store data for this question
-//                                                Map<String, Object> questionData = new HashMap<>();
-//                                                questionData.put("Question", question);
-//                                                questionData.put("Choices", choiceList);
-//                                                questionData.put("Answer", answer);
-//
-//                                                lessonDataMap.put(questionKey, questionData);
-//
-//                                                Log.d("PreTest", "Stored data for " + questionKey + ": " + questionData);
-//                                            } else {
-//                                                Log.e("PreTest", "Missing data for " + questionKey);
-//                                            }
-//                                        }
-//
-//                                        // Now store this lesson data inside the module map
-//                                        PreTestDataManager.allModulesData.put(module, new HashMap<>());
-//                                        PreTestDataManager.allModulesData.get(module).put(lesson, lessonDataMap);
-//
-//                                        Log.d("PreTest", "Stored data for " + lesson + ": " + lessonDataMap);
-//
-//                                    } else {
-//                                        Log.e("PreTest", "One or more data fields (Questions, Choices, Answers) are not in the expected Map format.");
-//                                    }
-//                                } else {
-//                                    Log.e("PreTest", "Pre-Test data not found for " + lesson);
-//                                }
-//
-//                            } else {
-//                                Log.e("PreTest", "Lesson data not found: " + lesson);
-//                            }
-//                        } else {
-//                            Log.e("PreTest", "Module data not found: " + module);
-//                        }
-//                    } else {
-//                        Log.e("PreTest", "Failed to fetch data: ", task.getException());
-//                    }
-//                });
+//        // Convert list to array and return
+//        return questionsList.toArray(new e_Question[0]);
 //    }
 
-
-
-
-    private e_Question[] getPreTestQuestions(String module, String lesson) {
-        String key = module + "_" + lesson;
-
-        switch (key) {
-            /* ===== Module 1 ===== */
-            case "M1_Lesson 1":
-                return e_Module_1_1.get_PreTest_Lesson1_Questions();
-            case "M2_Lesson 1":
-                return e_Module_1_2.get_PreTest_Lesson2_Questions();
-            case "M3_Lesson 1":
-                return e_Module_1_3.get_PreTest_Lesson3_Questions();
-            case "M4_Lesson 1":
-                return e_Module_1_4.get_PreTest_Lesson4_Questions();
-
-            /* ===== Module 2 ===== */
-            case "M1_Lesson 2":
-                return e_Module_2_1.get_PreTest_Lesson2_Questions();
-
-            /* ===== Module 3 ===== */
-            case "M1_Lesson 3":
-                return e_Module_3_1.get_PreTest_Lesson1_Questions();
-            case "M2_Lesson 3":
-                return e_Module_3_2.get_PreTest_Lesson2_Questions();
-            case "M3_Lesson 3":
-//                return e_Module_3_3.get_PreTest_Lesson2_Questions();
-
-                /* ===== Module 4 ===== */
-            case "M1_Lesson 4":
-                return e_Module_4_1.get_PreTest_Lesson1_Questions();
-            case "M2_Lesson 4":
-                return e_Module_4_2.get_PreTest_Lesson2_Questions();
-            case "M3_Lesson 4":
-//                return e_Module_4_3.get_PreTest_Lesson3_Q
-                /* ===== Module 5 ===== */
-            case "M1_Lesson 5":
-                return e_Module_5_1.get_PreTest_Lesson1_Questions();
-            case "M2_Lesson 5":
-                return e_Module_5_2.get_PreTest_Lesson2_Questions();
-            case "M3_Lesson 5":
-                return e_Module_5_3.get_PreTest_Lesson3_Questions();
-
-            /* ===== Module 6 ===== */
-            case "M1_Lesson 6":
-                return e_Module_6_1.get_PreTest_Lesson1_Questions();
-            case "M2_Lesson 6":
-                return e_Module_6_2.get_PreTest_Lesson2_Questions();
-            case "M3_Lesson 6":
-                return e_Module_6_3.get_PreTest_Lesson3_Questions();
-
-            /* ===== Module 7 ===== */
-            case "M1_Lesson 7":
-                return e_Module_7_1.get_PreTest_Questions();
-
-            /* ===== Module 8 ===== */
-            case "M1_Lesson 8":
-                return e_Module_8_1.get_PreTest_Lesson1_Questions();
-            case "M2_Lesson 8":
-                return e_Module_8_2.get_PreTest_Lesson2_Questions();
-            case "M3_Lesson 8":
-                return e_Module_8_3.get_PreTest_Lesson3_Questions();
-
-            default:
-                throw new IllegalArgumentException("Invalid module or lesson: " + key);
-        }
-    }
+//    private e_Question[] getPreTestQuestions(String module, String lesson) {
+//        String key = module + "_" + lesson;
+//
+//        switch (key) {
+//            /* ===== Module 1 ===== */
+//            case "M1_Lesson 1":
+//                return e_Module_1_1.get_PreTest_Lesson1_Questions();
+//            case "M2_Lesson 1":
+//                return e_Module_1_2.get_PreTest_Lesson2_Questions();
+//            case "M3_Lesson 1":
+//                return e_Module_1_3.get_PreTest_Lesson3_Questions();
+//            case "M4_Lesson 1":
+//                return e_Module_1_4.get_PreTest_Lesson4_Questions();
+//
+//            /* ===== Module 2 ===== */
+//            case "M1_Lesson 2":
+//                return e_Module_2_1.get_PreTest_Lesson2_Questions();
+//
+//            /* ===== Module 3 ===== */
+//            case "M1_Lesson 3":
+//                return e_Module_3_1.get_PreTest_Lesson1_Questions();
+//            case "M2_Lesson 3":
+//                return e_Module_3_2.get_PreTest_Lesson2_Questions();
+//            case "M3_Lesson 3":
+////                return e_Module_3_3.get_PreTest_Lesson2_Questions();
+//
+//                /* ===== Module 4 ===== */
+//            case "M1_Lesson 4":
+//                return e_Module_4_1.get_PreTest_Lesson1_Questions();
+//            case "M2_Lesson 4":
+//                return e_Module_4_2.get_PreTest_Lesson2_Questions();
+//            case "M3_Lesson 4":
+////                return e_Module_4_3.get_PreTest_Lesson3_Q
+//                /* ===== Module 5 ===== */
+//            case "M1_Lesson 5":
+//                return e_Module_5_1.get_PreTest_Lesson1_Questions();
+//            case "M2_Lesson 5":
+//                return e_Module_5_2.get_PreTest_Lesson2_Questions();
+//            case "M3_Lesson 5":
+//                return e_Module_5_3.get_PreTest_Lesson3_Questions();
+//
+//            /* ===== Module 6 ===== */
+//            case "M1_Lesson 6":
+//                return e_Module_6_1.get_PreTest_Lesson1_Questions();
+//            case "M2_Lesson 6":
+//                return e_Module_6_2.get_PreTest_Lesson2_Questions();
+//            case "M3_Lesson 6":
+//                return e_Module_6_3.get_PreTest_Lesson3_Questions();
+//
+//            /* ===== Module 7 ===== */
+//            case "M1_Lesson 7":
+//                return e_Module_7_1.get_PreTest_Questions();
+//
+//            /* ===== Module 8 ===== */
+//            case "M1_Lesson 8":
+//                return e_Module_8_1.get_PreTest_Lesson1_Questions();
+//            case "M2_Lesson 8":
+//                return e_Module_8_2.get_PreTest_Lesson2_Questions();
+//            case "M3_Lesson 8":
+//                return e_Module_8_3.get_PreTest_Lesson3_Questions();
+//
+//            default:
+//                throw new IllegalArgumentException("Invalid module or lesson: " + key);
+//        }
+//    }
 
 
 
     private void loadQuestion() {
 
-        //Log.e("loadQuestion", "loadQuestion();");
+        // Log.e("loadQuestion", "loadQuestion();");
 
-        d_Lesson_container.startCountdown(requireContext(), "Pre-Test", questionsAnswered >= (preTestQuestions+1));
+        d_Lesson_container.startCountdown(requireContext(), "Pre-Test", questionsAnswered >= (preTestQuestions + 1));
 
         isCorrect = false;
 
         // Clear previous selection
         choicesGroup.clearCheck();
 
-        e_Question currentQuestion = questions[currentQuestionIndex];
-        questionText.setText(currentQuestion.getQuestion());
+        // Ensure that questions[currentQuestionIndex] is valid
+        if (questions != null && questions.length > currentQuestionIndex) {
+            e_Question currentQuestion = questions[currentQuestionIndex];
+            questionText.setText(currentQuestion.getQuestion());
 
-        choicesGroup.removeAllViews();
-        String[] choices = currentQuestion.getChoices();
+            choicesGroup.removeAllViews();
 
-        // Validate context before creating RadioButton instances
-        Context context = getContext();
-        if (context == null) {
-            //Log.e("f_pre_test", "Context is null, cannot create RadioButtons");
-            return;  // Exit early if context is null to prevent a crash
-        }
+            // Retrieve the choices, and handle the case where choices might be null
+            List<String> choices = currentQuestion.getChoices();
 
-        for (int i = 0; i < choices.length; i++) {
-            RadioButton choiceButton = new RadioButton(context);
-            choiceButton.setId(i);
-            choiceButton.setPadding(16, 0, 0, 0);
-            choiceButton.setText(choices[i]);
-            choiceButton.setTextColor(getResources().getColor(R.color.white));  // Set text color to white
-            choiceButton.setTextSize(16);  // Set text size to 18sp (you can adjust this size)
+            // Example logging to check choices
+//            Log.e("e_Question", "Creating question with choices: " + choices);
 
-            // Create LayoutParams for margin settings
-            RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
-                    RadioGroup.LayoutParams.WRAP_CONTENT,
-                    RadioGroup.LayoutParams.WRAP_CONTENT
-            );
-            params.setMargins(0, 8, 0, 8);  // Set margins (left, top, right, bottom) in pixels
+            // Check if choices is null or empty
+            if (choices == null || choices.isEmpty()) {
+                // Log an error or show a fallback message
+//                Log.e("loadQuestion", "Choices list is null or empty.");
+                // Optionally, you could set a fallback UI or exit the method early
+                return;  // Exit early if choices are unavailable
+            }
 
-            choiceButton.setLayoutParams(params);  // Apply the margins to the RadioButton
+            // Validate context before creating RadioButton instances
+            Context context = getContext();
+            if (context == null) {
+                // Log.e("f_pre_test", "Context is null, cannot create RadioButtons");
+                return;  // Exit early if context is null to prevent a crash
+            }
 
-            choicesGroup.addView(choiceButton);
+            // Create RadioButton for each choice
+            for (int i = 0; i < choices.size(); i++) {
+                RadioButton choiceButton = new RadioButton(context);
+                choiceButton.setId(i);
+                choiceButton.setPadding(16, 0, 0, 0);
+                choiceButton.setText(choices.get(i));
+                choiceButton.setTextColor(getResources().getColor(R.color.white));  // Set text color to white
+                choiceButton.setTextSize(16);  // Set text size to 18sp (you can adjust this size)
+
+                // Create LayoutParams for margin settings
+                RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
+                        RadioGroup.LayoutParams.WRAP_CONTENT,
+                        RadioGroup.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(0, 8, 0, 8);  // Set margins (left, top, right, bottom) in pixels
+
+                choiceButton.setLayoutParams(params);  // Apply the margins to the RadioButton
+
+                choicesGroup.addView(choiceButton);
+            }
+        } else {
+//            Log.e("loadQuestion", "Invalid question index or questions array is null.");
         }
     }
+
 
 
     public boolean checkAnswer() {
@@ -693,6 +675,22 @@ public class f_0_lesson_pre_test extends Fragment {
                 toastMessage = "Correct answer!";
             }
 
+            // Update feedback and scores based on correctness
+            if (isCorrect) {
+                if (!x_bkt_algorithm.isLessonFinished) {
+                    x_bkt_algorithm.updateTestScore(
+                            isProgressiveMode,
+                            moduleIndex, lessonIndex,
+                            "Pre-Test",
+                            c_Lesson_feedback.preTestCorrectAnswers);
+                }
+                c_Lesson_feedback.preTestCorrectAnswers
+                        = Math.min(
+                        c_Lesson_feedback.preTestCorrectAnswers + 1, preTestQuestions);
+                Log.i("TAG", "CONSUMPTION | Pre-Test Score: " + c_Lesson_feedback.preTestCorrectAnswers);
+
+            }
+
             if (answerAttempt >= attemptChances || isCorrect) {
                 // Construct the tag based on currentQuestionIndex
                 String targetTag = "testAnswer_" + c_Lesson_feedback.preTestAttemptAnswers;
@@ -709,8 +707,11 @@ public class f_0_lesson_pre_test extends Fragment {
                         targetImageView.setImageResource(R.drawable.test_answer_cross);
                     }
                 } else {
-                    Log.e("ImageViewError", "No ImageView found with tag: " + targetTag);
+//                    Log.e("ImageViewError", "No ImageView found with tag: " + targetTag);
                 }
+
+                // Add a value in the database,
+
             }
 
             // Create a GradientDrawable for rounded corners
