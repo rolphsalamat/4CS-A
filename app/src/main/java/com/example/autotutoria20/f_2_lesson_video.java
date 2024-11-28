@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ public class f_2_lesson_video extends Fragment {
     private static final String SHARED_PREFS = "VideoPrefs";
     private static final String PREF_VIDEO_URL = "pref_video_url";
 
+    private Button skipVideoButton;
     private View youtubeButton;
     private View googleDriveButton;
     private WebView webView;
@@ -42,6 +44,7 @@ public class f_2_lesson_video extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView called");
         return inflater.inflate(R.layout.f_2_lesson_video, container, false);
+//        return inflater.inflate(R.layout.f_2_lesson_video_landscape, container, false);
     }
 
     @Override
@@ -50,6 +53,15 @@ public class f_2_lesson_video extends Fragment {
         Log.d(TAG, "onViewCreated called");
 
         webView = view.findViewById(R.id.webView);
+
+        // Initialize and handle the new button
+        skipVideoButton = view.findViewById(R.id.skip_video_tutorial);
+        skipVideoButton.setOnClickListener(v -> {
+            Log.i(TAG, "Skip Video Button clicked!");
+            d_Lesson_container.nextButton.performClick();
+        });
+
+//        webView = view.findViewById(R.id.webView_landscape);
         Log.d(TAG, "WebView initialized: " + (webView != null));
 
         WebSettings webSettings = webView.getSettings();

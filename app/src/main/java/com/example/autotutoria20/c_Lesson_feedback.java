@@ -93,10 +93,25 @@ public class c_Lesson_feedback {
         TextView passingScore = view.findViewById(R.id.passing_grade);
         Button okayButton = view.findViewById(R.id.okay_button);
 
+//        c_Lesson_feedback.showModuleFailed(
+//                requireContext(),
+//                t_UserProgressFromDatabase.failedLesson,
+//                t_UserProgressFromDatabase.failedModule,
+//                t_UserProgressFromDatabase.failedBKTScore
+
+        Log.i("Flask", "Flash | module: " + module);
+        Log.i("Flask", "Flash | lesson: " + lessonNumber);
+
+        String moduleLesson =
+                // Module
+                module + " " +
+                // Lesson
+                "Lesson " + (int) lessonNumber;
+
         // Set text or any other properties for the views with 2 decimal places
         message.setText(
-                "You did not pass\n"
-                + module + " Lesson " + (int) (lessonNumber*10)
+                "You did not pass" + "\n"
+                + moduleLesson
                 );
 
         /*=============

@@ -106,10 +106,11 @@ public class f_1_lesson_text extends Fragment {
     public void onResume() {
         super.onResume();
 
-        loadTextContentForKey2(key, "Page " + pageNumber);
+        String page = "Page " + pageNumber;
+        loadTextContentForKey2(key, page);
 
-        // Log.i("setPageContent", "setPageContent | onResume()");
-        setPageContent(pageNumber);
+        // no need na dito, kasi may setPageContent na sa loob ng loadTextContentForKey2
+//        setPageContent();
 
     }
 
@@ -294,7 +295,7 @@ public class f_1_lesson_text extends Fragment {
     private void handleNextButtonClick() {
 
         // Log.i("setPageContent", "setPageContent | handleNextButtonClick()");
-        setPageContent(pageNumber);
+        setPageContent();
 
         showTextView(currentStep);
         showNextStep();
@@ -463,69 +464,128 @@ public class f_1_lesson_text extends Fragment {
         String module = "Module " + key.charAt(10);
         String lesson = "Lesson " + key.charAt(1);
 
-        // Log.i(TAG, "loadTextContentForKey2(" + key + ");");
+        Log.i(TAG, "PASTEURIZED | Module: " + module);
+        Log.i(TAG, "PASTEURIZED | Lesson: " + lesson);
+
+        clearAllContentTextViews();
+
+        Log.i(TAG, "PASTEURIZED | after clearAllContent();");
 
         // Reference to Firestore document
-        DocumentReference userRef = db.collection("text lesson").document(module);
+        DocumentReference userRef = db
+                .collection("text lesson")
+                .document(module);
+
+        /*
+        Collection -> text lesson /
+        Document -> Module n /
+         */
+
+
+        Log.i(TAG, "PASTEURIZED | before addOnCompleteListener();");
 
         userRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
+
+                Log.i(TAG, "PASTEURIZED | task.isSuccessful();");
                 Map<String, Object> lessonMap = (Map<String, Object>) task.getResult().get(lesson);
+
+                /*
+                Collection -> text lesson /
+                Document -> Module n /
+                Field -> Lesson n /
+                 */
 
                 if (lessonMap != null) {
 
+                    Log.i(TAG, "PASTEURIZED | lessonMap != null");
                     clearAllContentTextViews();
 
+                    // Iterate : Lesson n
                     for (Map.Entry<String, Object> lessonEntry : lessonMap.entrySet()) {
-                        String pageKey2 = lessonEntry.getKey();
-                        Map<String, Object> pageMap = (Map<String, Object>) lessonEntry.getValue();
 
-                        if (pageMap != null || pageMap.containsKey(page)) {
+                        Log.i(TAG, "PASTEURIZED | inside for each loop");
+
+                        String pageKey2 = lessonEntry.getKey(); // Key for the current lesson/page
+                        Map<String, Object> pageMap;
+
+                        // Safely cast the value to Map<String, Object>
+                        try {
+                            pageMap = (Map<String, Object>) lessonEntry.getValue();
+                            Log.e(TAG, "Valid data structure for page: " + pageKey2);
+                        } catch (ClassCastException e) {
+                            Log.e(TAG, "Invalid data structure for page: " + pageKey2, e);
+                            continue; // Skip invalid entries
+                        }
+
+                        Log.i(TAG, "PASTEURIZED | pageMap: " + pageMap);
+                        Log.i(TAG, "PASTEURIZED | Page: " + page);
+
+                        if (pageMap != null
+//                                && pageMap.containsKey(pageKey2)
+                        ) {
+
+                            Log.i(TAG, "PASTEURIZED | inside pageMap != null!");
                             Map<String, Object> contentWithBulletsMap = new HashMap<>(); // To store content and bullets together
 
-                            // Process content and bullets
+                            // Iterate through the page's data
                             for (Map.Entry<String, Object> entry : pageMap.entrySet()) {
                                 String keyName = entry.getKey();
+                                Object value = entry.getValue();
 
-                                if (keyName.startsWith("Title")) {
-                                    String title = (String) entry.getValue();
+                                Log.i(TAG, "Processing Page Data: Key = " + keyName + ", Value = " + value);
+
+                                // Extract title
+                                if (keyName.contains("Title") && value instanceof String) {
+                                    String title = (String) value;
+                                    Log.i(TAG, "Extracted Title: " + title);
                                     contentWithBulletsMap.put(keyName, title);
                                 }
 
-                                if (keyName.startsWith("Content ")) {
-                                    // Extract content
-                                    String content = (String) entry.getValue();
+                                // Extract content
+                                if (keyName.contains("Content ") && value instanceof String) {
+                                    String content = (String) value;
+                                    Log.i(TAG, "Extracted Content: " + content);
                                     contentWithBulletsMap.put(keyName, content);
                                 }
 
-                                if (keyName.equals("Bullet")) {
-                                    // Extract bullets
-                                    Object bulletData = entry.getValue();
-                                    if (bulletData instanceof List<?>) {
-                                        List<?> rawBulletList = (List<?>) bulletData;
+                                // Extract bullets
+                                if (keyName.contains("Bullet") && value instanceof List<?>) {
+                                    List<?> rawBulletList = (List<?>) value;
 
-                                        // Convert to List<Integer> for consistent handling
-                                        List<Integer> bulletList = new ArrayList<>();
-                                        for (Object item : rawBulletList) {
+                                    // Safely convert raw bullet list to List<Integer>
+                                    List<Integer> bulletList = new ArrayList<>();
+                                    for (Object item : rawBulletList) {
+                                        try {
+                                            int bulletValue;
                                             if (item instanceof Number) {
-                                                bulletList.add(((Number) item).intValue());
+                                                bulletValue = ((Number) item).intValue();
+                                            } else if (item instanceof String) {
+                                                bulletValue = Integer.parseInt((String) item);
+                                            } else {
+                                                Log.w(TAG, "Skipping non-numeric bullet item: " + item);
+                                                continue; // Skip invalid entries
                                             }
+                                            bulletList.add(bulletValue);
+                                        } catch (Exception e) {
+                                            Log.e(TAG, "Error processing bullet item: " + item, e);
                                         }
-                                        contentWithBulletsMap.put("Bullet", bulletList);
-                                        // Log.i(TAG, "contentWithBulletsMap: " + contentWithBulletsMap);
                                     }
+
+                                    Log.i(TAG, "Processed Bullet List: " + bulletList);
+                                    contentWithBulletsMap.put("Bullet", bulletList); // Add processed bullets to the map
                                 }
                             }
 
-                            // Log combined content and bullets
-                            // Log.i(TAG, "Page: " + pageKey2 + " | Content with Bullets: " + contentWithBulletsMap);
+                            // Update the pageMap with the processed content
+                            pageMap.put(pageKey2, contentWithBulletsMap);
 
+                            // Update the outer structure (optional, based on requirements)
                             pages.put(pageKey2, contentWithBulletsMap);
-                            // Log.i(TAG, "Pages: " + pages);
-
                         }
                     }
-                    setPageContent(pageNumber);
+
+                    setPageContent();
                 } else {
                     // Log.d(TAG, "No data found for Lesson " + lesson);
                 }
@@ -741,7 +801,7 @@ public class f_1_lesson_text extends Fragment {
         contentTextView_10.setText("");
     }
 
-    public void setPageContent(int pageNumber) {
+    public void setPageContent() {
         String TAG = "setPageContent(" + pageNumber + ");";
         // Log.i(TAG, "setPageContent(" + pageNumber + "); | setPageContent();");
 
@@ -786,7 +846,8 @@ public class f_1_lesson_text extends Fragment {
             }
             else {
                 titleTextView.setVisibility(View.GONE);
-                contentTextView_01.setPadding(0, 40, 0, 0);
+                contentTextView_01.setPadding(0, 70, 0, 0);
+                contentImageView_01.setPadding(0,70, 0, 0);
             }
 
             // Get bullets list

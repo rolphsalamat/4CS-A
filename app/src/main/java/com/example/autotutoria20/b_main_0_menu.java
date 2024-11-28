@@ -117,7 +117,7 @@ public class b_main_0_menu extends AppCompatActivity {
         // Log.("hello", "word");
         setContentView(R.layout.b_main_0_menu);
 
-        showLoadingDialog();
+//        showLoadingDialog();
 
         if (!n_Network.isNetworkAvailable(this))
             Toast.makeText(b_main_0_menu.this, "No Internet", Toast.LENGTH_SHORT).show();

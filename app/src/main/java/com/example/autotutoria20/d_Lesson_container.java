@@ -2,8 +2,10 @@ package com.example.autotutoria20;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
@@ -77,6 +80,7 @@ public class d_Lesson_container extends AppCompatActivity implements
 
     public static Boolean isCompleted;
 //    private Boolean isLessonPassed;
+    private Button skipVideoButton;
     public static Button nextButton;
     private Button backButton;
     static TextView txtSecondsRemaining;
@@ -343,35 +347,63 @@ public class d_Lesson_container extends AppCompatActivity implements
 
                 if (currentFragment instanceof f_2_lesson_video) {
 
-                    // Log.i(TAG, "I am in video");
+                    params.bottomMargin = 225;  // Adjust this value as needed
+                    viewPager.setLayoutParams(params);
+
+//                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE);
 //                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//
+//                  // Update the ViewPager layout parameters
+//                    WebView viewPager = findViewById(R.id.webView_landscape); // Reinitialize after setContentView
+//                    ViewGroup.LayoutParams params2 = viewPager.getLayoutParams();
+//                    params2.width = ViewGroup.LayoutParams.MATCH_PARENT;
+//                    params2.height = ViewGroup.LayoutParams.MATCH_PARENT;
+//                    viewPager.setPageMargin(16);
+//                    viewPager.setLayoutParams(params2);
+//
+//                    skipVideoButton.setOnClickListener(v -> {
+//                        Log.i(TAG, "skipVideoButton clicked!");
+//                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//                        onNextButtonClicked();
+//                    });
+//
+//                    onNextButtonClicked();
+
+
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Show and enable the button after 2500ms
+                            nextButton.setVisibility(View.VISIBLE);
+                            nextButton.setEnabled(true);
+                        }
+                    }, 2500); // Delay in milliseconds
+
+                    nextButton.setVisibility(View.GONE);
+                    nextButton.setEnabled(false);
 
                     backButton.setVisibility(View.VISIBLE);
                     backButton.setEnabled(true);
 
-                    videoLesson = (f_2_lesson_video) currentFragment;
-
-                    params.bottomMargin = 215;  // Adjust this value as needed
-                    viewPager.setLayoutParams(params);
-
-                    int delayInSeconds = 5;
-
-                    if (currentStep == numberOfSteps - 2) {
-                        showNextButtonRunnable = new Runnable() {
-                            @Override
-                            public void run() {
-                            // Log.(TAG, "instanceOf videoLesson & currentStep == numberOfSteps-2 | show nextButton!");
-                                nextButton.setVisibility(View.VISIBLE);
-                                nextButton.setEnabled(true);
-                            }
-                        };
-                        handler.postDelayed(showNextButtonRunnable, delayInSeconds * 1000);
-                    }
-
                 }
+
                 if (currentFragment instanceof f_3_lesson_post_test) {
 
-                // Log.(TAG, "Post-Test");
+                    nextButton.setVisibility(View.GONE);
+                    nextButton.setEnabled(false);
+
+//                    // Later, when you need to revert back
+//                    if (originalOrientation == Configuration.ORIENTATION_PORTRAIT) {
+//                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//                    } else if (originalOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//                    } else {
+//                        // Default to portrait if the orientation isn't clear
+//                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//                    }
+
+                    Log.i(TAG, "Post-Test");
+//                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
                     // Cancel any pending tasks
                     handler.removeCallbacks(showNextButtonRunnable);
@@ -409,6 +441,25 @@ public class d_Lesson_container extends AppCompatActivity implements
         nextButton = findViewById(R.id.nextButton);
         backButton = findViewById(R.id.backButtonLayout);
 
+//        // Initialize and handle the new button
+//        skipVideoButton = findViewById(R.id.skip_video_tutorial);
+//        skipVideoButton.setOnClickListener(v -> {
+//            Log.i(TAG, "Skip Video Button clicked!");
+//
+//            // Set currentStep to the index of the POST_TEST fragment in stepSequence
+//            for (int i = 0; i < stepSequence.length; i++) {
+//                if (stepSequence[i] == StepType.POST_TEST) {
+//                    currentStep = i; // Set the step to POST_TEST
+//                    break;
+//                }
+//            }
+//
+//            populateGridLayout();
+//
+//            // Update the ViewPager to navigate to POST_TEST
+//            viewPager.setCurrentItem(currentStep);
+//        });
+
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -435,6 +486,19 @@ public class d_Lesson_container extends AppCompatActivity implements
                 showExitConfirmationDialog();
             }
         });
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // Handle landscape-specific adjustments
+            Log.d("Orientation", "Switched to landscape");
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // Handle portrait-specific adjustments
+            Log.d("Orientation", "Switched to portrait");
+        }
     }
 
 //    public static void showDialog(String title, String message) {
@@ -466,14 +530,45 @@ public class d_Lesson_container extends AppCompatActivity implements
     // Method to retrieve the steps as StepType[] array
     public StepType[] getStepsAsStepTypeArray(String module, String lesson) {
 
-        if (t_LessonSequenceFromDatabase.lessonStepsMap.containsKey(module)) {
-            Map<String, String> lessonsMap = t_LessonSequenceFromDatabase.lessonStepsMap.get(module);
+        Log.i(TAG, "Coco Martin | Original Module: " + module);
+        Log.i(TAG, "Coco Martin | Original Lesson: " + lesson);
 
-            if (lessonsMap != null && lessonsMap.containsKey(lesson)) {
+        Log.i(TAG, "Coco Martin | Original Module.chartAt(7): " + module.charAt(7)); // Lesson N
+        Log.i(TAG, "Coco Martin | Original Lesson.chartAt(7): " + lesson.charAt(7)); // Module N
+
+        String newModule = "Module " + lesson.charAt(7);
+        String newLesson = "Lesson " + module.charAt(7);
+
+        Log.i(TAG, "Coco Martin | newModule: " + newModule);
+        Log.i(TAG, "Coco Martin | newLesson: " + newLesson);
+
+        Log.i(TAG, "Checking for newModule in lessonStepsMap: " + newModule);
+        Log.i(TAG, "Checking for newLesson in module map: " + newLesson);
+
+
+        Log.d(TAG, "Coco Martin | lessonStepsMap: " + t_LessonSequenceFromDatabase.lessonStepsMap);
+
+        Log.i(TAG, "Coco Martin | lessonStepsMap.containsKey(" + newModule + ");");
+        if (t_LessonSequenceFromDatabase.lessonStepsMap.containsKey(newModule)) {
+            Map<String, String> lessonsMap = t_LessonSequenceFromDatabase.lessonStepsMap.get(newModule);
+
+            if (lessonsMap == null) {
+                Log.e(TAG, "lessonsMap is null for key: " + newLesson);
+                return null; // Early exit to prevent further null pointer issues.
+            }
+
+            if (lessonsMap != null && lessonsMap.containsKey(newLesson)) {
                 // Retrieve the steps as a string
-                String stepsAsString = lessonsMap.get(lesson);
+                String stepsAsString = lessonsMap.get(newLesson);
 
                 if (stepsAsString != null) {
+
+                    Log.i(TAG, "Coco Martin | Module : " + module);
+                    Log.i(TAG, "Coco Martin | Lesson : " + lesson);
+                    Log.i(TAG, "Coco Martin | newModule: " + newModule);
+                    Log.i(TAG, "Coco Martin | newLesson: " + newLesson);
+                    Log.i(TAG, "Coco Martin | stepsAsString: " + stepsAsString);
+
                     // Split the string into individual steps
                     String[] steps = stepsAsString.split(", ");
 
@@ -639,9 +734,16 @@ public class d_Lesson_container extends AppCompatActivity implements
 
             View stepView = new View(this);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.width = 0;
-            params.height = (int) (10 * getResources().getDisplayMetrics().density);
-            params.columnSpec = GridLayout.spec(i * 2, 1, 1f);
+
+            params.width = (int) (8 * getResources().getDisplayMetrics().density); // Proportional width
+            params.height = (int) (8 * getResources().getDisplayMetrics().density); // Height consistent with width
+            params.columnSpec = GridLayout.spec(i * 2); // Simplify weight handling
+
+
+            // Original Code
+//            params.width = 0;
+//            params.height = (int) (10 * getResources().getDisplayMetrics().density);
+//            params.columnSpec = GridLayout.spec(i * 2, 1, 3f);
             stepView.setLayoutParams(params);
 
             // Determine the background based on the step's position relative to the selected step
@@ -665,15 +767,13 @@ public class d_Lesson_container extends AppCompatActivity implements
 
             View stepView = new View(this);
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.width = 1;
+
+            // Original Code : mukang piyaot
+//            params.width = 1;
+            params.width = (int) (8 * getResources().getDisplayMetrics().density);
             params.height = (int) (8 * getResources().getDisplayMetrics().density);
 
-//            if (i % 2 == 0) {
-                params.columnSpec = GridLayout.spec(i * 2, 1, 3f);
-//            } else {
-//                // For odd indices, use weight for distribution
-//                params.columnSpec = GridLayout.spec(i * 2, 0.5f);
-//            }
+            params.columnSpec = GridLayout.spec(i * 2, 1, 3f);
 
 
             stepView.setLayoutParams(params);
@@ -1113,6 +1213,7 @@ public class d_Lesson_container extends AppCompatActivity implements
         String category = b_main_0_menu_categorize_user.category;
         double bktScore = x_bkt_algorithm.getKnowledge();
 
+        Log.i(TAG, "HDMI | let's change category...");
         t_SystemInterventionCategory.changeCategory(category, bktScore);
 
         lessonPassed = isPassed;
@@ -1162,9 +1263,17 @@ public class d_Lesson_container extends AppCompatActivity implements
         Button okButton = customDialogView.findViewById(R.id.okay_passed_button);
         okButton.setOnClickListener(v -> {
 
+            // Add token to pag true
             f_3_lesson_post_test_generateHint.takeToken(true, 10);
 
             finish(); // Optionally finish the activity
+
+            // if last lesson of the module, go back to main menu
+            // but how do I detect it?
+
+//            Intent intent = new Intent(d_Lesson_container.this, b_main_1_lesson_progressive.class);
+//            startActivity(intent);
+
         });
 
         // Create and show the dialog

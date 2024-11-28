@@ -64,6 +64,7 @@ public class t_LessonSequenceFromDatabase {
 
                                 // Add the module and its lessons to the main map
                                 lessonStepsMap.put(module, lessonsMap);
+                                Log.i(TAG, "lessonStepsMap.put(" + module + ", " + lessonsMap + ");");
                                 lessonStepsCount.put(module, stepCountMap);
                                 Log.i(TAG, "lessonStepsCount.put(" + module + ", " + stepCountMap + ");");
                                 Log.i(TAG, "Current lessonStepsCount: " + lessonStepsCount);
@@ -77,47 +78,47 @@ public class t_LessonSequenceFromDatabase {
 
 
 
-    static void getLessonSequenceFromDatabase() {
-        try {
-            // Synchronously get the Firestore collection
-            Task<QuerySnapshot> task = db.collection("Lessons Sequence").get();
-            QuerySnapshot querySnapshot = Tasks.await(task); // Waits for the task to complete
-
-            List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-
-            for (DocumentSnapshot document : documents) {
-                String module = document.getId(); // Module name (e.g., "Module 1")
-                // Log.i(TAG, "Module: " + module);
-
-                Map<String, Object> lessons = document.getData(); // All lessons in the module
-                if (lessons != null) {
-                    Map<String, String> lessonsMap = new HashMap<>();
-
-                    // Iterate through each lesson in the module
-                    for (Map.Entry<String, Object> lessonEntry : lessons.entrySet()) {
-                        String lesson = lessonEntry.getKey(); // Lesson name (e.g., "Lesson 1")
-
-                        @SuppressWarnings("unchecked")
-                        List<String> steps = (List<String>) lessonEntry.getValue(); // Array of steps
-                        if (steps != null) {
-                            // Join steps into a single string (or store as needed)
-                            String stepsAsString = String.join(", ", steps);
-                            lessonsMap.put(lesson, stepsAsString);
-
-                            // Log.i("loadLessonSteps", "Lesson: " + lesson + ", Steps: " + stepsAsString);
-                        }
-                    }
-                    // Add the module and its lessons to the main map
-                    lessonStepsMap.put(module, lessonsMap);
-                    // Log.i("loadLessonSteps", "after .put() | Module: " + module + ", Lessons: " + lessonsMap);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Log.e(TAG, "Error fetching data: ", e);
-        }
-        // Log.i(TAG, "LAST PART | lessonStepsMap: " + lessonStepsMap);
-    }
+//    static void getLessonSequenceFromDatabase() {
+//        try {
+//            // Synchronously get the Firestore collection
+//            Task<QuerySnapshot> task = db.collection("Lessons Sequence").get();
+//            QuerySnapshot querySnapshot = Tasks.await(task); // Waits for the task to complete
+//
+//            List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+//
+//            for (DocumentSnapshot document : documents) {
+//                String module = document.getId(); // Module name (e.g., "Module 1")
+//                // Log.i(TAG, "Module: " + module);
+//
+//                Map<String, Object> lessons = document.getData(); // All lessons in the module
+//                if (lessons != null) {
+//                    Map<String, String> lessonsMap = new HashMap<>();
+//
+//                    // Iterate through each lesson in the module
+//                    for (Map.Entry<String, Object> lessonEntry : lessons.entrySet()) {
+//                        String lesson = lessonEntry.getKey(); // Lesson name (e.g., "Lesson 1")
+//
+//                        @SuppressWarnings("unchecked")
+//                        List<String> steps = (List<String>) lessonEntry.getValue(); // Array of steps
+//                        if (steps != null) {
+//                            // Join steps into a single string (or store as needed)
+//                            String stepsAsString = String.join(", ", steps);
+//                            lessonsMap.put(lesson, stepsAsString);
+//
+//                            // Log.i("loadLessonSteps", "Lesson: " + lesson + ", Steps: " + stepsAsString);
+//                        }
+//                    }
+//                    // Add the module and its lessons to the main map
+//                    lessonStepsMap.put(module, lessonsMap);
+//                    // Log.i("loadLessonSteps", "after .put() | Module: " + module + ", Lessons: " + lessonsMap);
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            // Log.e(TAG, "Error fetching data: ", e);
+//        }
+//        // Log.i(TAG, "LAST PART | lessonStepsMap: " + lessonStepsMap);
+//    }
 
     public static int getNumberOfSteps(String lessonModule) {
 

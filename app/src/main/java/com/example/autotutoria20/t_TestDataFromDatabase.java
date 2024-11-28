@@ -225,7 +225,7 @@ public class t_TestDataFromDatabase {
             Log.i(TAG, "Done! let's show the application...");
 //                                    b_main_1_lesson_progressive.hideLoadingDialog();
             b_main_0_menu.viewPager.setAdapter(b_main_0_menu.pagerAdapter);
-            b_main_0_menu.hideLoadingDialog();
+//            b_main_0_menu.hideLoadingDialog();
         }
     }
 
@@ -335,7 +335,8 @@ public class t_TestDataFromDatabase {
                                      Log.e(TAG, "randomIndices[]: " + Arrays.toString(randomIndices.toArray()));
 
                                     String questionKey = null;
-                                    String choicesKey = null;
+                                    String choicesKey1 = null;
+                                    String choicesKey2 = null;
                                     String answerKey = null;
 
                                     // Step 2: Use the generated random indices to retrieve questions, choices, and answers
@@ -345,14 +346,13 @@ public class t_TestDataFromDatabase {
                                         // Log.e(TAG, "questionKey: " + questionKey);
 
                                         if (!testMode.equals("Post-Test Hard")) {
-                                            choicesKey = "Choice " + randomIndices.get(i-1);
-                                            // Log.e(TAG, "choicesKey: " + choicesKey);
+                                            choicesKey1 = "Choice " + randomIndices.get(i-1);
+                                            choicesKey2 = "Choices " + randomIndices.get(i-1);
+
                                         }
 
                                         answerKey = "Answer " + randomIndices.get(i-1);
                                         // Log.e(TAG, "answerKey: " + answerKey);
-
-
 
 
                                         // Retrieve question data
@@ -361,10 +361,19 @@ public class t_TestDataFromDatabase {
 
                                         // Retrieve choices (skip for "Post-Test Hard")
                                         List<String> choices = null;
-                                        if (!testMode.equals("Post-Test Hard") && choicesMap.containsKey(choicesKey)) {
-                                            choices = (List<String>) choicesMap.get(choicesKey);
+
+//                                        // .contains() method code
+//                                        if ()
+
+                                        // Original Code
+                                        if (!testMode.equals("Post-Test Hard")
+                                                && (choicesMap.containsKey(choicesKey1)
+                                                || choicesMap.containsKey(choicesKey2))) {
+                                            // Retrieve "Choice n"
+                                            choices = (List<String>) choicesMap.get(choicesKey1);
                                             if (choices == null)
-                                                choices = (List<String>) choicesMap.get("Choices " + randomIndices.get(i-1));
+                                                // Retrieve Choices n"
+                                                choices = (List<String>) choicesMap.get(choicesKey2);
 
                                         }
 

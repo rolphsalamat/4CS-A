@@ -54,7 +54,7 @@ public class f_0_lesson_pre_test extends Fragment {
     private int answerAttempt = 0;
     private int attemptChances = 2;
     private int questionsAnswered = 1;
-    static int preTestQuestions = 5;
+    static int preTestQuestions = 1;
     private Button submitButton;
     private TextView correct, mistake;
     private TextView total;
@@ -612,12 +612,12 @@ public class f_0_lesson_pre_test extends Fragment {
             List<String> choices = currentQuestion.getChoices();
 
             // Example logging to check choices
-//            Log.e("e_Question", "Creating question with choices: " + choices);
+            Log.e("e_Question", "Creating question with choices: " + choices);
 
             // Check if choices is null or empty
             if (choices == null || choices.isEmpty()) {
                 // Log an error or show a fallback message
-//                Log.e("loadQuestion", "Choices list is null or empty.");
+                Log.e("loadQuestion", "Choices list is null or empty.");
                 // Optionally, you could set a fallback UI or exit the method early
                 return;  // Exit early if choices are unavailable
             }

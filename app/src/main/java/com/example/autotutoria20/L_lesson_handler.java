@@ -58,6 +58,8 @@ public class L_lesson_handler extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
+        if (stepSequence.length == 0)
+            return 0;
         return stepSequence.length;
     }
 }

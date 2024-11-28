@@ -1,21 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/video_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/milk_cream"
-        android:gravity="center_horizontal"
-        android:layout_margin="10dp"
-        android:text="This video lesson provides additional knowledge and improves your learning experience."
-        android:textAlignment="center"
-        android:textColor="#87CEEB"
-        android:textSize="22dp"
-        android:textStyle="bold" />
 
     <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -27,16 +14,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:layout_margin="40dp"
+            android:layout_margin="30dp"
             android:text="Skip Video Tutorial"
             android:background="@drawable/rounded_corners"
             android:padding="16dp"
             android:fontFamily="@font/mouldy_cheese"
-            android:visibility="gone"
             />
 
         <WebView
-            android:id="@+id/webView"
+            android:id="@+id/webView_landscape"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
@@ -47,7 +33,8 @@
             android:layout_height="50dp"
             android:layout_gravity="top|end"
             android:background="@android:color/transparent"
-            android:clickable="true"/>
+            android:clickable="true"
+            android:visibility="gone"/>
 
         <!-- Transparent view to cover the pop-out button -->
         <View
@@ -57,10 +44,11 @@
             android:layout_gravity="bottom"
             android:backgroundTint="@color/current_step"
             android:background="@android:color/transparent"
-            android:clickable="true"/>
+            android:clickable="true"
+            android:visibility="gone"/>
 
 
     </FrameLayout>
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

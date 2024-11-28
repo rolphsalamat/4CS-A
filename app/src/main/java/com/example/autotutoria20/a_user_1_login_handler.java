@@ -2,8 +2,8 @@ package com.example.autotutoria20;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,13 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.play.core.appupdate.AppUpdateInfo;
-import com.google.android.play.core.appupdate.AppUpdateManager;
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
-import com.google.android.play.core.install.model.AppUpdateType;
-import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,11 +24,22 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class a_user_1_login_handler extends AppCompatActivity {
 
+    static CustomLoadingDialog loadingDialog;
     private static final int MY_REQUEST_CODE = 100;
     private static FirebaseAuth mAuth;
     private static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "a_user_1_login_handler";
     public static boolean tutorialCompleted;
+
+    private static t_UserDataFromDatabase context;
+
+    public a_user_1_login_handler(t_UserDataFromDatabase context) {
+        this.context = context;
+    }
+
+    public a_user_1_login_handler() {
+        this.context = context;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +58,8 @@ public class a_user_1_login_handler extends AppCompatActivity {
 //            startActivity(loginIntent);
 
         } else {
-            Toast.makeText(a_user_1_login_handler.this, "Has Internet", Toast.LENGTH_SHORT).show();
-            Log.i("Login Handler", "Has Internet!");
+//            Toast.makeText(a_user_1_login_handler.this, "Has Internet", Toast.LENGTH_SHORT).show();
+//            Log.i("Login Handler", "Has Internet!");
         }
 
 //        checkForAppUpdate();
@@ -75,6 +80,7 @@ public class a_user_1_login_handler extends AppCompatActivity {
         }
 
         // Check if user is logged in
+        // can be false if cleared data
         SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
         boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
 
@@ -84,7 +90,7 @@ public class a_user_1_login_handler extends AppCompatActivity {
         if (isLoggedIn && mAuth.getCurrentUser() != null) {
             Log.e(TAG, "You are already logged in!");
 
-            checkTutorial();
+            showLoadingDialog();
 
         } else {
 
@@ -98,63 +104,144 @@ public class a_user_1_login_handler extends AppCompatActivity {
         createNotificationChannel();
     }
 
+//    public void startApplication() {
+//        Intent intent = new Intent(a_user_1_login_handler.this, b_main_0_menu.class);
+//        startActivity(intent);
+//        finish(); // Close current activity to prevent stacking
+//    }
+
+
     private void checkTutorial() {
-
-        Log.e(TAG, "Let's do checkTutorial()");
-
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             String userId = user.getUid();
-            Log.e(TAG, "Query na natin! | checkTutorial()");
+//            runOnUiThread(this::showLoadingDialog); // Show loading dialog immediately
 
             db.collection("users")
                     .document(userId)
                     .get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document != null && document.exists()) {
-                                    if (document.contains("Tutorial")) {
-                                        tutorialCompleted = document.getBoolean("Tutorial");
-                                        Log.e(TAG, "Tutorial Completed: " + tutorialCompleted + " | checkTutorial()");
+                    .addOnCompleteListener(task -> {
+//                        runOnUiThread(this::hideLoadingDialog); // Ensure dialog is hidden on completion
 
-                                        if (tutorialCompleted) {
-                                            Intent intent = new Intent(a_user_1_login_handler.this, b_main_0_menu.class);
-                                            startActivity(intent);
-                                        } else {
-                                            Intent intent = new Intent(a_user_1_login_handler.this, b_main_0_menu_tutorial.class);
-                                            startActivity(intent);
-                                        }
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null && document.exists() && document.contains("Tutorial")) {
+                                tutorialCompleted = document.getBoolean("Tutorial");
 
+                                Intent intent = tutorialCompleted
+                                        ? new Intent(a_user_1_login_handler.this, b_main_0_menu.class)
+                                        : new Intent(a_user_1_login_handler.this, b_main_0_menu_tutorial.class);
 
-                                    } else {
-                                        Log.e(TAG, "Tutorial field is missing in the document.");
-                                    }
-                                } else {
-                                    Log.e(TAG, "Document does not exist or user data is missing.");
-                                }
+                                startActivity(intent);
                             } else {
-                                Log.e(TAG, "Task failed: ", task.getException());
+                                Log.e(TAG, "Tutorial data missing.");
                             }
-
-                            Log.e(TAG, "Done Query | checkTutorial()"); // Moved inside onComplete
+                        } else {
+                            Log.e(TAG, "Task failed: ", task.getException());
                         }
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.e(TAG, "I failed", e);
-                        }
+                    .addOnFailureListener(e -> {
+//                        runOnUiThread(this::hideLoadingDialog); // Ensure dialog is hidden on failure
+                        Log.e(TAG, "Error fetching tutorial data", e);
                     });
-
         } else {
-            Log.e(TAG, "Firebase user is null, cannot check tutorial.");
+            Log.e(TAG, "Firebase user is null.");
         }
     }
 
 
+//    private void checkTutorial() {
+//
+//        Log.e(TAG, "Let's do checkTutorial()");
+//
+//        FirebaseUser user = mAuth.getCurrentUser();
+//        if (user != null) {
+//            String userId = user.getUid();
+//            Log.e(TAG, "Query na natin! | checkTutorial()");
+//
+//            showLoadingDialog();
+//
+//            db.collection("users")
+//                    .document(userId)
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                            if (task.isSuccessful()) {
+//                                DocumentSnapshot document = task.getResult();
+//                                if (document != null && document.exists()) {
+//                                    if (document.contains("Tutorial")) {
+//                                        tutorialCompleted = document.getBoolean("Tutorial");
+//                                        Log.e(TAG, "Tutorial Completed: " + tutorialCompleted + " | checkTutorial()");
+//
+//                                        if (tutorialCompleted) {
+//                                            Intent intent = new Intent(a_user_1_login_handler.this, b_main_0_menu.class);
+//                                            startActivity(intent);
+//
+//                                        } else {
+//                                            Intent intent = new Intent(a_user_1_login_handler.this, b_main_0_menu_tutorial.class);
+//                                            startActivity(intent);
+//                                        }
+//
+//
+//                                    } else {
+//                                        Log.e(TAG, "Tutorial field is missing in the document.");
+//                                    }
+//                                } else {
+//                                    Log.e(TAG, "Document does not exist or user data is missing.");
+//                                }
+//                            } else {
+//                                Log.e(TAG, "Task failed: ", task.getException());
+//                            }
+//
+//                            Log.e(TAG, "Done Query | checkTutorial()"); // Moved inside onComplete
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Log.e(TAG, "I failed", e);
+//                        }
+//                    });
+//
+//        } else {
+//            Log.e(TAG, "Firebase user is null, cannot check tutorial.");
+//        }
+//    }
+
+    private void showLoadingDialog() {
+        if (this != null && !this.isFinishing()) {
+            loadingDialog = new CustomLoadingDialog(this);
+            loadingDialog.setCancelable(false);
+            loadingDialog.show();
+
+            // Trigger data retrieval after showing the dialog
+            t_UserDataFromDatabase.getUserDataFromDatabase(this);
+        }
+    }
+
+    static void updateProgress(int progress) {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.setProgress(progress); // Ensure setProgress updates UI elements
+        }
+    }
+
+    public void hideLoadingDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+            if (t_UserDataFromDatabase.isDataRetrieved) {
+                startApplication(); // Navigate to the next screen
+            }
+        }
+    }
+
+
+
+    public void startApplication() {
+        Intent intent = new Intent(this, b_main_0_menu.class);
+        startActivity(intent);
+        finish();
+    }
 
 
     // Move the checkTutorialCompletion method outside the onCreate method
