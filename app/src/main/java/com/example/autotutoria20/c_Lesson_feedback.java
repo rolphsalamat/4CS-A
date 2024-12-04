@@ -3,18 +3,28 @@ package com.example.autotutoria20;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -72,100 +82,141 @@ public class c_Lesson_feedback {
     }
 
     public static void showModuleFailed(Context context, String module, double lessonNumber, double score) {
-
-        // Create a new dialog
         Dialog dialog = new Dialog(context);
 
         // Inflate the custom layout
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.c_lesson_failed_dialog, null);
+        View view = inflater.inflate(R.layout.c_lesson_failed_dialog_2, null);
 
-        // Set the dialog content view to the inflated layout
+        // Set the dialog content
         dialog.setContentView(view);
         dialog.getWindow().setLayout(
-                ViewGroup.LayoutParams.MATCH_PARENT, // Width
-                ViewGroup.LayoutParams.WRAP_CONTENT); // Height
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
 
-
-        // Find views within the inflated layout
+        // Find the views
         TextView message = view.findViewById(R.id.failed_lesson);
         TextView bktScore = view.findViewById(R.id.bkt_score);
         TextView passingScore = view.findViewById(R.id.passing_grade);
         Button okayButton = view.findViewById(R.id.okay_button);
 
-//        c_Lesson_feedback.showModuleFailed(
-//                requireContext(),
-//                t_UserProgressFromDatabase.failedLesson,
-//                t_UserProgressFromDatabase.failedModule,
-//                t_UserProgressFromDatabase.failedBKTScore
+        ProgressBar progressBar = view.findViewById(R.id.progress_bar);
+        ImageView arrow = view.findViewById(R.id.arrow);
+        LinearLayout barLayout = view.findViewById(R.id.bar_layout);
 
-        Log.i("Flask", "Flash | module: " + module);
-        Log.i("Flask", "Flash | lesson: " + lessonNumber);
+        // Set progress bar value
+        int progressValue = (int) (score * 100); // Convert score (0-1) to percentage
+        progressBar.setProgress(progressValue);
+        ImageView thresholdLine = view.findViewById(R.id.threshold_line);
 
-        String moduleLesson =
-                // Module
-                module + " " +
-                // Lesson
-                "Lesson " + (int) lessonNumber;
+        // Wait for barLayout to be laid out to calculate its height
+        barLayout.post(() -> {
+            int barHeight = barLayout.getHeight();
 
-        // Set text or any other properties for the views with 2 decimal places
-        message.setText(
-                "You did not pass" + "\n"
-                + moduleLesson
-                );
+            // Calculate the position for the line (60% of ProgressBar height)
+            float linePosition = barHeight * 0.6f;
 
-        /*=============
-         * You did not pass
-         * Module n Lesson n
-         * ============*/
+            // Set the translationY of the line
+            thresholdLine.setTranslationY(linePosition);
 
-        bktScore.setText(String.format("BKT Score: %.2f%%", (score*100)));
+            // Calculate arrow position as 38% (or other percentage) from the bottom
+            int arrowBottomPosition = (int) (score * barHeight) - (arrow.getHeight()/2) - 60;
+
+            // Set the arrow's bottom margin dynamically
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) arrow.getLayoutParams();
+            params.bottomMargin = arrowBottomPosition;
+            arrow.setLayoutParams(params);
+
+            // Debug log for positioning
+            Log.d("ArrowPosition", "Arrow Bottom Position: " + arrowBottomPosition + "px");
+        });
+
+        // Format and set the texts
+        String moduleLesson = module + " Lesson " + (int) lessonNumber;
+        message.setText("You did not pass\n" + moduleLesson);
+        bktScore.setText(String.format("BKT Score: %.2f%%", score * 100));
         passingScore.setText("Passing Grade: 60.00%");
 
-        // Set up the 'Okay' button click listener
+        // Dismiss dialog on button click
         okayButton.setOnClickListener(v -> dialog.dismiss());
 
         // Show the dialog
         dialog.show();
     }
 
+
+
+
     public static void showDialog(Activity activity, double score, double passingGrade, String lesson) {
-        // Create a new dialog
         Dialog dialog = new Dialog(activity);
 
-        // Inflate the custom layout
+        // Inflate the layout
         LayoutInflater inflater = LayoutInflater.from(activity);
-        View view = inflater.inflate(R.layout.c_lesson_failed_dialog, null);
-
-        // Set the dialog content view to the inflated layout
+        View view = inflater.inflate(R.layout.c_lesson_failed_dialog_2, null);
         dialog.setContentView(view);
         dialog.getWindow().setLayout(
-                ViewGroup.LayoutParams.MATCH_PARENT, // Width
-                ViewGroup.LayoutParams.WRAP_CONTENT); // Height
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        // Find views within the inflated layout
+        // Find views
         TextView message = view.findViewById(R.id.failed_lesson);
         TextView bktScore = view.findViewById(R.id.bkt_score);
         TextView passingScore = view.findViewById(R.id.passing_grade);
         Button okayButton = view.findViewById(R.id.okay_button);
 
-        score *= 100;
-        passingGrade *= 100;
+        ProgressBar progressBar = view.findViewById(R.id.progress_bar);
+        ImageView arrow = view.findViewById(R.id.arrow);
+        LinearLayout barLayout = view.findViewById(R.id.bar_layout);
+        ImageView thresholdLine = view.findViewById(R.id.threshold_line);
 
-        // Set text or any other properties for the views with 2 decimal places
-        message.setText("You did not pass " + lesson);
-        bktScore.setText(String.format("BKT Score: %.2f%%", score));
-        passingScore.setText(String.format("Passing Grade: %.2f%%", passingGrade));
+        // Set progress bar value
+        int progressValue = (int) (score * 100);
+        progressBar.setProgress(progressValue);
 
-        // Set up the 'Okay' button click listener
-        okayButton.setOnClickListener(v -> {
-            dialog.dismiss();
-//            activity.finish(); // This will close/dismiss the activity
+        barLayout.post(() -> {
+            // Get the total height of the bar layout
+            int barHeight = barLayout.getHeight() / 4;
+
+            // Debug log: bar layout height
+            Log.d("ArrowPosition", "Bar Height: " + barHeight + "px");
+
+            // Calculate the arrow's position as a percentage of the bar height
+            int arrowPosition = (int) ((score / 100) * barHeight);
+
+            // Debug log: calculated arrow position
+            Log.d("ArrowPosition", "Calculated Arrow Position: " + arrowPosition + "px");
+
+            Log.i("ArrowPosition", "barHeight: " + barHeight);
+            Log.i("ArrowPosition", "arrowPosition: " + arrowPosition);
+            Log.i("ArrowPosition", "arrow.getHeight(): " + arrow.getHeight());
+
+            // Adjust arrow position: translate from bottom
+            int arrowBottomPosition = barHeight - arrowPosition - (arrow.getHeight() / 2);
+
+            // Ensure the arrow stays within bounds
+            arrowBottomPosition = Math.max(0, Math.min(arrowBottomPosition, barHeight - arrow.getHeight()));
+
+            // Debug log: adjusted arrow position
+            Log.d("ArrowPosition", "Adjusted Arrow Bottom Position: " + arrowBottomPosition + "px");
+
+            // Set the arrow's bottom margin dynamically
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) arrow.getLayoutParams();
+            params.bottomMargin = arrowBottomPosition;
+            arrow.setLayoutParams(params);
         });
 
-        // Show the dialog
+
+        // Set text values
+        message.setText("You did not pass " + lesson);
+        bktScore.setText(String.format("BKT Score: %.2f%%", score * 100));
+        passingScore.setText(String.format("Passing Grade: %.2f%%", passingGrade * 100));
+
+        // Button click listener
+        okayButton.setOnClickListener(v -> dialog.dismiss());
+
         dialog.show();
     }
+
 
     // Retrieve BKTScore from the database
     public void retrieveBKTScore(String mode, String lesson) {

@@ -27,7 +27,8 @@ public class f_2_lesson_video extends Fragment {
     private Button skipVideoButton;
     private View youtubeButton;
     private View googleDriveButton;
-    private WebView webView;
+    static WebView webView;
+    private Button nextButton;
     private String videoUrl;
 
     public static f_2_lesson_video newInstance(String videoUrl) {
@@ -53,6 +54,11 @@ public class f_2_lesson_video extends Fragment {
         Log.d(TAG, "onViewCreated called");
 
         webView = view.findViewById(R.id.webView);
+        nextButton = view.findViewById(R.id.nextButton);
+        nextButton.setOnClickListener(v -> {
+            Log.i(TAG, "Next Button clicked!");
+            d_Lesson_container.nextButton.performClick();
+        });
 
         // Initialize and handle the new button
         skipVideoButton = view.findViewById(R.id.skip_video_tutorial);
@@ -141,6 +147,7 @@ public class f_2_lesson_video extends Fragment {
     @Override
     public void onDestroyView() {
         Log.d(TAG, "onDestroyView called");
+        Log.d(TAG, "webView: " + webView);
         if (webView != null) {
             Log.d(TAG, "WebView exists, stopping video playback and clearing resources");
             webView.loadUrl("about:blank");
@@ -153,7 +160,7 @@ public class f_2_lesson_video extends Fragment {
         super.onDestroyView();
     }
 
-    public void stopVideoPlayback() {
+    public static void stopVideoPlayback() {
         Log.e(TAG, "stopVideoPlayback called");
         if (webView != null) {
             webView.loadUrl("about:blank");

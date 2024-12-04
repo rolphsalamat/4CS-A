@@ -37,6 +37,9 @@ android {
 
 dependencies {
 
+    // Bar Graph for visualization of analysis
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
     // Add Firebase App Check dependency
     implementation ("com.google.firebase:firebase-appcheck:16.0.0")
     implementation ("com.google.firebase:firebase-appcheck-safetynet:16.0.0")

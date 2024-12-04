@@ -109,6 +109,14 @@ public class f_1_lesson_text extends Fragment {
         String page = "Page " + pageNumber;
         loadTextContentForKey2(key, page);
 
+        // Execute additional code after a delay of 600 milliseconds
+        new Handler().postDelayed(() -> {
+
+            // disable if want to show contentTextViews  one by one
+            d_Lesson_container.nextButton.setEnabled(true);
+            d_Lesson_container.nextButton.setVisibility(View.VISIBLE);
+
+        }, 1000);
         // no need na dito, kasi may setPageContent na sa loob ng loadTextContentForKey2
 //        setPageContent();
 
@@ -120,6 +128,7 @@ public class f_1_lesson_text extends Fragment {
 
         // Reset??
         currentStep = 1;
+
 
         // Retrieve the key from the arguments
         if (getArguments() != null) {
@@ -218,6 +227,7 @@ public class f_1_lesson_text extends Fragment {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // Log.i("nextButton", "nextButton clicked!");
                 nextButton.setEnabled(false);
                 tapToContinueButton.setEnabled(false);
@@ -241,15 +251,15 @@ public class f_1_lesson_text extends Fragment {
             @Override
             public void onClick(View v) {
                 // Log.i("tapToContinueButton", "tapToContinueButton clicked!");
-
-                tapToContinueButton.setEnabled(false);
-                tapToContinueButton.setVisibility(View.GONE);
-
-                showNextStep();
-                showTextView(currentStep);
-
-                handleNextButtonClick();
-
+//
+//                tapToContinueButton.setEnabled(false);
+//                tapToContinueButton.setVisibility(View.GONE);
+//
+//                showNextStep();
+//                showTextView(currentStep);
+//
+//                handleNextButtonClick();
+//
             }
         });
 
@@ -300,14 +310,16 @@ public class f_1_lesson_text extends Fragment {
         showTextView(currentStep);
         showNextStep();
 
-        // Execute additional code after a delay of 600 milliseconds
-        new Handler().postDelayed(() -> {
+        d_Lesson_container.nextButton.performClick();
 
-            // disable if want to show contentTextViews  one by one
-            d_Lesson_container.nextButton.setEnabled(true);
-            d_Lesson_container.nextButton.setVisibility(View.VISIBLE);
-
-        }, 1000);
+//        // Execute additional code after a delay of 600 milliseconds
+//        new Handler().postDelayed(() -> {
+//
+//            // disable if want to show contentTextViews  one by one
+//            d_Lesson_container.nextButton.setEnabled(true);
+//            d_Lesson_container.nextButton.setVisibility(View.VISIBLE);
+//
+//        }, 1000);
 
     }
 

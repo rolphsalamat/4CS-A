@@ -163,8 +163,8 @@ public class b_main_1_lesson_progressive extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        loadModules();
+//
+//        loadModules();
 
     }
 
@@ -176,8 +176,10 @@ public class b_main_1_lesson_progressive extends Fragment {
             public void onProgressUpdated(int progress) {
                 String TAG = "onProgressUpdated";
 
-                int moduleProgress = 0;
-                boolean hasFail = t_UserProgressFromDatabase.isFirstFailDetected;
+                int moduleProgress;
+                boolean hasFail = false;
+
+                boolean allModulesComplete = true; // Flag to check if all modules are 100% and no failures
 
                 for (int i = 0; i < t_UserProgressFromDatabase.moduleCount; i++) {
                     String moduleName = "Module " + (i + 1);
@@ -186,42 +188,90 @@ public class b_main_1_lesson_progressive extends Fragment {
 
                     Log.i(TAG, "BANANA | moduleProgress[" + moduleProgress + "] >= 100 && !hasFail[" + (!hasFail) + "]");
 
-                    if (moduleProgress >= 100
-//                            && !hasFail
-                    ) {
+                    if (hasFail && moduleName.equalsIgnoreCase(t_UserProgressFromDatabase.failedLesson)) {
+                        Log.i(TAG, "BANANA | Module " + (i + 1) + " is failed.");
+                    }
 
-                        Log.i(TAG, "BALONG | failedBKTScore: " + t_UserProgressFromDatabase.failedBKTScore);
-
-                        // if bktScore > 60
-                        if (t_UserProgressFromDatabase.failedBKTScore < 60) {
-                            // Mark the module as completed
+                    if (moduleProgress >= 100) {
+                        if (!moduleName.equalsIgnoreCase(t_UserProgressFromDatabase.failedLesson) && !hasFail) {
+                            // Mark as completed and unlock next module
                             Log.i(TAG, "BANANA | Module: " + (i + 1) + " is completed!");
                             cardCompletionStatus[i] = true;
-                            hideLockedOverlay(i+1);
-                        }
+                            hideLockedOverlay(i + 1);
+                        } else {
+                            // Progress is 100 but there's a failure or low BKT score
+                            Log.i(TAG, "BANANA | Module: " + (i + 1) + " progress = 100 but not complete due to failure or low BKT score.");
+                            cardCompletionStatus[i] = false;
 
+                            if (i + 1 < t_UserProgressFromDatabase.moduleCount) {
+                                cardCompletionStatus[i + 1] = false;
+                            }
+                            hasFail = true;
+                            allModulesComplete = false; // A failure disqualifies "all complete" status
+                        }
                     } else if (moduleProgress == 0) {
-                        // Module not yet started, keep locked but don't fail it
+                        // Module not yet started
                         Log.i(TAG, "BANANA | Module: " + (i + 1) + " is not yet started (progress = 0).");
                         cardCompletionStatus[i] = false;
 
                         if (i + 1 < t_UserProgressFromDatabase.moduleCount) {
                             cardCompletionStatus[i + 1] = false;
                         }
+
+                        allModulesComplete = false; // Not started means it's not complete
                     } else {
-                        // Module in progress but not completed, or failed
+                        // Module in progress but not completed
                         Log.i(TAG, "BANANA | Module: " + (i + 1) + " is incomplete or failed.");
                         cardCompletionStatus[i] = false;
 
                         if (i + 1 < t_UserProgressFromDatabase.moduleCount) {
                             cardCompletionStatus[i + 1] = false;
                         }
+
+                        allModulesComplete = false; // Incomplete progress disqualifies "all complete" status
                     }
                 }
+
+                if (t_UserProgressFromDatabase.hasWeakPoint)
+                    t_UserProgressFromDatabase.displayFeedback(requireContext(), t_UserProgressFromDatabase.nestedFeedback);
+
+                // Notify user of weak points
+                if (t_UserProgressFromDatabase.isFirstFailDetected) {
+                    String failedLesson = t_UserProgressFromDatabase.failedLesson;
+                    int failedModule = t_UserProgressFromDatabase.failedModule;
+                    double failedBKTScore = t_UserProgressFromDatabase.failedBKTScore;
+
+                    Log.i(TAG, "Weak Point Detected: Lesson: " + failedLesson + ", Module: " + failedModule + ", Score: " + failedBKTScore);
+
+                    showToast("You have weak points in " + failedLesson + ", particularly in Module " + failedModule +
+                            ". Your BKT Score is " + failedBKTScore + ". Consider reviewing this module.");
+                }
+
+                // Final check
+                if (allModulesComplete && !hasFail) {
+
+                    // you have completed context-free grammar..
+                    // however, you have weak points on modules n, particularly in lesson n..
+
+                    double overallAverageBKTScore = calculateOverallAverageBKTScore(); // Call your method
+                    String newCategory = getUserCategory(overallAverageBKTScore);
+                    Log.e("TAG", "WALTER | New Category: " + newCategory);
+                    Log.i(TAG, "BANANA | All modules are 100% complete with no failures!");
+//                    showToast("show change category dialog");
+//                    showChangeCategoryDialog(newCategory);
+                    t_SystemInterventionCategory.showChangeCategoryDialog(b_main_0_menu_categorize_user.category, newCategory, requireContext());
+                } else {
+                    Log.i(TAG, "BANANA | Not all modules are complete or there's a failure.");
+                }
+
+
 
                 // Handle failure case
                 if (hasFail && t_UserProgressFromDatabase.failedBKTScore > 0 && t_UserProgressFromDatabase.failedBKTScore < 60) {
                     Log.i(TAG, "BANANA | Failure detected. Showing failure dialog.");
+                    Log.i(TAG, "APT | failedLesson: " + t_UserProgressFromDatabase.failedLesson);
+                    Log.i(TAG, "APT | failedModule: " + t_UserProgressFromDatabase.failedModule);
+                    Log.i(TAG, "APT | failedBKTScore: " + t_UserProgressFromDatabase.failedBKTScore);
                     c_Lesson_feedback.showModuleFailed(
                             requireContext(),
                             t_UserProgressFromDatabase.failedLesson,
@@ -234,12 +284,14 @@ public class b_main_1_lesson_progressive extends Fragment {
             }
 
 
+
             @Override
             public void onDataFetched(String category, boolean allModulesComplete) {
                 hideLoadingDialog();
 
                 if (allModulesComplete) {
-                    showChangeCategoryDialog(category);
+                    Log.d("Progress", "All modules are complete.");
+//                    showChangeCategoryDialog(category);
                 } else {
                     Log.d("Progress", "Not all modules are complete.");
                 }
@@ -252,6 +304,23 @@ public class b_main_1_lesson_progressive extends Fragment {
             }
         });
     }
+
+    private double calculateOverallAverageBKTScore() {
+        double totalBKTScore = 0.0;
+
+        if (t_UserProgressFromDatabase.moduleCount > 0) {
+            for (int i = 0; i < t_UserProgressFromDatabase.moduleCount; i++) {
+                String moduleName = "Module " + (i + 1);
+                totalBKTScore += (Double) t_UserProgressFromDatabase.moduleScore.get(moduleName);
+                Log.i("calculateOverallAverageBKTScore", moduleName + ": " + t_UserProgressFromDatabase.moduleScore.get(moduleName));
+            }
+
+            return totalBKTScore / t_UserProgressFromDatabase.moduleCount;
+        }
+
+        return 0.0; // Return 0 if no modules are available
+    }
+
 
     // Original Code
 //    private void fetchAllProgressData() {
@@ -1281,7 +1350,7 @@ public class b_main_1_lesson_progressive extends Fragment {
     }
 
     private void showToast(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }
 
     private boolean isPreviousCardCompleted(int cardId) {

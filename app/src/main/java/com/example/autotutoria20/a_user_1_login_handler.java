@@ -262,6 +262,14 @@ public class a_user_1_login_handler extends AppCompatActivity {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             Boolean isComplete = document.getBoolean("Tutorial");
+
+                            int tokenCount = Math.toIntExact(document.getLong("Token"));
+
+                            Log.i(TAG, "NEVER STOP | Token Count: " + tokenCount);
+
+                            // isama kona dito yung sa token hehe
+                            b_main_0_menu.tokenCount.setText("" + tokenCount);
+
                             callback.onTutorialChecked(isComplete != null ? isComplete : false);
                         } else {
                             Log.e(TAG, "No user data found");

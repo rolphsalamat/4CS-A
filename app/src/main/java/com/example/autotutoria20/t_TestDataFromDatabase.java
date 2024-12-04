@@ -21,10 +21,10 @@ public class t_TestDataFromDatabase {
     static Map<String, Object> moduleData = new HashMap<>();
 
     public static void logMapData(Map<String, Object> dataMap) {
-        // Log.e("logMapData", "ETO NA ILO-LOG KO NA!");
+        // // Log.e("logMapData", "ETO NA ILO-LOG KO NA!");
 
         if (dataMap == null || dataMap.isEmpty()) {
-            // Log.i("logMapData", "The map is empty or null.");
+            // // Log.i("logMapData", "The map is empty or null.");
             return;
         }
 
@@ -36,7 +36,7 @@ public class t_TestDataFromDatabase {
         }
 
         // Log all entries at once
-        // Log.i("logMapData", logBuilder.toString());
+        // // Log.i("logMapData", logBuilder.toString());
     }
 
     static void getTestQuestionsFromDatabase(String testMode) {
@@ -57,7 +57,7 @@ public class t_TestDataFromDatabase {
                             String module = moduleSnapshot.getId(); // e.g., "Module 1"
 
                             if (module.contains("Module ")) {
-                                // Log.d(TAG, "Module data found for: " + module);
+                                 Log.d(TAG, "Module data found for: " + module);
 
                                 // Create a map to store lessons for the module
                                 Map<String, Object> moduleLessonData = new HashMap<>();
@@ -65,19 +65,8 @@ public class t_TestDataFromDatabase {
                                 // Loop through the lessons inside the module
                                 for (String lesson : moduleSnapshot.getData().keySet()) {
                                     if (lesson.contains("Lesson ")) {
-                                        // Log.d("getTestQuestionsFromDatabase", "Lesson data found for: " + lesson);
+                                         Log.d("getTestQuestionsFromDatabase", "MindSync | Lesson data found for: " + lesson);
                                         Map<String, Object> lessonData = (Map<String, Object>) moduleSnapshot.get(lesson);
-
-//                                        // Instead of looping through moduleSnapshot.getData().keySet(), check lessonData directly
-//                                        if (lessonData.containsKey("Pre-Test")) {
-//                                            testMode = "Pre-Test";
-//                                        } else if (lessonData.containsKey("Post-Test Easy")) {
-//                                            testMode = "Post-Test Easy";
-//                                        } else if (lessonData.containsKey("Post-Test Medium")) {
-//                                            testMode = "Post-Test Medium";
-//                                        } else if (lessonData.containsKey("Post-Test Hard")) {
-//                                            testMode = "Post-Test Hard";
-//                                        }
 
                                         // Proceed only if a valid test mode was found
                                         if (testMode != null) {
@@ -96,6 +85,10 @@ public class t_TestDataFromDatabase {
                                                         testMode.equals("Post-Test Easy") ||
                                                         testMode.equals("Post-Test Medium")) {
                                                     questionsObj = (Map<String, Object>) testDataMap.get("Questions");
+
+                                                    if (questionsObj == null)
+                                                        questionsObj = (Map<String, Object>) testDataMap.get("Qusetions");
+
                                                     choicesObj = (Map<String, Object>) testDataMap.get("Choices");
                                                     answersObj = (Map<String, Object>) testDataMap.get("Answers");
                                                 }
@@ -104,6 +97,11 @@ public class t_TestDataFromDatabase {
                                                     questionsObj = (Map<String, Object>) testDataMap.get("Questions");
                                                     answersObj = (Map<String, Object>) testDataMap.get("Answers");
                                                 }
+
+                                                // Log.i(TAG, "Test Mode: " + testMode);
+                                                // Log.i(TAG, "questionsObj: " + questionsObj);
+                                                // Log.i(TAG, "choicesObj: " + choicesObj);
+                                                // Log.i(TAG, "answersObj: " + answersObj);
 
                                                 // Proceed only if they are Maps and not null
                                                 if ((questionsObj instanceof Map && choicesObj instanceof Map && answersObj instanceof Map) ||
@@ -124,10 +122,10 @@ public class t_TestDataFromDatabase {
                                                             if (parts.length > 1) {
                                                                 questionNumber = parts[1]; // Safely get the second part
                                                             } else {
-                                                                // Log.e("getTestQuestionsFromDatabase", "Invalid questionKey format: " + questionKey);
+                                                                 // Log.e("getTestQuestionsFromDatabase", "Invalid questionKey format: " + questionKey);
                                                             }
                                                         } else {
-                                                            // Log.e("getTestQuestionsFromDatabase", "Invalid or missing questionKey: " + questionKey);
+                                                             // Log.e("getTestQuestionsFromDatabase", "Invalid or missing questionKey: " + questionKey);
                                                         }
 
                                                         List<String> choiceList = null;
@@ -139,29 +137,29 @@ public class t_TestDataFromDatabase {
                                                         Number answerNumber = null;
                                                         String answerText = null;
 
-                                                        // Log.e(TAG, "Hey Rop, Choice retrieved: " + choiceList);
+                                                         // Log.e(TAG, "Hey Rop, Choice retrieved: " + choiceList);
                                                         Object answerObj = answersObj.get("Answer " + questionNumber);
-                                                        // Log.e("ROP CHECK MO TO", "Checking Answer " + questionNumber);
+                                                         // Log.e("ROP CHECK MO TO", "Checking Answer " + questionNumber);
 
                                                         // Check the type of answerObj before casting
                                                         if (answerObj instanceof Long) { // If it's a Long, convert it to String
-                                                            // Log.d("ROP CHECK MO TO", String.valueOf(answerObj));
+                                                             Log.d("ROP CHECK MO TO", String.valueOf(answerObj));
                                                             answerNumber = (Number) answerObj;
                                                         } else if (answerObj instanceof String) { // If it's already a String, just log it
-                                                            // Log.d("ROP CHECK MO TO", (String) answerObj);
+                                                             Log.d("ROP CHECK MO TO", (String) answerObj);
                                                             answerText = (String) answerObj;
                                                         } else { // Handle other unexpected types, if any
-                                                            // Log.e("ROP CHECK MO TO", "Unexpected type for Answer: " + answerObj);
+                                                             // Log.e("ROP CHECK MO TO", "Unexpected type for Answer: " + answerObj);
                                                         }
 
-                                                        // Log.e(TAG, "Fetching data for " + questionKey);
-                                                        // Log.d(TAG, "Question: " + question);
+                                                         // Log.e(TAG, "Fetching data for " + questionKey);
+                                                         Log.d(TAG, "Question: " + question);
 
                                                         if (testMode.equals("Post-Test Hard")) {
-                                                            // Log.d(TAG, "Answer: " + answerText);
+                                                             Log.d(TAG, "Answer: " + answerText);
                                                         } else {
-                                                            // Log.d(TAG, "Choices: " + choiceList);
-                                                            // Log.d(TAG, "Answer: " + answerNumber);
+                                                             Log.d(TAG, "Choices: " + choiceList);
+                                                             Log.d(TAG, "Answer: " + answerNumber);
                                                         }
 
                                                         // Check if any of the data is null before assigning
@@ -176,27 +174,27 @@ public class t_TestDataFromDatabase {
                                                             String answerVariable = null;
 
                                                             if (testMode.equals("Post-Test Hard")) {
-                                                                // Log.e(TAG, "Post-Test Hard | Answer: " + answerText);
+                                                                // // Log.e(TAG, "Post-Test Hard | Answer: " + answerText);
                                                                 answerVariable = "String";
                                                                 questionData.put("Answer", answerText);
                                                             } else {
-                                                                // Log.e(TAG, "Post-Test Easy or Medium | Answer: " + answerNumber);
+                                                                // // Log.e(TAG, "Post-Test Easy or Medium | Answer: " + answerNumber);
                                                                 answerVariable = "Number";
                                                                 questionData.put("Choices", choiceList);
                                                                 questionData.put("Answer", answerNumber);
                                                             }
 
-                                                            // Log.i(TAG, "Question Key: " + questionKey);
-                                                            // Log.i(TAG, "Question Data: " + questionData);
-                                                            // Log.i(TAG, "Answer Variable: " + answerVariable);
+                                                             // Log.i(TAG, "Question Key: " + questionKey);
+                                                             // Log.i(TAG, "Question Data: " + questionData);
+                                                             // Log.i(TAG, "Answer Variable: " + answerVariable);
 
                                                             questionsMap.put(questionKey, questionData); // Add to questions map
                                                         } else {
-                                                            // Log.e(TAG, "Missing data for " + questionKey);
+                                                             // Log.e(TAG, "Missing data for " + questionKey);
                                                         }
                                                     }
 
-                                                    // Log.e(TAG, testMode + " data retrieval done!");
+                                                     // Log.e(TAG, testMode + " data retrieval done!");
 
                                                     // Add questions map to lesson data
                                                     lessonData.put("Questions", questionsMap);
@@ -204,7 +202,7 @@ public class t_TestDataFromDatabase {
                                                     // Now add lesson data to module lesson data
                                                     moduleLessonData.put(lesson, lessonData);
                                                 } else {
-                                                    // Log.e(TAG, "Invalid data structure for key: " + testMode);
+                                                     // Log.e(TAG, "Invalid data structure for key: " + testMode);
                                                 }
                                             }
                                         }
@@ -222,7 +220,7 @@ public class t_TestDataFromDatabase {
                     }
                 });
         if (testMode.equals("Post-Test Hard")) {
-            Log.i(TAG, "Done! let's show the application...");
+            // Log.i(TAG, "Done! let's show the application...");
 //                                    b_main_1_lesson_progressive.hideLoadingDialog();
             b_main_0_menu.viewPager.setAdapter(b_main_0_menu.pagerAdapter);
 //            b_main_0_menu.hideLoadingDialog();
@@ -232,10 +230,10 @@ public class t_TestDataFromDatabase {
     public static List<e_Question> getRandomQuestionsData(String module, String lesson, String testMode) {
 
         String TAG = "getRandomQuestionsData";
-        // Log.e(TAG, "IM HERE");
-        // Log.e(TAG, "Module: " + module);
-        // Log.e(TAG, "Lesson: " + lesson);
-        // Log.e(TAG, "Test Mode: " + testMode);
+        // // Log.e(TAG, "IM HERE");
+        // // Log.e(TAG, "Module: " + module);
+        // // Log.e(TAG, "Lesson: " + lesson);
+        // // Log.e(TAG, "Test Mode: " + testMode);
 
         List<e_Question> randomQuestions = new ArrayList<>();
 
@@ -243,21 +241,22 @@ public class t_TestDataFromDatabase {
             Object moduleObj = t_TestDataFromDatabase.moduleData.get(module);
 
             if (moduleObj instanceof Map) {
-                // Log.e(TAG, "---> Module " + module.charAt(7) + " [Map]");
+                 // Log.e(TAG, "---> Module " + module.charAt(7) + " [Map]");
                 Map<String, Object> moduleLessons = (Map<String, Object>) moduleObj;
+
 
                 if (moduleLessons.containsKey(lesson)) {
                     Object lessonObj = moduleLessons.get(lesson);
 
                     if (lessonObj instanceof Map) {
-                        // Log.e(TAG, "------> Lesson " + lesson.charAt(7) + " [Map]");
+                         // Log.e(TAG, "------> Lesson " + lesson.charAt(7) + " [Map]");
                         Map<String, Object> lessonData = (Map<String, Object>) lessonObj;
 
                         if (lessonData.containsKey(testMode)) {
                             Object testModeObj = lessonData.get(testMode);
 
                             if (testModeObj instanceof Map) {
-                                // Log.e(TAG, "---------> " + testMode + " [Map]");
+                                 // Log.e(TAG, "---------> " + testMode + " [Map]");
                                 Map<String, Object> testModeMap = (Map<String, Object>) testModeObj;
 
                                 // Check if all required maps exist: Questions, Choices, Answers
@@ -266,7 +265,7 @@ public class t_TestDataFromDatabase {
                                     Map<String, Object> questionsMap = null;
                                     Map<String, Object> choicesMap = null;
                                     Map<String, Object> answersMap = null;
-                                    // Log.e(TAG, "------------> " + "Questions" + " [Map]");
+                                     // Log.e(TAG, "------------> " + "Questions" + " [Map]");
 
                                     questionsMap = (Map<String, Object>) testModeMap.get("Questions");
 
@@ -275,7 +274,7 @@ public class t_TestDataFromDatabase {
 
                                     answersMap = (Map<String, Object>) testModeMap.getOrDefault("Answers", new HashMap<>());
 
-                                    // Log.i(TAG, "Initialize Question, Choices, and Answers Map");
+                                     // Log.i(TAG, "Initialize Question, Choices, and Answers Map");
 
                                     List<String> questionKeys = new ArrayList<>(questionsMap.keySet());
 
@@ -291,26 +290,26 @@ public class t_TestDataFromDatabase {
                                     switch (testMode) {
                                         case "Post-Test Hard":
                                             maxIndex = Math.min(questionKeys.size(), 3);
-                                            // Log.i(TAG, "Post-Test Hard | maxIndex: " + maxIndex);
+                                            // // Log.i(TAG, "Post-Test Hard | maxIndex: " + maxIndex);
                                             break;
                                         case "Post-Test Medium":
                                         case "Pre-Test":
                                             maxIndex = Math.min(questionKeys.size(), 5);
-                                            // Log.i(TAG, "Post-Test Medium || Pre-Test | maxIndex: " + maxIndex);
+                                            // // Log.i(TAG, "Post-Test Medium || Pre-Test | maxIndex: " + maxIndex);
                                             break;
                                         case "Post-Test Easy":
                                             maxIndex = Math.min(questionKeys.size(), 10);
-                                            // Log.i(TAG, "Post-Test Easy | maxIndex: " + maxIndex);
+                                            // // Log.i(TAG, "Post-Test Easy | maxIndex: " + maxIndex);
                                             break;
                                     }
 
                                     // Ensure minIndex is less than or equal to maxIndex
                                     if (minIndex > maxIndex) {
-                                        // Log.e(TAG, "Invalid range: minIndex should be less than or equal to maxIndex.");
+                                        // // Log.e(TAG, "Invalid range: minIndex should be less than or equal to maxIndex.");
                                     } else {
-                                        // Log.i(TAG, "After setting Maximum Size");
-                                        // Log.i(TAG, "Minimum Size: " + minIndex);
-                                        // Log.i(TAG, "Maximum Size: " + maxIndex);
+                                        // // Log.i(TAG, "After setting Maximum Size");
+                                        // // Log.i(TAG, "Minimum Size: " + minIndex);
+                                        // // Log.i(TAG, "Maximum Size: " + maxIndex);
 
                                         // Adjust the range for random number generation
                                         int range = maxIndex - minIndex + 1; // This should still be correct
@@ -318,7 +317,7 @@ public class t_TestDataFromDatabase {
                                         while (randomIndicesSet.size() < (maxIndex - minIndex + 1)) { // Ensure we get the right number of unique indices
                                             int randomIndex = random.nextInt(questionKeys.size()) + minIndex; // Generates [minIndex, maxIndex]
                                             if (randomIndicesSet.add(randomIndex)) { // Adds if unique
-                                                // Log.i(TAG, "Added: " + randomIndex);
+                                                // // Log.i(TAG, "Added: " + randomIndex);
                                             }
                                         }
                                     }
@@ -332,7 +331,7 @@ public class t_TestDataFromDatabase {
                                     Collections.shuffle(randomIndices);
 
                                      // Log the generated random indices
-                                     Log.e(TAG, "randomIndices[]: " + Arrays.toString(randomIndices.toArray()));
+                                     // Log.e(TAG, "randomIndices[]: " + Arrays.toString(randomIndices.toArray()));
 
                                     String questionKey = null;
                                     String choicesKey1 = null;
@@ -343,7 +342,7 @@ public class t_TestDataFromDatabase {
                                     for (int i = 1; i <= maxIndex; i++) {
 
                                         questionKey = "Question " + randomIndices.get(i-1);
-                                        // Log.e(TAG, "questionKey: " + questionKey);
+                                        // // Log.e(TAG, "questionKey: " + questionKey);
 
                                         if (!testMode.equals("Post-Test Hard")) {
                                             choicesKey1 = "Choice " + randomIndices.get(i-1);
@@ -352,18 +351,15 @@ public class t_TestDataFromDatabase {
                                         }
 
                                         answerKey = "Answer " + randomIndices.get(i-1);
-                                        // Log.e(TAG, "answerKey: " + answerKey);
+                                        // // Log.e(TAG, "answerKey: " + answerKey);
 
 
                                         // Retrieve question data
                                         String questionText = (String) questionsMap.getOrDefault(questionKey, "Default question text");
-                                        // Log.d(TAG, "Question: " + questionText);
+                                         Log.d(TAG, "Question: " + questionText);
 
                                         // Retrieve choices (skip for "Post-Test Hard")
                                         List<String> choices = null;
-
-//                                        // .contains() method code
-//                                        if ()
 
                                         // Original Code
                                         if (!testMode.equals("Post-Test Hard")
@@ -392,57 +388,57 @@ public class t_TestDataFromDatabase {
                                         if (testMode.equals("Post-Test Hard")) {
                                             answerText = (String) answersMap.getOrDefault(answerKey, "Default Answer :D");// Create and add the question object to the list
 
-                                            // Log.i(TAG, "String | Answer: " + answerText);
+                                            // // Log.i(TAG, "String | Answer: " + answerText);
                                             randomQuestions.add(new e_Question(questionText, answerText, e_Question.Difficulty.HARD));
                                         } else {
                                             if (answerObj instanceof Long) {
-                                                // Log.i(TAG, "answerOjb is Long");
+                                                // // Log.i(TAG, "answerOjb is Long");
                                                 answerIndex = ((Long) answerObj).intValue(); // Convert Long to int
                                             } else if (answerObj instanceof Integer) {
-                                                // Log.i(TAG, "answerOjb is Integer");
+                                                // // Log.i(TAG, "answerOjb is Integer");
                                                 answerIndex = (Integer) answerObj; // Use directly if it's already an Integer
                                             } else if (answerObj instanceof Number) {
-                                                // Log.i(TAG, "answerOjb is Number");
+                                                // // Log.i(TAG, "answerOjb is Number");
                                                 answerIndex = ((Number) answerObj).intValue(); // Convert Number to int safely
                                             } else {
                                                 // Log an error and assign a default value
-                                                // Log.e("AnswerTypeError", "Unexpected type for answerObj: " + answerObj);
+                                                // // Log.e("AnswerTypeError", "Unexpected type for answerObj: " + answerObj);
                                                 answerIndex = -1; // Default invalid value
                                             }
 
-                                            // Log.i(TAG, "Integer | Answer: " + answerIndex);
+                                            // // Log.i(TAG, "Integer | Answer: " + answerIndex);
                                             // Add the question to the list
                                             randomQuestions.add(new e_Question(questionText, choices, answerIndex));
                                         }
 
-                                        // Log.d(TAG, "Answer: " + answerObj);
+                                         Log.d(TAG, "Answer: " + answerObj);
 
-                                        // Log.i(TAG, "Screen Lock");
+                                        // // Log.i(TAG, "Screen Lock");
 
                                     }
 
 
                                     return randomQuestions;
                                 } else {
-                                    // Log.e(TAG, "No questions found for test mode: " + testMode);
+                                     // Log.e(TAG, "No questions found for test mode: " + testMode);
                                 }
                             } else {
-                                // Log.e(TAG, "Test mode data is not a Map.");
+                                 // Log.e(TAG, "Test mode data is not a Map.");
                             }
                         } else {
-                            // Log.e(TAG, "Test mode not found: " + testMode);
+                             // Log.e(TAG, "Test mode not found: " + testMode);
                         }
                     } else {
-                        // Log.e(TAG, "Lesson data is not a Map.");
+                         // Log.e(TAG, "Lesson data is not a Map.");
                     }
                 } else {
-                    // Log.e(TAG, "Lesson not found: " + lesson);
+                     // Log.e(TAG, "Lesson not found: " + lesson);
                 }
             } else {
-                // Log.e(TAG, "Module data is not a Map.");
+                 // Log.e(TAG, "Module data is not a Map.");
             }
         } else {
-            // Log.e(TAG, "Module not found: " + module);
+             // Log.e(TAG, "Module not found: " + module);
         }
 
         return randomQuestions;

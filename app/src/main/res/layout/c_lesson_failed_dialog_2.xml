@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/failed_background"
+    >
+
+    <ImageView
+        android:id="@+id/failed_logo"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="@drawable/failed_logo"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginHorizontal="80dp"
+        />
+
+    <TextView
+        android:id="@+id/you_failed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/failed_logo"
+        android:layout_alignEnd="@id/failed_logo"
+        android:layout_alignBottom="@id/failed_logo"
+        android:layout_marginBottom="-15dp"
+        android:fontFamily="@font/failed_font"
+        android:gravity="center"
+        android:text="You Failed"
+        android:textColor="@color/white"
+        android:textSize="48sp" />
+
+    <TextView
+        android:id="@+id/failed_lesson"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/failed_font"
+        android:gravity="center"
+        android:text="You did not pass\nModule 1 Lesson 4"
+        android:textColor="@color/white"
+        android:textSize="28sp"
+        android:layout_below="@id/you_failed"
+        android:layout_alignStart="@id/you_failed"
+        android:layout_alignEnd="@id/you_failed"
+        />
+
+    <TextView
+        android:id="@+id/bkt_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BKT Score: "
+        android:fontFamily="@font/failed_font"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/failed_lesson"
+        />
+
+    <TextView
+        android:id="@+id/passing_grade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Passing Grade: "
+        android:fontFamily="@font/failed_font"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:layout_alignStart="@id/bkt_score"
+        android:layout_below="@id/bkt_score"
+        />
+
+    <LinearLayout
+        android:id="@+id/bar_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="60dp"
+        android:padding="20dp"
+        android:layout_gravity="end"
+        android:layout_below="@id/failed_lesson"
+        android:layout_alignParentEnd="true"
+        android:orientation="horizontal"
+        >
+
+        <!-- Arrow pointing to the ProgressBar -->
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/arrow_back"
+            android:backgroundTint="@color/white"
+            android:elevation="10dp"
+            android:rotationY="180"
+            android:layout_gravity="start|bottom"/>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"> <!-- Center for alignment -->
+
+            <!-- ProgressBar with gradient color -->
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="40dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:progressDrawable="@drawable/gradient_progress"
+                android:max="100"/>
+
+            <!-- Black horizontal line at 60% height of ProgressBar -->
+            <ImageView
+                android:id="@+id/threshold_line"
+                android:layout_width="45dp"
+                android:layout_height="2dp"
+                android:layout_gravity="center_horizontal|top"
+                android:foregroundTint="@color/black"
+                android:backgroundTint="@color/black"
+                android:translationY="0dp" />
+
+        </FrameLayout>
+
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/okay_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="50dp"
+        android:text="Okay"
+        android:textAllCaps="false"
+        android:fontFamily="@font/failed_font"
+        android:textSize="20sp"
+        android:backgroundTint="#95d3f4"
+        android:layout_below="@id/passing_grade"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@id/bar_layout"
+        />
+
+
+</RelativeLayout>

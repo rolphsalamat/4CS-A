@@ -72,8 +72,9 @@ import java.util.List;
 import java.util.Map;
 
 public class b_main_0_menu extends AppCompatActivity {
+
     public static long token;
-    private TextView tokenCount;
+    static TextView tokenCount;
     private boolean[] cardStates = {true, false, false}; // Example state array for 3 cards
     static Boolean isStudent = false;
     static Boolean isProgressiveCompleted = false;
@@ -585,6 +586,8 @@ public class b_main_0_menu extends AppCompatActivity {
 
         showLearningModes();
 
+//        tokenCount.setText("" + token);
+
     }
 
     private void showLoadingDialog() {
@@ -786,7 +789,9 @@ public class b_main_0_menu extends AppCompatActivity {
 //                Toast.makeText(b_main_0_menu.this, "Rating: " + rating, Toast.LENGTH_SHORT).show();
 //                Toast.makeText(b_main_0_menu.this, "Comment: " + comment, Toast.LENGTH_SHORT).show();
 
-                // dialog.ismiss();
+                Toast.makeText(b_main_0_menu.this, "Thank you for your rating and feedback!", Toast.LENGTH_SHORT).show();
+
+                 dialog.dismiss();
             }
         });
 
@@ -1070,8 +1075,6 @@ public class b_main_0_menu extends AppCompatActivity {
 
                         greetUserName.setText("Hello, " + firstName);
                         greetUserCategory.setText(category);
-
-                        tokenCount.setText("" + token);
 
                         // Check if the user has a custom profile picture
                         Boolean hasCustomProfilePicture = document.getBoolean("hasCustomProfilePicture");

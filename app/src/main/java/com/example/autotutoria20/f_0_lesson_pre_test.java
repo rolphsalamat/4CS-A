@@ -52,9 +52,9 @@ public class f_0_lesson_pre_test extends Fragment {
     private int incorrect = 0;
     public static RadioGroup choicesGroup;
     private int answerAttempt = 0;
-    private int attemptChances = 2;
+    private int attemptChances = 1;
     private int questionsAnswered = 1;
-    static int preTestQuestions = 1;
+    static int preTestQuestions = 5;
     private Button submitButton;
     private TextView correct, mistake;
     private TextView total;
@@ -375,7 +375,10 @@ public class f_0_lesson_pre_test extends Fragment {
 
 //                    Log.e("TAG", "ROP CHECK THIS: | isLessonFinished: " + x_bkt_algorithm.isLessonFinished);
 
-                    if (!x_bkt_algorithm.isLessonFinished)
+//                    if (!x_bkt_algorithm.isLessonFinished)
+//                        bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer, answerAttempt);
+
+                    if (!d_Lesson_container.isCompleted)
                         bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer, answerAttempt);
 
                     // Check if we need to move to the next question based on attempts or correctness.
@@ -421,6 +424,16 @@ public class f_0_lesson_pre_test extends Fragment {
                         if (preTestCompleteListener != null) {
                             Log.d("TESTING", "Pre-Test BKT Score: " + x_bkt_algorithm.getKnowledge());
                             Log.d("TESTING", "Pre-Test Score: " + c_Lesson_feedback.preTestCorrectAnswers);
+                            double bktScore = x_bkt_algorithm.getKnowledge();
+
+                            // Pre-Test BKT Score
+                            x_bkt_algorithm.updateTestBKTScore(
+                                    isProgressiveMode,
+                                    moduleIndex, lessonIndex,
+                                    "Pre-Test",
+                                    bktScore
+                                    );
+
                             preTestCompleteListener.onPreTestComplete(
 //                                    correctAnswer,
                                     c_Lesson_feedback.preTestCorrectAnswers);
@@ -650,7 +663,7 @@ public class f_0_lesson_pre_test extends Fragment {
                 choicesGroup.addView(choiceButton);
             }
         } else {
-//            Log.e("loadQuestion", "Invalid question index or questions array is null.");
+            Log.e("loadQuestion", "Invalid question index or questions array is null.");
         }
     }
 
@@ -677,7 +690,8 @@ public class f_0_lesson_pre_test extends Fragment {
 
             // Update feedback and scores based on correctness
             if (isCorrect) {
-                if (!x_bkt_algorithm.isLessonFinished) {
+//                if (!x_bkt_algorithm.isLessonFinished) {
+                if (!d_Lesson_container.isCompleted) {
                     x_bkt_algorithm.updateTestScore(
                             isProgressiveMode,
                             moduleIndex, lessonIndex,

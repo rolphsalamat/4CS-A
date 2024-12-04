@@ -22,9 +22,19 @@ import java.util.Map;
 
 public class x_bkt_algorithm {
 
+    private Map<String, Object> previousState = new HashMap<>();
+    private Map<String, Object> currentState = new HashMap<>();
+
+
+    static Double preTestBKTScore;
+    static Double preTestScore;
+    static Double postTestBKTScore;
+    static Double postTestScore;
+
+
     private static final String TAG = "x_bkt_algorithm";
     private Context context;
-
+    static String userCategory;
     private FirebaseFirestore db;
     private String userId;
     public static boolean isLessonFinished;
@@ -114,6 +124,7 @@ public class x_bkt_algorithm {
                         category = documentSnapshot.getString("User Category");
 
                         Log.d(TAG, "User Category retrieved: " + category);
+                        userCategory = category;
                         callback.onCategoryFetched(category);
 
 //                        updateKnowledgeProbability();
@@ -137,55 +148,62 @@ public class x_bkt_algorithm {
     }
 
 
-    public static void setBKTCategory(String category) {
+    public static void setBKTCategory(String category, double knowledgeGain, double retention, double mastery) {
         if (category == null) {
             throw new IllegalArgumentException("Category cannot be null");
         }
 
+        // Weights for performance criteria
+        double learnRateWeight = 0.5;  // Knowledge gain is the most significant factor
+        double slipRateWeight = 0.3;  // Mastery inversely impacts slip rate
+        double guessRateWeight = 0.2; // Guessing is least affected by mastery
+
+        // Compute weighted parameters
+        double weightedLearnRate = (knowledgeGain * learnRateWeight) + (mastery * 0.3) + (retention * 0.2);
+        double weightedSlipRate = 1.0 - mastery; // Slip rate inversely proportional to mastery
+        double weightedGuessRate = 0.5 - (knowledgeGain * guessRateWeight); // Guess rate reduces as knowledge increases
+        double weightedForgetRate = 1.0 - retention; // Retention inversely impacts forgetting
+
+        // Assign parameters based on category
         switch (category) {
             case "Novice":
-                learnRate = 0.88;          // Slightly higher learning rate for novices
-                slipRate = 0.10;           // Reduced slip rate for fewer penalties
-                guessRate = 0.45;          // Balanced guess rate
-                forgetRate = 0.007;        // Minimal forgetting for novices
-                baseGain = 0.12;           // Higher base gain to encourage learning
-                knowledgeProbability = 0.5; // Lower starting knowledge to reflect novice status
+                learnRate = Math.min(0.6, weightedLearnRate); // Cap learning rate for beginners
+                slipRate = Math.max(0.15, weightedSlipRate);  // Maintain a baseline slip rate
+                guessRate = Math.max(0.4, weightedGuessRate); // Reflects guessing tendency
+                forgetRate = Math.min(0.02, weightedForgetRate); // Caps novice forget rate
+                knowledgeProbability = 0.4; // Fixed starting knowledge
                 break;
 
             case "Beginner":
-                learnRate = 0.92;          // Moderate learning rate for beginners
-                slipRate = 0.08;           // Reduced slip rate for improved accuracy
-                guessRate = 0.35;          // Slightly lower guess rate
-                forgetRate = 0.005;        // Minimal forgetting
-                baseGain = 0.10;           // Moderate base gain for steady improvement
-                knowledgeProbability = 0.6; // Reasonable starting knowledge
+                learnRate = Math.min(0.75, weightedLearnRate);
+                slipRate = Math.max(0.1, weightedSlipRate);
+                guessRate = Math.max(0.3, weightedGuessRate);
+                forgetRate = Math.min(0.01, weightedForgetRate);
+                knowledgeProbability = 0.55;
                 break;
 
             case "Intermediate":
-                learnRate = 0.90;          // Balanced learning rate for intermediates
-                slipRate = 0.05;           // Low slip rate reflecting better competence
-                guessRate = 0.25;          // Lower guess rate as knowledge improves
-                forgetRate = 0.003;        // Negligible forget rate
-                baseGain = 0.08;           // Moderate base gain for consolidation
-                knowledgeProbability = 0.75; // Higher starting knowledge reflecting experience
+                learnRate = Math.min(0.85, weightedLearnRate);
+                slipRate = Math.max(0.08, weightedSlipRate);
+                guessRate = Math.max(0.2, weightedGuessRate);
+                forgetRate = Math.min(0.008, weightedForgetRate);
+                knowledgeProbability = 0.7;
                 break;
 
             case "Advanced":
-                learnRate = 0.92;          // High learning rate for advanced learners
-                slipRate = 0.03;           // Very low slip rate
-                guessRate = 0.15;          // Lower guess rate reflecting mastery
-                forgetRate = 0.002;        // Minimal forgetting
-                baseGain = 0.07;           // Slightly lower base gain for fine-tuning skills
-                knowledgeProbability = 0.85; // High starting knowledge reflecting expertise
+                learnRate = Math.min(0.9, weightedLearnRate);
+                slipRate = Math.max(0.05, weightedSlipRate);
+                guessRate = Math.max(0.1, weightedGuessRate);
+                forgetRate = Math.min(0.005, weightedForgetRate);
+                knowledgeProbability = 0.85;
                 break;
 
             case "Expert":
-                learnRate = 0.96;          // Near-max learning rate for experts
-                slipRate = 0.01;           // Minimal slip rate
-                guessRate = 0.08;          // Very low guess rate reflecting high proficiency
-                forgetRate = 0.001;        // Negligible forgetting
-                baseGain = 0.05;           // Minimal base gain for subtle improvements
-                knowledgeProbability = 0.9; // Very high starting knowledge reflecting mastery
+                learnRate = Math.min(0.95, weightedLearnRate);
+                slipRate = Math.max(0.02, weightedSlipRate);
+                guessRate = Math.max(0.05, weightedGuessRate);
+                forgetRate = Math.min(0.001, weightedForgetRate);
+                knowledgeProbability = 0.95;
                 break;
 
             default:
@@ -193,19 +211,98 @@ public class x_bkt_algorithm {
         }
 
         // Debug log for confirmation
-        String TAG = "Set BKT Category";
-        Log.d(TAG, "Category: " + category);
-        Log.d(TAG, "Learn Rate: " + learnRate);
-        Log.d(TAG, "Slip Rate: " + slipRate);
-        Log.d(TAG, "Guess Rate: " + guessRate);
-        Log.d(TAG, "Forget Rate: " + forgetRate);
-        Log.d(TAG, "Base Gain: " + baseGain);
-        Log.d(TAG, "Knowledge Probability: " + knowledgeProbability);
+        Log.d("Set BKT Category", "Category: " + category);
+        Log.d("Set BKT Category", "Learn Rate: " + learnRate);
+        Log.d("Set BKT Category", "Slip Rate: " + slipRate);
+        Log.d("Set BKT Category", "Guess Rate: " + guessRate);
+        Log.d("Set BKT Category", "Forget Rate: " + forgetRate);
+        Log.d("Set BKT Category", "Knowledge Probability: " + knowledgeProbability);
+    }
+
+    public static double calculateKnowledgeGain(double preTestScore, double postTestScore) {
+        return Math.max(0, (postTestScore - preTestScore) / 100.0); // Normalize to [0, 1]
+    }
+
+    public static double calculateRetention(double previousSessionScore, double currentSessionScore) {
+        return Math.max(0, Math.min(1, currentSessionScore / previousSessionScore)); // Ratio in [0, 1]
+    }
+
+    public static double calculateMastery(int correctAnswers, int totalQuestions) {
+        return Math.max(0, Math.min(1, (double) correctAnswers / totalQuestions)); // Ratio in [0, 1]
     }
 
 
-    public void updateKnowledgeProbability(boolean answeredCorrectly, int attempts) {
 
+
+    public static void setBKTCategory(String category) {
+        if (category == null) {
+            throw new IllegalArgumentException("Category cannot be null");
+        }
+
+        switch (category) {
+            case "Novice":
+                learnRate = 0.75;          // Adjusted for slower novice learning
+                slipRate = 0.15;           // Slightly higher slip rate for early learners
+                guessRate = 0.50;          // Higher guess rate reflecting uncertainty
+                forgetRate = 0.010;        // Slightly higher forget rate for novices
+                baseGain = 0.15;           // Encouraging improvement
+                knowledgeProbability = 0.4; // Lower starting knowledge
+                break;
+
+            case "Beginner":
+                learnRate = 0.80;          // Steady learning rate
+                slipRate = 0.10;           // Reduced slip rate
+                guessRate = 0.40;          // Reflects improving confidence
+                forgetRate = 0.007;        // Reduced forget rate
+                baseGain = 0.12;           // Encourages improvement
+                knowledgeProbability = 0.55; // Slightly higher knowledge
+                break;
+
+            case "Intermediate":
+                learnRate = 0.85;          // Balanced learning rate
+                slipRate = 0.08;           // Lower slip rate
+                guessRate = 0.30;          // Lower guess rate
+                forgetRate = 0.005;        // Minimal forgetting
+                baseGain = 0.10;           // Moderate improvement
+                knowledgeProbability = 0.70; // Reflecting experience
+                break;
+
+            case "Advance":
+            case "Advanced":
+                learnRate = 0.90;          // High learning rate
+                slipRate = 0.05;           // Very low slip rate
+                guessRate = 0.20;          // Low guess rate
+                forgetRate = 0.003;        // Minimal forgetting
+                baseGain = 0.08;           // Incremental improvement
+                knowledgeProbability = 0.85; // High starting knowledge
+                break;
+
+            case "Expert":
+                learnRate = 0.95;          // Near-max learning rate
+                slipRate = 0.02;           // Minimal slip rate
+                guessRate = 0.10;          // Very low guess rate
+                forgetRate = 0.001;        // Negligible forgetting
+                baseGain = 0.05;           // Subtle fine-tuning
+                knowledgeProbability = 0.95; // Reflects mastery
+                break;
+
+            default:
+                throw new IllegalArgumentException("Invalid category: " + category);
+        }
+
+        // Debug log for confirmation
+        Log.d("Set BKT Category", "Category: " + category);
+        Log.d("Set BKT Category", "Learn Rate: " + learnRate);
+        Log.d("Set BKT Category", "Slip Rate: " + slipRate);
+        Log.d("Set BKT Category", "Guess Rate: " + guessRate);
+        Log.d("Set BKT Category", "Forget Rate: " + forgetRate);
+        Log.d("Set BKT Category", "Base Gain: " + baseGain);
+        Log.d("Set BKT Category", "Knowledge Probability: " + knowledgeProbability);
+    }
+
+
+
+    public void updateKnowledgeProbability(boolean answeredCorrectly, int attempts) {
 
         double pKnow = knowledgeProbability;
         double adjustedLearnRate = learnRate * (1 + (Math.min(attempts, 10) / 15.0)); // Scale learn rate but cap at 10 attempts
@@ -224,6 +321,7 @@ public class x_bkt_algorithm {
         knowledgeProbability = Math.max(baseGain, Math.min(1.0, knowledgeProbability)); // Minimum raised to 0.3 for usability
 
         Log.d("Update Knowledge Probability", "Updated Knowledge Probability: " + knowledgeProbability);
+
     }
 
 
@@ -284,29 +382,93 @@ public class x_bkt_algorithm {
     }
 
 
+    /*
+    0.00 -> 0.33 [Easy]
+    0.34 -> 0.66 [Medium]
+    0.67 -> 1.00 [Hard]
+     */
 
+    public e_Question.Difficulty getDifficultyLevel(String category, double bktScore) {
+        Log.d("getDifficultyLevel()", "Category: " + category + ", BKT Score: " + bktScore);
 
-    public e_Question.Difficulty getDifficultyLevel(double bktScore) {
+        switch (category) {
 
-        String TAG = "getDifficultyLevel()";
+            case "Novice":
+                if (bktScore < 0.450) { // Easy dominates for Novices
+                    return e_Question.Difficulty.EASY;
+                } else if (bktScore <= 0.650) { // Medium range for upper Novices
+                    return e_Question.Difficulty.MEDIUM;
+                } else { // Hard is rare for Novices
+                    return e_Question.Difficulty.HARD;
+                }
 
-        Log.e(TAG, "bktScore: " + bktScore);
+            case "Beginner":
+                if (bktScore < 0.400) { // Easy questions for lower Beginners
+                    return e_Question.Difficulty.EASY;
+                } else if (bktScore <= 0.700) { // Medium dominates for most Beginners
+                    return e_Question.Difficulty.MEDIUM;
+                } else { // Hard questions for upper Beginners
+                    return e_Question.Difficulty.HARD;
+                }
 
-        Log.e(TAG, "Hard: " + hard);
-        Log.e(TAG, "Medium: " + medium);
-        Log.e(TAG, "Easy: " + easy);
+            case "Intermediate":
+                if (bktScore < 0.350) { // Few Easy questions for lower Intermediates
+                    return e_Question.Difficulty.EASY;
+                } else if (bktScore <= 0.650) { // Medium is common for most Intermediates
+                    return e_Question.Difficulty.MEDIUM;
+                } else { // Hard questions for upper Intermediates
+                    return e_Question.Difficulty.HARD;
+                }
 
-        if (bktScore >= hard)
-            // 0.67 ~ positive infinity
-            return e_Question.Difficulty.HARD;
-        else if (bktScore >= medium)
-            // 0.34 ~ 0.66
-            return e_Question.Difficulty.MEDIUM;
-        else
-            // negative infinity ~ 0.33
-            return e_Question.Difficulty.EASY;
+            case "Advance":
+            case "Advanced":
+                if (bktScore < 0.300) { // Rare Easy questions for lower Advanced
+                    return e_Question.Difficulty.EASY;
+                } else if (bktScore <= 0.550) { // Medium for some Advanced users
+                    return e_Question.Difficulty.MEDIUM;
+                } else { // Hard dominates for Advanced users
+                    return e_Question.Difficulty.HARD;
+                }
 
+            case "Expert":
+                if (bktScore < 0.250) { // Very rare Easy questions for Experts
+                    return e_Question.Difficulty.EASY;
+                } else if (bktScore <= 0.400) { // Medium for lower Experts
+                    return e_Question.Difficulty.MEDIUM;
+                } else { // Hard is almost always assigned to Experts
+                    return e_Question.Difficulty.HARD;
+                }
+
+            default:
+                throw new IllegalArgumentException("Unknown category: " + category);
+        }
     }
+
+
+
+
+    // Original Code
+//    public e_Question.Difficulty getDifficultyLevel(double bktScore) {
+//
+//        String TAG = "getDifficultyLevel()";
+//
+//        Log.e(TAG, "bktScore: " + bktScore);
+//
+//        Log.e(TAG, "Hard: " + hard);
+//        Log.e(TAG, "Medium: " + medium);
+//        Log.e(TAG, "Easy: " + easy);
+//
+//        if (bktScore >= hard)
+//            // 0.67 ~ positive infinity
+//            return e_Question.Difficulty.HARD;
+//        else if (bktScore >= medium)
+//            // 0.34 ~ 0.66
+//            return e_Question.Difficulty.MEDIUM;
+//        else
+//            // negative infinity ~ 0.33
+//            return e_Question.Difficulty.EASY;
+//
+//    }
 
     public static x_bkt_algorithm getInstance(double pInit, double learnRate, double forgetRate, double slip) {
         if (instance == null) {
@@ -696,6 +858,101 @@ public class x_bkt_algorithm {
                 .addOnFailureListener(e -> Log.e(TAG, "Error updating test score", e));
     }
 
+    public static void updateTestBKTScore(boolean learningMode,
+                                       int moduleIndex, int lessonIndex,
+                                       String testMode, double score) {
+
+        String TAG = "BKT | updateTestSCore()";
+
+        if (moduleIndex < 0 || lessonIndex < 0) {
+            Log.e(TAG, "Invalid module or lesson index");
+            return;
+        }
+
+        // Determine the correct collection based on the learning mode
+        String collectionPath = learningMode ? "Progressive Mode" : "Free Use Mode";
+
+        // Increment indices for display purposes
+        lessonIndex += 1;
+        moduleIndex += 1;
+
+        Log.e(TAG, "moduleIndex: " + moduleIndex);
+        Log.e(TAG, "lessonIndex: " + lessonIndex);
+
+        String documentName = "Lesson " + lessonIndex; // Corrected to use incremented lessonIndex
+
+        // Determine the correct test score field name
+        String testField = null;
+        if (testMode.equals("Pre-Test")) {
+            testField = "Pre-Test BKT Score";
+        } else if (testMode.equals("Post-Test")) {
+            testField = "Post-Test BKT Score";
+        } else {
+            Log.e(TAG, "Invalid test mode");
+            return; // Exit if the test mode is invalid
+        }
+
+        // Construct the field path using dot notation
+        String moduleFieldPath = "M" + moduleIndex + "." + testField;
+
+        Log.e(TAG, "Field path for update: " + moduleFieldPath + " | Lesson " + lessonIndex);
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put(moduleFieldPath, (score)); // Update only the specific field
+        Log.i(TAG, "COLGATE | " + testField + ": " + score);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        String userId = user != null ? user.getUid() : null;
+
+        if (userId == null) {
+            Log.e(TAG, "User not authenticated");
+            return; // Exit if user is not authenticated
+        }
+
+        int finalModuleIndex = moduleIndex;
+
+        if (testMode.equalsIgnoreCase("Post-Test")) {
+            // Reference to the user's Firestore document
+            db.collection("users").document(userId)
+                    .collection(collectionPath)
+                    .document(documentName)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            // Retrieve existing scores
+                            Map<String, Object> moduleData = (Map<String, Object>) documentSnapshot.get("M" + finalModuleIndex);
+
+                            preTestBKTScore = moduleData != null && moduleData.containsKey("Pre-Test BKT Score")
+                                    ? Double.parseDouble(moduleData.get("Pre-Test BKT Score").toString())
+                                    : 0.0f;
+
+                            preTestScore = moduleData != null && moduleData.containsKey("Pre-Test Score")
+                                    ? Double.parseDouble(moduleData.get("Pre-Test Score").toString())
+                                    : 0.0f;
+
+                            postTestBKTScore = score;
+
+                            postTestScore = moduleData != null && moduleData.containsKey("Post-Test Score")
+                                    ? Double.parseDouble(moduleData.get("Post-Test Score").toString())
+                                    : 0.0f;
+
+                            Log.d(TAG, "Retrieved Pre-Test BKT Score: " + preTestBKTScore);
+                            Log.d(TAG, "Retrieved Pre-Test Score: " + preTestScore);
+                            Log.d(TAG, "Retrieved Post-Test Score: " + postTestScore);
+
+                        }
+                    }).addOnFailureListener(e -> Log.e(TAG, "Error retrieving document", e));
+        }
+
+        db.collection("users").document(userId)
+                .collection(collectionPath)
+                .document(documentName)
+                .update(updates)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Test score successfully updated"))
+                .addOnFailureListener(e -> Log.e(TAG, "Error updating test score", e));
+    }
+
     public static double getKnowledge() {
         Log.e("getKnowledge()", "knowledgeProbability: " + knowledgeProbability);
         return knowledgeProbability;
@@ -711,6 +968,7 @@ public class x_bkt_algorithm {
     }
 
     public void logScores() {
+        Log.i(TAG, "logScores()");
 //        if (bktScores != null) {
 //            Log.d(TAG, "BKT Scores:");
 //            for (int i = 0; i < bktScores.size(); i++) {
@@ -721,4 +979,151 @@ public class x_bkt_algorithm {
 //        }
     }
 
+    public void updateLessonState(boolean isLessonComplete, double bktScore, double progress,
+                                  double preTestScore, double postTestScore,
+                                  int moduleIndex, int lessonIndex, boolean isProgressiveMode) {
+
+        if (moduleIndex < 0 || lessonIndex < 0) {
+            Log.e(TAG, "Invalid BKT score update request");
+            return;
+        }
+
+        moduleIndex += 1; // Adjust to 1-based index
+        lessonIndex += 1;
+
+        // Determine the correct collection based on the learning mode
+        String collectionPath = isProgressiveMode ? "Progressive Mode" : "Free Use Mode";
+        String documentName = "Lesson " + lessonIndex;
+        String moduleName = "M" + moduleIndex;
+
+        Log.d(TAG, "Module: " + moduleName + ", Lesson: " + documentName);
+
+        // Create Firestore references
+        Map<String, Object> moduleUpdates = new HashMap<>();
+        Map<String, Object> currentState = new HashMap<>();
+        Map<String, Object> previousState = new HashMap<>();
+
+        if (isLessonComplete) {
+            // Prepare the current state
+            currentState.put("BKT Score", bktScore);
+            currentState.put("Progress", progress);
+            currentState.put("Pre-Test Score", preTestScore);
+            currentState.put("Post-Test Score", postTestScore);
+
+            // Add "Current" to the module
+            moduleUpdates.put(moduleName + ".Current", currentState);
+
+            // Retrieve the "Previous" state if it exists
+            db.collection("users").document(userId)
+                    .collection(collectionPath)
+                    .document(documentName)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            Map<String, Object> moduleData = (Map<String, Object>) documentSnapshot.get(moduleName);
+
+                            if (moduleData != null && moduleData.containsKey("Current")) {
+                                // Move the existing "Current" to "Previous"
+                                previousState.putAll((Map<String, Object>) moduleData.get("Current"));
+                                moduleUpdates.put(moduleName + ".Previous", previousState);
+                            }
+                        }
+
+                        // Save the updated states
+                        db.collection("users").document(userId)
+                                .collection(collectionPath)
+                                .document(documentName)
+                                .update(moduleUpdates)
+                                .addOnSuccessListener(aVoid -> Log.d(TAG, moduleName + " states updated successfully"))
+                                .addOnFailureListener(e -> Log.e(TAG, "Error updating " + moduleName, e));
+                    })
+                    .addOnFailureListener(e -> Log.e(TAG, "Error retrieving module data for " + moduleName, e));
+
+        } else {
+            // Update "Previous" state
+            previousState.put("BKT Score", bktScore);
+            previousState.put("Progress", progress);
+            previousState.put("Pre-Test Score", preTestScore);
+            previousState.put("Post-Test Score", postTestScore);
+
+            // Add "Previous" to the module
+            moduleUpdates.put(moduleName + ".Previous", previousState);
+
+            // Save the updated state
+            db.collection("users").document(userId)
+                    .collection(collectionPath)
+                    .document(documentName)
+                    .update(moduleUpdates)
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, moduleName + " Previous state updated successfully"))
+                    .addOnFailureListener(e -> Log.e(TAG, "Error updating " + moduleName, e));
+        }
+    }
+
+
 }
+
+//    public void updateScore(
+//            int moduleIndex, int lessonIndex,
+//            boolean isProgressiveMode,
+//            boolean isCorrect,
+//            int attempt
+//    ) {
+//
+//        String TAG = "BKT | updateScore()";
+//
+////        updateKnowledge(isCorrect); // Call to update knowledge based on correctness
+//        updateKnowledgeProbability(isCorrect, attempt); // eto ba dapat??
+//
+//        if (
+////                bktScores == null ||
+//                moduleIndex < 0 ||
+//                        lessonIndex < 0) {
+//            Log.e(TAG, "Invalid BKT score update request");
+//            Log.e(TAG, "bktScores: " + bktScores);
+//            Log.e(TAG, "moduleIndex: " + moduleIndex);
+//            Log.e(TAG, "lessonIndex: " + lessonIndex);
+//            return;
+//        }
+//
+//        Log.e("updateScore", "Category: " + category);
+//        Log.e("updateScore", "pKnow: " + knowledgeProbability);
+//
+//        moduleIndex += 1;
+//        lessonIndex += 1;
+//
+//        // Determine the correct collection based on the learning mode
+//        String collectionPath = isProgressiveMode ? "Progressive Mode" : "Free Use Mode";
+//        String documentName = "Lesson " + lessonIndex;
+//
+//        Log.e(TAG, "moduleIndex: " + moduleIndex);
+//        Log.e(TAG, "lessonIndex: " + lessonIndex);
+//
+//        // Construct the field path using dot notation
+//        String moduleFieldPath = "M" + moduleIndex + ".BKT Score";
+//
+//        Log.e(TAG, "Field path for update: " + moduleFieldPath + " | Lesson " + lessonIndex);
+//
+//        Map<String, Object> updates = new HashMap<>();
+//
+//        Log.e(TAG, "Knowledge Probability: " + knowledgeProbability);
+//
+//        // My own code:
+//        updates.put(moduleFieldPath, knowledgeProbability);
+//
+//
+////        // Original Code
+////        updates.put(moduleFieldPath, newScore); // Update only the specific field
+//
+//        Log.e(TAG, "ABDUL path: users/"+userId+"/"+collectionPath+"/"+documentName+"/"+updates);
+//
+//        int finalModuleIndex = moduleIndex;
+//
+//        db.collection("users").document(userId)
+//                .collection(collectionPath)
+//                .document(documentName)
+//                .update(updates)
+//                .addOnSuccessListener(aVoid -> Log.d(TAG, "M" + finalModuleIndex + " M fields successfully updated"))
+//                .addOnFailureListener(e -> Log.e(TAG, "Error updating M" + finalModuleIndex + " M fields", e));
+//    }
+// }
+

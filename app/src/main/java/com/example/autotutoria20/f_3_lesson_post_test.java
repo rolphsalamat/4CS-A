@@ -44,6 +44,7 @@ public class f_3_lesson_post_test extends Fragment {
     private static final String ARG_LESSON = "lesson";
     private static final String ARG_MODE = "mode";
 
+
     private LinearLayout imageContainer_postTest;
     private ImageButton hintButton;
     private String[] options; // Assuming there are options for the question
@@ -61,11 +62,13 @@ public class f_3_lesson_post_test extends Fragment {
     public static e_Question.Difficulty difficultyLevel;
     private int answerAttempt = 0;
     private int attemptChances = 0;
+    private RadioButton choiceButton;
     private int questionsAnswered = 1;
     static int postTestQuestions = 10;
     private boolean isCorrect = false;
     private boolean isProgressiveMode = true; // Default to Progressive Mode
     private AlertDialog hintDialog;
+    private AlertDialog correctAnswerDialog;
     private PostTestCompleteListener postTestCompleteListener;
 
     // BKT Model instance
@@ -229,21 +232,21 @@ public class f_3_lesson_post_test extends Fragment {
             String difficultyString = null;
 
             // Set attempt chances and number of questions
-            difficultyLevel = bktModel.getDifficultyLevel(userScore);
+            difficultyLevel = bktModel.getDifficultyLevel(b_main_0_menu_categorize_user.category, userScore);
 
             if (difficultyLevel == e_Question.Difficulty.EASY) {
                 difficultyString = "Post-Test Easy";
-                attemptChances = 1;
+//                attemptChances = 1;
                 postTestQuestions = 10;
             }
             else if (difficultyLevel == e_Question.Difficulty.MEDIUM) {
                 difficultyString = "Post-Test Medium";
-                attemptChances = 2;
+//                attemptChances = 2;
                 postTestQuestions = 5;
             }
             else if (difficultyLevel == e_Question.Difficulty.HARD) {
                 difficultyString = "Post-Test Hard";
-                attemptChances = 3;
+//                attemptChances = 3;
                 postTestQuestions = 3;
 
                 // enable and show hint button
@@ -254,6 +257,8 @@ public class f_3_lesson_post_test extends Fragment {
                 hint_frameLayout.setVisibility(View.VISIBLE);
 
             }
+
+            attemptChances = 1;
 
 //            // Temporary for testing
 //            difficultyLevel = e_Question.Difficulty.HARD;
@@ -344,7 +349,7 @@ public class f_3_lesson_post_test extends Fragment {
             // Log.e(TAG, "lesson: " + lesson);
 
             // Retrieve post-test questions based on difficulty level
-//            questions = getPostTestQuestionsBasedOnDifficulty(module, lesson, difficultyLevel);
+            questions = getPostTestQuestionsBasedOnDifficulty(module, lesson, difficultyLevel);
             loadQuestion();
 
 //            // Log.e(TAG, "wala :( loadQuestion nalang :(");
@@ -385,7 +390,8 @@ public class f_3_lesson_post_test extends Fragment {
 
                     // Update feedback and scores based on correctness
                     if (correctAnswer) {
-                        if (!x_bkt_algorithm.isLessonFinished) {
+//                        if (!x_bkt_algorithm.isLessonFinished) {
+                        if (!d_Lesson_container.isCompleted) {
                             x_bkt_algorithm.updateTestScore(
                                     isProgressiveMode,
                                     moduleIndex, lessonIndex,
@@ -397,7 +403,8 @@ public class f_3_lesson_post_test extends Fragment {
                                 c_Lesson_feedback.postTestCorrectAnswers + 1, postTestQuestions);
                     }
 
-                    if (!x_bkt_algorithm.isLessonFinished)
+//                    if (!x_bkt_algorithm.isLessonFinished)
+                    if (!d_Lesson_container.isCompleted)
                         bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer, answerAttempt);
 
                     // Log.d("TESTING", "Answer: " + correctAnswer);
@@ -450,11 +457,23 @@ public class f_3_lesson_post_test extends Fragment {
                             double bktscore = x_bkt_algorithm.getKnowledge();
                             Log.d("TESTING", "Post-Test BKT Score: " + x_bkt_algorithm.getKnowledge());
                             Log.d("TESTING", "Post-Test Score: " + c_Lesson_feedback.postTestCorrectAnswers);
+                            Log.d("TESTING", "Passing Score: " + b_main_0_menu_categorize_user.passingGrade);
+
+                            double bktScore = x_bkt_algorithm.getKnowledge();
+
+                            // Post-Test BKT Score
+                            x_bkt_algorithm.updateTestBKTScore(
+                                    isProgressiveMode,
+                                    moduleIndex, lessonIndex,
+                                    "Post-Test",
+                                    bktScore);
+
                             postTestCompleteListener.onPostTestComplete(
                                     correctAnswer,
                                     c_Lesson_feedback.postTestCorrectAnswers,
                                     bktscore >= b_main_0_menu_categorize_user.passingGrade
                             );
+
                             c_Lesson_feedback.printResult("Post-Test");
                             d_Lesson_container.isPostTestComplete = true;
 
@@ -713,32 +732,32 @@ public class f_3_lesson_post_test extends Fragment {
 
         // Check if questions array is null or empty
         if (questions == null) {
-            // Log.e(TAG, "Error: Questions array is null.");
+             Log.e(TAG, "Error: Questions array is null.");
             Toast.makeText(getContext(), "Error: Questions not initialized.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (questions.length == 0) {
-            // Log.e(TAG, "Error: Questions array is empty.");
+             Log.e(TAG, "Error: Questions array is empty.");
             Toast.makeText(getContext(), "Error: No questions available.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check if currentQuestionIndex is within bounds
         if (currentQuestionIndex >= questions.length) {
-            // Log.e(TAG, "Error: Invalid currentQuestionIndex (" + currentQuestionIndex + "). Out of bounds.");
+             Log.e(TAG, "Error: Invalid currentQuestionIndex (" + currentQuestionIndex + "). Out of bounds.");
             return;
         }
 
-        // Log.e(TAG, "Loading question at index: " + currentQuestionIndex);
+//         Log.e(TAG, "Loading question at index: " + currentQuestionIndex);
 
         // Reset isCorrect before loading a new question
         isCorrect = false;
 
         // Get the current question
         currentQuestion = questions[currentQuestionIndex];
-        // Log.e(TAG, "ACER | Current question: " + currentQuestion.getQuestion());
-        // Log.e(TAG, "ACER | Current answer: " + currentQuestion.getCorrectAnswer_EASY_MEDIUM());
+//         Log.e(TAG, "ACER | Current question: " + currentQuestion.getQuestion());
+//         Log.e(TAG, "ACER | Current answer: " + currentQuestion.getCorrectAnswer_EASY_MEDIUM());
 
         // Clear previous selection
         choicesGroup.clearCheck();
@@ -746,15 +765,15 @@ public class f_3_lesson_post_test extends Fragment {
 
         questionText.setText(currentQuestion.getQuestion());
 
-        // Log.d(TAG, "Leakproof | Difficulty: " + difficultyLevel);
-        // Log.i(TAG, "Leakproof | Question: " + currentQuestion.getQuestion());
+         Log.d(TAG, "Leakproof | Difficulty: " + difficultyLevel);
+         Log.i(TAG, "Leakproof | Question: " + currentQuestion.getQuestion());
 
         if (!(difficultyLevel == e_Question.Difficulty.HARD))
-            // Log.i(TAG, "Leakproof | Choices: " + currentQuestion.getChoices());
+             Log.i(TAG, "Leakproof | Choices: " + currentQuestion.getChoices());
 
-        // Log.i(TAG, "Leakproof | HARD Answer: " + currentQuestion.getCorrectAnswer_HARD());
-        // Log.i(TAG, "Leakproof | EASY|MEDIUM Answer: " + currentQuestion.getCorrectAnswer_EASY_MEDIUM());
-        // Log.i(TAG, "Leakproof | Pre-Test Answer: " + currentQuestion.getCorrectAnswer_preTest());
+         Log.i(TAG, "Leakproof | HARD Answer: " + currentQuestion.getCorrectAnswer_HARD());
+         Log.i(TAG, "Leakproof | EASY|MEDIUM Answer: " + currentQuestion.getCorrectAnswer_EASY_MEDIUM());
+         Log.i(TAG, "Leakproof | Pre-Test Answer: " + currentQuestion.getCorrectAnswer_preTest());
 
         choicesGroup.removeAllViews();
 
@@ -764,7 +783,7 @@ public class f_3_lesson_post_test extends Fragment {
             // Check if choices is null or empty
             if (choices != null && !choices.isEmpty()) {
                 for (int i = 0; i < choices.size(); i++) {
-                    RadioButton choiceButton = new RadioButton(getContext());
+                    choiceButton = new RadioButton(getContext());
                     choiceButton.setId(i);
                     choiceButton.setText(choices.get(i));
                     choiceButton.setTextColor(getResources().getColor(R.color.white));
@@ -780,7 +799,7 @@ public class f_3_lesson_post_test extends Fragment {
                     choicesGroup.addView(choiceButton);
                 }
             } else {
-                // Log.i(TAG, "choices is empty or null!");
+                 Log.i(TAG, "choices is empty or null!");
             }
 
             choicesGroup.setVisibility(View.VISIBLE);
@@ -838,16 +857,7 @@ public class f_3_lesson_post_test extends Fragment {
 
                     e_Question currentQuestion = questions[currentQuestionIndex];
                     int correctAnswer = currentQuestion.getCorrectAnswer_EASY_MEDIUM();
-                    isCorrect = (selectedId == currentQuestion.getCorrectAnswer_EASY_MEDIUM());
-
-                    // Bakit laging 0 yung correct Answer?
-
-
-                    // Log.i(TAG, "EASY || MEDIUM | ELECTRONICS | Question: " + currentQuestion.getQuestion());
-                    // Log.i(TAG, "EASY || MEDIUM | ELECTRONICS | Choices: " + currentQuestion.getChoices());
-                    // Log.i(TAG, "EASY || MEDIUM | ELECTRONICS | correctAnswer: " + correctAnswer);
-                    // Log.i(TAG, "EASY || MEDIUM | ELECTRONICS | Answer: " + selectedId);
-                    // Log.i(TAG, "Your answer is: " + (isCorrect ? "Correct!" : "Wrong!"));
+                    isCorrect = (selectedId == correctAnswer);
 
                     if (answerAttempt >= attemptChances || isCorrect) {
                         // Change button appearance based on correctness
@@ -859,16 +869,19 @@ public class f_3_lesson_post_test extends Fragment {
                         // Log.d("TagCheck", "Post-Test | Looking for ImageView with tag: " + targetTag);
 
                         ImageView targetImageView = imageContainer_postTest.findViewWithTag(targetTag);
-                        if (targetImageView != null) {
-                            // Log.d("ImageViewFound", "Found ImageView with tag: " + targetTag);
 
+                        if (targetImageView != null) {
                             int imageResource = isCorrect ? R.drawable.test_answer_check : R.drawable.test_answer_cross;
                             targetImageView.setImageResource(imageResource);
                             targetImageView.invalidate(); // Force redraw
-
                         } else {
-                            // Log.e("ImageViewError", "No ImageView found with tag: " + targetTag);
+                             Log.e("ImageViewError", "No ImageView found with tag: " + targetTag);
                         }
+
+                    } else {
+
+                        choiceButton.setBackgroundColor(Color.RED);
+
                     }
 
                     // Display feedback and manage attempts
@@ -969,6 +982,41 @@ public class f_3_lesson_post_test extends Fragment {
                 submitButton.setTextColor(Color.BLACK); // Restore original text color
             }
         }, 1000);
+    }
+
+    private void showCorrecAnswerDialog(String correctAnswer) {
+
+        String TAG = "showCorrecAnswerDialog()";
+
+        // Inflate the custom layout
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View customView = inflater.inflate(R.layout.c_lesson_answer_hint, null);
+
+        // Set the hint text to the TextView in the custom layout
+        TextView hintTextView = customView.findViewById(R.id.hint);
+        Button okayButton = customView.findViewById(R.id.okay);
+
+        hintTextView.setText(correctAnswer);
+
+        // Build the AlertDialog with the custom view
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        builder.setView(customView); // Set the custom view
+        builder.setCancelable(false);
+
+        // Create the dialog
+        correctAnswerDialog = builder.create();
+        correctAnswerDialog.show();
+
+        okayButton.setOnClickListener(v -> {
+            correctAnswerDialog.dismiss();
+        });
+
+        // Adjust the dialog dimensions
+        correctAnswerDialog.getWindow().setLayout(
+                ViewGroup.LayoutParams.WRAP_CONTENT, // Width: Wrap content
+                ViewGroup.LayoutParams.WRAP_CONTENT  // Height: Wrap content
+        );
+
     }
 
     // Method to show hint dialog when needed

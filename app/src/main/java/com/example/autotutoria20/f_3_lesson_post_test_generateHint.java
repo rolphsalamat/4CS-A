@@ -15,6 +15,8 @@ public class f_3_lesson_post_test_generateHint {
 
     static final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+
+
     static String generateHint(String originalString, String category) {
 
         // Define the number of underscores based on the category

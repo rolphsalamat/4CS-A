@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -33,6 +34,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -46,7 +53,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class d_Lesson_container extends AppCompatActivity implements
@@ -56,6 +65,7 @@ public class d_Lesson_container extends AppCompatActivity implements
         f_3_lesson_post_test.PostTestCompleteListener
 {
 
+    private Runnable delayedAction;
     public static boolean isPreTestComplete = false;
     public static boolean isPostTestComplete = false;
     private Handler handler = new Handler();
@@ -85,7 +95,7 @@ public class d_Lesson_container extends AppCompatActivity implements
     private Button backButton;
     static TextView txtSecondsRemaining;
     private ShapeableImageView currentButton;
-    private f_2_lesson_video videoLesson;
+//    private f_2_lesson_video videoLesson;
     private StepType[] stepSequence;
     private static ViewPager viewPager;
     private L_lesson_handler pagerAdapter;
@@ -98,6 +108,9 @@ public class d_Lesson_container extends AppCompatActivity implements
 //    public static long token;
     public static int d_lesson_container_token;
     public static TextView tokenCount;
+
+    SharedPreferences sharedPreferences;
+    String userId;
 
     // Enum for step types
     public enum StepType {
@@ -113,6 +126,93 @@ public class d_Lesson_container extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.d_lesson_container);
 
+        sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+        userId = sharedPreferences.getString("userId", "");
+
+        db = FirebaseFirestore.getInstance();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("ModulePreferences", MODE_PRIVATE);
+        learningMode = sharedPreferences.getString("learningMode", null);
+        currentLesson = sharedPreferences.getString("currentLesson", null);
+        currentModule = sharedPreferences.getString("currentModule", null);
+        isCompleted = sharedPreferences.getBoolean("isCompleted", false);
+//        isLessonPassed = sharedPreferences.getBoolean("isLessonPassed", false);
+
+        if (isCompleted) {
+            // show Dialog "You already finished this lesson, do you want to reset your score and retake this lesson?"
+        }
+
+        String HEY = "EVO PLUS GOLD";
+
+        Log.i(HEY, "GENAMIE | Learning Mode: " + learningMode); // Progressive Mode : Free Use Mode
+        Log.i(HEY, "GENAMIE | Current Lesson: " + currentLesson); // Lesson 1 -> Lesson 8
+        Log.i(HEY, "GENAMIE | Current Module: " + currentModule); // M1 -> M4
+        Log.i(HEY, "GENAMIE | isComplete: " + isCompleted); // true
+
+        String formattedModule = "Module " + currentModule.charAt(1);
+
+        stepSequence = getStepsAsStepTypeArray(formattedModule, currentLesson);
+
+        // Log the step sequence
+        if (stepSequence != null) {
+            numberOfSteps = stepSequence.length;
+            Log.i(HEY, "GENAMIE | numberOfSteps: " + numberOfSteps);
+        } else {
+            Log.e(TAG, "Step sequence is null for key: " + currentModule + "_" + currentLesson);
+        }
+
+        Log.i("HEY", "GENAMIE | stepSequence.length: " + stepSequence.length + " | numberOfSteps: " + numberOfSteps);
+        Log.i("HEY", "GENAMIE | Path: users/" + userId + "/" + learningMode + "/" + currentLesson + "/" + currentModule + ".Progress");
+
+//        db.collection("users")
+//                .document(userId)
+//                .collection(learningMode) // Progressive Mode or Free Use Mode
+//                .document(currentLesson) // e.g., Lesson 1
+//                .get()
+//                .addOnCompleteListener(documentSnapshot -> {
+//                    if (documentSnapshot.isComplete()) {
+//                        Log.i("HEY", "GENAMIE | Document fetch complete.");
+//                        Map<String, Object> lessonData = documentSnapshot.getResult().getData();
+//                        if (lessonData != null) {
+//                            Log.i("HEY", "GENAMIE | Lesson Data: " + lessonData.toString());
+//
+//                            // Get the module data
+//                            Map<String, Object> moduleData = (Map<String, Object>) lessonData.get(currentModule);
+//                            if (moduleData != null) {
+//                                Log.i("HEY", "GENAMIE | Module data found for key: " + currentModule);
+//
+//                                // Check for Progress key
+//                                if (moduleData.containsKey("Progress")) {
+//                                    Object progress = moduleData.get("Progress");
+//                                    if (progress != null) {
+//                                        Log.i("HEY", "GENAMIE | Progress found: " + progress.toString());
+//                                        int currentStep = Integer.parseInt(progress.toString());
+//
+//                                        if (currentStep == 0 || currentStep == numberOfSteps)
+//                                            Log.i("HEY", "GENAMIE | Lesson is either finished or not yet progressed.");
+//                                            // proceed from the beginning
+//                                        else
+//                                            showResumeDialog(currentStep);
+//
+//                                    } else {
+//                                        Log.i("HEY", "GENAMIE | Progress is null.");
+//                                    }
+//                                } else {
+//                                    Log.i("HEY", "GENAMIE | Progress key does not exist in module data.");
+//                                }
+//                            } else {
+//                                Log.i("HEY", "GENAMIE | Module data is null for key: " + currentModule);
+//                            }
+//                        } else {
+//                            Log.i("HEY", "GENAMIE | Lesson data is null.");
+//                        }
+//                    } else {
+//                        Log.i("HEY", "GENAMIE | Lesson Document Not Found.");
+//                    }
+//                })
+//                .addOnFailureListener(e -> Log.e("HEY", "GENAMIE | Error Retrieving Data", e));
+
+        Log.i("HEY", "GENAMIE | Done na yung query sa database");
         tokenLayout = findViewById(R.id.tokenLayout);
         tokenCount = findViewById(R.id.token);
         tokenCount.setText("" + b_main_0_menu.token);
@@ -136,78 +236,22 @@ public class d_Lesson_container extends AppCompatActivity implements
 //        txtSecondsRemaining = findViewById(R.id.seconds_remaining);
         gridLayout = findViewById(R.id.gridLayout);
         viewPager = findViewById(R.id.viewPager);
-        viewPager.setOffscreenPageLimit(1);  // Adjust the offscreen page limit
-
-//        txtSecondsRemaining.setEnabled(false);
-//        txtSecondsRemaining.setVisibility(View.GONE);
-
-        db = FirebaseFirestore.getInstance();
-
-        SharedPreferences sharedPreferences = getSharedPreferences("ModulePreferences", MODE_PRIVATE);
-        learningMode = sharedPreferences.getString("learningMode", null);
-        currentLesson = sharedPreferences.getString("currentLesson", null);
-        currentModule = sharedPreferences.getString("currentModule", null);
-        isCompleted = sharedPreferences.getBoolean("isCompleted", false);
-//        isLessonPassed = sharedPreferences.getBoolean("isLessonPassed", false);
-
-        String HEY = "EVO PLUS GOLD";
-
-    // Log.(HEY, "Learning Mode: " + learningMode);
-    // Log.(HEY, "Current Lesson: " + currentLesson);
-    // Log.(HEY, "Current Module: " + currentModule);
-    // Log.(HEY, "isComplete: " + isCompleted);
-
-        int moduleIndex = Integer.parseInt(String.valueOf(currentModule.charAt(1)));
-        int lessonIndex = Integer.parseInt(String.valueOf(currentLesson.charAt(7)));
+        viewPager.setOffscreenPageLimit(1);  // Originally 1
 
         boolean isProgressiveMode = true;
 
         isProgressiveMode = learningMode.equalsIgnoreCase("Progressive Mode");
 
         boolean finalIsProgressiveMode = isProgressiveMode;
+        String learningMode = isProgressiveMode ? "Progressive Mode" : "Free Use Mode";
 
         bktAlgo = new x_bkt_algorithm();
-
-    // Log.(TAG, "Learning Mode: " + learningMode);
-    // Log.(TAG, "Lesson: " + currentLesson);
-    // Log.(TAG, "Module: " + currentModule);
 
         // Get the Singleton instance
         bktAlgo = x_bkt_algorithm.getInstance(0.3, 0.2, 0.1, 0.4);
 
         bktAlgo.initializeBKTScores(learningMode, currentLesson, currentModule);
 
-    // Log.("onCreate", "currentModule: " + currentModule + " | currentLesson: " + currentLesson);
-
-        // Retrieve the lesson sequence
-//        stepSequence = L_lesson_sequence.getLessonSequences().get(currentModule + "_" + currentLesson);
-
-        String formattedModule = "Module " + currentModule.charAt(1);
-
-        stepSequence = getStepsAsStepTypeArray(formattedModule, currentLesson);
-
-        // Log the step sequence
-        if (stepSequence != null) {
-        // Log.(TAG, "Step sequence: " + Arrays.toString(stepSequence));
-            numberOfSteps = stepSequence.length;
-
-//            // Count the number of TEXT lessons in the sequence
-//            numberOfTextLessons = L_lesson_sequence.countTextLessons(stepSequence);
-        // Log.(TAG, "Number of TEXT lessons in " + currentModule + "_" + currentLesson + ": " + numberOfTextLessons);
-        } else {
-        // Log.(TAG, "Step sequence is null for key: " + currentModule + "_" + currentLesson);
-//            stepSequence = new L_lesson_sequence.StepType[0]; // Assign an empty array to avoid null
-        }
-
-    // Log.(TAG, "Number of steps: " + numberOfSteps);
-    // Log.(TAG, "Learning Mode: " + learningMode);
-    // Log.(TAG, "Current Lesson: " + currentLesson);
-    // Log.(TAG, "Current Module: " + currentModule);
-    // Log.(TAG, "isCompleted: " + isCompleted);
-
-    // Log.("pagerAdapter", "LessonPagerAdapter(" + getSupportFragmentManager() + ", " + Arrays.toString(stepSequence) + ", " + currentModule + "_" + currentLesson + ");");
-
-        // dapat kasi eto may nag c-call din dito somewhere, kasi pag ganto lagi talaga syang Page 1
         pagerAdapter = new L_lesson_handler(
                 getSupportFragmentManager(),
                 stepSequence,
@@ -215,10 +259,6 @@ public class d_Lesson_container extends AppCompatActivity implements
                 learningMode,
                 pageNumber);
         viewPager.setAdapter(pagerAdapter);
-
-
-        // ANG WINO-WORK OUT MO IS BAKIT NAGLO-LOAD AGAD SI TEXT LESSON KAHIT NASA PRE-TEST PALANG
-        // AND BAKIT DI NAG A-ADJUST LAYOUT PAG NASA VIDEO LESSON NA
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -230,7 +270,7 @@ public class d_Lesson_container extends AppCompatActivity implements
             @Override
             public void onPageSelected(int position) {
 
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
             // Log.(TAG, "Displayed fragment position: " + position);
 
@@ -254,11 +294,20 @@ public class d_Lesson_container extends AppCompatActivity implements
                 // Get the current fragment
                 Fragment currentFragment = getCurrentFragment();
 
+//                // Check if the last fragment was the video lesson and stop the video
+//                if (videoLesson != null && !(currentFragment instanceof f_2_lesson_video)) {
+//                // Log.(TAG, "Stopping video playback as we're leaving the video lesson.");
+//                    videoLesson.stopVideoPlayback();
+//                }
+
                 // Check if the last fragment was the video lesson and stop the video
-                if (videoLesson != null && !(currentFragment instanceof f_2_lesson_video)) {
-                // Log.(TAG, "Stopping video playback as we're leaving the video lesson.");
-                    videoLesson.stopVideoPlayback();
+                if (f_2_lesson_video.webView != null && !(currentFragment instanceof f_2_lesson_video)) {
+                    // Log.(TAG, "Stopping video playback as we're leaving the video lesson.");
+                    f_2_lesson_video.stopVideoPlayback();
                 }
+
+                tokenLayout.setVisibility(View.GONE);
+                tokenLayout.setEnabled(false);
 
                 if (currentFragment instanceof f_0_lesson_pre_test) {
 
@@ -318,19 +367,14 @@ public class d_Lesson_container extends AppCompatActivity implements
 
                     // Log.(TAG, "Text Lesson");
 
-                    // Execute additional code after a delay of 600 milliseconds
-                    new Handler().postDelayed(() -> {
-
-                        // disable if want to show contentTextViews  one by one
-                        nextButton.setEnabled(true);
-                        nextButton.setVisibility(View.VISIBLE);
-
-                    }, 3000);
-
-//                    f_1_lesson_text showContent = new f_1_lesson_text();
-//                    showContent.showContentTextViews(d_Lesson_container.this);
+//                    // Execute additional code after a delay of 600 milliseconds
+//                    handler.postDelayed(() -> {
 //
-//                    f_1_lesson_text textLessonFragment = (f_1_lesson_text) currentFragment;
+//                        // disable if want to show contentTextViews  one by one
+//                        nextButton.setEnabled(true);
+//                        nextButton.setVisibility(View.VISIBLE);
+//
+//                    }, 3000);
 
                     if (viewPager.getCurrentItem() == 1) {
                         backButton.setVisibility(View.GONE);
@@ -347,37 +391,23 @@ public class d_Lesson_container extends AppCompatActivity implements
 
                 if (currentFragment instanceof f_2_lesson_video) {
 
-                    params.bottomMargin = 225;  // Adjust this value as needed
-                    viewPager.setLayoutParams(params);
+                    handler.removeCallbacksAndMessages(null);
 
-//                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_LANDSCAPE);
-//                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//
-//                  // Update the ViewPager layout parameters
-//                    WebView viewPager = findViewById(R.id.webView_landscape); // Reinitialize after setContentView
-//                    ViewGroup.LayoutParams params2 = viewPager.getLayoutParams();
-//                    params2.width = ViewGroup.LayoutParams.MATCH_PARENT;
-//                    params2.height = ViewGroup.LayoutParams.MATCH_PARENT;
-//                    viewPager.setPageMargin(16);
-//                    viewPager.setLayoutParams(params2);
-//
-//                    skipVideoButton.setOnClickListener(v -> {
-//                        Log.i(TAG, "skipVideoButton clicked!");
-//                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//                        onNextButtonClicked();
-//                    });
-//
-//                    onNextButtonClicked();
+//                    params.bottomMargin = 225;  // Adjust this value as needed
+//                    viewPager.setLayoutParams(params);
 
 
-                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            // Show and enable the button after 2500ms
-                            nextButton.setVisibility(View.VISIBLE);
-                            nextButton.setEnabled(true);
-                        }
-                    }, 2500); // Delay in milliseconds
+
+//                    Handler handler = new Handler(Looper.getMainLooper());
+//                    delayedAction = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            // Show and enable the button after 2500ms
+//                            nextButton.setVisibility(View.VISIBLE);
+//                            nextButton.setEnabled(true);
+//                        }
+//                    }; // Post the delay
+//                    handler.postDelayed(delayedAction, 5000); // Delay in milliseconds
 
                     nextButton.setVisibility(View.GONE);
                     nextButton.setEnabled(false);
@@ -388,6 +418,15 @@ public class d_Lesson_container extends AppCompatActivity implements
                 }
 
                 if (currentFragment instanceof f_3_lesson_post_test) {
+
+//                    // Cancel the Runnable
+//                    handler.removeCallbacks(delayedAction);
+
+                    handler.removeCallbacksAndMessages(null);
+
+                    // just in case lang, and also anti error
+                    if (f_2_lesson_video.webView != null)
+                        f_2_lesson_video.stopVideoPlayback();
 
                     nextButton.setVisibility(View.GONE);
                     nextButton.setEnabled(false);
@@ -487,6 +526,25 @@ public class d_Lesson_container extends AppCompatActivity implements
             }
         });
     }
+
+    private void showResumeDialog(int databaseCurrentStep) {
+        new AlertDialog.Builder(d_Lesson_container.this)
+                .setTitle("Resume Progress")
+                .setMessage("You have saved progress at step " + databaseCurrentStep + ". Do you want to resume?")
+                .setPositiveButton("Resume", (dialog, which) -> {
+                    // Resume from the saved progress
+                    Log.i("HEY", "GENAMIE | Resuming from step: " + databaseCurrentStep);
+                    currentStep = databaseCurrentStep;
+                    viewPager.setCurrentItem(currentStep);
+                })
+                .setNegativeButton("Start Over", (dialog, which) -> {
+                    // Restart progress
+                    Log.i("HEY", "GENAMIE | Starting Over.");
+                    currentStep = 0;
+                })
+                .show();
+    }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -853,7 +911,7 @@ public class d_Lesson_container extends AppCompatActivity implements
             }
         }
 
-        gridLayout.setColumnCount(numberOfSteps * 2 - 1);
+        gridLayout.setColumnCount((numberOfSteps+1) * 2 - 1);
     }
 
     private void updateProgressAndMoveToNextStep() {
@@ -873,9 +931,8 @@ public class d_Lesson_container extends AppCompatActivity implements
         // Update furthestStep if currentStep moved forward
         furthestStep = Math.max(furthestStep, currentStep);
 
-        if (!isCompleted) {
+        if (!isCompleted)
             updateCurrentModuleInDatabase();  // Update database with the new progress
-        }
 
         populateGridLayout();  // Update the progress indicators
 
@@ -1155,14 +1212,28 @@ public class d_Lesson_container extends AppCompatActivity implements
     @Override
     public void onPreTestComplete(int score) {
 
+        String category = b_main_0_menu_categorize_user.category;
+        double bktScore = x_bkt_algorithm.getKnowledge();
+
+        isLessonFinished = false;
+
+//        x_bkt_algorithm.updateTestBKTScore();
+
+//        Log.i(TAG, "onPreTestComplete System Intervention");
+//        Log.i(TAG, "HDMI | Category: " + category);
+//        Log.i(TAG, "HDMI | bktScore: " + bktScore);
+//        Log.i(TAG, "HDMI | let's change category...");
+//        t_SystemInterventionCategory.changeCategory(category, bktScore);
+
         showScoreDialog("Pre-Test", score, f_0_lesson_pre_test.preTestQuestions);
 
         // Call feedback for pre-test
         c_Lesson_feedback.printResult("Pre-Test");
 
-
         isPreTestComplete = true;
 
+        Log.i("HEY" , "ICHI | Pre-Test is Done!");
+        updateProgressAndMoveToNextStep();
     }
 
     @Override
@@ -1182,14 +1253,14 @@ public class d_Lesson_container extends AppCompatActivity implements
 //        }, delay * 1000);
 
         // Enable and show the button after the delay
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                nextButton.setEnabled(true);
-                nextButton.setVisibility(View.VISIBLE);
-            // Log.(TAG, "onTextLessonComplete | show NextButton");
-            }
-        }, delay * 1000);  // Convert seconds to milliseconds
+//        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                nextButton.setEnabled(true);
+//                nextButton.setVisibility(View.VISIBLE);
+//            // Log.(TAG, "onTextLessonComplete | show NextButton");
+//            }
+//        }, delay * 1000);  // Convert seconds to milliseconds
 
 //        if (isDone && pageNumber <= numberOfTextLessons) {
 //            // Check if there are any remaining text lessons
@@ -1213,6 +1284,8 @@ public class d_Lesson_container extends AppCompatActivity implements
         String category = b_main_0_menu_categorize_user.category;
         double bktScore = x_bkt_algorithm.getKnowledge();
 
+        Log.i(TAG, "HDMI | Category: " + category);
+        Log.i(TAG, "HDMI | bktScore: " + bktScore);
         Log.i(TAG, "HDMI | let's change category...");
         t_SystemInterventionCategory.changeCategory(category, bktScore);
 
@@ -1229,12 +1302,41 @@ public class d_Lesson_container extends AppCompatActivity implements
     }
 
     private void showPassedDialog(String lesson) {
+
         // Create a dialog using the custom layout
         AlertDialog.Builder builder = new AlertDialog.Builder(d_Lesson_container.this);
 
         // Inflate the custom layout
         LayoutInflater inflater = getLayoutInflater();
         View customDialogView = inflater.inflate(R.layout.c_lesson_passed_dialog_2, null);
+
+        // Find the BarChart in the custom layout
+        BarChart barChart = customDialogView.findViewById(R.id.bar_chart);
+
+        // Prepare data entries
+        List<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(0, c_Lesson_feedback.preTestCorrectAnswers));  // Pre-Test Score
+        entries.add(new BarEntry(1, c_Lesson_feedback.postTestCorrectAnswers)); // Post-Test Score
+
+        // Create dataset
+        BarDataSet dataSet = new BarDataSet(entries, "Test Scores");
+        dataSet.setColors(new int[]{Color.BLUE, Color.GREEN});  // Set colors for bars
+        dataSet.setValueTextSize(12f);
+
+        // Create BarData and set it to the chart
+        BarData data = new BarData(dataSet);
+        barChart.setData(data);
+
+        // Customize the chart
+        barChart.getDescription().setEnabled(false); // Disable description
+        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(new String[]{"Pre-Test", "Post-Test"}));
+        barChart.getXAxis().setGranularity(1f); // Ensure labels align with bars
+        barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        barChart.getAxisLeft().setAxisMinimum(0); // Start Y-axis at 0
+        barChart.getAxisRight().setEnabled(false); // Disable right Y-axis
+
+        barChart.invalidate(); // Refresh the chart
+
 
         // Set the custom layout to the dialog builder
         builder.setView(customDialogView);
@@ -1262,18 +1364,9 @@ public class d_Lesson_container extends AppCompatActivity implements
         // Handle button click
         Button okButton = customDialogView.findViewById(R.id.okay_passed_button);
         okButton.setOnClickListener(v -> {
-
             // Add token to pag true
             f_3_lesson_post_test_generateHint.takeToken(true, 10);
-
-            finish(); // Optionally finish the activity
-
-            // if last lesson of the module, go back to main menu
-            // but how do I detect it?
-
-//            Intent intent = new Intent(d_Lesson_container.this, b_main_1_lesson_progressive.class);
-//            startActivity(intent);
-
+            finish();
         });
 
         // Create and show the dialog
@@ -1297,8 +1390,8 @@ public class d_Lesson_container extends AppCompatActivity implements
 
 
     private void updateCurrentModuleInDatabase() {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
-        String userId = sharedPreferences.getString("userId", "");
+//        SharedPreferences sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
+//        String userId = sharedPreferences.getString("userId", "");
 
         Log.i("Katalon", "Katalon | userId: " + userId);
         Log.i("Katalon", "Katalon | Collection: " + learningMode);
@@ -1306,6 +1399,9 @@ public class d_Lesson_container extends AppCompatActivity implements
         Log.i("Katalon", "Katalon | userRef.update(" + currentModule + ".Progress: " + currentStep);
 
         if (!userId.isEmpty()) {
+            Log.i("Katalon", "Katalon | user.Id is not empty!");
+            Log.i("Katalon", "Katalon | path: \"users\"/"+userId+"/"+learningMode+"/"+currentLesson+"/"+currentModule+".Progress["+currentStep+"]");
+            Log.i("Katalon", "Katalon | ");
             DocumentReference userRef = db.collection("users").document(userId)
                     .collection(learningMode).document(currentLesson);
 
@@ -1314,18 +1410,22 @@ public class d_Lesson_container extends AppCompatActivity implements
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                            // Log.(TAG, "Current step updated successfully in the database.");
+                                Log.i("Katalon", "Katalon | task.isSuccessful()");
+                             Log.i(TAG, "Current step updated successfully in the database.");
                             } else {
-                            // Log.(TAG, "Failed to update current step: " + task.getException().getMessage());
+                             Log.i(TAG, "Failed to update current step: " + task.getException().getMessage());
                                 if (task.getException() instanceof FirebaseFirestoreException) {
                                     FirebaseFirestoreException firestoreException = (FirebaseFirestoreException) task.getException();
                                     if (firestoreException.getCode() == FirebaseFirestoreException.Code.NOT_FOUND) {
-                                    // Log.(TAG, "The specified document does not exist.");
+                                     Log.i(TAG, "The specified document does not exist.");
                                     }
                                 }
                             }
                         }
                     });
+
+            Log.i("Katalon", "Katalon | done na mag query.");
+
         } else {
         // Log.(TAG, "User ID not found in SharedPreferences.");
         }

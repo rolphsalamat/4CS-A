@@ -95,6 +95,41 @@
         app:layout_constraintTop_toBottomOf="@id/passing_grade"
         />
 
+    <LinearLayout
+        android:id="@+id/bar_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/you_failed"
+        >
+
+        <!-- Arrow pointing to the ProgressBar -->
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/arrow_back"
+            android:backgroundTint="@color/white"
+            android:elevation="10dp"
+            android:rotationY="180"
+            android:layout_gravity="start|bottom"/>
+
+        <!-- ProgressBar with gradient color -->
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="40dp"
+            android:layout_height="150dp"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:progressDrawable="@drawable/gradient_progress"
+            android:max="100"
+            android:progress="75"
+            />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,6 +1,19 @@
 package com.example.autotutoria20;
 
+import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.graphics.Typeface;
+import androidx.core.content.res.ResourcesCompat;
+
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -8,13 +21,17 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class t_UserProgressFromDatabase {
 
     static int number_Of_Lessons = 0;
+    static boolean hasWeakPoint;
     private static final String TAG = "ProgressDataManager";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -25,6 +42,9 @@ public class t_UserProgressFromDatabase {
     static Boolean isFirstFailDetected = false;
 
     static Map<String, Object> lessonData = new HashMap<>();
+    static Map<String, Map<String, Map<String, Object>>> nestedFeedback = new HashMap<>();
+
+    static Map<String, Object> moduleScore = new HashMap<>();
     static Map<String, Object> moduleProgress = new HashMap<>();
     static Map<String, Boolean> moduleBoolean = new HashMap<>();
     static int moduleCount = 0;
@@ -179,6 +199,7 @@ public class t_UserProgressFromDatabase {
                     if (lessonData == null) continue;
 
                     int lessonNumber = ++moduleCount;
+                    double totalBKTScore = 0.0;
                     int totalProgress = 0;
                     int moduleCountInLesson = 0;
 
@@ -206,16 +227,38 @@ public class t_UserProgressFromDatabase {
                         if (maxProgress <= 0) continue;
 
                         int progressPercentage = (int) ((progress / (double) maxProgress) * 100);
+
                         totalProgress += progressPercentage;
+                        totalBKTScore += bktScoreValue;
                         moduleCountInLesson++;
 
+                        // Determine feedback based on BKT score and user category
+                        String feedback = t_SystemInterventionCategory.getWeakPointFeedback(bktScoreValue, b_main_0_menu_categorize_user.category);
+                        Log.i(TAG, "Module " + moduleKey + " | Lesson " + lessonNumber + " | " + bktScoreValue + " | " + feedback);
+
+                        // if feedback contains "weak"
+                        // add it to the nested map nestedFeedback
+
+                        String module = "Module " + moduleKey.charAt(1);
+                        String lesson = "Lesson " + lessonNumber;
+
+                        if (feedback.contains("weak")) {
+                            addFeedback(nestedFeedback, module, lesson, bktScoreValue, feedback);
+                            Log.i(TAG, "Weak Point detected at: " +
+                                    "\n" + module + " | " + lesson + " |\n" + bktScoreValue + " | " + feedback);
+                        }
+
+
+
+
                         Log.i(TAG, "MANGO | progressPercentage: " + progressPercentage);
-                        Log.i(TAG, "Module Progress: Module " + moduleKey + " in Lesson " + lessonNumber
+                        Log.i(TAG, "MANGO | Module Progress: Module " + moduleKey + " in Lesson " + lessonNumber
                                             + " - Progress: " + progressPercentage + "%");
+                        Log.i(TAG, "MANGO | BKT Score: " + bktScoreValue);
 
                         Log.i(TAG, "50 PLUS | isFirstFailDetected: " + isFirstFailDetected);
 
-                        if (!isFirstFailDetected && (progressPercentage < 100) ) {
+                        if (!isFirstFailDetected && !(progressPercentage < 100) ) {
                             Log.i(TAG, "MANGO | inside if statement");
 
 
@@ -230,6 +273,9 @@ public class t_UserProgressFromDatabase {
                                 failedLesson = "Module " + lessonNumber;
                                 failedModule = Integer.parseInt(String.valueOf(moduleKey.charAt(1)));
                                 failedBKTScore = bktScore != null ? bktScore.doubleValue() : 0.0;
+
+                                Log.i(TAG, "MANGO | failedLesson: " + failedLesson);
+                                Log.i(TAG, "MANGO | failedModule: " + failedModule);
 
                                 Log.i(TAG, "MAMA MO PASADO | failedBKTScore: " + failedBKTScore);
                                 Log.i("ProgressCheck", "First failure detected for module.");
@@ -246,6 +292,10 @@ public class t_UserProgressFromDatabase {
                         }
                     }
 
+                    // Calculate the average BKT score for the lesson
+                    double averageBKTScore = moduleCountInLesson > 0 ? totalBKTScore / moduleCountInLesson : 0.0;
+                    moduleScore.put("Module " + lessonNumber, averageBKTScore);
+
                     int averageProgress = moduleCountInLesson > 0 ? totalProgress / moduleCountInLesson : 0;
                     moduleProgress.put("Module " + lessonNumber, averageProgress);
                     moduleBoolean.put("Module " + lessonNumber, averageProgress >= 100);
@@ -259,6 +309,111 @@ public class t_UserProgressFromDatabase {
             }
         });
     }
+
+    public static void addFeedback(Map<String, Map<String, Map<String, Object>>> nestedFeedback,
+                                   String module, String lesson, double bktScore, String feedback) {
+
+        hasWeakPoint = true;
+
+        // Get or create the module map
+        nestedFeedback.putIfAbsent(module, new HashMap<>());
+
+        // Get or create the lesson map within the module
+        nestedFeedback.get(module).putIfAbsent(lesson, new HashMap<>());
+
+        // Add the BKT score and feedback to the lesson map
+        Map<String, Object> lessonDetails = nestedFeedback.get(module).get(lesson);
+        lessonDetails.put("BKT Score", bktScore);
+        lessonDetails.put("Feedback", feedback);
+    }
+
+    public static void displayFeedback(Context context, Map<String, Map<String, Map<String, Object>>> nestedFeedback) {
+        // Logs for debugging
+        List<String> sortedModules = new ArrayList<>(nestedFeedback.keySet());
+        Collections.sort(sortedModules);  // Sort the modules alphabetically or numerically
+
+        // Inflate the custom layout for the dialog
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.feedback_dialog, null);
+
+        // Find the scrollable container in the layout
+        LinearLayout feedbackContainer = dialogView.findViewById(R.id.feedback_container);
+
+        // Load the custom font from the resources
+        Typeface customFont = ResourcesCompat.getFont(context, R.font.garfiey);
+
+        // Populate the feedback container with details from nestedFeedback
+        for (String module : sortedModules) {  // Iterate over sorted modules
+            // Add Module title
+            TextView moduleTitle = new TextView(context);
+            moduleTitle.setText("Module: " + module);
+            moduleTitle.setTypeface(null, Typeface.BOLD);  // This sets the text style to bold
+            moduleTitle.setTextColor(ContextCompat.getColor(context, R.color.white));
+            moduleTitle.setTypeface(customFont);
+            moduleTitle.setTextSize(26);
+            moduleTitle.setPadding(16, 16, 16, 8);
+            feedbackContainer.addView(moduleTitle);
+
+            Map<String, Map<String, Object>> lessons = nestedFeedback.get(module);
+            // Sort lessons by lesson name (if applicable)
+            List<String> sortedLessons = new ArrayList<>(lessons.keySet());
+            Collections.sort(sortedLessons);  // Sort lessons alphabetically or numerically
+
+            for (String lesson : sortedLessons) {  // Iterate over sorted lessons
+                // Add Lesson title
+                TextView lessonTitle = new TextView(context);
+                lessonTitle.setText("\tLesson: " + lesson);
+                lessonTitle.setTextColor(ContextCompat.getColor(context, R.color.white));
+                lessonTitle.setTypeface(customFont);
+                lessonTitle.setTextSize(20);
+                lessonTitle.setPadding(16, 8, 16, 4);
+                feedbackContainer.addView(lessonTitle);
+
+                Map<String, Object> lessonDetails = lessons.get(lesson);
+
+                // Add BKT Score
+                TextView bktScoreView = new TextView(context);
+                // Assuming lessonDetails.get("BKT Score") returns a Double
+                Double bktScore = (Double) lessonDetails.get("BKT Score");  // Retrieve the BKT Score
+                bktScoreView.setText("\t\tBKT Score: " + String.format("%.2f", bktScore));
+                bktScoreView.setTextColor(ContextCompat.getColor(context, R.color.white));
+                bktScoreView.setTypeface(customFont);
+                bktScoreView.setTextSize(22);
+                bktScoreView.setPadding(16, 4, 16, 2);
+                feedbackContainer.addView(bktScoreView);
+
+//                // Add Feedback
+//                TextView feedbackView = new TextView(context);
+//                feedbackView.setText("    Feedback: " + lessonDetails.get("Feedback"));
+//                feedbackView.setTextColor(ContextCompat.getColor(context, R.color.white));
+//                feedbackView.setTypeface(customFont);
+//                feedbackView.setPadding(16, 2, 16, 16);
+//                feedbackContainer.addView(feedbackView);
+
+            }
+        }
+
+        // Add recommendation message
+        TextView recommendationMessage = new TextView(context);
+        recommendationMessage.setText("\nRecommendation: Retake the following modules and lessons for improvement.");
+        recommendationMessage.setTextColor(ContextCompat.getColor(context, R.color.white));
+        recommendationMessage.setTypeface(customFont);
+        recommendationMessage.setTextSize(16);
+        recommendationMessage.setPadding(16, 16, 16, 16);
+        feedbackContainer.addView(recommendationMessage);
+
+        // Create and show the dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setView(dialogView);
+
+        // Add OK button to dismiss the dialog
+        Button okayButton = dialogView.findViewById(R.id.okay_button);
+        AlertDialog dialog = builder.create();
+        okayButton.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
 
 
 
