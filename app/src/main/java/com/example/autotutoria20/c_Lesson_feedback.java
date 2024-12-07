@@ -52,6 +52,7 @@ public class c_Lesson_feedback {
     public static int preTestAttemptAnswers = 1;
     public static int postTestCorrectAnswers = 0;
     public static int postTestAttemptAnswers = 1;
+    public static int postTestQuestions = 0;
 
     // Constructor
     public c_Lesson_feedback(Context context) {
@@ -63,11 +64,14 @@ public class c_Lesson_feedback {
 
     }
 
+
+
     public static void resetResult() {
         preTestCorrectAnswers = 0;
         preTestAttemptAnswers = 1;
         postTestCorrectAnswers = 0;
         postTestAttemptAnswers = 1;
+        postTestQuestions = 0;
     }
 
     public static void printResult(String mode) {

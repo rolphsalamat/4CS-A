@@ -1,5 +1,6 @@
 package com.example.autotutoria20;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -9,6 +10,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -64,6 +66,7 @@ public class a_user_1_login extends AppCompatActivity {
     private boolean isPasswordVisible = false;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private Dialog loadingDialog;
     private TextView loginButton;
     private TextView forgotPassword;
     private LinearLayout signupButton, signWithGoogleButton;
@@ -137,12 +140,20 @@ public class a_user_1_login extends AppCompatActivity {
                 if (!(n_Network.isNetworkAvailable(a_user_1_login.this))) {
                     Toast.makeText(a_user_1_login.this, "Please connect to a network.", Toast.LENGTH_SHORT).show();
                 } else {
+                    if (email.isEmpty()) {
+                        Toast.makeText(a_user_1_login.this, "Username is empty.", Toast.LENGTH_SHORT).show();
+                    } else if (password.isEmpty()) {
+                        Toast.makeText(a_user_1_login.this, "Password is empty.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Show loading dialog
+                        loadingDialog = new Dialog(a_user_1_login.this);
+                        loadingDialog.setContentView(R.layout.a_user_0_login_loading);
+                        loadingDialog.setCancelable(false); // Prevent closing while loading
+                        loadingDialog.show();
 
-//                    Toast.makeText(a_user_1_login.this, "May INTERNET KA!", Toast.LENGTH_SHORT).show();
-                    loginUser(email, password); // original code
+                        loginUser(email, password); // original code
+                    }
                 }
-
-//                login(email, password);
             }
         });
 
@@ -366,12 +377,6 @@ public class a_user_1_login extends AppCompatActivity {
         String TAG = "login method";
 
         Log.e(TAG, "loginUser("+username+","+password+");");
-//        // Check if a user is currently logged in
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if (currentUser == null) {
-//            Log.e(TAG, "No user is currently logged in.");
-//            return; // Handle user not logged in
-//        }
 
         // Retrieve all users from the Firestore database
         db.collection("users")
@@ -392,7 +397,7 @@ public class a_user_1_login extends AppCompatActivity {
                         // Check if the document exists and compare the User Category
                         if (document.exists()) {
                             String dbUsername = document.getString("Username");
-                            if (dbUsername.equals(username)) {
+                            if (dbUsername != null && dbUsername.equals(username)) {
                                 usernameFound = true;
                                 email = document.getString("Email Address");
                                 storedHashedPassword = document.getString("Password");
@@ -406,6 +411,7 @@ public class a_user_1_login extends AppCompatActivity {
                     if (!usernameFound) {
                         Log.d(TAG, "Username does not exist: " + username);
                         Toast.makeText(a_user_1_login.this, "Username does not exist", Toast.LENGTH_SHORT).show();
+                        loadingDialog.dismiss();
                         return;
                     }
 
@@ -418,12 +424,14 @@ public class a_user_1_login extends AppCompatActivity {
                     if (email == null || email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                         Log.e(TAG, "Email is missing for username: " + username + " | or Email is invalid format");
                         Toast.makeText(a_user_1_login.this, "Email is missing for this username", Toast.LENGTH_SHORT).show();
+                        loadingDialog.dismiss();
                         return;
                     }
 
                     if (storedHashedPassword == null || storedHashedPassword.isEmpty()) {
                         Log.e(TAG, "Password is missing for username: " + username);
                         Toast.makeText(a_user_1_login.this, "Password is missing for this username", Toast.LENGTH_SHORT).show();
+                        loadingDialog.dismiss();
                         return;
                     }
 
@@ -434,6 +442,7 @@ public class a_user_1_login extends AppCompatActivity {
                     if (!passwordMatch) {
                         Log.e(TAG, "Password does not match for username: " + username);
                         Toast.makeText(a_user_1_login.this, "Incorrect password", Toast.LENGTH_SHORT).show();
+                        loadingDialog.dismiss();
                         return;
                     }
 
@@ -459,6 +468,7 @@ public class a_user_1_login extends AppCompatActivity {
                                             Log.d(TAG, "Login successful. User ID: " + userId);
 
                                             fetchUserInfo(userId); // Fetch additional user info
+                                            loadingDialog.dismiss();
 
                                         } else {
                                             Log.d(TAG, "Email not verified");
@@ -466,12 +476,15 @@ public class a_user_1_login extends AppCompatActivity {
                                                     "Please verify your email before logging in.",
                                                     Toast.LENGTH_SHORT).show();
                                             user.sendEmailVerification();
+                                            loadingDialog.dismiss();
                                         }
+
                                     } else {
                                         Log.d(TAG, "User login failed: User object is null");
                                         Toast.makeText(a_user_1_login.this,
                                                 "Account does not exist",
                                                 Toast.LENGTH_SHORT).show();
+                                        loadingDialog.dismiss();
                                     }
                                 } else {
 
@@ -481,6 +494,7 @@ public class a_user_1_login extends AppCompatActivity {
                                     Toast.makeText(a_user_1_login.this,
                                             "Too many login attempts, try logging in later.",
                                             Toast.LENGTH_SHORT).show();
+                                    loadingDialog.dismiss();
                                 }
                             });
 

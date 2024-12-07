@@ -65,7 +65,11 @@ public class d_Lesson_container extends AppCompatActivity implements
         f_3_lesson_post_test.PostTestCompleteListener
 {
 
+    private int moduleIndex;
+    private int lessonIndex;
+    private Boolean isProgressiveMode;
     private Runnable delayedAction;
+    private static Boolean isResumed = false;
     public static boolean isPreTestComplete = false;
     public static boolean isPostTestComplete = false;
     private Handler handler = new Handler();
@@ -126,6 +130,12 @@ public class d_Lesson_container extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.d_lesson_container);
 
+        currentStep = 0;
+        currentReturnStep = 0;
+        returnStep = 0;
+        numberOfSteps = 0;
+        isResumed = false;
+
         sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE);
         userId = sharedPreferences.getString("userId", "");
 
@@ -138,20 +148,22 @@ public class d_Lesson_container extends AppCompatActivity implements
         isCompleted = sharedPreferences.getBoolean("isCompleted", false);
 //        isLessonPassed = sharedPreferences.getBoolean("isLessonPassed", false);
 
-        if (isCompleted) {
-            // show Dialog "You already finished this lesson, do you want to reset your score and retake this lesson?"
-        }
-
         String HEY = "EVO PLUS GOLD";
 
         Log.i(HEY, "GENAMIE | Learning Mode: " + learningMode); // Progressive Mode : Free Use Mode
         Log.i(HEY, "GENAMIE | Current Lesson: " + currentLesson); // Lesson 1 -> Lesson 8
         Log.i(HEY, "GENAMIE | Current Module: " + currentModule); // M1 -> M4
-        Log.i(HEY, "GENAMIE | isComplete: " + isCompleted); // true
+        Log.i(HEY, "GENAMIE | isComplete: " + isCompleted); // true : false
+
+        if (isCompleted) {
+            // show Dialog "You already finished this lesson, do you want to reset your score and retake this lesson?"
+            showResetLessonDialog();
+        }
 
         String formattedModule = "Module " + currentModule.charAt(1);
 
         stepSequence = getStepsAsStepTypeArray(formattedModule, currentLesson);
+        Log.i(HEY, "GENAMIE | stepSequence: " + stepSequence);
 
         // Log the step sequence
         if (stepSequence != null) {
@@ -164,53 +176,53 @@ public class d_Lesson_container extends AppCompatActivity implements
         Log.i("HEY", "GENAMIE | stepSequence.length: " + stepSequence.length + " | numberOfSteps: " + numberOfSteps);
         Log.i("HEY", "GENAMIE | Path: users/" + userId + "/" + learningMode + "/" + currentLesson + "/" + currentModule + ".Progress");
 
-//        db.collection("users")
-//                .document(userId)
-//                .collection(learningMode) // Progressive Mode or Free Use Mode
-//                .document(currentLesson) // e.g., Lesson 1
-//                .get()
-//                .addOnCompleteListener(documentSnapshot -> {
-//                    if (documentSnapshot.isComplete()) {
-//                        Log.i("HEY", "GENAMIE | Document fetch complete.");
-//                        Map<String, Object> lessonData = documentSnapshot.getResult().getData();
-//                        if (lessonData != null) {
-//                            Log.i("HEY", "GENAMIE | Lesson Data: " + lessonData.toString());
-//
-//                            // Get the module data
-//                            Map<String, Object> moduleData = (Map<String, Object>) lessonData.get(currentModule);
-//                            if (moduleData != null) {
-//                                Log.i("HEY", "GENAMIE | Module data found for key: " + currentModule);
-//
-//                                // Check for Progress key
-//                                if (moduleData.containsKey("Progress")) {
-//                                    Object progress = moduleData.get("Progress");
-//                                    if (progress != null) {
-//                                        Log.i("HEY", "GENAMIE | Progress found: " + progress.toString());
-//                                        int currentStep = Integer.parseInt(progress.toString());
-//
-//                                        if (currentStep == 0 || currentStep == numberOfSteps)
-//                                            Log.i("HEY", "GENAMIE | Lesson is either finished or not yet progressed.");
-//                                            // proceed from the beginning
-//                                        else
-//                                            showResumeDialog(currentStep);
-//
-//                                    } else {
-//                                        Log.i("HEY", "GENAMIE | Progress is null.");
-//                                    }
-//                                } else {
-//                                    Log.i("HEY", "GENAMIE | Progress key does not exist in module data.");
-//                                }
-//                            } else {
-//                                Log.i("HEY", "GENAMIE | Module data is null for key: " + currentModule);
-//                            }
-//                        } else {
-//                            Log.i("HEY", "GENAMIE | Lesson data is null.");
-//                        }
-//                    } else {
-//                        Log.i("HEY", "GENAMIE | Lesson Document Not Found.");
-//                    }
-//                })
-//                .addOnFailureListener(e -> Log.e("HEY", "GENAMIE | Error Retrieving Data", e));
+        db.collection("users")
+                .document(userId)
+                .collection(learningMode) // Progressive Mode or Free Use Mode
+                .document(currentLesson) // e.g., Lesson 1
+                .get()
+                .addOnCompleteListener(documentSnapshot -> {
+                    if (documentSnapshot.isComplete()) {
+                        Log.i("HEY", "GENAMIE | Document fetch complete.");
+                        Map<String, Object> lessonData = documentSnapshot.getResult().getData();
+                        if (lessonData != null) {
+                            Log.i("HEY", "GENAMIE | Lesson Data: " + lessonData.toString());
+
+                            // Get the module data
+                            Map<String, Object> moduleData = (Map<String, Object>) lessonData.get(currentModule);
+                            if (moduleData != null) {
+                                Log.i("HEY", "GENAMIE | Module data found for key: " + currentModule);
+
+                                // Check for Progress key
+                                if (moduleData.containsKey("Progress")) {
+                                    Object progress = moduleData.get("Progress");
+                                    if (progress != null) {
+                                        Log.i("HEY", "GENAMIE | Progress found: " + progress.toString());
+                                        int currentStep = Integer.parseInt(progress.toString());
+
+                                        if (currentStep == 0 || currentStep == numberOfSteps)
+                                            Log.i("HEY", "GENAMIE | Lesson is either finished or not yet progressed.");
+                                            // proceed from the beginning
+                                        else
+                                            showResumeDialog(currentStep);
+
+                                    } else {
+                                        Log.i("HEY", "GENAMIE | Progress is null.");
+                                    }
+                                } else {
+                                    Log.i("HEY", "GENAMIE | Progress key does not exist in module data.");
+                                }
+                            } else {
+                                Log.i("HEY", "GENAMIE | Module data is null for key: " + currentModule);
+                            }
+                        } else {
+                            Log.i("HEY", "GENAMIE | Lesson data is null.");
+                        }
+                    } else {
+                        Log.i("HEY", "GENAMIE | Lesson Document Not Found.");
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("HEY", "GENAMIE | Error Retrieving Data", e));
 
         Log.i("HEY", "GENAMIE | Done na yung query sa database");
         tokenLayout = findViewById(R.id.tokenLayout);
@@ -222,23 +234,14 @@ public class d_Lesson_container extends AppCompatActivity implements
         tokenLayout.setVisibility(View.GONE);
         tokenLayout.setEnabled(false);
 
-        currentStep = 0;
-        currentReturnStep = 0;
-        returnStep = 0;
-        numberOfSteps = 0;
-
-        // e kasi ibang lesson na to :D
         isPreTestComplete = false;
         isPostTestComplete = false;
 
         c_Lesson_feedback.resetResult();
 
-//        txtSecondsRemaining = findViewById(R.id.seconds_remaining);
         gridLayout = findViewById(R.id.gridLayout);
         viewPager = findViewById(R.id.viewPager);
         viewPager.setOffscreenPageLimit(1);  // Originally 1
-
-        boolean isProgressiveMode = true;
 
         isProgressiveMode = learningMode.equalsIgnoreCase("Progressive Mode");
 
@@ -393,21 +396,19 @@ public class d_Lesson_container extends AppCompatActivity implements
 
                     handler.removeCallbacksAndMessages(null);
 
-//                    params.bottomMargin = 225;  // Adjust this value as needed
-//                    viewPager.setLayoutParams(params);
+                    params.bottomMargin = 225;  // Adjust this value as needed
+                    viewPager.setLayoutParams(params);
 
-
-
-//                    Handler handler = new Handler(Looper.getMainLooper());
-//                    delayedAction = new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            // Show and enable the button after 2500ms
-//                            nextButton.setVisibility(View.VISIBLE);
-//                            nextButton.setEnabled(true);
-//                        }
-//                    }; // Post the delay
-//                    handler.postDelayed(delayedAction, 5000); // Delay in milliseconds
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    delayedAction = new Runnable() {
+                        @Override
+                        public void run() {
+                            // Show and enable the button after 2500ms
+                            nextButton.setVisibility(View.VISIBLE);
+                            nextButton.setEnabled(true);
+                        }
+                    }; // Post the delay
+                    handler.postDelayed(delayedAction, 3000); // Delay in milliseconds
 
                     nextButton.setVisibility(View.GONE);
                     nextButton.setEnabled(false);
@@ -527,6 +528,33 @@ public class d_Lesson_container extends AppCompatActivity implements
         });
     }
 
+    private void showResetLessonDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(d_Lesson_container.this);
+        builder.setTitle("Lesson Completed")
+                .setMessage("You already finished this lesson. Do you want to reset your score and retake this lesson?")
+                .setPositiveButton("Reset and Retake", (dialog, which) -> {
+                    // Logic to reset the score and retake the lesson
+                    resetLessonProgress();
+                    dialog.dismiss();
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void resetLessonProgress() {
+        // Placeholder for resetting logic
+        int moduleIndex = Integer.parseInt(String.valueOf(d_Lesson_container.currentModule.charAt(1)));
+        int lessonIndex = Integer.parseInt(String.valueOf(d_Lesson_container.currentLesson.charAt(7)));
+        Boolean isProgressiveMode = "Progressive Mode".equals(learningMode);
+        x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, isProgressiveMode);
+        Log.d("ResetLesson", "Lesson progress has been reset.");
+        isCompleted = false;
+        // Add your database update logic or other reset functionality here
+    }
+
+
     private void showResumeDialog(int databaseCurrentStep) {
         new AlertDialog.Builder(d_Lesson_container.this)
                 .setTitle("Resume Progress")
@@ -535,7 +563,12 @@ public class d_Lesson_container extends AppCompatActivity implements
                     // Resume from the saved progress
                     Log.i("HEY", "GENAMIE | Resuming from step: " + databaseCurrentStep);
                     currentStep = databaseCurrentStep;
+                    furthestStep = databaseCurrentStep;
+                    currentReturnStep = databaseCurrentStep;
+                    L_lesson_handler.pageNumber = currentStep;
                     viewPager.setCurrentItem(currentStep);
+                    populateGridLayout(); // to set to currentStep
+                    isResumed = true;
                 })
                 .setNegativeButton("Start Over", (dialog, which) -> {
                     // Restart progress
@@ -703,30 +736,30 @@ public class d_Lesson_container extends AppCompatActivity implements
 
                         // Reset logic based on completion and passing status
                         if (isCompleted) {
-                            if (!lessonPassed) {
+                            if (!lessonPassed && !isResumed) {
                                 // Case 1: Completed, not Passed - RETAKE
                             // Log.("TAG", "Case 1: Completed, not Passed - RETAKE");
                                 c_Lesson_feedback.resetResult();
-                                x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, isProgressiveMode);
+//                                x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, isProgressiveMode);
 //                                showToast("You completed the lesson but did not pass, please retake the lesson");
-                            } else {
+                            } else if (lessonPassed && !isResumed){
                             // Log.("TAG", "Case 2: Completed, Passed - OK (do nothing)");
                                 // Case 2: Completed, Passed - OK (do nothing)
 //                                showToast("You completed the lesson and passed! Great job!");
                             }
                         } else {
                             // If the lesson is incomplete
-                            if (!lessonPassed) {
+                            if (!lessonPassed && !isResumed) {
                             // Log.("TAG", "Case 3: Incomplete, not Passed - RETAKE");
                                 // Case 3: Incomplete, not Passed - RETAKE
                                 c_Lesson_feedback.resetResult();
-                                x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, isProgressiveMode);
+//                                x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, isProgressiveMode);
 //                                showToast("you completed the lesson but failed, please retake it.");
-                            } else {
+                            } else if (lessonPassed && !isResumed){
                             // Log.("TAG", "Case 4: Incomplete, Passed - RETAKE (possible because of high Pre-Test)");
                                 // Case 4: Incomplete, Passed - RETAKE (possible because of high Pre-Test)
                                 c_Lesson_feedback.resetResult();
-                                x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, isProgressiveMode);
+//                                x_bkt_algorithm.resetScore(moduleIndex, lessonIndex, isProgressiveMode);
 //                                showToast("You did not complete and failed the lesson, please retake it.");
                             }
                         }
@@ -916,6 +949,13 @@ public class d_Lesson_container extends AppCompatActivity implements
 
     private void updateProgressAndMoveToNextStep() {
 
+        String TAG = "updateProgressAndMoveToNextStep()";
+
+        Log.i(TAG, "CATH | currentStep: " + currentStep);
+        Log.i(TAG, "CATH | numberOfSteps: " + numberOfSteps);
+        Log.i(TAG, "CATH | furthestStep: " + furthestStep);
+        Log.i(TAG, "CATH | ");
+
         if (currentStep < numberOfSteps) {
 
             if (currentReturnStep < (currentStep)) {
@@ -931,21 +971,31 @@ public class d_Lesson_container extends AppCompatActivity implements
         // Update furthestStep if currentStep moved forward
         furthestStep = Math.max(furthestStep, currentStep);
 
+        Log.i(TAG, "CATH | isCompleted: " + isCompleted);
+
         if (!isCompleted)
             updateCurrentModuleInDatabase();  // Update database with the new progress
 
+        Log.i(TAG, "CATH | let's call populateGridLayout();");
         populateGridLayout();  // Update the progress indicators
 
         if (isLessonFinished) {
+
             // Clear video preferences once the lesson is completed
             f_2_lesson_video.clearVideoPreferences(this);
+            Log.i("CATH", "CATH | isLessonFinished: " + isLessonFinished);
 
             if (lessonPassed) {
                 showPassedDialog(String.valueOf(currentModule.charAt(1)));
+                Log.i("CATH", "CATH | showPassedDialog();");
             } else {
+                Log.i("CATH", "CATH | finish();");
                 finish();
             }
+
+            x_bkt_algorithm.resultMap.clear();
             c_Lesson_feedback.resetResult();
+
         }
     }
 
@@ -1127,6 +1177,9 @@ public class d_Lesson_container extends AppCompatActivity implements
         // Update the progress and move to the next step
         updateProgressAndMoveToNextStep();
 
+        Log.i("HEY", "CATH | currentStep: " + currentStep);
+        Log.i("HEY", "CATH | numberOfSteps: " + numberOfSteps);
+
         if (currentStep >= numberOfSteps) {
             // ahmmm wag ilagay dito yung finish??
                 finish();
@@ -1219,10 +1272,10 @@ public class d_Lesson_container extends AppCompatActivity implements
 
 //        x_bkt_algorithm.updateTestBKTScore();
 
-//        Log.i(TAG, "onPreTestComplete System Intervention");
-//        Log.i(TAG, "HDMI | Category: " + category);
-//        Log.i(TAG, "HDMI | bktScore: " + bktScore);
-//        Log.i(TAG, "HDMI | let's change category...");
+        Log.i(TAG, "onPreTestComplete System Intervention");
+        Log.i(TAG, "HDMI | Category: " + category);
+        Log.i(TAG, "HDMI | bktScore: " + bktScore);
+        Log.i(TAG, "HDMI | let's change category...");
 //        t_SystemInterventionCategory.changeCategory(category, bktScore);
 
         showScoreDialog("Pre-Test", score, f_0_lesson_pre_test.preTestQuestions);
@@ -1232,8 +1285,10 @@ public class d_Lesson_container extends AppCompatActivity implements
 
         isPreTestComplete = true;
 
-        Log.i("HEY" , "ICHI | Pre-Test is Done!");
-        updateProgressAndMoveToNextStep();
+//        Log.i("HEY" , "ICHI | Pre-Test is Done!");
+//        updateProgressAndMoveToNextStep();
+
+        Log.i("HEY", "ICHI | updateProgressAndMoveToNextStep() done!");
     }
 
     @Override
@@ -1279,15 +1334,17 @@ public class d_Lesson_container extends AppCompatActivity implements
     }
 
     @Override
-    public void onPostTestComplete(boolean isCorrect, int score, boolean isPassed) {
+    public void onPostTestComplete(
+            int score, boolean isPassed) {
 
-        String category = b_main_0_menu_categorize_user.category;
-        double bktScore = x_bkt_algorithm.getKnowledge();
+        t_SystemInterventionCategory.calculateGrowth
+                (f_3_lesson_post_test.preTestScore, f_3_lesson_post_test.postTestScore,
+                c_Lesson_feedback.postTestQuestions, f_3_lesson_post_test.difficultyLevel);
 
-        Log.i(TAG, "HDMI | Category: " + category);
-        Log.i(TAG, "HDMI | bktScore: " + bktScore);
-        Log.i(TAG, "HDMI | let's change category...");
-        t_SystemInterventionCategory.changeCategory(category, bktScore);
+        x_bkt_algorithm.updateLearningStatus
+                (isProgressiveMode, moduleIndex, lessonIndex,
+                c_Lesson_feedback.preTestCorrectAnswers, c_Lesson_feedback.postTestCorrectAnswers,
+                c_Lesson_feedback.postTestQuestions);
 
         lessonPassed = isPassed;
         isLessonFinished = true;
@@ -1310,34 +1367,6 @@ public class d_Lesson_container extends AppCompatActivity implements
         LayoutInflater inflater = getLayoutInflater();
         View customDialogView = inflater.inflate(R.layout.c_lesson_passed_dialog_2, null);
 
-        // Find the BarChart in the custom layout
-        BarChart barChart = customDialogView.findViewById(R.id.bar_chart);
-
-        // Prepare data entries
-        List<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(0, c_Lesson_feedback.preTestCorrectAnswers));  // Pre-Test Score
-        entries.add(new BarEntry(1, c_Lesson_feedback.postTestCorrectAnswers)); // Post-Test Score
-
-        // Create dataset
-        BarDataSet dataSet = new BarDataSet(entries, "Test Scores");
-        dataSet.setColors(new int[]{Color.BLUE, Color.GREEN});  // Set colors for bars
-        dataSet.setValueTextSize(12f);
-
-        // Create BarData and set it to the chart
-        BarData data = new BarData(dataSet);
-        barChart.setData(data);
-
-        // Customize the chart
-        barChart.getDescription().setEnabled(false); // Disable description
-        barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(new String[]{"Pre-Test", "Post-Test"}));
-        barChart.getXAxis().setGranularity(1f); // Ensure labels align with bars
-        barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        barChart.getAxisLeft().setAxisMinimum(0); // Start Y-axis at 0
-        barChart.getAxisRight().setEnabled(false); // Disable right Y-axis
-
-        barChart.invalidate(); // Refresh the chart
-
-
         // Set the custom layout to the dialog builder
         builder.setView(customDialogView);
 
@@ -1345,19 +1374,53 @@ public class d_Lesson_container extends AppCompatActivity implements
         TextView dialogMessage = customDialogView.findViewById(R.id.message);
         dialogMessage.setText("You passed Lesson " + lesson + "!");
 
+        int preTestCorrectAnswers = 0;
+
+        moduleIndex = Integer.parseInt(String.valueOf(d_Lesson_container.currentModule.charAt(1)));
+        lessonIndex = Integer.parseInt(String.valueOf(d_Lesson_container.currentLesson.charAt(7)));
+        isProgressiveMode = "Progressive Mode".equals(learningMode);
+
+        if (c_Lesson_feedback.preTestCorrectAnswers == 0 && isResumed) {
+            preTestCorrectAnswers = x_bkt_algorithm.retrievePreTestScore(isProgressiveMode, moduleIndex, lessonIndex);
+        } else {
+            preTestCorrectAnswers = c_Lesson_feedback.preTestCorrectAnswers;
+        }
+
         TextView preTestMessage = customDialogView.findViewById(R.id.pre_test_score);
         preTestMessage.setText(
                 "Pre-Test Score: "
-                        + (c_Lesson_feedback.preTestCorrectAnswers)
+                        + (preTestCorrectAnswers)
                         + "/"
-                        + (c_Lesson_feedback.preTestAttemptAnswers - 1));
+//                        + (c_Lesson_feedback.preTestAttemptAnswers - 1)
+                        + (f_0_lesson_pre_test.preTestQuestions)
+        );
 
         TextView postTestMessage = customDialogView.findViewById(R.id.post_test_score);
         postTestMessage.setText(
                 "Post-Test Score: "
                         + (c_Lesson_feedback.postTestCorrectAnswers)
                         + "/"
-                        + (c_Lesson_feedback.postTestAttemptAnswers));
+//                        + (c_Lesson_feedback.postTestAttemptAnswers - 1)
+                        + (c_Lesson_feedback.postTestQuestions));
+
+        TextView nlgFeedback = customDialogView.findViewById(R.id.nlg_feedback);
+
+        t_SystemInterventionCategory NLG = new t_SystemInterventionCategory();
+
+        String learningRate = null;
+
+        if (NLG.NLG_Score > 0.7)
+            learningRate = "a strong improvement";
+        else if (NLG.NLG_Score >= 0.3 && NLG.NLG_Score <= 0.7)
+            learningRate = "a moderate improvement";
+        else
+            learningRate = "a minimal improvement";
+
+        String feedback = "Your learning gain for this lesson is classified as" +
+                NLG.NLG_Feedback + ". This reflects " + learningRate + " of " +
+                (NLG.NLG_Score*100) + " in your understanding.";
+
+        nlgFeedback.setText(feedback);
 
         TextView receivedMessage = customDialogView.findViewById(R.id.token);
 
@@ -1473,25 +1536,25 @@ public class d_Lesson_container extends AppCompatActivity implements
         }, (int) delay * 1000);  // Convert seconds to milliseconds
     }
 
-    public static void simulateClicksInCenter() {
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                // Get the center coordinates of the screen
-                int x = viewPager.getWidth() / 2;
-                int y = viewPager.getHeight() / 2;
-
-//                // Number of clicks
-//                int clickCount = 1;
+//    public static void simulateClicksInCenter() {
+//        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                // Get the center coordinates of the screen
+//                int x = viewPager.getWidth() / 2;
+//                int y = viewPager.getHeight() / 2;
 //
-//                for (int i=0;i<clickCount;i++) {
-                    // Simulate click
-                    simulateClick(x, y);
-//                }
-            // Log.("simulateClicksInCenter", "Click!");
-            }
-        }, 7000);  // Convert seconds to milliseconds
-    }
+////                // Number of clicks
+////                int clickCount = 1;
+////
+////                for (int i=0;i<clickCount;i++) {
+//                    // Simulate click
+//                    simulateClick(x, y);
+////                }
+//            // Log.("simulateClicksInCenter", "Click!");
+//            }
+//        }, 7000);  // Convert seconds to milliseconds
+//    }
 
     public static  void simulateClick(int x, int y) {
         long downTime = System.currentTimeMillis();

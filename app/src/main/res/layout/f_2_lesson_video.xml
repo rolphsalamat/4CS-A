@@ -64,14 +64,14 @@
 
     </FrameLayout>
 
-    <Button
-        android:id="@+id/nextButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Next"
-        android:textColor="@color/navy_blue"
-        android:background="@drawable/rounded_corners"
-        android:layout_marginVertical="20dp"/>
+<!--    <Button-->
+<!--        android:id="@+id/nextButton"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Next"-->
+<!--        android:textColor="@color/navy_blue"-->
+<!--        android:background="@drawable/rounded_corners"-->
+<!--        android:layout_marginVertical="20dp"/>-->
 
 
     </LinearLayout>

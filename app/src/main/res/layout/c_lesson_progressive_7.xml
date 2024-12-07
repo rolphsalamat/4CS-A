@@ -116,6 +116,7 @@
             app:layout_constraintEnd_toEndOf="@id/card1"
             app:layout_constraintBottom_toBottomOf="@id/card1"
             android:layout_marginHorizontal="20dp"
+            android:visibility="gone"
             >
             <!-- Background for the locked lesson cover -->
             <ImageView

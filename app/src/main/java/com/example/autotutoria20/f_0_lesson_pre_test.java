@@ -2,44 +2,38 @@ package com.example.autotutoria20;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
-import java.util.HashSet;
 import java.util.Random;
-import android.os.CountDownTimer;
+
 import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.imageview.ShapeableImageView;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class f_0_lesson_pre_test extends Fragment {
 
+    private Button choiceButton;
     private static final String ARG_MODULE = "module";
     private static final String ARG_LESSON = "lesson";
     private static final String ARG_MODE = "mode";
@@ -274,6 +268,9 @@ public class f_0_lesson_pre_test extends Fragment {
         questionText = view.findViewById(R.id.question_text);
         choicesGroup = view.findViewById(R.id.choices_group);
         submitButton = view.findViewById(R.id.submit_pre_test);
+
+//        submitButton.setVisibility(View.GONE);
+
 //        currentButton = view.findViewById(R.id.currentButton);
 //        correct = view.findViewById(R.id.answers_correct);
 //        mistake = view.findViewById(R.id.answers_wrong);
@@ -294,6 +291,9 @@ public class f_0_lesson_pre_test extends Fragment {
         // Ensure valid indices are used
         moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
         lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
+
+        Log.i("481", "481 | pre-test | moduleIndex: " + moduleIndex);
+        Log.i("481", "481 | pre-test | lessonIndex: " + lessonIndex);
 
         if (moduleIndex < 0 || lessonIndex < 0) {
 //            Log.e("submitButton.onClick", "Invalid module or lesson index");
@@ -362,120 +362,19 @@ public class f_0_lesson_pre_test extends Fragment {
 //            if (d_Lesson_container.isPreTestComplete)
 //                d_Lesson_container.onGoToCurrent();
 
-            if (!(choicesGroup.getCheckedRadioButtonId() == -1)) {
+//            choiceButton.
+
+//            if (!(choicesGroup.getCheckedRadioButtonId() == -1)) {
 
                 // Dito originally yung answerAttempt++;
                 answerAttempt++;
+                currentQuestionIndex++;
 
-                boolean correctAnswer = checkAnswer(); // Check if the answer is correct
+//                boolean correctAnswer = checkAnswer(); // Check if the answer is correct
 
 //                Log.e("HEY!", "questionsAnswered("+questionsAnswered+") < preTestQuestions("+(preTestQuestions)+")");
                 // Ensure that questions answered does not exceed total pre-test questions.
-                if (questionsAnswered <= preTestQuestions) { // <= talaga to
 
-//                    Log.e("TAG", "ROP CHECK THIS: | isLessonFinished: " + x_bkt_algorithm.isLessonFinished);
-
-//                    if (!x_bkt_algorithm.isLessonFinished)
-//                        bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer, answerAttempt);
-
-                    if (!d_Lesson_container.isCompleted)
-                        bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer, answerAttempt);
-
-                    // Check if we need to move to the next question based on attempts or correctness.
-                    if (answerAttempt >= attemptChances || correctAnswer) {
-
-                        String TAG = "EVOPlus";
-
-                        c_Lesson_feedback.preTestAttemptAnswers++;
-
-                        // Move to next question or reset if all have been answered.
-//                        Log.d(TAG, "currentQuestionInddex["+currentQuestionIndex+"] < questions.length-1["+(questions.length-1)+"])");
-                        if (currentQuestionIndex < questions.length - 1) {
-                            currentQuestionIndex++;
-//                            Log.e(TAG, "currentQuestionIndex++; ["+currentQuestionIndex+"]");
-                        } else {
-                            currentQuestionIndex = 0; // Reset for new round
-                            bktModel.logScores(); // Log scores at reset point
-//                            Log.e(TAG, "reset currentQuestionIndex["+currentQuestionIndex+"]");
-                        }
-
-                        questionsAnswered++; // Increment answered count
-//                        Log.e(TAG, "increment questionsAnswered["+questionsAnswered+"]");
-
-                        // Load next question only if still within pre-test limits.
-//                        Log.d(TAG, "if (correctAnswer["+correctAnswer+"] || currentQuestionIndex["+currentQuestionIndex
-//                        + "] < preTestQuestions["+preTestQuestions+"] && answerAttempt["+answerAttempt+"] >= attemptChances["+attemptChances+"]");
-                        if (correctAnswer || currentQuestionIndex < preTestQuestions && answerAttempt >= attemptChances) {
-
-                            if (!(questionsAnswered == (preTestQuestions+1)))
-                                loadQuestion();
-
-                            answerAttempt = 0;
-
-                        }
-
-                    }
-
-                    // may plus 1 to kanina
-                    if (questionsAnswered == (preTestQuestions+1)) {
-                        Log.d("TESTING", "Pre-test complete!");
-
-                        // Handle completion of pre-test.
-                        if (preTestCompleteListener != null) {
-                            Log.d("TESTING", "Pre-Test BKT Score: " + x_bkt_algorithm.getKnowledge());
-                            Log.d("TESTING", "Pre-Test Score: " + c_Lesson_feedback.preTestCorrectAnswers);
-                            double bktScore = x_bkt_algorithm.getKnowledge();
-
-                            // Pre-Test BKT Score
-                            x_bkt_algorithm.updateTestBKTScore(
-                                    isProgressiveMode,
-                                    moduleIndex, lessonIndex,
-                                    "Pre-Test",
-                                    bktScore
-                                    );
-
-                            preTestCompleteListener.onPreTestComplete(
-//                                    correctAnswer,
-                                    c_Lesson_feedback.preTestCorrectAnswers);
-                            c_Lesson_feedback.printResult("Pre-Test");
-                            d_Lesson_container.isPreTestComplete = true;
-
-                            // Removed, wag na daw balikan pre-test :D
-//                            loadQuestion();
-
-                        }
-                    }
-
-                } else {
-
-                    String feedback = correctAnswer ? "Correct!" : "Incorrect :(";
-
-                    // Logic for after pre-test is complete
-                    Toast.makeText(getContext(), feedback, Toast.LENGTH_SHORT).show();
-
-                    // Allow answering questions without changing scores
-                    if (answerAttempt >= attemptChances || correctAnswer) {
-                        if (currentQuestionIndex < questions.length - 1) {
-                            currentQuestionIndex++;
-                        } else {
-                            currentQuestionIndex = 0; // Reset for new round
-                        }
-
-                        // Load next question without affecting score
-                        loadQuestion();
-                        answerAttempt = 0; // Reset attempts for new question
-                    }
-                }
-
-
-
-                choicesGroup.clearCheck(); // Clear selected choices at the end of processing.
-            }
-
-            if (c_Lesson_feedback.preTestAttemptAnswers <= preTestQuestions)
-                total.setText("Item: " + c_Lesson_feedback.preTestAttemptAnswers
-                        + "/"
-                        +  preTestQuestions);
 
         });
     }
@@ -642,118 +541,423 @@ public class f_0_lesson_pre_test extends Fragment {
                 return;  // Exit early if context is null to prevent a crash
             }
 
-            // Create RadioButton for each choice
+            Typeface customFont = ResourcesCompat.getFont(context, R.font.garfiey);
+
+            // Convert 8dp to pixels
+            int paddingInDp = 12;
+            int paddingInPx = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, paddingInDp, context.getResources().getDisplayMetrics()
+            );
+
             for (int i = 0; i < choices.size(); i++) {
-                RadioButton choiceButton = new RadioButton(context);
-                choiceButton.setId(i);
-                choiceButton.setPadding(16, 0, 0, 0);
+                Button choiceButton = new Button(context);
+                choiceButton.setId(i); // Set the ID to match the choice index
                 choiceButton.setText(choices.get(i));
-                choiceButton.setTextColor(getResources().getColor(R.color.white));  // Set text color to white
-                choiceButton.setTextSize(16);  // Set text size to 18sp (you can adjust this size)
+                choiceButton.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+                choiceButton.setBackground(getResources().getDrawable(R.drawable.rounded_corners));
+                choiceButton.setTextColor(getResources().getColor(R.color.black));
+                choiceButton.setTextSize(12);
+                choiceButton.setPadding(paddingInPx, paddingInPx, paddingInPx, paddingInPx);
+                choiceButton.setEnabled(false);
+                choiceButton.setVisibility(View.GONE);
+//                choiceButton.setTypeface(customFont);
 
                 // Create LayoutParams for margin settings
                 RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
-                        RadioGroup.LayoutParams.WRAP_CONTENT,
+                        RadioGroup.LayoutParams.MATCH_PARENT,
                         RadioGroup.LayoutParams.WRAP_CONTENT
                 );
                 params.setMargins(0, 8, 0, 8);  // Set margins (left, top, right, bottom) in pixels
-
                 choiceButton.setLayoutParams(params);  // Apply the margins to the RadioButton
 
+                // Handle button click
+                choiceButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        checkAnswer(choiceButton.getId());
+                        choiceButton.setEnabled(false);
+                    }
+                });
+
+                // Add button to the container (or choicesGroup if still used for layout)
                 choicesGroup.addView(choiceButton);
+
             }
+
+            // Delay for 2 seconds before making the choicesGroup visible
+            new android.os.Handler().postDelayed(() -> {
+                for (int i = 0; i < choicesGroup.getChildCount(); i++) {
+                    View child = choicesGroup.getChildAt(i);
+                    if (child instanceof Button) {
+                        child.setEnabled(true);
+                        child.setVisibility(View.VISIBLE);
+                    }
+                }
+            }, 2000);
+
+
+            // Create RadioButton for each choice
+//            for (int i = 0; i < choices.size(); i++) {
+//
+//                choiceButton = new Button(context);
+//                choiceButton.setId(i);
+//                choiceButton.setPadding(16, 0, 0, 0);
+//                choiceButton.setText(choices.get(i));
+//                choiceButton.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+//                choiceButton.setTextColor(getResources().getColor(R.color.black));
+//                choiceButton.setBackground(getResources().getDrawable(R.drawable.rounded_corners));
+//                choiceButton.setTextSize(14);
+//                choiceButton.setTypeface(customFont);
+//                choiceButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        submitButton.performClick();
+//                    }
+//                });
+//
+//
+//
+//
+////                RadioButton choiceButton = new RadioButton(context);
+////                choiceButton.setId(i);
+////                choiceButton.setPadding(16, 0, 0, 0);
+////                choiceButton.setText(choices.get(i));
+////                choiceButton.setTextColor(getResources().getColor(R.color.white));  // Set text color to white
+////                choiceButton.setTextSize(16);  // Set text size to 18sp (you can adjust this size)
+//
+//                // Create LayoutParams for margin settings
+//                RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
+//                        RadioGroup.LayoutParams.MATCH_PARENT,
+//                        RadioGroup.LayoutParams.WRAP_CONTENT
+//                );
+//                params.setMargins(0, 8, 0, 8);  // Set margins (left, top, right, bottom) in pixels
+//
+//                choiceButton.setLayoutParams(params);  // Apply the margins to the RadioButton
+//
+//                choicesGroup.addView(choiceButton);
+//            }
         } else {
             Log.e("loadQuestion", "Invalid question index or questions array is null.");
         }
     }
 
+    public void submitButton(boolean correctAnswer) {
 
+        if (questionsAnswered <= preTestQuestions) { // <= talaga to
 
-    public boolean checkAnswer() {
-        int selectedId = choicesGroup.getCheckedRadioButtonId();
-        if (selectedId != -1) {
-            e_Question currentQuestion = questions[currentQuestionIndex];
-            isCorrect = (selectedId == currentQuestion.getCorrectAnswer_preTest());
+//                    Log.e("TAG", "ROP CHECK THIS: | isLessonFinished: " + x_bkt_algorithm.isLessonFinished);
 
-            // Determine the background color based on correctness
-            int backgroundColor;
-            String toastMessage;
+//                    if (!x_bkt_algorithm.isLessonFinished)
+//                        bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer, answerAttempt);
 
-            if (!isCorrect) {
-                backgroundColor = Color.RED;
-                toastMessage = "Incorrect answer.";
-                incorrect++;
-            } else {
-                backgroundColor = Color.GREEN;
-                toastMessage = "Correct answer!";
-            }
+            if (!d_Lesson_container.isCompleted)
+                bktModel.updateBKTScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer, answerAttempt);
 
-            // Update feedback and scores based on correctness
-            if (isCorrect) {
-//                if (!x_bkt_algorithm.isLessonFinished) {
-                if (!d_Lesson_container.isCompleted) {
-                    x_bkt_algorithm.updateTestScore(
+            // Check if we need to move to the next question based on attempts or correctness.
+//            if (answerAttempt >= attemptChances || correctAnswer) {
+
+                String TAG = "EVOPlus";
+
+                c_Lesson_feedback.preTestAttemptAnswers++;
+
+                Log.i(TAG, "Roadshow | preTestAttemptAnswers: " + c_Lesson_feedback.preTestAttemptAnswers);
+                Log.i(TAG, "Roadshow | questionsAnswered: " + questionsAnswered);
+                Log.i(TAG, "Roadshow | preTestQuestions: " + preTestQuestions);
+
+                if (questionsAnswered <= preTestQuestions) {
+                    currentQuestionIndex++;
+                    loadQuestion(); // Always load the next question after updating the index
+                    answerAttempt = 0;
+                } else {
+                    // Handle pre-test completion
+                    preTestCompleteListener.onPreTestComplete(c_Lesson_feedback.preTestCorrectAnswers);
+                }
+
+//                if (currentQuestionIndex < questions.length - 1) {
+//                    currentQuestionIndex++;
+////                            Log.e(TAG, "currentQuestionIndex++; ["+currentQuestionIndex+"]");
+//                } else {
+//                    currentQuestionIndex = 0; // Reset for new round
+//                    bktModel.logScores(); // Log scores at reset point
+////                            Log.e(TAG, "reset currentQuestionIndex["+currentQuestionIndex+"]");
+//                }
+
+                questionsAnswered++; // Increment answered count
+//                        Log.e(TAG, "increment questionsAnswered["+questionsAnswered+"]");
+
+                // Load next question only if still within pre-test limits.
+//                        Log.d(TAG, "if (correctAnswer["+correctAnswer+"] || currentQuestionIndex["+currentQuestionIndex
+//                        + "] < preTestQuestions["+preTestQuestions+"] && answerAttempt["+answerAttempt+"] >= attemptChances["+attemptChances+"]");
+                if (correctAnswer || currentQuestionIndex < preTestQuestions && answerAttempt >= attemptChances) {
+
+                    if (!(questionsAnswered == (preTestQuestions+1)))
+                        loadQuestion();
+
+                    answerAttempt = 0;
+
+                }
+
+//            }
+
+            // may plus 1 to kanina
+            if (questionsAnswered == (preTestQuestions+1)) {
+                Log.d("TESTING", "Pre-test complete!");
+
+                // Handle completion of pre-test.
+                if (preTestCompleteListener != null) {
+                    Log.d("TESTING", "Pre-Test BKT Score: " + x_bkt_algorithm.getKnowledge());
+                    Log.d("TESTING", "Pre-Test Score: " + c_Lesson_feedback.preTestCorrectAnswers);
+                    double bktScore = x_bkt_algorithm.getKnowledge();
+
+                    // Pre-Test BKT Score
+                    x_bkt_algorithm.updateTestBKTScore(
                             isProgressiveMode,
                             moduleIndex, lessonIndex,
                             "Pre-Test",
+                            bktScore
+                    );
+
+                    preTestCompleteListener.onPreTestComplete(
+//                                    correctAnswer,
                             c_Lesson_feedback.preTestCorrectAnswers);
-                }
-                c_Lesson_feedback.preTestCorrectAnswers
-                        = Math.min(
-                        c_Lesson_feedback.preTestCorrectAnswers + 1, preTestQuestions);
-                Log.i("TAG", "CONSUMPTION | Pre-Test Score: " + c_Lesson_feedback.preTestCorrectAnswers);
+                    c_Lesson_feedback.printResult("Pre-Test");
+                    d_Lesson_container.isPreTestComplete = true;
 
+                    // Removed, wag na daw balikan pre-test :D
+//                            loadQuestion();
+
+                }
             }
-
-            if (answerAttempt >= attemptChances || isCorrect) {
-                // Construct the tag based on currentQuestionIndex
-                String targetTag = "testAnswer_" + c_Lesson_feedback.preTestAttemptAnswers;
-                Log.d("TagCheck", "Looking for ImageView with tag: " + targetTag);
-
-                // Find the ImageView with the matching tag
-                ImageView targetImageView = imageContainer.findViewWithTag(targetTag);
-
-                // Check if the ImageView exists, then update its resource
-                if (targetImageView != null) {
-                    if (isCorrect) {
-                        targetImageView.setImageResource(R.drawable.test_answer_check);
-                    } else {
-                        targetImageView.setImageResource(R.drawable.test_answer_cross);
-                    }
-                } else {
-//                    Log.e("ImageViewError", "No ImageView found with tag: " + targetTag);
-                }
-
-                // Add a value in the database,
-
-            }
-
-            // Create a GradientDrawable for rounded corners
-            GradientDrawable drawable = new GradientDrawable();
-            drawable.setColor(backgroundColor);
-            drawable.setCornerRadius(40); // Adjust this value for corner radius
-            submitButton.setBackground(drawable);
-            submitButton.setTextColor(Color.WHITE);
-
-            // Create a Handler to revert the colors after 1 second (1000 milliseconds)
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    // Revert to original colors
-                    submitButton.setBackgroundResource(R.drawable.rounded_corners); // Restore original drawable
-                    submitButton.setTextColor(Color.BLACK); // Restore original text color
-                }
-            }, 1000);
-
-            Toast.makeText(getContext(), toastMessage, Toast.LENGTH_SHORT).show();
-            d_Lesson_container.startCountdown(requireContext(), "Pre-Test", questionsAnswered >= (preTestQuestions + 1));
 
         } else {
-            Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
-            d_Lesson_container.startCountdown(requireContext(), "Pre-Test", questionsAnswered >= (preTestQuestions + 1));
+
+            String feedback = correctAnswer ? "Correct!" : "Incorrect :(";
+
+            // Logic for after pre-test is complete
+            Toast.makeText(getContext(), feedback, Toast.LENGTH_SHORT).show();
+
+            // Allow answering questions without changing scores
+            if (answerAttempt >= attemptChances || correctAnswer) {
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                } else {
+                    currentQuestionIndex = 0; // Reset for new round
+                }
+
+                // Load next question without affecting score
+                loadQuestion();
+                answerAttempt = 0; // Reset attempts for new question
+            }
         }
-        return isCorrect; // Return whether the answer was correct or not
+
+
+
+        choicesGroup.clearCheck(); // Clear selected choices at the end of processing.
+//            } // end of getChecked == -1
+
+        if (c_Lesson_feedback.preTestAttemptAnswers <= preTestQuestions)
+            total.setText("Item: " + c_Lesson_feedback.preTestAttemptAnswers
+                    + "/"
+                    +  preTestQuestions);
+
     }
+
+    public boolean checkAnswer(int selectedId) {
+
+        // Ensure the question exists
+        if (questions != null && questions.length > currentQuestionIndex) {
+            e_Question currentQuestion = questions[currentQuestionIndex];
+
+            int correctAnswer = currentQuestion.getCorrectAnswer_EASY_MEDIUM();
+            // Check if the selectedId matches the correct answer
+            isCorrect = (selectedId == correctAnswer);
+
+            // Determine feedback and update scores
+            String toastMessage;
+            if (isCorrect) {
+                toastMessage = "Correct answer!";
+                if (!x_bkt_algorithm.isLessonFinished) {
+                    if (!d_Lesson_container.isCompleted) {
+                        x_bkt_algorithm.updateTestScore(
+                                isProgressiveMode,
+                                moduleIndex, lessonIndex,
+                                "Pre-Test",
+                                c_Lesson_feedback.preTestCorrectAnswers);
+                    }
+                }
+                c_Lesson_feedback.preTestCorrectAnswers = Math.min(c_Lesson_feedback.preTestCorrectAnswers + 1, preTestQuestions);
+            } else {
+                toastMessage = "Incorrect answer.";
+                incorrect++;
+            }
+
+            // Display feedback to the user
+            Toast.makeText(getContext(), toastMessage, Toast.LENGTH_SHORT).show();
+
+            // Update UI, such as marking the answer as correct/incorrect
+            updateAnswerFeedback(isCorrect);
+            updateChoiceButton(isCorrect, selectedId, currentQuestion.getCorrectAnswer_preTest());
+
+            return isCorrect;
+
+        } else {
+            Toast.makeText(getContext(), "No question available.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+    }
+
+    private void setButtonBackgroundWithColor(Button button, int color) {
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setColor(color); // Set the desired color
+        drawable.setCornerRadius(40); // Adjust for your rounded corners
+        button.setBackground(drawable); // Apply the drawable to the button
+    }
+
+
+    private void updateChoiceButton(boolean isCorrect, int selectedId, int correctId) {
+        // Find the selected and correct buttons
+        Button selectedButton = choicesGroup.findViewById(selectedId);
+        Button correctButton = choicesGroup.findViewById(correctId);
+
+        // Set colors for feedback
+        if (selectedButton != null) {
+            setButtonBackgroundWithColor(selectedButton, Color.RED);
+//            selectedButton.setBackgroundResource(R.drawable.rounded_corners);
+//            selectedButton.setBackgroundColor(Color.RED); // Incorrect choice turns red
+//            selectedButton.setTextColor(Color.WHITE);    // Adjust text color for visibility
+        }
+
+        if (correctButton != null) {
+            setButtonBackgroundWithColor(correctButton, Color.GREEN);
+//            correctButton.setBackgroundResource(R.drawable.rounded_corners);
+//            correctButton.setBackgroundColor(Color.GREEN); // Correct choice turns green
+//            correctButton.setTextColor(Color.WHITE);       // Adjust text color for visibility
+        }
+
+        // Delay to reset the buttons
+        new Handler().postDelayed(() -> {
+            if (selectedButton != null) {
+                selectedButton.setBackgroundResource(R.drawable.rounded_corners); // Reset to original background
+                selectedButton.setTextColor(getResources().getColor(R.color.black)); // Reset text color
+            }
+
+            if (correctButton != null) {
+                correctButton.setBackgroundResource(R.drawable.rounded_corners); // Reset to original background
+                correctButton.setTextColor(getResources().getColor(R.color.black)); // Reset text color
+            }
+
+            submitButton(isCorrect);
+        }, 2000); // Delay of 2 seconds
+
+
+    }
+
+
+    private void updateAnswerFeedback(boolean isCorrect) {
+
+        String targetTag = "testAnswer_" + c_Lesson_feedback.preTestAttemptAnswers;
+        ImageView targetImageView = imageContainer.findViewWithTag(targetTag);
+
+        if (targetImageView != null) {
+            if (isCorrect) {
+                targetImageView.setImageResource(R.drawable.test_answer_check);
+            } else {
+                targetImageView.setImageResource(R.drawable.test_answer_cross);
+            }
+        }
+    }
+
+
+
+//    public boolean checkAnswer() {
+//
+//        int selectedId == choiceButton.getsele
+////        int selectedId = choicesGroup.getCheckedRadioButtonId();
+//
+//        if (selectedId != -1) {
+//            e_Question currentQuestion = questions[currentQuestionIndex];
+//            isCorrect = (selectedId == currentQuestion.getCorrectAnswer_preTest());
+//
+//            // Determine the background color based on correctness
+//            int backgroundColor;
+//            String toastMessage;
+//
+//            if (!isCorrect) {
+//                backgroundColor = Color.RED;
+//                toastMessage = "Incorrect answer.";
+//                incorrect++;
+//            } else {
+//                backgroundColor = Color.GREEN;
+//                toastMessage = "Correct answer!";
+//            }
+//
+//            // Update feedback and scores based on correctness
+//            if (isCorrect) {
+////                if (!x_bkt_algorithm.isLessonFinished) {
+//                if (!d_Lesson_container.isCompleted) {
+//                    x_bkt_algorithm.updateTestScore(
+//                            isProgressiveMode,
+//                            moduleIndex, lessonIndex,
+//                            "Pre-Test",
+//                            c_Lesson_feedback.preTestCorrectAnswers);
+//                }
+//                c_Lesson_feedback.preTestCorrectAnswers
+//                        = Math.min(
+//                        c_Lesson_feedback.preTestCorrectAnswers + 1, preTestQuestions);
+//                Log.i("TAG", "CONSUMPTION | Pre-Test Score: " + c_Lesson_feedback.preTestCorrectAnswers);
+//
+//            }
+//
+//            if (answerAttempt >= attemptChances || isCorrect) {
+//                // Construct the tag based on currentQuestionIndex
+//                String targetTag = "testAnswer_" + c_Lesson_feedback.preTestAttemptAnswers;
+//                Log.d("TagCheck", "Looking for ImageView with tag: " + targetTag);
+//
+//                // Find the ImageView with the matching tag
+//                ImageView targetImageView = imageContainer.findViewWithTag(targetTag);
+//
+//                // Check if the ImageView exists, then update its resource
+//                if (targetImageView != null) {
+//                    if (isCorrect) {
+//                        targetImageView.setImageResource(R.drawable.test_answer_check);
+//                    } else {
+//                        targetImageView.setImageResource(R.drawable.test_answer_cross);
+//                    }
+//                } else {
+////                    Log.e("ImageViewError", "No ImageView found with tag: " + targetTag);
+//                }
+//
+//                // Add a value in the database,
+//
+//            }
+//
+//            // Create a GradientDrawable for rounded corners
+//            GradientDrawable drawable = new GradientDrawable();
+//            drawable.setColor(backgroundColor);
+//            drawable.setCornerRadius(40); // Adjust this value for corner radius
+//            submitButton.setBackground(drawable);
+//            submitButton.setTextColor(Color.WHITE);
+//
+//            // Create a Handler to revert the colors after 1 second (1000 milliseconds)
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    // Revert to original colors
+//                    submitButton.setBackgroundResource(R.drawable.rounded_corners); // Restore original drawable
+//                    submitButton.setTextColor(Color.BLACK); // Restore original text color
+//                }
+//            }, 1000);
+//
+//            Toast.makeText(getContext(), toastMessage, Toast.LENGTH_SHORT).show();
+//            d_Lesson_container.startCountdown(requireContext(), "Pre-Test", questionsAnswered >= (preTestQuestions + 1));
+//
+//        } else {
+//            Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
+//            d_Lesson_container.startCountdown(requireContext(), "Pre-Test", questionsAnswered >= (preTestQuestions + 1));
+//        }
+//        return isCorrect; // Return whether the answer was correct or not
+//    }
 
     // Helper methods to get module and lesson indices
     private int getModuleIndex(String module) {

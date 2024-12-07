@@ -224,34 +224,12 @@ public class f_1_lesson_text extends Fragment {
         }
 
         // Set OnClickListener for the nextButton
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // Log.i("nextButton", "nextButton clicked!");
-                nextButton.setEnabled(false);
-                tapToContinueButton.setEnabled(false);
-                tapToContinueButton.setVisibility(View.GONE);
-
-                showNextStep();
-                showTextView(currentStep);
-
-                handleNextButtonClick();
-
-            }
-        });
-
-
-//        nextButton.performClick();
-
-        // "ALSO" Set OnClickListener for the tapToContinueButton
-
-//        tap_to_continue
-        tapToContinueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Log.i("tapToContinueButton", "tapToContinueButton clicked!");
+//        nextButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
 //
+//                // Log.i("nextButton", "nextButton clicked!");
+//                nextButton.setEnabled(false);
 //                tapToContinueButton.setEnabled(false);
 //                tapToContinueButton.setVisibility(View.GONE);
 //
@@ -260,8 +238,30 @@ public class f_1_lesson_text extends Fragment {
 //
 //                handleNextButtonClick();
 //
-            }
-        });
+//            }
+//        });
+
+
+//        nextButton.performClick();
+
+        // "ALSO" Set OnClickListener for the tapToContinueButton
+
+//        tap_to_continue
+//        tapToContinueButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Log.i("tapToContinueButton", "tapToContinueButton clicked!");
+////
+////                tapToContinueButton.setEnabled(false);
+////                tapToContinueButton.setVisibility(View.GONE);
+////
+////                showNextStep();
+////                showTextView(currentStep);
+////
+////                handleNextButtonClick();
+////
+//            }
+//        });
 
     }
 

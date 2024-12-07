@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
 
 public class f_3_lesson_post_test extends Fragment {
 
@@ -44,7 +45,19 @@ public class f_3_lesson_post_test extends Fragment {
     private static final String ARG_LESSON = "lesson";
     private static final String ARG_MODE = "mode";
 
+    public static int attempts;
+    public static double bktScore;
+    public static int progress;
+    public static int preTestScore;
+    public static int postTestScore;
+    public static double preTestBktScore;
+    public static double postTestBktScore;
+    public static String learningStatus;
 
+
+    private String difficultyString;
+    private int moduleIndex;
+    private int lessonIndex;
     private LinearLayout imageContainer_postTest;
     private ImageButton hintButton;
     private String[] options; // Assuming there are options for the question
@@ -76,7 +89,7 @@ public class f_3_lesson_post_test extends Fragment {
 
     // Interface to notify the container activity when post-test is complete
     public interface PostTestCompleteListener {
-        void onPostTestComplete(boolean isCorrect, int score, boolean isPassed);
+        void onPostTestComplete(int score, boolean isPassed);
     }
 
     public static f_3_lesson_post_test newInstance(String module, String lesson, String mode) {
@@ -124,6 +137,15 @@ public class f_3_lesson_post_test extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        attempts = 0;
+        bktScore = 0;
+        progress = 0;
+        preTestScore = 0;
+        postTestScore = 0;
+        preTestBktScore = 0.0;
+        postTestBktScore = 0.0;
+        learningStatus = "UNKNOWN";
+
         hintButton = view.findViewById(R.id.hintButton);
         hint_frameLayout = view.findViewById(R.id.hint_frameLayout);
 
@@ -132,6 +154,14 @@ public class f_3_lesson_post_test extends Fragment {
 
         hint_frameLayout.setEnabled(false);
         hint_frameLayout.setVisibility(View.GONE);
+
+        // Ensure valid indices are used
+        moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
+        lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
+
+        Log.i("481", "481 | post-test | moduleIndex: " + moduleIndex);
+        Log.i("481", "481 | post-test | lessonIndex: " + lessonIndex);
+
 
         hintButton.setOnClickListener(v -> {
 
@@ -207,8 +237,7 @@ public class f_3_lesson_post_test extends Fragment {
         // Retrieve arguments passed from the parent container
         if (getArguments() != null) {
 
-            String TAG = "GWENCHANA";
-            // Log.e(TAG, "PASOK NA ROP");
+            String TAG = "PEANUT BUTTER";
 
             String module = getArguments().getString(ARG_MODULE);
             String lesson = getArguments().getString(ARG_LESSON);
@@ -224,136 +253,137 @@ public class f_3_lesson_post_test extends Fragment {
             String documentName = "Lesson " + (lessonNumber + 1);
             String mod = "M" + (moduleNumber + 1);
 
-            double userScore = x_bkt_algorithm.getKnowledge();
+            Log.i(TAG, TAG + " | Module Index: " + moduleIndex);
+            Log.i(TAG, TAG + " | Lesson Index: " + lessonIndex);
 
-            // Determine difficulty based on scoreserScore);
-            // Log.d("f_post_test", "Determined Difficulty Level: " + difficultyLevel);
+            x_bkt_algorithm.retrieveAllFields(true, moduleIndex, lessonIndex, moduleData -> {
 
-            String difficultyString = null;
+                if (moduleData != null) {
+                    Log.i("MAIN", "All Retrieved Data: " + moduleData);
 
-            // Set attempt chances and number of questions
-            difficultyLevel = bktModel.getDifficultyLevel(b_main_0_menu_categorize_user.category, userScore);
+                    // Access "M1" data (or iterate over all modules if needed)
+                    Map<String, Object> data = (Map<String, Object>) moduleData.get(mod);
+                    if (data != null) {
+                        Log.i("MAIN", mod + " Data: " + data);
 
-            if (difficultyLevel == e_Question.Difficulty.EASY) {
-                difficultyString = "Post-Test Easy";
+                        attempts = data.get("Attempts") instanceof Number
+                                ? ((Number) data.get("Attempts")).intValue()
+                                : 0;
+
+                        // Extract individual fields
+                        bktScore = data.get("BKT Score") instanceof Number
+                                ? ((Number) data.get("BKT Score")).doubleValue()
+                                : 0.0;
+
+                        progress = data.get("Progress") instanceof Number
+                                ? ((Number) data.get("Progress")).intValue()
+                                : 0;
+
+                        preTestScore = data.get("Pre-Test Score") instanceof Number
+                                ? ((Number) data.get("Pre-Test Score")).intValue()
+                                : 0;
+
+                        postTestScore = data.get("Post-Test Score") instanceof Number
+                                ? ((Number) data.get("Post-Test Score")).intValue()
+                                : 0;
+
+                        preTestBktScore = data.get("Pre-Test BKT Score") instanceof Number
+                                ? ((Number) data.get("Pre-Test BKT Score")).doubleValue()
+                                : 0.0;
+
+                        postTestBktScore = data.get("Post-Test BKT Score") instanceof Number
+                                ? ((Number) data.get("Post-Test BKT Score")).doubleValue()
+                                : 0.0;
+
+                        learningStatus = data.get("Learning Status") instanceof String
+                                ? ((String) data.get("Learning Status")).toString()
+                                : "UNKNOWN";
+
+                        // Log extracted fields
+                        Log.i("MAIN", "Attempts: " + attempts);
+                        Log.i("MAIN", "BKT Score: " + bktScore);
+                        Log.i("MAIN", "Progress: " + progress);
+                        Log.i("MAIN", "Pre-Test Score: " + preTestScore);
+                        Log.i("MAIN", "Post-Test Score: " + postTestScore);
+                        Log.i("MAIN", "Pre-Test BKT Score: " + preTestBktScore);
+                        Log.i("MAIN", "Post-Test BKT Score: " + postTestBktScore);
+                        Log.i("MAIN", "Learning Status: " + learningStatus);
+
+//                        int attempts, String learningStatus, double preTestScore,
+//                        double bktScore, int maxScore) {
+
+                        // Optionally, calculate difficulty level or perform further logic
+                        difficultyLevel = bktModel.getDifficultyLevel2(
+                                attempts,
+                                learningStatus, // Replace with a valid learning status if available
+                                preTestScore,
+                                bktScore
+                        );
+                        Log.i("MAIN", "Calculated Difficulty Level: " + difficultyLevel);
+
+                        if (difficultyLevel == e_Question.Difficulty.EASY) {
+                            difficultyString = "Post-Test Easy";
 //                attemptChances = 1;
-                postTestQuestions = 10;
-            }
-            else if (difficultyLevel == e_Question.Difficulty.MEDIUM) {
-                difficultyString = "Post-Test Medium";
+                            postTestQuestions = 10;
+                            c_Lesson_feedback.postTestQuestions = 10;
+                        }
+                        else if (difficultyLevel == e_Question.Difficulty.MEDIUM) {
+                            difficultyString = "Post-Test Medium";
 //                attemptChances = 2;
-                postTestQuestions = 5;
-            }
-            else if (difficultyLevel == e_Question.Difficulty.HARD) {
-                difficultyString = "Post-Test Hard";
+                            postTestQuestions = 5;
+                            c_Lesson_feedback.postTestQuestions = 5;
+                        }
+                        else if (difficultyLevel == e_Question.Difficulty.HARD) {
+                            difficultyString = "Post-Test Hard";
 //                attemptChances = 3;
-                postTestQuestions = 3;
+                            postTestQuestions = 3;
+                            c_Lesson_feedback.postTestQuestions = 3;
 
-                // enable and show hint button
-                hintButton.setEnabled(true);
-                hintButton.setVisibility(View.VISIBLE);
+                            // enable and show hint button
+                            hintButton.setEnabled(true);
+                            hintButton.setVisibility(View.VISIBLE);
 
-                hint_frameLayout.setEnabled(true);
-                hint_frameLayout.setVisibility(View.VISIBLE);
+                            hint_frameLayout.setEnabled(true);
+                            hint_frameLayout.setVisibility(View.VISIBLE);
 
-            }
+                        }
 
-            attemptChances = 1;
+                        String formattedModule = "Module " + module.charAt(1);
 
-//            // Temporary for testing
-//            difficultyLevel = e_Question.Difficulty.HARD;
-//            difficultyString = "Post-Test Hard";
-//            attemptChances = 3;
-//            postTestQuestions = 3;
-//
-//            // enable and show hint button
-//            hintButton.setEnabled(true);
-//            hintButton.setVisibility(View.VISIBLE);
-//
-//            hint_frameLayout.setEnabled(true);
-//            hint_frameLayout.setVisibility(View.VISIBLE);
-//            // Temporary for testing
+                        Log.i(TAG, TAG + " | let's call t_TestDataFromDatabase.getRandomQuestionsData");
+                        Log.i(TAG, TAG + " | Module: " + formattedModule);
+                        Log.i(TAG, TAG + " | Lesson: " + lesson);
+                        Log.i(TAG, TAG + " | Difficulty: " + difficultyString);
+                        questions = t_TestDataFromDatabase.getRandomQuestionsData(formattedModule, lesson, difficultyString).toArray(new e_Question[0]);
 
-            String formattedModule = "Module " + module.charAt(1);
+                        Log.i(TAG, TAG + " | let's call getPostTestQuestionsBasedOnDifficulty");
+                        Log.i(TAG, TAG + " | Module: " + module);
+                        Log.i(TAG, TAG + " | Lesson: " + lesson);
+                        Log.i(TAG, TAG + " | Difficulty: " + difficultyLevel);
 
-            questions = t_TestDataFromDatabase.getRandomQuestionsData(formattedModule, lesson, difficultyString).toArray(new e_Question[0]);
+                        // Retrieve post-test questions based on difficulty level
+                        questions = getPostTestQuestionsBasedOnDifficulty(module, lesson, difficultyLevel);
 
-            // Log.e(TAG, "Post-Test | Load Images");
-            // Log.i(TAG, "Questions: " + Arrays.toString(questions));
+                        // images for Correct : Incorrect Answers.
+                        loadCheckAnswers();
 
-            // Ensure imageContainer has MATCH_PARENT width and fixed height in XML
-            imageContainer_postTest = requireView().findViewById(R.id.image_container);
+                        total.setText("Item: " + c_Lesson_feedback.postTestAttemptAnswers
+                                + "/"
+                                + postTestQuestions);
 
-            // Set container height to 60dp
-            int containerHeight = (int) TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, 60, getResources().getDisplayMetrics());
-            imageContainer_postTest.getLayoutParams().height = containerHeight;
+                        Log.i(TAG, TAG + " | let's loadQuestion()");
+                        loadQuestion();
 
-            // Set container orientation to horizontal
-            imageContainer_postTest.setOrientation(LinearLayout.HORIZONTAL);
+                        attemptChances = 1;
 
-            // Total horizontal spacing: 16dp as a base value for margin adjustment
-            int baseSpacing = 16;
+                    } else {
+                        Log.e("MAIN", "No data found for " + mod + ".");
+                    }
 
-            // Calculate dynamic margin based on the number of images
-            int marginInPixels = (int) TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP, baseSpacing / Math.max(1, postTestQuestions), getResources().getDisplayMetrics());
-
-            // Iterate through the number of images
-            for (int i = 0; i < postTestQuestions; i++) {
-                ImageView imageView = new ImageView(requireContext());
-
-                // Set each image to take an equal part of the width
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        0, // Width: Dynamic, evenly spaced
-                        LinearLayout.LayoutParams.MATCH_PARENT, // Height matches the container
-                        1f // Weight to divide equally
-                );
-
-                // Apply dynamic margins between images
-                if (i > 0) { // No margin for the first image
-                    params.setMargins(marginInPixels, 0, 0, 0);
+                } else {
+                    Log.e("MAIN", "Failed to retrieve data or document does not exist.");
                 }
-
-                imageView.setLayoutParams(params);
-
-                // Set the tag
-                imageView.setTag("testAnswer_" + (i + 1));
-                // Log.e("Post-Test imageContainer", "testAnswer_" + (i+1));
-
-                // Set the image resource or background
-                imageView.setImageResource(R.drawable.test_answer_blank);
-//            imageView.setColorFilter(Color.GRAY);
-
-                // Add the ImageView to the container
-                imageContainer_postTest.addView(imageView);
-
-                // Log.e(TAG, "Post-Test | Loading Images...");
-
-            }
-
-            // Log.e(TAG, "Post-Test | DONE Load Images");
-
-            TextView items = view.findViewById(R.id.answers_total);
-
-            items.setText("Item: " + c_Lesson_feedback.postTestAttemptAnswers
-                    + "/"
-                    + postTestQuestions);
-
-            // Log.e("f_post_test", "dahil " + difficultyLevel + " ang difficulty, gawin nating " + attemptChances + " ang chances");
-
-//                bktModel.setBKTParameters(difficultyLevel);
-
-            // Log.e(TAG, "I will pass these:")    ;
-            // Log.e(TAG, "module: " + module);
-            // Log.e(TAG, "lesson: " + lesson);
-
-            // Retrieve post-test questions based on difficulty level
-            questions = getPostTestQuestionsBasedOnDifficulty(module, lesson, difficultyLevel);
-            loadQuestion();
-
-//            // Log.e(TAG, "wala :( loadQuestion nalang :(");
-//            loadQuestion();
+            });
 
         }
 
@@ -366,18 +396,21 @@ public class f_3_lesson_post_test extends Fragment {
 
             // Easy | Medium
             if (!(choicesGroup.getCheckedRadioButtonId() == -1)
-                ||
-            // Hard
-                !identificationAnswer.getText().toString().trim().isEmpty()) {
+                    ||
+                    // Hard
+                    !identificationAnswer.getText().toString().trim().isEmpty()) {
 
                 // Dito originally yung answerAttempt++;
                 answerAttempt++;
 
                 boolean correctAnswer = checkAnswer(); // Check if the answer is correct
 
-                // Ensure valid indices are used
-                int moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
-                int lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
+//                // Ensure valid indices are used
+//                moduleIndex = getModuleIndex(getArguments().getString(ARG_MODULE));
+//                lessonIndex = getLessonIndex(getArguments().getString(ARG_LESSON));
+//
+//                Log.i("481", "481 | post-test | moduleIndex: " + moduleIndex);
+//                Log.i("481", "481 | post-test | lessonIndex: " + lessonIndex);
 
                 if (moduleIndex < 0 || lessonIndex < 0) {
                     // Log.e("submitButton.onClick", "Invalid module or lesson index");
@@ -385,18 +418,19 @@ public class f_3_lesson_post_test extends Fragment {
                 }
 
                 // Log.e("HEY!", "questionsAnswered("+questionsAnswered+") < postTestQuestions("+(postTestQuestions)+")");
-                // Ensure that questions answered does not exceed total pre-test questions.
+                // Ensure that questions answered does not exceed total post-test questions.
                 if (questionsAnswered <= (postTestQuestions)) {
 
                     // Update feedback and scores based on correctness
                     if (correctAnswer) {
-//                        if (!x_bkt_algorithm.isLessonFinished) {
-                        if (!d_Lesson_container.isCompleted) {
-                            x_bkt_algorithm.updateTestScore(
-                                    isProgressiveMode,
-                                    moduleIndex, lessonIndex,
-                                    "Post-Test",
-                                    c_Lesson_feedback.postTestCorrectAnswers);
+                        if (!x_bkt_algorithm.isLessonFinished) {
+                            if (!d_Lesson_container.isCompleted) {
+                                x_bkt_algorithm.updateTestScore(
+                                        isProgressiveMode,
+                                        moduleIndex, lessonIndex,
+                                        "Post-Test",
+                                        c_Lesson_feedback.postTestCorrectAnswers);
+                            }
                         }
                         c_Lesson_feedback.postTestCorrectAnswers
                                 = Math.min(
@@ -405,7 +439,7 @@ public class f_3_lesson_post_test extends Fragment {
 
 //                    if (!x_bkt_algorithm.isLessonFinished)
                     if (!d_Lesson_container.isCompleted)
-                        bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer, answerAttempt);
+                        bktModel.updateBKTScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer, answerAttempt);
 
                     // Log.d("TESTING", "Answer: " + correctAnswer);
 
@@ -416,7 +450,7 @@ public class f_3_lesson_post_test extends Fragment {
 
                         c_Lesson_feedback.postTestAttemptAnswers
                                 = Math.min(
-                                        c_Lesson_feedback.postTestAttemptAnswers + 1, postTestQuestions);
+                                c_Lesson_feedback.postTestAttemptAnswers + 1, postTestQuestions);
 
                         // Move to next question or reset if all have been answered.
                         // Log.d(TAG, "currentQuestionInddex["+currentQuestionIndex+"] < questions.length-1["+(questions.length-1)+"])");
@@ -432,7 +466,7 @@ public class f_3_lesson_post_test extends Fragment {
                         questionsAnswered++; // Increment answered count
                         // Log.e(TAG, "increment questionsAnswered["+questionsAnswered+"]");
 
-                        // Load next question only if still within pre-test limits.
+                        // Load next question only if still within post-test limits.
 //                         Log.d(TAG, "if (correctAnswer["+correctAnswer+"] || currentQuestionIndex["+currentQuestionIndex
 //                                + "] < postTestQuestions["+postTestQuestions+"] && answerAttempt["+answerAttempt+"] >= attemptChances["+attemptChances+"]");
                         if (correctAnswer || currentQuestionIndex < postTestQuestions && answerAttempt >= attemptChances) {
@@ -446,12 +480,12 @@ public class f_3_lesson_post_test extends Fragment {
                     }
 
                     //                     == to dapat.. ginawa ko lang >=
-                     if (questionsAnswered >= (postTestQuestions+1)) {
+                    if (questionsAnswered >= (postTestQuestions+1)) {
                         // Log.d("TESTING", "Post-Test complete!");
 
 //                        c_Lesson_feedback.postTestAttemptAnswers++;
 
-                        // Handle completion of pre-test.
+                        // Handle completion of post-test.
                         if (postTestCompleteListener != null) {
 
                             double bktscore = x_bkt_algorithm.getKnowledge();
@@ -469,7 +503,6 @@ public class f_3_lesson_post_test extends Fragment {
                                     bktScore);
 
                             postTestCompleteListener.onPostTestComplete(
-                                    correctAnswer,
                                     c_Lesson_feedback.postTestCorrectAnswers,
                                     bktscore >= b_main_0_menu_categorize_user.passingGrade
                             );
@@ -495,6 +528,61 @@ public class f_3_lesson_post_test extends Fragment {
 
     }
 
+    private void loadCheckAnswers() {
+
+        // Ensure imageContainer has MATCH_PARENT width and fixed height in XML
+        imageContainer_postTest = requireView().findViewById(R.id.image_container);
+
+        // Set container height to 60dp
+        int containerHeight = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 60, getResources().getDisplayMetrics());
+        imageContainer_postTest.getLayoutParams().height = containerHeight;
+
+        // Set container orientation to horizontal
+        imageContainer_postTest.setOrientation(LinearLayout.HORIZONTAL);
+
+        // Total horizontal spacing: 16dp as a base value for margin adjustment
+        int baseSpacing = 16;
+
+        // Calculate dynamic margin based on the number of images
+        int marginInPixels = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, baseSpacing / Math.max(1, postTestQuestions), getResources().getDisplayMetrics());
+
+        // Iterate through the number of images
+        for (int i = 0; i < postTestQuestions; i++) {
+            ImageView imageView = new ImageView(requireContext());
+
+            // Set each image to take an equal part of the width
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    0, // Width: Dynamic, evenly spaced
+                    LinearLayout.LayoutParams.MATCH_PARENT, // Height matches the container
+                    1f // Weight to divide equally
+            );
+
+            // Apply dynamic margins between images
+            if (i > 0) { // No margin for the first image
+                params.setMargins(marginInPixels, 0, 0, 0);
+            }
+
+            imageView.setLayoutParams(params);
+
+            // Set the tag
+            imageView.setTag("testAnswer_" + (i + 1));
+            // Log.e("Post-Test imageContainer", "testAnswer_" + (i+1));
+
+            // Set the image resource or background
+            imageView.setImageResource(R.drawable.test_answer_blank);
+//            imageView.setColorFilter(Color.GRAY);
+
+            // Add the ImageView to the container
+            imageContainer_postTest.addView(imageView);
+
+            // Log.e(TAG, "Post-Test | Loading Images...");
+
+        }
+
+    }
+
     @Override
     public String toString() {
         return "Question: " + questionText + ", Options: " + Arrays.toString(options) + ", Correct Answer: " + correctAnswer;
@@ -507,7 +595,10 @@ public class f_3_lesson_post_test extends Fragment {
     private e_Question[] getPostTestQuestions(String module, String lesson) {
         String key = module + "_" + lesson;
 
-        // Log.e("NEVER", "Key: " + key);
+        Log.e("NEVER", "NEVER | Module: " + module);
+        Log.e("NEVER", "NEVER | Lesson: " + lesson);
+        Log.e("NEVER", "NEVER | Difficulty: " + difficultyLevel);
+        Log.e("NEVER", "NEVER | Key: " + key);
 
         switch (key) {
             /* ===== Module 1 ===== */
@@ -519,6 +610,7 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_1_1.get_PostTest_Lesson1_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_1_1.get_PostTest_Lesson1_Hard_Questions();
+                break;
             case "M2_Lesson 1":
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_1_2.get_PostTest_Lesson2_Easy_Questions();
@@ -526,6 +618,7 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_1_2.get_PostTest_Lesson2_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_1_2.get_PostTest_Lesson2_Hard_Questions();
+                break;
             case "M3_Lesson 1":
 //                return e_Module_1.getPostTestLesson3Questions();
                 if (difficultyLevel == e_Question.Difficulty.EASY)
@@ -534,6 +627,7 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_1_3.get_PostTest_Lesson3_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_1_3.get_PostTest_Lesson3_Hard_Questions();
+                break;
             case "M4_Lesson 1":
 //                return e_Module_1.getPostTestLesson4Questions();
                 if (difficultyLevel == e_Question.Difficulty.EASY)
@@ -542,8 +636,9 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_1_4.get_PostTest_Lesson4_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_1_4.get_PostTest_Lesson4_Hard_Questions();
+                break;
 
-            /* ===== Module 2 ===== */
+                /* ===== Module 2 ===== */
             case "M1_Lesson 2":
 //                return e_Module_2_1.getPostTestLesson1Questions();
                 if (difficultyLevel == e_Question.Difficulty.EASY)
@@ -552,8 +647,9 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_2_1.get_PostTest_Lesson2_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_2_1.get_PostTest_Lesson2_Hard_Questions();
+                break;
 
-            /* ===== Module 3 ===== */
+                /* ===== Module 3 ===== */
             case "M1_Lesson 3":
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_3_1.get_PostTest_Lesson1_Easy_Questions();
@@ -561,6 +657,7 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_3_1.get_PostTest_Lesson1_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_3_1.get_PostTest_Lesson1_Hard_Questions();
+                break;
             case "M2_Lesson 3":
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_3_2.get_PostTest_Lesson2_Easy_Questions();
@@ -568,15 +665,9 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_3_2.get_PostTest_Lesson2_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_3_2.get_PostTest_Lesson2_Hard_Questions();
-//            case "M3_Lesson 3":
-//                if (difficultyLevel == e_Question.Difficulty.EASY)
-//                    return e_Module_3_3.get_PostTest_Lesson3_Easy_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                    return e_Module_3_3.get_PostTest_Lesson3_Medium_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                    return e_Module_3_3.get_PostTest_Lesson3_Hard_Questions();
+                break;
 
-            /* ===== Module 4 ===== */
+                /* ===== Module 4 ===== */
             case "M1_Lesson 4":
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_4_1.get_PostTest_Lesson1_Easy_Questions();
@@ -584,6 +675,7 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_4_1.get_PostTest_Lesson1_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_4_1.get_PostTest_Lesson1_Hard_Questions();
+                break;
             case "M2_Lesson 4":
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_4_2.get_PostTest_Lesson2_Easy_Questions();
@@ -591,15 +683,9 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_4_2.get_PostTest_Lesson2_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_4_2.get_PostTest_Lesson2_Hard_Questions();
-//            case "M3_Lesson 4":
-//                if (difficultyLevel == e_Question.Difficulty.EASY)
-//                    return e_Module_4_3.get_PostTest_Lesson3_Easy_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.MEDIUM)
-//                    return e_Module_4_3.get_PostTest_Lesson3_Medium_Questions();
-//                else if (difficultyLevel == e_Question.Difficulty.HARD)
-//                    return e_Module_4_3.get_PostTest_Lesson3_Hard_Questions();
+                break;
 
-            /* ===== Module 5 ===== */
+                /* ===== Module 5 ===== */
             case "M1_Lesson 5":
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_5_1.get_PostTest_Lesson1_Easy_Questions();
@@ -607,6 +693,7 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_5_1.get_PostTest_Lesson1_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_5_1.get_PostTest_Lesson1_Hard_Questions();
+                break;
             case "M2_Lesson 5":
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_5_2.get_PostTest_Lesson2_Easy_Questions();
@@ -614,6 +701,7 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_5_2.get_PostTest_Lesson2_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_5_2.get_PostTest_Lesson2_Hard_Questions();
+                break;
             case "M3_Lesson 5":
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_5_3.get_PostTest_Lesson3_Easy_Questions();
@@ -621,8 +709,9 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_5_3.get_PostTest_Lesson3_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_5_3.get_PostTest_Lesson3_Hard_Questions();
+                break;
 
-            /* ===== Module 6 ===== */
+                /* ===== Module 6 ===== */
             case "M1_Lesson 6":
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_6_1.get_PostTest_Lesson1_Easy_Questions();
@@ -630,6 +719,7 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_6_1.get_PostTest_Lesson1_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_6_1.get_PostTest_Lesson1_Hard_Questions();
+                break;
             case "M2_Lesson 6":
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_6_2.get_PostTest_Lesson2_Easy_Questions();
@@ -637,6 +727,7 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_6_2.get_PostTest_Lesson2_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_6_2.get_PostTest_Lesson2_Hard_Questions();
+                break;
             case "M3_Lesson 6":
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_6_3.get_PostTest_Lesson3_Easy_Questions();
@@ -644,8 +735,9 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_6_3.get_PostTest_Lesson3_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_6_3.get_PostTest_Lesson3_Hard_Questions();
+                break;
 
-            /* ===== Module 7 ===== */
+                /* ===== Module 7 ===== */
             case "M1_Lesson 7":
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_7_1.get_PostTest_Lesson1_Easy_Questions();
@@ -653,8 +745,9 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_7_1.get_PostTest_Lesson1_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_7_1.get_PostTest_Lesson1_Hard_Questions();
+                break;
 
-            /* ===== Module 8 ===== */
+                /* ===== Module 8 ===== */
             case "M1_Lesson 8":
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_8_1.get_PostTest_Lesson1_Easy_Questions();
@@ -662,6 +755,7 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_8_1.get_PostTest_Lesson1_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_8_1.get_PostTest_Lesson1_Hard_Questions();
+                break;
             case "M2_Lesson 8":
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_8_2.get_PostTest_Lesson2_Easy_Questions();
@@ -669,6 +763,7 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_8_2.get_PostTest_Lesson2_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_8_2.get_PostTest_Lesson2_Hard_Questions();
+                break;
             case "M3_Lesson 8":
                 if (difficultyLevel == e_Question.Difficulty.EASY)
                     return e_Module_8_3.get_PostTest_Lesson3_Easy_Questions();
@@ -676,10 +771,12 @@ public class f_3_lesson_post_test extends Fragment {
                     return e_Module_8_3.get_PostTest_Lesson3_Medium_Questions();
                 else if (difficultyLevel == e_Question.Difficulty.HARD)
                     return e_Module_8_3.get_PostTest_Lesson3_Hard_Questions();
+                break;
 
             default:
                 throw new IllegalArgumentException("Invalid module or lesson: " + key);
         }
+        return new e_Question[0];
     }
 
 //    private e_Question.Difficulty getDifficultyLevel(double bktScore) {
@@ -694,13 +791,11 @@ public class f_3_lesson_post_test extends Fragment {
 
     private e_Question[] getPostTestQuestionsBasedOnDifficulty(String module, String lesson, e_Question.Difficulty difficulty) {
 
-        String TAG = "GWEN";
+        String TAG = "getPostTestQuestionsBasedOnDifficulty";
 
-        // Log.e(TAG, "I RECEIVED these:");
-        // Log.e(TAG, "module: " + module);
-        // Log.e(TAG, "lesson: " + lesson);
-
-        // Log.e(TAG, "Difficulty: " + difficulty);
+        Log.i(TAG, "MEG | Module: " + module);
+        Log.i(TAG, "MEG | Lesson: " + lesson);
+        Log.i(TAG, "MEG | Difficulty: " + difficulty);
 
         e_Question[] allQuestions = getPostTestQuestions(module, lesson);  // Fetch all questions for the lesson
 
@@ -732,20 +827,20 @@ public class f_3_lesson_post_test extends Fragment {
 
         // Check if questions array is null or empty
         if (questions == null) {
-             Log.e(TAG, "Error: Questions array is null.");
+            Log.e(TAG, "Error: Questions array is null.");
             Toast.makeText(getContext(), "Error: Questions not initialized.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (questions.length == 0) {
-             Log.e(TAG, "Error: Questions array is empty.");
+            Log.e(TAG, "Error: Questions array is empty.");
             Toast.makeText(getContext(), "Error: No questions available.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Check if currentQuestionIndex is within bounds
         if (currentQuestionIndex >= questions.length) {
-             Log.e(TAG, "Error: Invalid currentQuestionIndex (" + currentQuestionIndex + "). Out of bounds.");
+            Log.e(TAG, "Error: Invalid currentQuestionIndex (" + currentQuestionIndex + "). Out of bounds.");
             return;
         }
 
@@ -756,8 +851,12 @@ public class f_3_lesson_post_test extends Fragment {
 
         // Get the current question
         currentQuestion = questions[currentQuestionIndex];
-//         Log.e(TAG, "ACER | Current question: " + currentQuestion.getQuestion());
-//         Log.e(TAG, "ACER | Current answer: " + currentQuestion.getCorrectAnswer_EASY_MEDIUM());
+         Log.e(TAG, "ACER | Current question: " + currentQuestion.getQuestion());
+
+         if (difficultyLevel != e_Question.Difficulty.HARD)
+             Log.e(TAG, "ACER | Current Choices: " + currentQuestion.getChoices());
+
+         Log.e(TAG, "ACER | Current answer: " + currentQuestion.getCorrectAnswer_EASY_MEDIUM());
 
         // Clear previous selection
         choicesGroup.clearCheck();
@@ -765,41 +864,96 @@ public class f_3_lesson_post_test extends Fragment {
 
         questionText.setText(currentQuestion.getQuestion());
 
-         Log.d(TAG, "Leakproof | Difficulty: " + difficultyLevel);
-         Log.i(TAG, "Leakproof | Question: " + currentQuestion.getQuestion());
+        Log.d(TAG, "Leakproof | Difficulty: " + difficultyLevel);
+        Log.i(TAG, "Leakproof | Question: " + currentQuestion.getQuestion());
 
         if (!(difficultyLevel == e_Question.Difficulty.HARD))
-             Log.i(TAG, "Leakproof | Choices: " + currentQuestion.getChoices());
+            Log.i(TAG, "Leakproof | Choices: " + currentQuestion.getChoices());
 
-         Log.i(TAG, "Leakproof | HARD Answer: " + currentQuestion.getCorrectAnswer_HARD());
-         Log.i(TAG, "Leakproof | EASY|MEDIUM Answer: " + currentQuestion.getCorrectAnswer_EASY_MEDIUM());
-         Log.i(TAG, "Leakproof | Pre-Test Answer: " + currentQuestion.getCorrectAnswer_preTest());
+        Log.i(TAG, "Leakproof | HARD Answer: " + currentQuestion.getCorrectAnswer_HARD());
+        Log.i(TAG, "Leakproof | EASY|MEDIUM Answer: " + currentQuestion.getCorrectAnswer_EASY_MEDIUM());
+        Log.i(TAG, "Leakproof | Pre-Test Answer: " + currentQuestion.getCorrectAnswer_preTest());
 
         choicesGroup.removeAllViews();
 
+        // Render buttons for choices or input field for HARD difficulty
+        Context context = getContext();
         if (difficultyLevel == e_Question.Difficulty.EASY || difficultyLevel == e_Question.Difficulty.MEDIUM) {
             List<String> choices = currentQuestion.getChoices();
+            submitButton.setEnabled(false);
+            submitButton.setVisibility(View.GONE);
 
             // Check if choices is null or empty
             if (choices != null && !choices.isEmpty()) {
+
+// Convert 8dp to pixels
+                int paddingInDp = 12;
+                int paddingInPx = (int) TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP, paddingInDp, context.getResources().getDisplayMetrics()
+                );
+
                 for (int i = 0; i < choices.size(); i++) {
-                    choiceButton = new RadioButton(getContext());
+                    Button choiceButton = new Button(context);
                     choiceButton.setId(i);
                     choiceButton.setText(choices.get(i));
-                    choiceButton.setTextColor(getResources().getColor(R.color.white));
-                    choiceButton.setTextSize(18);
+                    choiceButton.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
+                    choiceButton.setTextSize(16);
+                    choiceButton.setPadding(paddingInPx, paddingInPx, paddingInPx, paddingInPx);
+                    choiceButton.setBackgroundResource(R.drawable.rounded_corners);
+                    choiceButton.setTextColor(getResources().getColor(R.color.black));
+                    choiceButton.setEnabled(false);
+                    choiceButton.setVisibility(View.GONE);
 
-                    RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
-                            RadioGroup.LayoutParams.WRAP_CONTENT,
-                            RadioGroup.LayoutParams.WRAP_CONTENT
+                    // Create LayoutParams for margin settings
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
                     );
-                    params.setMargins(0, 8, 0, 8);
-
+                    params.setMargins(0, 8, 0, 8); // Set margins (left, top, right, bottom) in pixels
                     choiceButton.setLayoutParams(params);
+
+                    // Add click listener
+                    choiceButton.setOnClickListener(v -> {
+                        checkAnswer(choiceButton.getId(), null);
+//                        checkAnswer();
+                        choiceButton.setEnabled(false);
+                    });
+
+                    // Add to layout
                     choicesGroup.addView(choiceButton);
+
                 }
+
+                // Delay for 2 seconds before making the choicesGroup visible
+                new android.os.Handler().postDelayed(() -> {
+                    for (int i = 0; i < choicesGroup.getChildCount(); i++) {
+                        View child = choicesGroup.getChildAt(i);
+                        if (child instanceof Button) {
+                            child.setEnabled(true);
+                            child.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }, 2000);
+
+
+//                for (int i = 0; i < choices.size(); i++) {
+//                    choiceButton = new RadioButton(getContext());
+//                    choiceButton.setId(i);
+//                    choiceButton.setText(choices.get(i));
+//                    choiceButton.setTextColor(getResources().getColor(R.color.white));
+//                    choiceButton.setTextSize(18);
+//
+//                    RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(
+//                            RadioGroup.LayoutParams.WRAP_CONTENT,
+//                            RadioGroup.LayoutParams.WRAP_CONTENT
+//                    );
+//                    params.setMargins(0, 8, 0, 8);
+//
+//                    choiceButton.setLayoutParams(params);
+//                    choicesGroup.addView(choiceButton);
+//                }
             } else {
-                 Log.i(TAG, "choices is empty or null!");
+                Log.i(TAG, "choices is empty or null!");
             }
 
             choicesGroup.setVisibility(View.VISIBLE);
@@ -842,6 +996,325 @@ public class f_3_lesson_post_test extends Fragment {
         }
     }
 
+    private void checkAnswer(int selectedId, String answer) {
+        boolean isCorrect = false;
+
+        if (difficultyLevel == e_Question.Difficulty.EASY || difficultyLevel == e_Question.Difficulty.MEDIUM) {
+            if (choicesGroup == null) {
+                Log.e("checkAnswer", "choicesGroup is null!");
+                return;
+            }
+
+            if (selectedId != -1) {
+                e_Question currentQuestion = questions[currentQuestionIndex];
+
+                int correctAnswer = currentQuestion.getCorrectAnswer_EASY_MEDIUM();
+                isCorrect = (selectedId == correctAnswer);
+
+                // Determine feedback and update scores
+                String toastMessage;
+                if (isCorrect) {
+                    toastMessage = "Correct answer!";
+                    if (!x_bkt_algorithm.isLessonFinished) {
+                        if (!d_Lesson_container.isCompleted) {
+                            x_bkt_algorithm.updateTestScore(
+                                    isProgressiveMode,
+                                    moduleIndex, lessonIndex,
+                                    "Post-Test",
+                                    c_Lesson_feedback.postTestCorrectAnswers);
+                        }
+                    }
+                    c_Lesson_feedback.postTestCorrectAnswers = Math.min(c_Lesson_feedback.postTestCorrectAnswers + 1, postTestQuestions);
+                } else {
+                    toastMessage = "Incorrect answer.";
+                }
+
+
+//                        answerAttempt >= attemptChances ||
+//                if (isCorrect) {
+//                    int backgroundColor = isCorrect ? Color.GREEN : Color.RED;
+//
+//                    Button selectedButton = choicesGroup.findViewById(checkedId);
+//                    if (selectedButton != null) {
+//                        selectedButton.setBackgroundColor(backgroundColor);
+//                    } else {
+//                        Log.e("checkAnswer", "Selected RadioButton is null!");
+//                    }
+//
+//                    String targetTag = "testAnswer_" + c_Lesson_feedback.postTestAttemptAnswers;
+//                    ImageView targetImageView = imageContainer_postTest.findViewWithTag(targetTag);
+//                    if (targetImageView != null) {
+//                        int imageResource = isCorrect ? R.drawable.test_answer_check : R.drawable.test_answer_cross;
+//                        targetImageView.setImageResource(imageResource);
+//                        targetImageView.invalidate();
+//                    } else {
+//                        Log.e("ImageViewError", "No ImageView found with tag: " + targetTag);
+//                    }
+//                }
+
+                Toast.makeText(getContext(), toastMessage, Toast.LENGTH_SHORT).show();
+
+                updateAnswerFeedback(isCorrect);
+                updateChoiceButton(isCorrect, selectedId, currentQuestion.getCorrectAnswer_EASY_MEDIUM());
+
+                return;
+            } else {
+                Toast.makeText(getContext(), "Please select an answer.", Toast.LENGTH_SHORT).show();
+                d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions + 1));
+                return;
+            }
+
+        } else if (difficultyLevel == e_Question.Difficulty.HARD) {
+            e_Question currentQuestion = questions[currentQuestionIndex];
+//            String correctAnswer_Hard = currentQuestion.getCorrectAnswer_HARD();
+
+            if (identificationAnswer != null) {
+//                String inputAnswer = String.valueOf(identificationAnswer.getText()).trim();
+
+                Log.i("HARD POST-TEST", "HEY | answer: " + answer);
+                Log.i("HARD POST-TEST", "HEY | correct answer: " + correctAnswer);
+
+                if (!answer.isEmpty()) {
+                    isCorrect = answer.equalsIgnoreCase(correctAnswer);
+
+                    int backgroundColor = isCorrect ? Color.GREEN : Color.RED;
+                    changeButtonAppearance(backgroundColor, Color.WHITE);
+
+                    if (answerAttempt >= attemptChances || isCorrect) {
+
+                        updateAnswerFeedback(isCorrect);
+
+//                        String targetTag = "testAnswer_" + c_Lesson_feedback.postTestAttemptAnswers;
+//                        ImageView targetImageView = imageContainer_postTest.findViewWithTag(targetTag);
+//                        if (targetImageView != null) {
+//                            int imageResource = isCorrect ? R.drawable.test_answer_check : R.drawable.test_answer_cross;
+//                            targetImageView.setImageResource(imageResource);
+//                            targetImageView.invalidate();
+//                        } else {
+//                            Log.e("ImageViewError", "No ImageView found with tag: " + targetTag);
+//                        }
+                    }
+
+                    if (!isCorrect) {
+                        Toast.makeText(getContext(), "Incorrect!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Correct!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    d_Lesson_container.startCountdown(requireContext(), "Post-Test", questionsAnswered >= (postTestQuestions + 1));
+//                    Toast.makeText(getContext(), "Incorrect! Chance: " + answerAttempt + "/" + attemptChances, Toast.LENGTH_SHORT).show();
+                    identificationAnswer.setText("");
+
+                    if (c_Lesson_feedback.postTestAttemptAnswers <= postTestQuestions)
+                        total.setText("Item: "
+                                + c_Lesson_feedback.postTestAttemptAnswers
+                                //                    + questionsAnswered
+                                + "/"
+                                +  postTestQuestions);
+
+                    return;
+                } else {
+                    Toast.makeText(getContext(), "Please enter an answer.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            } else {
+                Log.e("checkAnswer", "identificationAnswer is null!");
+                return;
+            }
+        }
+    }
+
+    //    updateChoiceButton(isCorrect, checkedId, currentQuestion.getCorrectAnswer_EASY_MEDIUM());
+    private void updateChoiceButton(boolean isCorrect, int selectedId, int correctId) {
+        // Find the selected and correct buttons
+        Button selectedButton = choicesGroup.findViewById(selectedId);
+        Button correctButton = choicesGroup.findViewById(correctId);
+
+        // Set colors for feedback
+        if (selectedButton != null) {
+            setButtonBackgroundWithColor(selectedButton, Color.RED);
+//            selectedButton.setBackgroundResource(R.drawable.rounded_corners);
+//            selectedButton.setBackgroundColor(Color.RED); // Incorrect choice turns red
+//            selectedButton.setTextColor(Color.WHITE);    // Adjust text color for visibility
+        }
+
+        if (correctButton != null) {
+            setButtonBackgroundWithColor(correctButton, Color.GREEN);
+//            correctButton.setBackgroundResource(R.drawable.rounded_corners);
+//            correctButton.setBackgroundColor(Color.GREEN); // Correct choice turns green
+//            correctButton.setTextColor(Color.WHITE);       // Adjust text color for visibility
+        }
+
+        // Delay to reset the buttons
+        new Handler().postDelayed(() -> {
+            if (selectedButton != null) {
+                selectedButton.setBackgroundResource(R.drawable.rounded_corners); // Reset to original background
+                selectedButton.setTextColor(getResources().getColor(R.color.black)); // Reset text color
+            }
+
+            if (correctButton != null) {
+                correctButton.setBackgroundResource(R.drawable.rounded_corners); // Reset to original background
+                correctButton.setTextColor(getResources().getColor(R.color.black)); // Reset text color
+            }
+
+            submitButton(isCorrect);
+        }, 2000); // Delay of 2 seconds
+
+
+    }
+
+    public void submitButton(boolean correctAnswer) {
+
+        if (questionsAnswered <= postTestQuestions) { // <= talaga to
+
+//                    Log.e("TAG", "ROP CHECK THIS: | isLessonFinished: " + x_bkt_algorithm.isLessonFinished);
+
+//                    if (!x_bkt_algorithm.isLessonFinished)
+//                        bktModel.updateScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer, answerAttempt);
+
+            if (!d_Lesson_container.isCompleted)
+                bktModel.updateBKTScore(moduleIndex, lessonIndex, isProgressiveMode, correctAnswer, answerAttempt);
+
+            // Check if we need to move to the next question based on attempts or correctness.
+//            if (answerAttempt >= attemptChances || correctAnswer) {
+
+            String TAG = "EVOPlus";
+
+            c_Lesson_feedback.postTestAttemptAnswers++;
+
+            Log.i(TAG, "Roadshow | postTestAttemptAnswers: " + c_Lesson_feedback.postTestAttemptAnswers);
+            Log.i(TAG, "Roadshow | questionsAnswered: " + questionsAnswered);
+            Log.i(TAG, "Roadshow | postTestQuestions: " + postTestQuestions);
+
+            if (questionsAnswered <= postTestQuestions) {
+                currentQuestionIndex++;
+                loadQuestion(); // Always load the next question after updating the index
+                answerAttempt = 0;
+            } else {
+
+                double bktScore = x_bkt_algorithm.getKnowledge();
+
+                // Handle post-test completion
+//                postTestCompleteListener.onPostTestComplete(c_Lesson_feedback.postTestCorrectAnswers);
+                postTestCompleteListener.onPostTestComplete(
+                        c_Lesson_feedback.postTestCorrectAnswers,
+                        bktScore >= b_main_0_menu_categorize_user.passingGrade
+                );
+            }
+
+//                if (currentQuestionIndex < questions.length - 1) {
+//                    currentQuestionIndex++;
+////                            Log.e(TAG, "currentQuestionIndex++; ["+currentQuestionIndex+"]");
+//                } else {
+//                    currentQuestionIndex = 0; // Reset for new round
+//                    bktModel.logScores(); // Log scores at reset point
+////                            Log.e(TAG, "reset currentQuestionIndex["+currentQuestionIndex+"]");
+//                }
+
+            questionsAnswered++; // Increment answered count
+//                        Log.e(TAG, "increment questionsAnswered["+questionsAnswered+"]");
+
+            // Load next question only if still within pre-test limits.
+//                        Log.d(TAG, "if (correctAnswer["+correctAnswer+"] || currentQuestionIndex["+currentQuestionIndex
+//                        + "] < postTestQuestions["+postTestQuestions+"] && answerAttempt["+answerAttempt+"] >= attemptChances["+attemptChances+"]");
+            if (correctAnswer || currentQuestionIndex < postTestQuestions && answerAttempt >= attemptChances) {
+
+                if (!(questionsAnswered == (postTestQuestions+1)))
+                    loadQuestion();
+
+                answerAttempt = 0;
+
+            }
+
+//            }
+
+            // may plus 1 to kanina
+            if (questionsAnswered == (postTestQuestions+1)) {
+                Log.d("TESTING", "Post-test complete!");
+
+                // Handle completion of pre-test.
+                if (postTestCompleteListener != null) {
+                    Log.d("TESTING", "Post-Test BKT Score: " + x_bkt_algorithm.getKnowledge());
+                    Log.d("TESTING", "Post-Test Score: " + c_Lesson_feedback.postTestCorrectAnswers);
+                    double bktScore = x_bkt_algorithm.getKnowledge();
+
+                    // Pre-Test BKT Score
+                    x_bkt_algorithm.updateTestBKTScore(
+                            isProgressiveMode,
+                            moduleIndex, lessonIndex,
+                            "Post-Test",
+                            bktScore
+                    );
+
+                    postTestCompleteListener.onPostTestComplete(
+                            c_Lesson_feedback.postTestCorrectAnswers,
+                            bktScore >= b_main_0_menu_categorize_user.passingGrade
+                    );
+
+                    c_Lesson_feedback.printResult("Post-Test");
+                    d_Lesson_container.isPostTestComplete = true;
+
+                }
+            }
+
+        } else {
+
+            String feedback = correctAnswer ? "Correct!" : "Incorrect :(";
+
+            // Logic for after post-test is complete
+            Toast.makeText(getContext(), feedback, Toast.LENGTH_SHORT).show();
+
+            // Allow answering questions without changing scores
+            if (answerAttempt >= attemptChances || correctAnswer) {
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                } else {
+                    currentQuestionIndex = 0; // Reset for new round
+                }
+
+                // Load next question without affecting score
+                loadQuestion();
+                answerAttempt = 0; // Reset attempts for new question
+            }
+        }
+
+
+
+        choicesGroup.clearCheck(); // Clear selected choices at the end of processing.
+//            } // end of getChecked == -1
+
+        if (c_Lesson_feedback.postTestAttemptAnswers <= postTestQuestions)
+            total.setText("Item: "
+                    + c_Lesson_feedback.postTestAttemptAnswers
+//                    + questionsAnswered
+                    + "/"
+                    +  postTestQuestions);
+
+    }
+
+
+    private void setButtonBackgroundWithColor(Button button, int color) {
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setColor(color); // Set the desired color
+        drawable.setCornerRadius(40); // Adjust for your rounded corners
+        button.setBackground(drawable); // Apply the drawable to the button
+    }
+
+    private void updateAnswerFeedback(boolean isCorrect) {
+
+        String targetTag = "testAnswer_" + (c_Lesson_feedback.postTestAttemptAnswers);
+        ImageView targetImageView = imageContainer_postTest.findViewWithTag(targetTag);
+
+        if (targetImageView != null) {
+            if (isCorrect) {
+                targetImageView.setImageResource(R.drawable.test_answer_check);
+            } else {
+                targetImageView.setImageResource(R.drawable.test_answer_cross);
+            }
+        }
+    }
+
+
     public boolean checkAnswer() {
         String TAG = "checkAnswer()";
         // Log.e(TAG, "checkAnswer() method is CALLED");
@@ -875,7 +1348,7 @@ public class f_3_lesson_post_test extends Fragment {
                             targetImageView.setImageResource(imageResource);
                             targetImageView.invalidate(); // Force redraw
                         } else {
-                             Log.e("ImageViewError", "No ImageView found with tag: " + targetTag);
+                            Log.e("ImageViewError", "No ImageView found with tag: " + targetTag);
                         }
 
                     } else {
@@ -908,7 +1381,7 @@ public class f_3_lesson_post_test extends Fragment {
                 String inputAnswer = String.valueOf(identificationAnswer.getText()).trim();
                 if (!inputAnswer.isEmpty()) {
                     isCorrect = inputAnswer.equalsIgnoreCase(correctAnswer);
-                    
+
                     // Change button appearance based on correctness
                     int backgroundColor = isCorrect ? Color.GREEN : Color.RED;
                     changeButtonAppearance(backgroundColor, Color.WHITE);

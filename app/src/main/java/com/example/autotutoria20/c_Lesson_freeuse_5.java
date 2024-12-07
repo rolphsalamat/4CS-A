@@ -134,8 +134,23 @@ public class c_Lesson_freeuse_5 extends AppCompatActivity {
                                             Log.d(TAG, key + " Progress is not of expected type Long.");
                                         }
                                     } else {
+                                        // Handle missing Progress key
                                         Log.d(TAG, key + " does not contain a 'Progress' field.");
+
+                                        // Default progress value
+                                        int progress = 0;
+
+                                        // Extract the second character and convert it to an integer
+                                        int moduleNumber = Character.getNumericValue(key.charAt(1));
+
+                                        // Log the module number and default progress
+                                        Log.d(TAG, key + " Default Progress: " + progress);
+
+                                        // Update the UI or process the default progress value
+                                        updateUI(moduleNumber, progress);
                                     }
+
+
                                 } else {
                                     Log.d(TAG, key + " is not a Map.");
                                 }

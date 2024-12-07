@@ -58,7 +58,7 @@
         android:padding="8dp"
         android:fontFamily="@font/mouldy_cheese"
         android:text="Okay"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textColor="@color/white"
         android:background="@drawable/rounded_corners"
         android:backgroundTint="#87CEEB"

@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+
 public class f_2_lesson_video extends Fragment {
 
     private static final String TAG = "f_2_lesson_video";
@@ -54,11 +56,24 @@ public class f_2_lesson_video extends Fragment {
         Log.d(TAG, "onViewCreated called");
 
         webView = view.findViewById(R.id.webView);
-        nextButton = view.findViewById(R.id.nextButton);
-        nextButton.setOnClickListener(v -> {
-            Log.i(TAG, "Next Button clicked!");
-            d_Lesson_container.nextButton.performClick();
-        });
+
+
+//        // Initially hide the nextButton
+//        nextButton = view.findViewById(R.id.nextButton);
+//        nextButton.setVisibility(View.GONE);
+//
+//        // Use a Handler to delay the visibility change and setOnClickListener
+//        new Handler().postDelayed(() -> {
+//            // Set the button visibility to VISIBLE after 3 seconds
+//            nextButton.setVisibility(View.VISIBLE);
+//
+//            // Set the OnClickListener once the button is visible
+//            nextButton.setOnClickListener(v -> {
+//                Log.i(TAG, "Next Button clicked!");
+//                d_Lesson_container.nextButton.performClick();
+//            });
+//        }, 3000); // 3000 milliseconds = 3 seconds
+
 
         // Initialize and handle the new button
         skipVideoButton = view.findViewById(R.id.skip_video_tutorial);
@@ -113,7 +128,7 @@ public class f_2_lesson_video extends Fragment {
 //        // Bypass setting, for a custom video
 //        videoUrl = "y6oMutwJQCw";
 
-        d_Lesson_container.simulateClicksInCenter();
+//        d_Lesson_container.simulateClicksInCenter();
     }
 
     @Override

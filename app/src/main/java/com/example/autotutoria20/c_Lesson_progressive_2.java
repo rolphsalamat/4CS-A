@@ -128,8 +128,24 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
                                             Log.e(TEST, "Progress value is not a Long for key: " + key);
                                         }
                                     } else {
+                                        // Handle missing Progress key
                                         Log.e(TEST, "No Progress key found for module: " + key);
+
+                                        int progress = 0; // Default progress value
+                                        int moduleNumber = Character.getNumericValue(key.charAt(1)); // Extract number from key
+                                        Log.e(TEST, "Module Number: " + moduleNumber);
+
+                                        // Store default progress in the array if within bounds
+                                        if (moduleNumber >= 1 && moduleNumber <= moduleProgress.length) {
+                                            moduleProgress[moduleNumber - 1] = progress;
+                                        }
+
+                                        // Log the module number and default progress
+                                        Log.d(TAG, "Module: " + moduleNumber + " | Progress: " + progress);
+
+                                        updateUI(moduleNumber, progress); // Update UI with default progress
                                     }
+
                                 } else {
                                     Log.e(TEST, "Value is not a Map for key: " + key);
                                 }
@@ -190,7 +206,7 @@ public class c_Lesson_progressive_2 extends AppCompatActivity {
 
                 // Check if the lesson is finished
                 if (progress >= t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 2")) {
-                    if (M1_Score < passingGrade) {
+                    if (M1_Score < passingGrade && M1_Score != 0) {
                         c_Lesson_feedback.showDialog(this, M1_Score, passingGrade, "Lesson 1");
                     } else {
                         setCardCompletionStatus(key, true);

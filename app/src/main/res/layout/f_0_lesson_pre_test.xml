@@ -18,6 +18,7 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/pre_test_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/answers_total"
@@ -31,14 +32,14 @@
 
     <TextView
         android:id="@+id/question_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="10dp"
         android:text="Question will appear here"
         android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/pre_test_text"
         android:layout_centerHorizontal="true"/>
 
     <RadioGroup
@@ -59,7 +60,7 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_marginBottom="16dp"
-        android:layout_above="@id/submit_pre_test">
+        android:layout_alignParentBottom="true">
     </LinearLayout>
 
     <Button
@@ -69,6 +70,8 @@
         android:background="@drawable/rounded_corners"
         android:layout_alignParentBottom="true"
         android:text="Submit"
-        android:textColor="@color/navy_blue" />
+        android:textColor="@color/navy_blue"
+        android:visibility="gone"
+        />
 
 </RelativeLayout>

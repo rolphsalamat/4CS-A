@@ -74,8 +74,9 @@
         android:layout_height="wrap_content"
         android:text="What did you learn from this lesson?"
         android:textColor="@color/white"
-        android:textSize="18sp"
-        android:layout_marginTop="16dp" />
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp" />
 
     <RadioGroup
         android:id="@+id/choices_group"

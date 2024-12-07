@@ -127,32 +127,32 @@ public class t_LessonSequenceFromDatabase {
 
         String TAG = "Nitro";
 
-        // Log.i(TAG, "getNumberOfSteps()");
-        // Log.i(TAG, "Module: " + module);
-        // Log.i(TAG, "Lesson: " + lesson);
+         Log.i(TAG, "getNumberOfSteps()");
+         Log.i(TAG, "Module: " + module);
+         Log.i(TAG, "Lesson: " + lesson);
 
         if (lessonStepsMap.containsKey(module)) {
             Map<String, String> lessonsMap = lessonStepsMap.get(module);
-            // Log.d(TAG, module + " exists! LET'S GO!");
+             Log.d(TAG, module + " exists! LET'S GO!");
 
             if (lessonsMap != null && lessonsMap.containsKey(lesson)) {
                 // Retrieve the list of steps for the lesson
-                // Log.d(TAG, lesson + " exists! LET'S GO!");
+                 Log.d(TAG, lesson + " exists! LET'S GO!");
 
                 String stepsAsString = lessonsMap.get(lesson); // Retrieve the steps as a single string
                 List<String> steps = Arrays.asList(stepsAsString.split(", ")); // Split the string into a list of steps
-                // Log.i(TAG, "-_- | Step: " + steps);
+                 Log.i(TAG, "-_- | Step: " + steps);
                 if (steps != null) {
-                    // Log.i(TAG, "steps.size(): " + steps.size());
+                     Log.i(TAG, "steps.size(): " + steps.size());
                     return steps.size(); // Return the number of steps
                 } else {
-                    // Log.e("RetrieveSteps", "No steps found for lesson: " + lesson);
+                     Log.e("RetrieveSteps", "No steps found for lesson: " + lesson);
                 }
             } else {
-                // Log.e("RetrieveSteps", "Lesson not found in module: " + lesson);
+                 Log.e("RetrieveSteps", "Lesson not found in module: " + lesson);
             }
         } else {
-            // Log.e("RetrieveSteps", "Module not found: " + module);
+             Log.e("RetrieveSteps", "Module not found: " + module);
         }
 
 

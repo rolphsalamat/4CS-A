@@ -73,6 +73,7 @@ import java.util.Map;
 
 public class b_main_0_menu extends AppCompatActivity {
 
+    public static String email;
     public static long token;
     static TextView tokenCount;
     private boolean[] cardStates = {true, false, false}; // Example state array for 3 cards
@@ -168,6 +169,7 @@ public class b_main_0_menu extends AppCompatActivity {
 
                             fetchUserData(userId);
 
+                            Log.i("Vitamin C", "Vitamin C | getLessonSequenceFromDatabase()");
                             // Retrieve Lesson Sequence
                             t_LessonSequenceFromDatabase.getLessonSequenceFromDatabase2();
 
@@ -228,10 +230,13 @@ public class b_main_0_menu extends AppCompatActivity {
 //            freeUseFragmentList.add(new b_main_4_uplifts());
         }
 
-        pagerAdapter = new CustomPagerAdapter(
-                getSupportFragmentManager(), progressiveFragmentList);
+        if (isProgressiveMode)
+            pagerAdapter = new CustomPagerAdapter(
+                    getSupportFragmentManager(), progressiveFragmentList);
+        else
+            pagerAdapter = new CustomPagerAdapter(
+                    getSupportFragmentManager(), freeUseFragmentList);
 
-//        viewPager.setAdapter(pagerAdapter);
 
         // Button highlighter for Header
         module = findViewById(R.id.modulesSelected);
@@ -267,7 +272,7 @@ public class b_main_0_menu extends AppCompatActivity {
                 int id = item.getItemId();
 
                 if (id == R.id.profile) {
-                    finish();
+//                    finish(); // Don't finish, para babalik nalang dito.
                     startActivity(new Intent(b_main_0_menu.this, b_main_0_menu_profile.class));
                 } else if (id == R.id.settings) {
                     // Log.("NavigationView", "Let's open Settings");
@@ -768,35 +773,51 @@ public class b_main_0_menu extends AppCompatActivity {
 
 
     private void showRateUsDialog() {
+        // Create an AlertDialog.Builder
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Inflate the custom layout
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.b_main_0_menu_rateus, null);
+
+        // Set the custom layout as the dialog's view
         builder.setView(dialogView);
 
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        // Get references to the views in the custom layout
         RatingBar ratingBar = dialogView.findViewById(R.id.ratingBar);
         EditText ratingComment = dialogView.findViewById(R.id.ratingComment);
         Button submitButton = dialogView.findViewById(R.id.submit_button);
 
-        AlertDialog dialog = builder.create();
-
+        // Set up the submit button logic
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                float rating = ratingBar.getRating();
                 String comment = ratingComment.getText().toString();
+                float rating = ratingBar.getRating();
 
-//                Toast.makeText(b_main_0_menu.this, "Rating: " + rating, Toast.LENGTH_SHORT).show();
-//                Toast.makeText(b_main_0_menu.this, "Comment: " + comment, Toast.LENGTH_SHORT).show();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String email = user != null ? user.getEmail() : "No Email";
 
-                Toast.makeText(b_main_0_menu.this, "Thank you for your rating and feedback!", Toast.LENGTH_SHORT).show();
+                Log.d("Feedback", "User Email: " + email);
+                Log.d("Feedback", "Rating: " + rating + ", Comment: " + comment);
 
-                 dialog.dismiss();
+                b_main_0_menu_rateUs rate = new b_main_0_menu_rateUs();
+                rate.sendFeedBack(email, comment, rating);
+
+                Toast.makeText(b_main_0_menu.this, "Thank you for your feedback!", Toast.LENGTH_SHORT).show();
+
+                // Dismiss the dialog after submission
+                dialog.dismiss();
             }
         });
 
+        // Show the dialog
         dialog.show();
     }
+
 
 
 
@@ -1015,7 +1036,7 @@ public class b_main_0_menu extends AppCompatActivity {
                         String firstName = document.getString("First Name");
                         String lastName = document.getString("Last Name");
                         String category = document.getString("User Category");
-                        String email = document.getString("Email Address");
+                        email = document.getString("Email Address");
                         String gender = document.getString("Gender");
                         Long age = document.getLong("Age");
 

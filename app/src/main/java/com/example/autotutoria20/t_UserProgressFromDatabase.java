@@ -21,11 +21,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class t_UserProgressFromDatabase {
@@ -35,7 +37,8 @@ public class t_UserProgressFromDatabase {
     private static final String TAG = "ProgressDataManager";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
+//    public static boolean[] moduleHasFail = new boolean[8];
+    public static ArrayList<Boolean> moduleHasFail = new ArrayList<>();
     static String failedLesson = null;
     static int failedModule = 0;
     static Double failedBKTScore = 0.0;
@@ -45,7 +48,8 @@ public class t_UserProgressFromDatabase {
     static Map<String, Map<String, Map<String, Object>>> nestedFeedback = new HashMap<>();
 
     static Map<String, Object> moduleScore = new HashMap<>();
-    static Map<String, Object> moduleProgress = new HashMap<>();
+    static Map<String, Object> moduleProgress_Progressive = new HashMap<>();
+    static Map<String, Object> moduleProgress_FreeUse = new HashMap<>();
     static Map<String, Boolean> moduleBoolean = new HashMap<>();
     static int moduleCount = 0;
     public interface ProgressDataListener {
@@ -178,13 +182,16 @@ public class t_UserProgressFromDatabase {
 //        });
 //    }
 
-    public void fetchAllProgressData(ProgressDataListener listener) {
+    public void fetchAllProgressData(String learningMode, ProgressDataListener listener) {
         if (userId == null) {
             listener.onError(new Exception("User not authenticated"));
             return;
         }
 
-        CollectionReference progressRef = db.collection("users").document(userId).collection("Progressive Mode");
+        CollectionReference progressRef =
+                db.collection("users")
+                .document(userId)
+                .collection(learningMode);
 
         progressRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful() && task.getResult() != null) {
@@ -195,110 +202,163 @@ public class t_UserProgressFromDatabase {
                 String category = null;
 
                 for (DocumentSnapshot lessonDoc : task.getResult()) {
+                    Log.i(TAG, TAG + " | lessonDoc: " + lessonDoc);
                     Map<String, Object> lessonData = lessonDoc.getData();
                     if (lessonData == null) continue;
 
                     int lessonNumber = ++moduleCount;
                     double totalBKTScore = 0.0;
-                    int totalProgress = 0;
+                    double totalProgress = 0;
                     int moduleCountInLesson = 0;
 
                     Long progress;
-                    Number bktScore;
+                    Number bktScore = null;
 
+                    int moduleNumber = 1;
+
+                    Log.i(TAG, TAG + "lessonData size: " + lessonData.size() + " | lessonData: " + lessonData);
                     for (String moduleKey : lessonData.keySet()) {
-                        Map<String, Object> moduleData = (Map<String, Object>) lessonData.get(moduleKey);
-                        if (moduleData == null) continue;
 
-                        progress = (Long) moduleData.get("Progress");
-                        bktScore = (Number) moduleData.get("BKT Score");
+                        Log.i(TAG, TAG + " | moduleNumber: " + moduleNumber + " | moduleKey: M" + moduleNumber);
+                        if (moduleKey.contains("M" + moduleNumber)) {
 
-                        Log.i(TAG, "CCS | I retrieved bktScore: " + bktScore);
+                            moduleNumber++;
 
-                        double bktScoreValue;
+                            Map<String, Object> moduleData = (Map<String, Object>) lessonData.get(moduleKey);
+                            Log.i(TAG, TAG + " | moduleKey: " + moduleKey + " | moduleData: " + moduleData);
 
-                        bktScoreValue = (bktScore != null) ? bktScore.doubleValue()*100 : 0.0;
+                            if (moduleData == null) {
+                                Log.i(TAG, TAG + " | moduleData == null");
+                                continue;
+                            }
 
-                        Log.i(TAG, "Converted BKT Score Value: " + bktScoreValue);
+                            progress = (Long) moduleData.get("Progress");
 
-                        if (progress == null) continue;
-
-                        int maxProgress = t_LessonSequenceFromDatabase.getNumberOfSteps(moduleKey + "_Lesson " + lessonNumber);
-                        if (maxProgress <= 0) continue;
-
-                        int progressPercentage = (int) ((progress / (double) maxProgress) * 100);
-
-                        totalProgress += progressPercentage;
-                        totalBKTScore += bktScoreValue;
-                        moduleCountInLesson++;
-
-                        // Determine feedback based on BKT score and user category
-                        String feedback = t_SystemInterventionCategory.getWeakPointFeedback(bktScoreValue, b_main_0_menu_categorize_user.category);
-                        Log.i(TAG, "Module " + moduleKey + " | Lesson " + lessonNumber + " | " + bktScoreValue + " | " + feedback);
-
-                        // if feedback contains "weak"
-                        // add it to the nested map nestedFeedback
-
-                        String module = "Module " + moduleKey.charAt(1);
-                        String lesson = "Lesson " + lessonNumber;
-
-                        if (feedback.contains("weak")) {
-                            addFeedback(nestedFeedback, module, lesson, bktScoreValue, feedback);
-                            Log.i(TAG, "Weak Point detected at: " +
-                                    "\n" + module + " | " + lesson + " |\n" + bktScoreValue + " | " + feedback);
-                        }
-
-
-
-
-                        Log.i(TAG, "MANGO | progressPercentage: " + progressPercentage);
-                        Log.i(TAG, "MANGO | Module Progress: Module " + moduleKey + " in Lesson " + lessonNumber
-                                            + " - Progress: " + progressPercentage + "%");
-                        Log.i(TAG, "MANGO | BKT Score: " + bktScoreValue);
-
-                        Log.i(TAG, "50 PLUS | isFirstFailDetected: " + isFirstFailDetected);
-
-                        if (!isFirstFailDetected && !(progressPercentage < 100) ) {
-                            Log.i(TAG, "MANGO | inside if statement");
-
-
-                            Log.i(TAG, "CCS | bktScore: " + bktScore);
-                            Log.i(TAG, "CCS | bktScoreValue: " + bktScoreValue);
-                            Log.i(TAG, "CCS | progressPercentage: " + progressPercentage);
-
-                            if ((bktScoreValue < 60)) {
-                                // Module is marked as failed only if it has progress > 0 and BKT score < 60
-                                Log.i(TAG, "MANGO | this one failed..");
-                                isFirstFailDetected = true;
-                                failedLesson = "Module " + lessonNumber;
-                                failedModule = Integer.parseInt(String.valueOf(moduleKey.charAt(1)));
-                                failedBKTScore = bktScore != null ? bktScore.doubleValue() : 0.0;
-
-                                Log.i(TAG, "MANGO | failedLesson: " + failedLesson);
-                                Log.i(TAG, "MANGO | failedModule: " + failedModule);
-
-                                Log.i(TAG, "MAMA MO PASADO | failedBKTScore: " + failedBKTScore);
-                                Log.i("ProgressCheck", "First failure detected for module.");
-                            } else {
-                                // Module progress is incomplete but not failed
-                                Log.i("ProgressCheck", "Module is incomplete but not failed. BKT Score: " + bktScoreValue);
+                            if (progress == null) {
+                                Log.i(TAG, TAG + " | Progress == null");
+                                progress = (long) 0.0;
+                                Log.i(TAG, TAG + " | Progress = 0.0");
+                                // Comment out continue, because it is not retrieving it.
+//                                continue;
                             }
 
 
-                        }
+                            Number tempPreTestBKTScore = (Number) moduleData.get("Pre-Test BKT Score");
+                            Number tempBKTScore = (Number) moduleData.get("BKT Score");
 
-                        if (progress >= maxProgress) {
-                            completedModules.incrementAndGet();
+                            // Check for Post-Test BKT Score, fallback to BKT Score if it's zero or null
+                            if (moduleData.containsKey("Post-Test BKT Score") && moduleData.get("Post-Test BKT Score") instanceof Number) {
+                                bktScore = (Number) moduleData.get("Post-Test BKT Score");
+                                if (bktScore != null && bktScore.doubleValue() == 0) {
+                                        bktScore = (Number) moduleData.get("BKT Score");
+                                }
+                            } else if (moduleData.containsKey("BKT Score")) {
+                                if (!Objects.equals(tempPreTestBKTScore, tempBKTScore)) // BKT Score is also Pre-Test BKT Score
+                                    bktScore = tempBKTScore;
+                            }
+
+                            // Convert to percentage
+                            double bktScoreValue = (bktScore != null) ? (bktScore.doubleValue() * 100) : 0.0;
+
+                            Log.i(TAG, "Converted BKT Score Value: " + bktScoreValue);
+
+                            String lessonKey = moduleKey + "_Lesson " + lessonNumber;
+
+                            Log.i(TAG, TAG  + " | lessonKey: " + lessonKey);
+                            int maxProgress = t_LessonSequenceFromDatabase.getNumberOfSteps(lessonKey);
+
+                            if (maxProgress <= 0)
+                                continue;
+
+                            // Progress of the current Lesson being iterated
+                            // M1 : M2 : M3 : M4 Progress Percentage
+                            int progressPercentage = (int) ((progress / (double) maxProgress) * 100);
+
+                            // totalProgress should be divided:
+                            // Module Progress = totalProgress / moduleCountInLesson
+                            totalProgress += progressPercentage;
+                            totalBKTScore += bktScoreValue;
+                            moduleCountInLesson++;
+
+                            if ((progress >= maxProgress)) {
+
+                                String feedback =
+                                        t_SystemInterventionCategory
+                                                .getWeakPointFeedback
+                                                        (bktScoreValue
+                                                        );
+
+                                String module = "Module " + lessonNumber;
+                                String lesson = "Lesson " + moduleKey.charAt(1);
+
+                                if (feedback.contains("Weak") || feedback.contains("Minimal"))
+                                    addFeedback(nestedFeedback, module, lesson, bktScoreValue, feedback);
+
+                                if (!isFirstFailDetected) { // No Fail yet..
+
+                                    if (!(progressPercentage < 100)) { // Module is completed
+
+                                        if (bktScoreValue < 60) { // Module is completed and failed
+
+                                            isFirstFailDetected = true;
+                                            failedLesson = "Module " + lessonNumber;
+                                            failedModule = Integer.parseInt(String.valueOf(moduleKey.charAt(1)));
+
+                                            // Update the failure status in the pre-initialized list
+//                                            moduleHasFail.set(lessonNumber - 1, true);
+
+                                            Log.i(TAG, TAG + " | YAKULT | bktScore: " + bktScore);
+                                            Log.i(TAG, TAG + " | YAKULT | bktScoreValue: " + bktScoreValue);
+
+                                            failedBKTScore = bktScore != null ? bktScoreValue : 0.0;
+
+                                            Log.i(TAG, TAG + " | YAKULT | isFirstFailDetected: " + isFirstFailDetected);
+                                            Log.i(TAG, TAG + " | YAKULT | failedLesson: " + failedLesson);
+                                            Log.i(TAG, TAG + " | YAKULT | failedBKTScore: " + failedBKTScore);
+                                        } else {
+                                            // Module progress is complete and passed
+                                        }
+                                    } else {
+                                        // Module is incomplete
+                                    }
+
+                                    // Ensure that non-failed modules are marked appropriately
+//                                    moduleHasFail.set(lessonNumber - 1, false);
+                                }
+
+
+                                if (progress >= maxProgress) {
+                                    completedModules.incrementAndGet();
+                                }
+
+                            } // end of if (progress >= maxProgress)
                         }
-                    }
+                        Log.i(TAG, TAG + " | moduleNumber incremented: " + moduleNumber);
+                    } // End for for each loop
+
+                    String moduleKey = "Module " + lessonNumber;
 
                     // Calculate the average BKT score for the lesson
-                    double averageBKTScore = moduleCountInLesson > 0 ? totalBKTScore / moduleCountInLesson : 0.0;
-                    moduleScore.put("Module " + lessonNumber, averageBKTScore);
+                    double averageBKTScore = moduleCountInLesson > 0
+                            ? totalBKTScore / moduleCountInLesson
+                            : 0.0;
+                    moduleScore.put(moduleKey, averageBKTScore);
 
-                    int averageProgress = moduleCountInLesson > 0 ? totalProgress / moduleCountInLesson : 0;
-                    moduleProgress.put("Module " + lessonNumber, averageProgress);
-                    moduleBoolean.put("Module " + lessonNumber, averageProgress >= 100);
+                    Log.i("WIPES", "WIPES | totalProgress: " + totalProgress);
+                    Log.i("WIPES", "WIPES | moduleCountInLesson: " + moduleCountInLesson);
+
+                    double averageProgress = moduleCountInLesson > 0
+                            ? totalProgress / moduleCountInLesson
+                            : 0;
+
+                    Log.i("WIPES", "WIPES | averageProgress: " + averageProgress);
+
+                    if (learningMode.equalsIgnoreCase("Progressive Mode"))
+                        moduleProgress_Progressive.put(moduleKey, averageProgress);
+                    else if (learningMode.equalsIgnoreCase("Free Use Mode"))
+                        moduleProgress_FreeUse.put(moduleKey, averageProgress);
+
+                    moduleBoolean.put(moduleKey, averageProgress >= 100);
                 }
 
                 listener.onProgressUpdated((int) ((completedModules.get() / (double) totalModules) * 100));
@@ -346,7 +406,7 @@ public class t_UserProgressFromDatabase {
         for (String module : sortedModules) {  // Iterate over sorted modules
             // Add Module title
             TextView moduleTitle = new TextView(context);
-            moduleTitle.setText("Module: " + module);
+            moduleTitle.setText("" + module);
             moduleTitle.setTypeface(null, Typeface.BOLD);  // This sets the text style to bold
             moduleTitle.setTextColor(ContextCompat.getColor(context, R.color.white));
             moduleTitle.setTypeface(customFont);
@@ -362,7 +422,7 @@ public class t_UserProgressFromDatabase {
             for (String lesson : sortedLessons) {  // Iterate over sorted lessons
                 // Add Lesson title
                 TextView lessonTitle = new TextView(context);
-                lessonTitle.setText("\tLesson: " + lesson);
+                lessonTitle.setText("\t\t" + lesson);
                 lessonTitle.setTextColor(ContextCompat.getColor(context, R.color.white));
                 lessonTitle.setTypeface(customFont);
                 lessonTitle.setTextSize(20);
@@ -375,10 +435,10 @@ public class t_UserProgressFromDatabase {
                 TextView bktScoreView = new TextView(context);
                 // Assuming lessonDetails.get("BKT Score") returns a Double
                 Double bktScore = (Double) lessonDetails.get("BKT Score");  // Retrieve the BKT Score
-                bktScoreView.setText("\t\tBKT Score: " + String.format("%.2f", bktScore));
+                bktScoreView.setText("\t\t" + String.format("%.2f", bktScore));
                 bktScoreView.setTextColor(ContextCompat.getColor(context, R.color.white));
                 bktScoreView.setTypeface(customFont);
-                bktScoreView.setTextSize(22);
+                bktScoreView.setTextSize(20);
                 bktScoreView.setPadding(16, 4, 16, 2);
                 feedbackContainer.addView(bktScoreView);
 
@@ -398,7 +458,7 @@ public class t_UserProgressFromDatabase {
         recommendationMessage.setText("\nRecommendation: Retake the following modules and lessons for improvement.");
         recommendationMessage.setTextColor(ContextCompat.getColor(context, R.color.white));
         recommendationMessage.setTypeface(customFont);
-        recommendationMessage.setTextSize(16);
+        recommendationMessage.setTextSize(20);
         recommendationMessage.setPadding(16, 16, 16, 16);
         feedbackContainer.addView(recommendationMessage);
 

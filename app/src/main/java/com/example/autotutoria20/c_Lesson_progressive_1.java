@@ -35,10 +35,45 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
     private double passingGrade;
     private double bktscore;
     private c_Lesson_feedback feedback;
+    private TextView module1ProgressText;
+    private TextView module2ProgressText;
+    private TextView module3ProgressText;
+    private TextView module4ProgressText;
+
+    private int maxStep_Lesson_1;
+    private int maxStep_Lesson_2;
+    private int maxStep_Lesson_3;
+    private int maxStep_Lesson_4;
+    private int[] maxSteps = {
+            maxStep_Lesson_1, maxStep_Lesson_2,
+            maxStep_Lesson_3, maxStep_Lesson_4};
+
+    private FrameLayout card1LockedOverlay;
+    private FrameLayout card2LockedOverlay;
+    private FrameLayout card3LockedOverlay;
+    private FrameLayout card4LockedOverlay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.c_lesson_progressive_1);
+
+        // Update progress text views
+        module1ProgressText = findViewById(R.id.progressive_lesson_1_module_1);
+        module2ProgressText = findViewById(R.id.progressive_lesson_1_module_2);
+        module3ProgressText = findViewById(R.id.progressive_lesson_1_module_3);
+        module4ProgressText = findViewById(R.id.progressive_lesson_1_module_4);
+
+        // Update locked overlays visibility
+        card1LockedOverlay = findViewById(R.id.card1_locked_overlay);
+        card2LockedOverlay = findViewById(R.id.card2_locked_overlay);
+        card3LockedOverlay = findViewById(R.id.card3_locked_overlay);
+        card4LockedOverlay = findViewById(R.id.card4_locked_overlay);
+
+        for (int i = 0; i < maxSteps.length; i++) {
+            maxSteps[i] = t_LessonSequenceFromDatabase.getNumberOfSteps("M" + (i+1) + "_Lesson 1");
+            Log.i("CHARMANDER", "CHARMANDER | maxSteps[" + (i+1) + "]: " + maxSteps[i]);
+        }
 
         c_Lesson_a_retrieveScore.fetchModuleProgress(
                 "Progressive Mode", "Lesson 1");
@@ -81,6 +116,7 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+
         super.onResume();
 
         Log.e("onResume()", "I has returned");
@@ -158,8 +194,25 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                                             Log.e(TEST, "Progress value is not a Long for key: " + key);
                                         }
                                     } else {
+                                        // Handle missing Progress key
                                         Log.e(TEST, "No Progress key found for module: " + key);
+
+                                        int progress = 0; // Default progress value
+                                        int moduleNumber = Character.getNumericValue(key.charAt(1)); // Extract number from key
+                                        Log.e(TEST, "Module Number: " + moduleNumber);
+
+                                        // Store default progress in the array if within bounds
+                                        if (moduleNumber >= 1 && moduleNumber <= moduleProgress.length) {
+                                            moduleProgress[moduleNumber - 1] = progress;
+                                        }
+
+                                        // Log the module number and default progress
+                                        Log.d(TAG, "Module: " + moduleNumber + " | Progress: " + progress);
+
+                                        updateUI(moduleNumber, progress); // Update UI with default progress
                                     }
+
+
                                 } else {
                                     Log.e(TEST, "Value is not a Map for key: " + key);
                                 }
@@ -262,25 +315,19 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                 Log.d("checkProgress", "Module " + (i + 1) + " is not completed. Progress: " + progress + "/" + maxSteps);
             } else {
                 Log.d("checkProgress", "Module " + (i + 1) + " is completed. Progress: " + progress + "/" + maxSteps);
-//                setCardCompletionStatus(i + 1, true); // Update the completion status for the card
+                setCardCompletionStatus(i + 1, true); // Update the completion status for the card
             }
         }
     }
 
+    private void suggestRetake() {
+
+        // 
+
+    }
+
     private void updateUI(int key, int progress) {
         Log.d("updateUI()", "ETO NA MAG A-UPDATE NA AKOOOO LEZGOOO");
-
-        // Update progress text views
-        TextView module1ProgressText = findViewById(R.id.progressive_lesson_1_module_1);
-        TextView module2ProgressText = findViewById(R.id.progressive_lesson_1_module_2);
-        TextView module3ProgressText = findViewById(R.id.progressive_lesson_1_module_3);
-        TextView module4ProgressText = findViewById(R.id.progressive_lesson_1_module_4);
-
-        // Update locked overlays visibility
-        FrameLayout card1LockedOverlay = findViewById(R.id.card1_locked_overlay);
-        FrameLayout card2LockedOverlay = findViewById(R.id.card2_locked_overlay);
-        FrameLayout card3LockedOverlay = findViewById(R.id.card3_locked_overlay);
-        FrameLayout card4LockedOverlay = findViewById(R.id.card4_locked_overlay);
 
         Log.d("updateUI()", "Module: " + key + " | Progress : " + progress);
 
@@ -298,28 +345,34 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
 
         switch (key) {
             case 1:
-                newText = progress + "/" + t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 1");
+                newText = progress + "/" + maxSteps[0];
                 module1ProgressText.setText(newText);
 
                 // Check if the lesson is finished
                 if (progress >= t_LessonSequenceFromDatabase.getNumberOfSteps("M1_Lesson 1")) {
-                    if (M1_Score < passingGrade) {
+                    Log.i(TAG, TAG + " | Score: " + M1_Score);
+                    Log.i(TAG, TAG + " | Passing Grade: " + passingGrade);
+                    if (M1_Score < passingGrade && M1_Score != 0) {
                         c_Lesson_feedback.showDialog(this, M1_Score, passingGrade, "Lesson 1");
                     } else {
                         card2LockedOverlay.setVisibility(View.GONE);
                         Log.e(TAG, "Lesson " + key + ": TRUE");
                         setCardCompletionStatus(key, true);
                     }
+                } else {
+
                 }
                 break;
             case 2:
-                newText = progress + "/" + t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 1");
+                newText = progress + "/" + maxSteps[1];
                 module2ProgressText.setText(newText);
 
                 // Check if the lesson is finished
                 if (progress >= t_LessonSequenceFromDatabase.getNumberOfSteps("M2_Lesson 1")) {
-                    if (M1_Score < passingGrade ||
-                        M2_Score < passingGrade) {
+                    Log.i(TAG, TAG + " | Score: " + M2_Score);
+                    Log.i(TAG, TAG + " | Passing Grade: " + passingGrade);
+                    if (M1_Score < passingGrade && M1_Score != 0 ||
+                        M2_Score < passingGrade && M2_Score != 0) {
                         if (cardCompletionStatus[0])
                             c_Lesson_feedback.showDialog(this, M2_Score, passingGrade, "Lesson 2");
                     } else {
@@ -332,14 +385,16 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                 break;
 
             case 3:
-                newText = progress + "/" + t_LessonSequenceFromDatabase.getNumberOfSteps("M3_Lesson 1");
+                newText = progress + "/" + maxSteps[2];
                 module3ProgressText.setText(newText);
 
                 // Check if the lesson is finished
                 if (progress >= t_LessonSequenceFromDatabase.getNumberOfSteps("M3_Lesson 1")) {
-                    if (M1_Score < passingGrade ||
-                        M2_Score < passingGrade ||
-                        M3_Score < passingGrade) {
+                    Log.i(TAG, TAG + " | Score: " + M3_Score);
+                    Log.i(TAG, TAG + " | Passing Grade: " + passingGrade);
+                    if (M1_Score < passingGrade && M1_Score != 0 ||
+                        M2_Score < passingGrade && M2_Score != 0 ||
+                        M3_Score < passingGrade && M3_Score != 0) {
                         if (cardCompletionStatus[0] &&
                             cardCompletionStatus[1])
                             c_Lesson_feedback.showDialog(this, M3_Score, passingGrade, "Lesson 3");
@@ -352,15 +407,17 @@ public class c_Lesson_progressive_1 extends AppCompatActivity {
                 break;
 
             case 4:
-                newText = progress + "/" + t_LessonSequenceFromDatabase.getNumberOfSteps("M4_Lesson 1");
+                newText = progress + "/" + maxSteps[3];
                 module4ProgressText.setText(newText);
 
                 // Check if the lesson is finished
                 if (progress >= t_LessonSequenceFromDatabase.getNumberOfSteps("M4_Lesson 1")) {
-                    if (M1_Score < passingGrade ||
-                        M2_Score < passingGrade ||
-                        M3_Score < passingGrade ||
-                        M4_Score < passingGrade) {
+                    Log.i(TAG, TAG + " | Score: " + M4_Score);
+                    Log.i(TAG, TAG + " | Passing Grade: " + passingGrade);
+                    if (M1_Score < passingGrade && M1_Score != 0 ||
+                        M2_Score < passingGrade && M2_Score != 0 ||
+                        M3_Score < passingGrade && M3_Score != 0 ||
+                        M4_Score < passingGrade && M4_Score != 0) {
                         if (cardCompletionStatus[0] &&
                             cardCompletionStatus[1] &&
                             cardCompletionStatus[2])

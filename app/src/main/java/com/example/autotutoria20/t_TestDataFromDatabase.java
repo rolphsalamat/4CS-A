@@ -230,10 +230,23 @@ public class t_TestDataFromDatabase {
     public static List<e_Question> getRandomQuestionsData(String module, String lesson, String testMode) {
 
         String TAG = "getRandomQuestionsData";
-        // // Log.e(TAG, "IM HERE");
-        // // Log.e(TAG, "Module: " + module);
-        // // Log.e(TAG, "Lesson: " + lesson);
-        // // Log.e(TAG, "Test Mode: " + testMode);
+          Log.e(TAG, "IM HERE");
+          Log.e(TAG, "Module: " + module);  
+          Log.e(TAG, "Lesson: " + lesson);
+          Log.e(TAG, "Before Test Mode: " + testMode);
+          Log.e(TAG, "Difficulty Level: " + f_3_lesson_post_test.difficultyLevel);
+
+          if (f_3_lesson_post_test.difficultyLevel == e_Question.Difficulty.HARD)
+              testMode = "Post-Test Hard";
+          else if (f_3_lesson_post_test.difficultyLevel == e_Question.Difficulty.MEDIUM)
+              testMode = "Post-Test Medium";
+          else if (f_3_lesson_post_test.difficultyLevel == e_Question.Difficulty.EASY)
+              testMode = "Post-Test Easy";
+          else
+              testMode = "Pre-Test";
+
+          Log.e(TAG, "After Test Mode: " + testMode);
+
 
         List<e_Question> randomQuestions = new ArrayList<>();
 
@@ -365,12 +378,19 @@ public class t_TestDataFromDatabase {
                                         if (!testMode.equals("Post-Test Hard")
                                                 && (choicesMap.containsKey(choicesKey1)
                                                 || choicesMap.containsKey(choicesKey2))) {
+                                            Log.i(TAG, "ENGR | choicesMap.get(" + choicesKey1 + "): " + choicesMap.get(choicesKey1));
                                             // Retrieve "Choice n"
                                             choices = (List<String>) choicesMap.get(choicesKey1);
-                                            if (choices == null)
+                                            if (choices == null) {
+                                                Log.i(TAG, "ENGR | choicesMap.get(" + choicesKey2 + "): " + choicesMap.get(choicesKey2));
                                                 // Retrieve Choices n"
                                                 choices = (List<String>) choicesMap.get(choicesKey2);
+                                            }
 
+                                        }
+
+                                        if (choices == null && testMode.equals("Post-Test Easy")) {
+                                            choices = Arrays.asList("True", "False");
                                         }
 
                                         if (choices == null && !testMode.equals("Post-Test Hard")) {

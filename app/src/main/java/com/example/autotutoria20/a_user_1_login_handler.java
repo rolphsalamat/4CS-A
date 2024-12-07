@@ -263,7 +263,14 @@ public class a_user_1_login_handler extends AppCompatActivity {
                         if (document.exists()) {
                             Boolean isComplete = document.getBoolean("Tutorial");
 
-                            int tokenCount = Math.toIntExact(document.getLong("Token"));
+                            int tokenCount;
+
+                            if (document.contains("Token"))
+                                tokenCount = Math.toIntExact(document.getLong("Token"));
+                            else {
+                                tokenCount = 0;
+
+                            }
 
                             Log.i(TAG, "NEVER STOP | Token Count: " + tokenCount);
 

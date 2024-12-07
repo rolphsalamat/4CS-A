@@ -44,12 +44,11 @@ public class b_main_2_lesson_freeuse extends Fragment {
 
     private CustomLoadingDialog loadingDialog;
 
-    // Define card progress array
-    private int[] cardProgress = new int[z_Lesson_steps.total_module_count]; // refer to the assigned value
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.b_main_2_lesson_freeuse, container, false);
+
+//        loadModules();
 
         String TAG = "Free Use Mode";
 
@@ -71,7 +70,81 @@ public class b_main_2_lesson_freeuse extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        fetchAllProgressData();
+//        fetchAllProgressData();
+
+        loadModules();
+
+    }
+
+    public void loadModules() {
+
+        t_UserProgressFromDatabase progressDataManager = new t_UserProgressFromDatabase();
+        progressDataManager.fetchAllProgressData("Free Use Mode", new t_UserProgressFromDatabase.ProgressDataListener() {
+            @Override
+            public void onProgressUpdated(int progress) {
+                String TAG = "onProgressUpdated";
+
+                double moduleProgress;
+                boolean hasFail = false; // Tracks if a failure has been detected
+
+                for (int i = 0; i < t_UserProgressFromDatabase.moduleCount; i++) {
+                    String moduleName = "Module " + (i + 1);
+                    moduleProgress = (double) t_UserProgressFromDatabase.moduleProgress_FreeUse.get(moduleName);
+
+                    updateCardProgress(i, moduleProgress);
+
+                    Log.i(TAG, "Processing " + moduleName + " | Progress: " + moduleProgress);
+
+                }
+
+                // Handle weak points and notify the user
+                if (t_UserProgressFromDatabase.hasWeakPoint) {
+                    t_UserProgressFromDatabase.displayFeedback(requireContext(), t_UserProgressFromDatabase.nestedFeedback);
+                }
+
+                // Handle first detected failure
+                if (t_UserProgressFromDatabase.isFirstFailDetected) {
+                    String failedLesson = t_UserProgressFromDatabase.failedLesson;
+                    int failedModule = t_UserProgressFromDatabase.failedModule;
+                    double failedBKTScore = t_UserProgressFromDatabase.failedBKTScore;
+
+                    Log.i(TAG, "Weak Point Detected: Lesson: " + failedLesson + ", Module: " + failedModule + ", Score: " + failedBKTScore);
+
+                    showToast("You have weak points in " + failedLesson + ", particularly in Module " + failedModule +
+                            ". Your BKT Score is " + failedBKTScore + ". Consider reviewing this module.");
+                }
+
+                // Handle failure case
+                if (hasFail && t_UserProgressFromDatabase.failedBKTScore > 0 && t_UserProgressFromDatabase.failedBKTScore < 60) {
+                    Log.i(TAG, "Failure detected. Showing failure dialog.");
+                    c_Lesson_feedback.showModuleFailed(
+                            requireContext(),
+                            t_UserProgressFromDatabase.failedLesson,
+                            t_UserProgressFromDatabase.failedModule,
+                            t_UserProgressFromDatabase.failedBKTScore
+                    );
+                }
+
+                Log.i(TAG, "Done processing modules.");
+            }
+
+            @Override
+            public void onDataFetched(String category, boolean allModulesComplete) {
+                hideLoadingDialog();
+
+                if (allModulesComplete) {
+                    Log.d("Progress", "All modules are complete.");
+                } else {
+                    Log.d("Progress", "Not all modules are complete.");
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                hideLoadingDialog();
+                Log.e("t_UserProgressFromDatabase", "Error fetching progress data", e);
+            }
+        });
     }
 
     private void showLoadingDialog() {
@@ -116,72 +189,75 @@ public class b_main_2_lesson_freeuse extends Fragment {
         });
     }
 
-    private void fetchAllProgressData() {
-        Log.d("fetchAllProgressData", "Method called");
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        String TAG = "fetchAllProgressData()";
+//    private void fetchAllProgressData() {
+//        Log.d("fetchAllProgressData", "Method called");
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        String TAG = "fetchAllProgressData()";
+//
+//        CollectionReference progressRef = db.collection("users").document(userId).collection("Free Use Mode");
+//
+//        progressRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    int totalModules = 0;
+//
+//                    for (DocumentSnapshot lessonDoc : task.getResult()) {
+//                        int lessonNumber = Integer.parseInt(lessonDoc.getId().substring(7).trim());
+//                        int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
+//                        totalModules += maxProgressValues.length;
+//                    }
+//
+//                    int moduleCounter = 0;
+//
+//                    for (DocumentSnapshot lessonDoc : task.getResult()) {
+//                        String lesson = lessonDoc.getId();
+//                        int totalProgress = 0;
+//                        int totalMaxProgress = 0;
+//                        int lessonNumber = Integer.parseInt(lesson.substring(7).trim());
+//                        int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
+//
+//                        for (int i = 0; i < maxProgressValues.length; i++) {
+//                            String key = "M" + (i + 1) + ".Progress";
+//                            Long moduleProgress = lessonDoc.getLong(key);
+//                            if (moduleProgress != null) {
+//                                totalProgress += moduleProgress;
+//                                totalMaxProgress += maxProgressValues[i];
+//                            }
+//
+//                            moduleCounter++;
+//                            final int progress = (int) ((moduleCounter / (float) totalModules) * 100);
+//                            updateProgress(progress);
+//                        }
+//
+//                        if (totalMaxProgress > 0) {
+//                            double overallProgress = ((double) totalProgress / totalMaxProgress) * 100;
+//                            int overallProgressInt = (int) Math.round(overallProgress);
+//
+//                            updateCardProgress(lessonNumber, overallProgressInt);
+//                        }
+//                    }
+//
+//                    // Add delay similar to progressive mode
+//                    incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            hideLoadingDialog();
+//                        }
+//                    });
+//                } else {
+//                    Log.d(TAG, "get failed with ", task.getException());
+//                    hideLoadingDialog(); // Hide the dialog in case of failure as well
+//                }
+//            }
+//        });
+//    }
 
-        CollectionReference progressRef = db.collection("users").document(userId).collection("Free Use Mode");
+    private void updateCardProgress(int cardId, double progressValue) {
 
-        progressRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    int totalModules = 0;
+        cardId += 1;
 
-                    for (DocumentSnapshot lessonDoc : task.getResult()) {
-                        int lessonNumber = Integer.parseInt(lessonDoc.getId().substring(7).trim());
-                        int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
-                        totalModules += maxProgressValues.length;
-                    }
-
-                    int moduleCounter = 0;
-
-                    for (DocumentSnapshot lessonDoc : task.getResult()) {
-                        String lesson = lessonDoc.getId();
-                        int totalProgress = 0;
-                        int totalMaxProgress = 0;
-                        int lessonNumber = Integer.parseInt(lesson.substring(7).trim());
-                        int[] maxProgressValues = z_Lesson_steps.getLessonSteps(lessonNumber);
-
-                        for (int i = 0; i < maxProgressValues.length; i++) {
-                            String key = "M" + (i + 1) + ".Progress";
-                            Long moduleProgress = lessonDoc.getLong(key);
-                            if (moduleProgress != null) {
-                                totalProgress += moduleProgress;
-                                totalMaxProgress += maxProgressValues[i];
-                            }
-
-                            moduleCounter++;
-                            final int progress = (int) ((moduleCounter / (float) totalModules) * 100);
-                            updateProgress(progress);
-                        }
-
-                        if (totalMaxProgress > 0) {
-                            double overallProgress = ((double) totalProgress / totalMaxProgress) * 100;
-                            int overallProgressInt = (int) Math.round(overallProgress);
-
-                            updateCardProgress(lessonNumber, overallProgressInt);
-                        }
-                    }
-
-                    // Add delay similar to progressive mode
-                    incrementLoadingProgressBar(loadingDialog.getLoadingProgressBar(), 3000, new Runnable() {
-                        @Override
-                        public void run() {
-                            hideLoadingDialog();
-                        }
-                    });
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                    hideLoadingDialog(); // Hide the dialog in case of failure as well
-                }
-            }
-        });
-    }
-
-    private void updateCardProgress(int cardId, int progressValue) {
         ProgressBar progressBar = null;
         TextView progressText = null;
 
@@ -224,7 +300,7 @@ public class b_main_2_lesson_freeuse extends Fragment {
         }
 
         if (progressBar != null && progressText != null) {
-            progressBar.setProgress(progressValue);
+            progressBar.setProgress((int) progressValue);
             progressText.setText(progressValue + "% Completed");
         } else {
             Log.d("updateCardProgress", "Progress bar or text view is null for cardId: " + cardId);

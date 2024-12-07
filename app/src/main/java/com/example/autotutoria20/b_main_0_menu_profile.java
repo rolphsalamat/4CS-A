@@ -124,7 +124,8 @@ public class b_main_0_menu_profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-                startActivity(new Intent(b_main_0_menu_profile.this, b_main_0_menu.class));
+                // no need to start activity.
+//                startActivity(new Intent(b_main_0_menu_profile.this, b_main_0_menu.class));
             }
         });
 
